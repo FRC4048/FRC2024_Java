@@ -7,7 +7,8 @@
 
 package frc.robot.utils.smartshuffleboard;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -20,12 +21,12 @@ public class SmartShuffleboardTab {
     private Map<String, SimpleWidget> widgetMap = new HashMap();
     private Set<String> commandSet = new HashSet<>();
     private ShuffleboardTab tab;
-
-    SmartShuffleboardTab(String tabName)
+     
+    SmartShuffleboardTab(String tabName) 
     {
         tab = Shuffleboard.getTab(tabName);
     }
-
+         
     public SimpleWidget getWidget(String fieldName)     // return widget handle
     {
         return widgetMap.get(fieldName);
@@ -35,19 +36,19 @@ public class SmartShuffleboardTab {
     {
         try {
             return tab.getLayout(layoutName);
-        }
+        }   
         catch (Exception noSuchElementException)
         {
             return null;
         }
     }
-
-    public void put(String fieldName, Object value)   //primitive
+         
+    public SimpleWidget put(String fieldName, Object value)   //primitive
     {
         SimpleWidget widget = widgetMap.get(fieldName);
         if (widget != null)
         {
-            NetworkTableEntry ntEntry= widget.getEntry();
+            GenericEntry ntEntry= widget.getEntry();
             ntEntry.setValue(value);
         }
         else
@@ -55,9 +56,10 @@ public class SmartShuffleboardTab {
             widget = tab.add(fieldName, value);
             widgetMap.put(fieldName, widget);
         }
+        return widget;
     }
-
-    public void put(String fieldName, String layoutName, Object value)   //primitive
+ 
+    public SimpleWidget put(String fieldName, String layoutName, Object value)   //primitive
     {
         ShuffleboardLayout layout;
         try {
@@ -70,7 +72,7 @@ public class SmartShuffleboardTab {
         SimpleWidget widget = widgetMap.get(fieldName);
         if (widget != null)
         {
-            NetworkTableEntry ntEntry= widget.getEntry();
+            GenericEntry ntEntry= widget.getEntry();
             ntEntry.setValue(value);
         }
         else
@@ -78,7 +80,45 @@ public class SmartShuffleboardTab {
             widget = layout.add(fieldName, value);
             widgetMap.put(fieldName, widget);
         }
+        return widget;
     }
+
+    public boolean getBoolean(String fieldName, boolean defaultValue) {
+        SimpleWidget widget = widgetMap.get(fieldName);
+        if (widget == null) {
+            return defaultValue;
+        } else {
+            return widget.getEntry().getBoolean(defaultValue);
+        }
+    }
+
+    public double getDouble(String fieldName, double defaultValue) {
+        SimpleWidget widget = widgetMap.get(fieldName);
+        if (widget == null) {
+            return defaultValue;
+        } else {
+            return widget.getEntry().getDouble(defaultValue);
+        }
+    }
+
+    public String getString(String fieldName, String defaultValue) {
+        SimpleWidget widget = widgetMap.get(fieldName);
+        if (widget == null) {
+            return defaultValue;
+        } else {
+            return widget.getEntry().getString(defaultValue);
+        }
+    }
+
+    public NetworkTableValue getValue(String fieldName) {
+        SimpleWidget widget = widgetMap.get(fieldName);
+        if (widget == null) {
+            return null;
+        } else {
+            return widget.getEntry().get();
+        }
+    }
+
     public void putCommand(String fieldName, CommandBase cmd)
     {
         if (!commandSet.contains(fieldName))
