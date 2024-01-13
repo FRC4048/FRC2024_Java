@@ -1,5 +1,8 @@
 package frc.robot.subsystems.swervev2.type;
 
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -59,4 +62,5 @@ public class GenericSwerveModule implements frc.robot.subsystems.swervev2.type.S
     public GenericEncodedSwerve getSwerveMotor(){
         return swerveMotor;
     }
+
 }

@@ -1,6 +1,8 @@
 package frc.robot.subsystems.swervev2;
 
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -27,6 +29,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     private final AHRS gyro;
     private double gyroValue = 0;
+
 
     private double getGyro() {
         return (gyro.getAngle() % 360) * -1;
@@ -91,6 +94,16 @@ public class SwerveDrivetrain extends SubsystemBase {
         backRight.getSwerveMotor().resetRelEnc();
     }
 
+    public void setSteerOffset(){
+        frontLeft.getSwerveMotor().setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO);
+        backLeft.getSwerveMotor().setSteerOffset(Constants.BACK_LEFT_ABS_ENCODER_ZERO);
+        frontRight.getSwerveMotor().setSteerOffset(Constants.FRONT_RIGHT_ABS_ENCODER_ZERO);
+        backRight.getSwerveMotor().setSteerOffset(Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
+    }
+
+    public void resetGyro() {
+        gyro.reset();
+    }
     public GenericSwerveModule getFrontLeft() {
         return frontLeft;
     }
