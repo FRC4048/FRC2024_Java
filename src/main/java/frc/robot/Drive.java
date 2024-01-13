@@ -1,4 +1,4 @@
-package main.java.frc.robot;
+package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;

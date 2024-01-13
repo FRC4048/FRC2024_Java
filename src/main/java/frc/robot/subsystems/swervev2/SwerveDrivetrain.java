@@ -1,4 +1,4 @@
-package frc.robot.swervev2;
+package frc.robot.subsystems.swervev2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -8,8 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.swervev2.components.EncodedSwerveSparkMax;
-import frc.robot.swervev2.type.GenericSwerveModule;
 
 public class SwerveDrivetrain extends SubsystemBase {
     
