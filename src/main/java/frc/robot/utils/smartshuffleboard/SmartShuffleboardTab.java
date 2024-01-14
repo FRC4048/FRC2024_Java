@@ -10,57 +10,52 @@ package frc.robot.utils.smartshuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import java.util.*;
 
-/**
- * Add your docs here.
- */
 public class SmartShuffleboardTab {
-    private Map<String, SimpleWidget> widgetMap = new HashMap();
-    private Set<String> commandSet = new HashSet<>();
-    private ShuffleboardTab tab;
+    private final Map<String, SimpleWidget> widgetMap = new HashMap<>();
+    private final Set<String> commandSet = new HashSet<>();
+    private final ShuffleboardTab tab;
      
-    SmartShuffleboardTab(String tabName) 
-    {
+    SmartShuffleboardTab(String tabName) {
         tab = Shuffleboard.getTab(tabName);
     }
-         
-    public SimpleWidget getWidget(String fieldName)     // return widget handle
-    {
+
+    /**
+     * @param fieldName name of field shown on shuffleboard
+     * @return the handle for the widget on shuffleboard
+     */
+    public SimpleWidget getWidget(String fieldName) {
         return widgetMap.get(fieldName);
     }
 
-    public ShuffleboardLayout getLayout(String layoutName)     // return layout handle
-    {
+    /**
+     * @param layoutName name of layout on shuffleboard
+     * @return the handle of the layout
+     */
+    public ShuffleboardLayout getLayout(String layoutName){
         try {
             return tab.getLayout(layoutName);
-        }   
-        catch (Exception noSuchElementException)
-        {
+        } catch (Exception noSuchElementException) {
             return null;
         }
     }
          
-    public SimpleWidget put(String fieldName, Object value)   //primitive
-    {
+    public SimpleWidget put(String fieldName, Object value){
         SimpleWidget widget = widgetMap.get(fieldName);
-        if (widget != null)
-        {
+        if (widget != null) {
             GenericEntry ntEntry= widget.getEntry();
             ntEntry.setValue(value);
-        }
-        else
-        {
+        } else {
             widget = tab.add(fieldName, value);
             widgetMap.put(fieldName, widget);
         }
         return widget;
     }
  
-    public SimpleWidget put(String fieldName, String layoutName, Object value)   //primitive
-    {
+    public SimpleWidget put(String fieldName, String layoutName, Object value){
         ShuffleboardLayout layout;
         try {
             layout = tab.getLayout(layoutName);
@@ -70,13 +65,10 @@ public class SmartShuffleboardTab {
         }
 
         SimpleWidget widget = widgetMap.get(fieldName);
-        if (widget != null)
-        {
+        if (widget != null) {
             GenericEntry ntEntry= widget.getEntry();
             ntEntry.setValue(value);
-        }
-        else
-        {
+        } else {
             widget = layout.add(fieldName, value);
             widgetMap.put(fieldName, widget);
         }
@@ -119,10 +111,12 @@ public class SmartShuffleboardTab {
         }
     }
 
-    public void putCommand(String fieldName, CommandBase cmd)
-    {
-        if (!commandSet.contains(fieldName))
-        {
+    /**
+     * @param fieldName name of the field that represents the command on shuffleboard
+     * @param cmd the command to execute
+     */
+    public void putCommand(String fieldName, Command cmd) {
+        if (!commandSet.contains(fieldName)) {
             //getting the layout, or creating it if it doesn't exist
             ShuffleboardLayout layout;
             try {
