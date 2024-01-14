@@ -26,10 +26,6 @@ public class Shooter extends SubsystemBase {
 
     this.shooterWheel1.setIdleMode(IdleMode.kCoast);
     this.shooterWheel2.setIdleMode(IdleMode.kCoast);
-
-    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 1", shooterWheel1.get());
-    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 2", shooterWheel2.get());
-    SmartShuffleboard.put("Shooter Sensor", "Shooter Sensor 1", shooterSensor.get());
   
   }
 
@@ -48,6 +44,13 @@ public class Shooter extends SubsystemBase {
   //Get the status of the shooter sensor
   public boolean getShooterSensorActivated() {
     return shooterSensor.get();
+  }
+
+  @Override
+  public void periodic() {
+    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 1", shooterWheel1.get());
+    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 2", shooterWheel2.get());
+    SmartShuffleboard.put("Shooter Sensor", "Shooter Sensor 1", shooterSensor.get());
   }
 
 }
