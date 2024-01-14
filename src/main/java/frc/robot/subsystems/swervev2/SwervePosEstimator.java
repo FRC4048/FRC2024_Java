@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
 
 public class SwervePosEstimator {
@@ -18,14 +19,14 @@ public class SwervePosEstimator {
     private final GenericEncodedSwerve backRightMotor;
     private final SwerveDrivePoseEstimator poseEstimator;
 
-    public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueRadians) {
+    public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
         this.backLeftMotor = backLeftMotor;
         this.backRightMotor = backRightMotor;
         this.poseEstimator =  new SwerveDrivePoseEstimator(
                 kinematics,
-                new Rotation2d(initGyroValueRadians),
+                new Rotation2d(Math.toRadians(initGyroValueDeg)),
                 new SwerveModulePosition[] {
                         frontLeftMotor.getPosition(),
                         frontRightMotor.getPosition(),
@@ -33,10 +34,11 @@ public class SwervePosEstimator {
                         backRightMotor.getPosition(),
                 },
                 new Pose2d());
+        SmartDashboard.putData(field);
     }
-    public void updatePosition(double gyroValue){
+    public void updatePosition(double gyroValueDeg){
         if (DriverStation.isEnabled()){
-            poseEstimator.update(new Rotation2d(gyroValue),
+            poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
                     new SwerveModulePosition[] {
                             frontLeftMotor.getPosition(),
                             frontRightMotor.getPosition(),
@@ -57,5 +59,9 @@ public class SwervePosEstimator {
     }
     public Pose2d getEstimatedPose(){
         return field.getRobotPose();
+    }
+
+    public Field2d getField() {
+        return field;
     }
 }

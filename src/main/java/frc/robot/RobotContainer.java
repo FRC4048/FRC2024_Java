@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
@@ -54,7 +56,9 @@ public class RobotContainer {
     KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.CHASSIS_DRIVE_GEAR_RATIO, Constants.CHASSIS_STEER_GEAR_RATIO);
     SwervePidConfig pidConfig = new SwervePidConfig(drivePid,steerPid,driveGain,steerGain,constraints);
     AHRS navxGyro = new AHRS();
+    navxGyro.setAngleAdjustment(0);
     this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
+    drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
 
     // Configure the trigger bindings
     configureBindings();
