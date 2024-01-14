@@ -1,22 +1,31 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import frc.robot.utils.SmartShuffleboard;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Shooter extends SubsystemBase {
   
-  private final PWMSparkMax shooterWheel1;
-  private final PWMSparkMax shooterWheel2;
+  private final CANSparkMax shooterWheel1;
+  private final CANSparkMax shooterWheel2;
   private final DigitalInput shooterSensor;
 
   public Shooter() {
     
-    this.shooterWheel1 = new PWMSparkMax(Constants.SHOOTER_MOTOR_ID_1);
-    this.shooterWheel2 = new PWMSparkMax(Constants.SHOOTER_MOTOR_ID_2);
+    this.shooterWheel1 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_1, CANSparkLowLevel.MotorType.kBrushless);
+    this.shooterWheel2 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_2, CANSparkLowLevel.MotorType.kBrushless);
     this.shooterSensor = new DigitalInput(Constants.SHOOTER_SENSOR_ID);
+
+    shooterWheel1.restoreFactoryDefaults();
+    shooterWheel2.restoreFactoryDefaults();
+
+    this.shooterWheel1.setIdleMode(IdleMode.kCoast);
+    this.shooterWheel2.setIdleMode(IdleMode.kCoast);
 
     SmartShuffleboard.put("Shooter Motors", "Shooter Motor 1", shooterWheel1.get());
     SmartShuffleboard.put("Shooter Motors", "Shooter Motor 2", shooterWheel2.get());

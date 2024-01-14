@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.Timer;
 public class Shoot extends Command {
 
     private Shooter shooter;
-    Timer timer = new Timer();
+    private Timer timer = new Timer();
+    private boolean isDone = false;
+    private final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
 
     @Override
     public void initialize() {
@@ -20,26 +22,24 @@ public class Shoot extends Command {
     public void execute() {
         //Spin motors once started
         shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
+
+        if (timer.advanceIfElapsed(SHOOTER_TIME_AFTER_TRIGGER)) {
+            shooter.stopMotor();
+            timer.reset();
+            isDone = true;
+        }
     }
 
     @Override 
     public boolean isFinished() {
-        //Check if sensor has been activated, waits 0.5 seconds, then stops the motors
+        //Check if sensor has been activated
         if (shooter.getShooterSensorActivated() == true) {
             timer.start();
-            if (timer.advanceIfElapsed(0.5)) {
-                shooter.stopMotor();
-                timer.reset();
-                return true;
-            }
-
-            else {
-                return false;
-            }
+            return false;
         }
 
         else {
-            return false;
+            return isDone;
         }
     }
     
