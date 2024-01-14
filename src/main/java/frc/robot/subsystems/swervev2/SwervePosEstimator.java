@@ -46,6 +46,15 @@ public class SwervePosEstimator {
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
+    public void resetOdometry(double gyroValue,Pose2d pose2d){
+        this.poseEstimator.resetPosition(new Rotation2d(gyroValue),
+                new SwerveModulePosition[] {
+                        frontLeftMotor.getPosition(),
+                        frontRightMotor.getPosition(),
+                        backLeftMotor.getPosition(),
+                        backRightMotor.getPosition(),
+                },pose2d);
+    }
     public Pose2d getEstimatedPose(){
         return field.getRobotPose();
     }

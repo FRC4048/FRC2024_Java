@@ -125,4 +125,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPose();
     }
+    public void resetOdometry(Pose2d pose2d){
+        poseEstimator.resetOdometry(gyroValue,pose2d);
+
+    }
 }
