@@ -1,9 +1,8 @@
 package frc.robot.subsystems.swervev2;
 
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -26,6 +25,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
+    private final SwervePosEstimator poseEstimator;
 
     private final AHRS gyro;
     private double gyroValue = 0;
@@ -38,6 +38,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         gyroValue = getGyro();
+        poseEstimator.updatePosition(gyroValue);
+
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -57,6 +59,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
     }
 
 
@@ -118,5 +121,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public GenericSwerveModule getBackRight() {
         return backRight;
+    }
+    public Pose2d getPose() {
+        return poseEstimator.getEstimatedPose();
     }
 }
