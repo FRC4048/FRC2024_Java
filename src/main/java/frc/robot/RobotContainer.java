@@ -4,11 +4,19 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
+import frc.robot.subsystems.swervev2.SwerveDrivetrain;
+import frc.robot.subsystems.swervev2.SwerveIdConfig;
+import frc.robot.subsystems.swervev2.SwervePidConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,6 +28,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+  private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+  private final SwerveDrivetrain drivetrain;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -29,6 +40,23 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
+    SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
+    SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
+    SwerveIdConfig backRightIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_RIGHT_D, Constants.DRIVE_BACK_RIGHT_S, Constants.DRIVE_CANCODER_BACK_RIGHT);
+
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 4, 2 * Math.PI * 10);
+    PID drivePid = PID.of(Constants.DRIVE_PID_P,Constants.DRIVE_PID_I,Constants.DRIVE_PID_D);
+    PID steerPid = PID.of(Constants.STEER_PID_P,Constants.STEER_PID_I,Constants.STEER_PID_D);
+    Gain driveGain = Gain.of(Constants.DRIVE_PID_FF_V,Constants.DRIVE_PID_FF_S);
+    Gain steerGain = Gain.of(Constants.STEER_PID_FF_V,Constants.STEER_PID_FF_S);
+
+    KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.CHASSIS_DRIVE_GEAR_RATIO, Constants.CHASSIS_STEER_GEAR_RATIO);
+    SwervePidConfig pidConfig = new SwervePidConfig(drivePid,steerPid,driveGain,steerGain,constraints);
+    AHRS navxGyro = new AHRS();
+    this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -47,6 +75,7 @@ public class RobotContainer {
     //Create Shoot Button (A)
     controller.button(XboxController.Button.kA.value).onTrue(new Shoot());
 
+    drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
   }
 
   /**
@@ -57,5 +86,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
+  }
+
+  public SwerveDrivetrain getDrivetrain() {
+    return drivetrain;
   }
 }
