@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.Shoot;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -14,6 +15,7 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax shooterWheel1;
   private final CANSparkMax shooterWheel2;
   private final DigitalInput shooterSensor;
+  private boolean isDone = Shoot.isDone;
 
   public Shooter() {
     
@@ -48,9 +50,10 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 1", shooterWheel1.get());
-    SmartShuffleboard.put("Shooter Motors", "Shooter Motor 2", shooterWheel2.get());
-    SmartShuffleboard.put("Shooter Sensor", "Shooter Sensor 1", shooterSensor.get());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 1", shooterWheel1.get());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 2", shooterWheel2.get());
+    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", shooterSensor.get());
+    SmartShuffleboard.put("Shooter", "isDone", isDone);
   }
 
 }

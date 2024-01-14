@@ -9,13 +9,19 @@ public class Shoot extends Command {
 
     private Shooter shooter;
     private Timer timer = new Timer();
-    private boolean isDone = false;
+    public static boolean isDone = false;
     private final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
+
+    public Shoot(Shooter shooter) {
+        this.shooter = shooter;
+        addRequirements(shooter);
+    }
 
     @Override
     public void initialize() {
         //Rest timer
         timer.reset();
+        isDone = false;
     }
 
     @Override
@@ -35,7 +41,7 @@ public class Shoot extends Command {
         //Check if sensor has been activated
         if (shooter.getShooterSensorActivated() == true) {
             timer.start();
-            return false;
+            return isDone;
         }
 
         else {

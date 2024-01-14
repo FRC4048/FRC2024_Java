@@ -25,7 +25,7 @@ public final class Constants {
   public static final double SHOOTER_MOTOR_SPEED = 0.75;
 
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverControllerPort = 2;
   }
   public static final boolean DRIVETRAIN_DEBUG = false;
     public static final boolean ARM_DEBUG = false;

@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootTest;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -33,6 +35,7 @@ public class RobotContainer {
   private final SwerveDrivetrain drivetrain;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Shooter shooter = new Shooter();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController controller =
@@ -73,7 +76,9 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Create Shoot Button (A)
-    controller.button(XboxController.Button.kA.value).onTrue(new Shoot());
+    controller.button(XboxController.Button.kA.value).onTrue(new Shoot(shooter));
+
+    controller.button(XboxController.Button.kB.value).onTrue(new ShootTest(shooter));
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
   }
