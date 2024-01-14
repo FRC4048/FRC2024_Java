@@ -97,11 +97,11 @@ public class SwerveDrivetrain extends SubsystemBase {
         backRight.getSwerveMotor().resetRelEnc();
     }
 
-    public void setSteerOffset(){
-        frontLeft.getSwerveMotor().setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO);
-        backLeft.getSwerveMotor().setSteerOffset(Constants.BACK_LEFT_ABS_ENCODER_ZERO);
-        frontRight.getSwerveMotor().setSteerOffset(Constants.FRONT_RIGHT_ABS_ENCODER_ZERO);
-        backRight.getSwerveMotor().setSteerOffset(Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
+    public void setSteerOffset(double absEncoderZeroFL,double absEncoderZeroFR, double absEncoderZeroBL,double absEncoderZeroBR){
+        frontLeft.getSwerveMotor().setSteerOffset(absEncoderZeroFL);
+        frontRight.getSwerveMotor().setSteerOffset(absEncoderZeroFR);
+        backLeft.getSwerveMotor().setSteerOffset(absEncoderZeroBL);
+        backRight.getSwerveMotor().setSteerOffset(absEncoderZeroBR);
     }
 
     public void resetGyro() {
