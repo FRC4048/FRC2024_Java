@@ -10,6 +10,7 @@ public class Shoot extends Command {
     private Shooter shooter;
     private Timer timer = new Timer();
     public static boolean isDone = false;
+    public static boolean shooterSensorActivated = false;
     private final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
 
     public Shoot(Shooter shooter) {
@@ -22,12 +23,14 @@ public class Shoot extends Command {
         //Rest timer
         timer.reset();
         isDone = false;
+        shooterSensorActivated = shooter.getShooterSensorActivated();
     }
 
     @Override
     public void execute() {
         //Spin motors once started
         shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
+        shooterSensorActivated = shooter.getShooterSensorActivated();
 
         if (timer.advanceIfElapsed(SHOOTER_TIME_AFTER_TRIGGER)) {
             shooter.stopMotor();
@@ -39,7 +42,7 @@ public class Shoot extends Command {
     @Override 
     public boolean isFinished() {
         //Check if sensor has been activated
-        if (shooter.getShooterSensorActivated() == true) {
+        if (shooterSensorActivated == true) {
             timer.start();
             return isDone;
         }

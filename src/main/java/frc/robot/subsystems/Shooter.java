@@ -15,7 +15,9 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax shooterWheel1;
   private final CANSparkMax shooterWheel2;
   private final DigitalInput shooterSensor;
+  //Tests
   private boolean isDone = Shoot.isDone;
+  private boolean shooterSensorActivated = Shoot.shooterSensorActivated;
 
   public Shooter() {
     
@@ -53,7 +55,10 @@ public class Shooter extends SubsystemBase {
     SmartShuffleboard.put("Shooter", "Shooter Motor 1", shooterWheel1.get());
     SmartShuffleboard.put("Shooter", "Shooter Motor 2", shooterWheel2.get());
     SmartShuffleboard.put("Shooter", "Shooter Sensor 1", shooterSensor.get());
-    SmartShuffleboard.put("Shooter", "isDone", isDone);
+    //Tests
+    SmartShuffleboard.put("Tests", "isDone", isDone);
+    SmartShuffleboard.put("Tests", "shooterSensorActivated", shooterSensorActivated);
+
   }
 
 }
