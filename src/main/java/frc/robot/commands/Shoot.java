@@ -54,5 +54,6 @@ public class Shoot extends Command {
     public void end(boolean interrupted) {
         shooter.stopMotor();
         timer.stop();
+        activated = false;
     }
 }
