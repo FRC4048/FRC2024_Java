@@ -9,8 +9,7 @@ public class Shoot extends Command {
 
     private Shooter shooter;
     private Timer timer = new Timer();
-    public static boolean isDone = false;
-    public static boolean shooterSensorActivated = false;
+    private boolean activated = false;
     private final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
 
     public Shoot(Shooter shooter) {
@@ -22,34 +21,38 @@ public class Shoot extends Command {
     public void initialize() {
         //Rest timer
         timer.reset();
-        isDone = false;
-        shooterSensorActivated = shooter.getShooterSensorActivated();
+        activated = false;
     }
 
     @Override
     public void execute() {
         //Spin motors once started
         shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
-        shooterSensorActivated = shooter.getShooterSensorActivated();
-
-        if (timer.advanceIfElapsed(SHOOTER_TIME_AFTER_TRIGGER)) {
-            shooter.stopMotor();
-            timer.reset();
-            isDone = true;
         }
-    }
 
     @Override 
     public boolean isFinished() {
         //Check if sensor has been activated
-        if (shooterSensorActivated == true) {
+        if ((shooter.getShooterSensorActivated() == true) || (activated == true)) {
             timer.start();
-            return isDone;
+            activated = true;
+            if (timer.hasElapsed(SHOOTER_TIME_AFTER_TRIGGER) == true) {
+                return true;
+            }
+
+            else {
+                return false;
+            }
         }
 
         else {
-            return isDone;
+            return false;
         }
     }
-    
+
+    @Override
+    public void end(boolean interrupted) {
+        shooter.stopMotor();
+        timer.stop();
+    }
 }
