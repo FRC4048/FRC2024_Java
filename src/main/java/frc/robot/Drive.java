@@ -1,25 +1,23 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 
 import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
-    private SwerveDrivetrain drivetrain;
+    private final SwerveDrivetrain drivetrain;
 
-    private DoubleSupplier fwdSupplier, strSupplier, rtSupplier;
+    private final DoubleSupplier fwdSupplier;
+    private final DoubleSupplier strSupplier;
+    private final DoubleSupplier rtSupplier;
 
 
-    public Drive(
-            SwerveDrivetrain drivetrain,
-            DoubleSupplier fwdSupplier,
-            DoubleSupplier strSupplier,
-            DoubleSupplier rtSupplier) {
+    public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
         addRequirements(drivetrain);
-
         this.drivetrain = drivetrain;
         this.fwdSupplier = fwdSupplier;
         this.strSupplier = strSupplier;
@@ -33,12 +31,13 @@ public class Drive extends Command {
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.1);
         double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.1);
 
-        drivetrain.drive(-fwd, -str, -rcw, true);
+        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
+        drivetrain.drive(driveStates);
     }
 
 
     @Override
     public boolean isFinished() {
-        return false;
+        return super.isFinished();
     }
 }

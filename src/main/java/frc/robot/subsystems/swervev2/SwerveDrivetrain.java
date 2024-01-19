@@ -77,7 +77,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         AutoBuilder.configureHolonomic(poseEstimator::getEstimatedPose,
                 this::resetOdometry,
                 () -> kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState()),
-                this::driveRobotRelative,
+                this::drive,
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(1, 0.0, 0.0), // Translation PID constants
                         new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
@@ -94,16 +94,15 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
 
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-                fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(Math.toRadians(gyroValue)))
-                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
-        setModuleStates(swerveModuleStates);
+    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
+        return fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
+                : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
-    public void driveRobotRelative(ChassisSpeeds speeds){
-        drive(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond,false);
+    public void drive(ChassisSpeeds speeds){
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates,Constants.MAX_VELOCITY);
+        setModuleStates(swerveModuleStates);
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
