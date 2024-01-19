@@ -1,6 +1,10 @@
 package frc.robot.subsystems.swervev2;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,16 +12,18 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 /**
  * blue centric //TODO make work for red
  */
+import java.util.Optional;
+
 public class SwerveDrivetrain extends SubsystemBase {
     
     private final GenericSwerveModule frontLeft;
@@ -61,11 +67,30 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
+
+        AutoBuilder.configureHolonomic(poseEstimator::getEstimatedPose,
+                this::resetOdometry,
+                () -> kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState()),
+                this::driveRobotRelative,
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(1, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
+                        3, // Max module speed, in m/s
+                        0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
+                        new ReplanningConfig() // Default path planning config. See the API for the options here
+                ), () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                }, this);
     }
 
 
@@ -76,6 +101,9 @@ public class SwerveDrivetrain extends SubsystemBase {
                         : new ChassisSpeeds(xSpeed, ySpeed, rot));
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
+    }
+    public void driveRobotRelative(ChassisSpeeds speeds){
+        drive(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond,false);
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
