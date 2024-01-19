@@ -9,9 +9,11 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.RampMove;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Ramp;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -54,7 +56,10 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
-
+  public void putShuffleboardCommands() {
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID", new SetArmPositionPID(arm, 10.0));
+    SmartShuffleboard.putCommand("Ramp", "Up", new ChangeArmPositionPID(arm, 10.0));
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -7,7 +7,8 @@ package frc.robot.utils.smartshuffleboard;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class SmartShuffleboard {
         return smartTab.getValue(fieldName);
     }
 
-    public static void putCommand(String tabName, String fieldName, CommandBase cmd)    // value is primitive
+    public static void putCommand(String tabName, String fieldName, Command cmd)    // value is primitive
     {
         SmartShuffleboardTab smartTab = getOrCreateTab(tabName);
         smartTab.putCommand(fieldName, cmd);

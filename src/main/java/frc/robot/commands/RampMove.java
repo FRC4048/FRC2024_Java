@@ -6,11 +6,11 @@ import frc.robot.subsystems.Ramp;
 public class RampMove extends Command{
     
     private Ramp ramp;
-    private double degrees;
+    private double power;
 
-    public RampMove(Ramp ramp, double degrees) {
+    public RampMove(Ramp ramp, double power) {
         this.ramp = ramp;
-        this.degrees = degrees;
+        this.power = power;
         addRequirements(this.ramp);
     }
 
@@ -21,7 +21,7 @@ public class RampMove extends Command{
 
     @Override
     public void execute() {
-        ramp.setRampPos(degrees);
+        ramp.setRampPos(power);
     }
     
     @Override

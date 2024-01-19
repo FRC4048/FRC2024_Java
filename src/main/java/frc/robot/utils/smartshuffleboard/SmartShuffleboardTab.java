@@ -10,7 +10,7 @@ package frc.robot.utils.smartshuffleboard;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.wpilibj.shuffleboard.*;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import java.util.*;
 
@@ -119,7 +119,7 @@ public class SmartShuffleboardTab {
         }
     }
 
-    public void putCommand(String fieldName, CommandBase cmd)
+    public void putCommand(String fieldName, Command cmd)
     {
         if (!commandSet.contains(fieldName))
         {
