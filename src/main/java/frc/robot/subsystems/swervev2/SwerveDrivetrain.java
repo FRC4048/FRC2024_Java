@@ -73,24 +73,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
-
-        AutoBuilder.configureHolonomic(poseEstimator::getEstimatedPose,
-                this::resetOdometry,
-                () -> kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState()),
-                this::drive,
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(1, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
-                        3, // Max module speed, in m/s
-                        0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
-                        new ReplanningConfig() // Default path planning config. See the API for the options here
-                ), () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-                    Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-                }, this);
     }
 
 
@@ -103,6 +85,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates,Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
+    }
+    public ChassisSpeeds speedsFromStates(){
+        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {

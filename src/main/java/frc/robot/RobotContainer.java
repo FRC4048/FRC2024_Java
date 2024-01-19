@@ -6,9 +6,14 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
@@ -22,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.util.Optional;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -31,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
   private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
-  private final SwerveDrivetrain drivetrain;
+  private SwerveDrivetrain drivetrain;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -41,7 +48,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    setupDriveTrain();
 
+    // Configure the trigger bindings
+    configureBindings();
+  }
+
+  private void setupDriveTrain() {
     SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
     SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
     SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -59,29 +72,29 @@ public class RobotContainer {
     navxGyro.setAngleAdjustment(0);
     this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
-
-    // Configure the trigger bindings
-    configureBindings();
+    AutoBuilder.configureHolonomic(drivetrain::getPose,
+            drivetrain::resetOdometry,
+            drivetrain::speedsFromStates,
+            drivetrain::drive,
+            new HolonomicPathFollowerConfig(
+                    new PIDConstants(0.3, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.3, 0.0, 0.0), // Rotation PID constants
+                    3, // Max module speed, in m/s
+                    0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
+                    new ReplanningConfig() // Default path planning config. See the API for the options here
+            ), () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+              Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+              return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+            }, drivetrain);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
