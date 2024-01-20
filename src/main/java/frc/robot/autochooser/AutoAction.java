@@ -52,4 +52,9 @@ public enum AutoAction {
                default: throw new InvalidParameterException(String.format("FieldLocation must be of types {%s,%s,%s} and location must not be -1",FieldLocation.Left,FieldLocation.Right,FieldLocation.Middle));
           }
      }
+
+     @Override
+     public String toString() {
+          return getName();
+     }
 }

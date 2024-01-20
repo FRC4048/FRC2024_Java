@@ -9,9 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.autochooser.chooser.ExampleAutoChooser;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.autochooser.chooser.ExampleAutoValidationChooser;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -38,7 +36,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private final ExampleAutoChooser chooser = new ExampleAutoChooser();
+  private final ExampleAutoValidationChooser chooser = new ExampleAutoValidationChooser();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 

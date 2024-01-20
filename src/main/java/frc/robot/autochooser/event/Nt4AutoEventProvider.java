@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class Nt4AutoEventProvider implements AutoEventProvider {
-    private static final String AUTO_TAB_NAME = "Auto";
-    private static final String ACTION_FIELD_NAME = "Auto Action";
-    private static final String LOCATION_FIELD_NAME = "Location Chooser";
+    public static final String AUTO_TAB_NAME = "Auto";
+    public static final String ACTION_FIELD_NAME = "Auto Action";
+    public static final String LOCATION_FIELD_NAME = "Location Chooser";
 
     private final SendableChooser<AutoAction> actionChooser;
     private final SendableChooser<FieldLocation> locationChooser;
@@ -60,7 +60,7 @@ public class Nt4AutoEventProvider implements AutoEventProvider {
     public void setOnActionChangeListener(Consumer<AutoAction> listener){
         actionChooser.onChange(listener);
     }
-    public void setOnLocationChangeListener(Consumer<AutoAction> listener){
-        actionChooser.onChange(listener);
+    public void setOnLocationChangeListener(Consumer<FieldLocation> listener){
+        locationChooser.onChange(listener);
     }
 }
