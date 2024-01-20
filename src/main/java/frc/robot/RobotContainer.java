@@ -41,9 +41,9 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+  //private final CommandXboxController m_driverController =
+      //new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private CommandXboxController controller = new CommandXboxController(0);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -64,10 +64,12 @@ public class RobotContainer {
     navxGyro.setAngleAdjustment(0);
     this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
-
+    
     // Configure the trigger bindings
     ramp = new Ramp();
     configureBindings();
+    putShuffleboardCommands();
+
   }
 
   /**
@@ -83,9 +85,11 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
   }
   public void putShuffleboardCommands() {
-    SmartShuffleboard.putCommand("Ramp", "SetArmPID", new SetArmPositionPID(arm, 10.0));
-    SmartShuffleboard.putCommand("Ramp", "Up", new ChangeArmPositionPID(arm, 10.0));
+    controller.button(XboxController.Button.kA.value).onTrue(new RampMove(ramp, 250));
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID", new RampMove(ramp, 1200));
+
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

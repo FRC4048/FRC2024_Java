@@ -46,37 +46,46 @@ public class Ramp extends SubsystemBase {
         SmartShuffleboard.put("Ramp", "PID I", pidI);
         SmartShuffleboard.put("Ramp", "PID D", pidD);
     }
-        public void periodic() {
 
-            SmartShuffleboard.put("Ramp", "P Gain", pidController.getP());
-            SmartShuffleboard.put("Ramp", "I Gain", pidController.getI());
-            SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
-            SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
-            SmartShuffleboard.put("Ramp", "Encoder Value", encoder.getPosition());
-            SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
-            //pid tuning
-            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
-            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
-            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
-            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
-        }
+    public void periodic() {
 
-        public void setRampPos(double position) {
-            pidController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
-            this.ramppos = position;
-        }
+        SmartShuffleboard.put("Ramp", "P Gain", pidController.getP());
+        SmartShuffleboard.put("Ramp", "I Gain", pidController.getI());
+        SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
+        SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
+        SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
+        SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
+        // pid tuning
+        pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
+        pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
+        pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
+        pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
+    }
 
-        public void changeRampPos(double increment) {
-            double newRampPos = Math.max(0.0, Math.min(40.0, this.ramppos + increment));
-            setRampPos(newRampPos);
-        }
+    public void setRampPos(double rotations) {
+        pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+        this.ramppos = rotations;
+    }
 
-        public void setPID() {
-            pidController.setP(pidP);
-            pidController.setI(pidI);
-            pidController.setD(pidD);
-            pidController.setFF(pidFF);
+    public double getRampPos() {
+        return encoder.getPosition();
+    }
 
-            System.out.println("-------------->>>>>>> Set pid to " + pidP + "/" + pidI + "/" + pidD + "/" + pidFF);
-        }
- }
+    public void changeRampPos(double increment) {
+        double newRampPos = Math.max(0.0, Math.min(40.0, this.ramppos + increment));
+        setRampPos(newRampPos);
+    }
+
+    public void resetEncoder() {
+        encoder.setPosition(0);
+    }
+
+    public void setPID() {
+        pidController.setP(pidP);
+        pidController.setI(pidI);
+        pidController.setD(pidD);
+        pidController.setFF(pidFF);
+
+        //System.out.println("-------------->>>>>>> Set pid to " + pidP + "/" + pidI + "/" + pidD + "/" + pidFF);
+    }
+}
