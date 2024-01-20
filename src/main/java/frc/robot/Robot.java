@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -64,9 +65,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("New New Path"));
-//    m_autonomousCommand = new PathPlannerAuto("Example Path");
-//    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Figure8"));
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
