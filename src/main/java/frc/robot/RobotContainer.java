@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ReportErrorCommand;
+import frc.robot.autochooser.chooser.ExampleAutoValidationChooser;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -46,6 +47,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+  private final ExampleAutoValidationChooser chooser = new ExampleAutoValidationChooser();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     setupDriveTrain();
@@ -98,7 +100,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return chooser.getAutoCommand();
   }
 
   public SwerveDrivetrain getDrivetrain() {
