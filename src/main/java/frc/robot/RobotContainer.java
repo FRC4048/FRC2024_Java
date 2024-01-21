@@ -61,7 +61,7 @@ public class RobotContainer {
                         new PIDConstants(5, 0.0, 0.0), // Rotation PID constants
                         3, // Max module speed, in m/s
                         0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
-                        new ReplanningConfig() // Default path planning config. See the API for the options here
+                        new ReplanningConfig(true,true,1.0,0.25)
                 ), RobotContainer::shouldFlip, drivetrain);
     }
 
