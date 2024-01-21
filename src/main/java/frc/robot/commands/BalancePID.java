@@ -5,6 +5,7 @@ import frc.robot.utils.Constants;
 import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.SimponsMethod;
+import frc.robot.utils.ClimberState;
 //import frc.robot.utils.Logger;
 //import frc.robot.utils.SmartShuffleboard;
 //import frc.robot.utils.logging.wrappers.LoggedCommand;
@@ -23,6 +24,8 @@ public class BalancePID extends Command{
         super.initialize();
         counter=0;
         startTime=Timer.getFPGATimestamp();
+        System.out.println("Im getting balanced");
+        climber.setClimberState(ClimberState.BALANCE);
     }
     @Override
     public void execute() {
@@ -33,5 +36,15 @@ public class BalancePID extends Command{
         double speed = Math.abs(pitch) > Constants.BALANCE_THRESH ? dir*Constants.BALANCE_LOW_SPEED : 0;
         climber.balance(speed);
     }
-    
+    @Override
+    public boolean isFinished() {
+        double pitch = climber.getNavxGyroValue();
+        if (Math.abs(pitch)<Constants.BALANCE_THRESH) {
+            System.out.println("Im Balanced");
+            climber.setClimberState(ClimberState.STOPPED);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

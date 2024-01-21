@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -21,6 +22,9 @@ import frc.robot.subsystems.swervev2.SwervePidConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.BalancePID;
+import frc.robot.commands.StaticClimb;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,7 +35,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
   private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+  private CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_ID);
   private final SwerveDrivetrain drivetrain;
+  private Climber climber;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -75,6 +81,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
+    controller.button(XboxController.Button.kA.value).toggleOnTrue(new StaticClimb(climber).andThen(new BalancePID(climber)).repeatedly());
   }
 
   /**

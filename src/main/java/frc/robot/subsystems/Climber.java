@@ -6,8 +6,11 @@ import java.awt.geom.Path2D;
 
 import edu.wpi.first.wpilibj.Timer;
 import com.revrobotics.CANSparkMax;
+
+import frc.robot.commands.BalancePID;
 import frc.robot.utils.ClimberState;
 import frc.robot.utils.Constants;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
     private final CANSparkMax SparkMax1;
@@ -19,8 +22,8 @@ public class Climber extends SubsystemBase {
     private double instatenousDeravative;
 
     public Climber(){
-        this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID);
-        this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID);
+        this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID, CANSparkMax.MotorType.kBrushless);
+        this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID, CANSparkMax.MotorType.kBrushless);
         navxGyro = new AHRS();
 
         navxGyroValue = -1.00;
@@ -34,10 +37,20 @@ public class Climber extends SubsystemBase {
     public double getNavxGyroValue() {
         return navxGyroValue;
     }
-    private double getGyro() {
+    public double getGyroPitch() { // change to private later
         return (navxGyro.getPitch() % 360)*-1; //ccw should be positive
     }
+    public double getGyroYaw() { // change to private later
+        return (navxGyro.getYaw() % 360)*-1;
+    }
+    public double getGyroRoll() { // change to private later
+        return (navxGyro.getRoll() % 360)*-1;
+    }
     private ClimberState currentState = ClimberState.STOPPED;
+    public ClimberState setClimberState(ClimberState newState){
+        currentState = newState;
+        return currentState;
+    }
 
     private double ArmUnderExtend=Constants.ArmSeperationDistance*java.lang.Math.tan(navxGyroValue);
     
@@ -71,14 +84,20 @@ public class Climber extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        instatenousDeravative = (getGyro()-navxGyroValue)/(Timer.getFPGATimestamp()-currentTime);
+        instatenousDeravative = (getGyroPitch()-navxGyroValue)/(Timer.getFPGATimestamp()-currentTime);
         currentTime=Timer.getFPGATimestamp();
-        navxGyroValue = getGyro(); 
-        ArmUnderExtendLog.lineTo(Timer.getFPGATimestamp(),navxGyroValue);
+        ArmUnderExtend=Constants.ArmSeperationDistance*java.lang.Math.tan(navxGyroValue);
+        navxGyroValue = getGyroPitch(); 
+        //ArmUnderExtendLog.lineTo(Timer.getFPGATimestamp(),navxGyroValue);
         if (currentState==ClimberState.BALANCE && navxGyroValue<1 && navxGyroValue>-1) {
             currentState=ClimberState.STOPPED;
         } else if (navxGyroValue>1 || navxGyroValue<-1) {
             currentState=ClimberState.BALANCE;
         }
+        SmartShuffleboard.put("Climber", "Climber State", "State", currentState);
+        SmartShuffleboard.put("Climber", "Climber State", "ArmUnderExtend", ArmUnderExtend);
+        SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
+        SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
+        SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
     } 
 }
