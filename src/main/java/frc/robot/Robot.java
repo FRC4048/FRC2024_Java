@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.drive.WheelAlign;
 import frc.robot.logging.Logger;
+import frc.robot.utils.diag.Diagnostics;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,6 +25,8 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private double loopTime = 0;
     private RobotContainer robotContainer;
+    private static Diagnostics diagnostics;
+
 
     @Override
     public void robotInit() {
@@ -31,6 +34,7 @@ public class Robot extends TimedRobot {
             DataLogManager.start();
             DriverStation.startDataLog(DataLogManager.getLog(), true);
         }
+        diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
@@ -59,6 +63,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        diagnostics.reset();
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
@@ -77,10 +82,14 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
         loopTime = 0;
+        diagnostics.refresh();
     }
 
     @Override
     public void simulationPeriodic() {
         loopTime = Timer.getFPGATimestamp();
+    }
+    public static Diagnostics getDiagnostics() {
+        return diagnostics;
     }
 }
