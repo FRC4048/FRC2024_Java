@@ -48,6 +48,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //Update the Shuffleboard
     SmartShuffleboard.put("Shooter", "Shooter Motor 1", shooterWheel1.get());
     SmartShuffleboard.put("Shooter", "Shooter Motor 2", shooterWheel2.get());
     SmartShuffleboard.put("Shooter", "Shooter Sensor 1", shooterSensor.get());

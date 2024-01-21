@@ -18,17 +18,20 @@ public class ShootTest extends Command {
 
     @Override
     public void initialize() {
+        //Reset and start timers
         timer.reset();
         timer.start();
     }
 
     @Override
     public void execute() {
+        //Spin motors
         shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
     }
 
     @Override 
     public boolean isFinished() {
+        //Check is timer has passed 2 seconds
         if (timer.advanceIfElapsed(MOTOR_RUN_TIME)) {
             shooter.stopMotor();
             return true;

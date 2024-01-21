@@ -32,7 +32,7 @@ public class Shoot extends Command {
 
     @Override 
     public boolean isFinished() {
-        //Check if sensor has been activated
+        //Check if sensor has been activated then check if timer has passed 0.5 seconds
         if ((shooter.getShooterSensorActivated() == true) || (activated == true)) {
             timer.start();
             activated = true;
@@ -52,6 +52,7 @@ public class Shoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        //Stop and reset everything once command has ended
         shooter.stopMotor();
         timer.stop();
         activated = false;
