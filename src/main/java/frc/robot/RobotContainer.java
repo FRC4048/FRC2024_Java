@@ -33,17 +33,17 @@ import frc.robot.commands.StaticClimb;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
-  private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+  /*private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+  private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);*/
   private CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_ID);
   private final SwerveDrivetrain drivetrain;
-  private Climber climber;
+  private Climber climber = null;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  /*private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);*/
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,6 +66,8 @@ public class RobotContainer {
     this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
 
+    climber = new Climber(navxGyro);
+    
     // Configure the trigger bindings
     configureBindings();
   }
@@ -80,8 +82,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
-    controller.button(XboxController.Button.kA.value).toggleOnTrue(new StaticClimb(climber).andThen(new BalancePID(climber)).repeatedly());
+    //drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
+    controller.button(XboxController.Button.kA.value).whileTrue(new StaticClimb(climber).andThen(new BalancePID(climber)).repeatedly());
   }
 
   /**

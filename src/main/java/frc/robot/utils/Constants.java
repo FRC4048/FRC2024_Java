@@ -18,7 +18,7 @@ public final class Constants
     public static final double ArmSeperationDistance = 5.00; 
     public static final double INTAKE_SPEED = 1.00;
     public static final double OUTTAKE_SPEED = 1.00;
-    public static final double CLIMBER_SPEED = 0.15;
+    public static final double CLIMBER_SPEED = 0.10;
     public static final int CONTROLLER_ID = 1;
     public static final int INTAKE_MOTOR1_ID = 4;
     public static final int INTAKE_MOTOR2_ID = 5;
@@ -29,7 +29,7 @@ public final class Constants
     public static final double BALANCE_kP = 1;
     public static final double BALANCE_kTi = 1;
     public static final double Balance_KTd = 1;
-    public static final double BALANCE_LOW_SPEED=0.10;
-    public static final double BALANCE_HIGH_SPEED=0.20;
+    public static final double BALANCE_LOW_SPEED=0.30;
+    public static final double BALANCE_HIGH_SPEED=0.50;
     public static final double BALANCE_THRESH=30;
 }

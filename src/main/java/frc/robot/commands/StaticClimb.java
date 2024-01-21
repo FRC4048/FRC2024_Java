@@ -5,7 +5,7 @@ import frc.robot.utils.ClimberState;
 import frc.robot.utils.Constants;
 
 public class StaticClimb extends Command {
-    private Climber climber;
+    private final Climber climber;
     private int counter;
     private double startTime;
 

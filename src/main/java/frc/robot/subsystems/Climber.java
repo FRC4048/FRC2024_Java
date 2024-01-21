@@ -21,10 +21,10 @@ public class Climber extends SubsystemBase {
     private double currentTime = Timer.getFPGATimestamp();
     private double instatenousDeravative;
 
-    public Climber(){
+    public Climber(AHRS navxGyro){
         this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID, CANSparkMax.MotorType.kBrushless);
         this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID, CANSparkMax.MotorType.kBrushless);
-        navxGyro = new AHRS();
+        this.navxGyro = new AHRS();
 
         navxGyroValue = -1.00;
     }
@@ -94,7 +94,6 @@ public class Climber extends SubsystemBase {
         } else if (navxGyroValue>1 || navxGyroValue<-1) {
             currentState=ClimberState.BALANCE;
         }
-        SmartShuffleboard.put("Climber", "Climber State", "State", currentState);
         SmartShuffleboard.put("Climber", "Climber State", "ArmUnderExtend", ArmUnderExtend);
         SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
         SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
