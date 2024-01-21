@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
-        new WheelAlign(robotContainer.getDrivetrain()).schedule();
+
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
 
@@ -46,13 +46,6 @@ public class Robot extends TimedRobot {
         // Logger should stay at the end of robotPeriodic()
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
-    }
-
-    @Override
-    public void autonomousInit() {
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-        }
     }
 
     @Override

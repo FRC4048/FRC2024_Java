@@ -4,6 +4,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public abstract class LoggingCommand extends Command {
 
     @Override
     public void initialize() {
-        getLoggingEntry().append(true);
+        if (Constants.ENABLE_LOGGING) getLoggingEntry().append(true);
         underlying.initialize();
     }
 
@@ -37,7 +38,7 @@ public abstract class LoggingCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        underlying.end(interrupted);
+        if (Constants.ENABLE_LOGGING) underlying.end(interrupted);
         getLoggingEntry().append(false);
     }
 
