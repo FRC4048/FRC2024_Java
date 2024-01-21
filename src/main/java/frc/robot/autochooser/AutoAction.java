@@ -3,6 +3,7 @@ package frc.robot.autochooser;
 public enum AutoAction {
     DoNothing("Do Nothing"),
     FigureEight("Figure 8"),
+    ShootAndCross("Shoot and Cross"),
     CrossLine("Cross The Line"),
     TwoPieceMoveLeft("Two Piece Move Left"),
     OnePieceMoveLeft("One Piece Move Left");

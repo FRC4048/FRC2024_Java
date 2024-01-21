@@ -35,14 +35,14 @@ public final class Constants {
     public static final int MANUAL_CONTROLLER_ID = 3;
 
     //S = STEER, D = DRIVE, Drivetrain ConstantsS
-    public static final int DRIVE_FRONT_RIGHT_S = 40;
-    public static final int DRIVE_FRONT_RIGHT_D = 49;
-    public static final int DRIVE_BACK_RIGHT_S = 46;
-    public static final int DRIVE_BACK_RIGHT_D = 43;
-    public static final int DRIVE_FRONT_LEFT_S = 50;
-    public static final int DRIVE_FRONT_LEFT_D = 51;
-    public static final int DRIVE_BACK_LEFT_S = 31;
-    public static final int DRIVE_BACK_LEFT_D = 34;
+    public static final int DRIVE_FRONT_RIGHT_S = 51;
+    public static final int DRIVE_FRONT_RIGHT_D = 50;
+    public static final int DRIVE_BACK_RIGHT_S = 34;
+    public static final int DRIVE_BACK_RIGHT_D = 31;
+    public static final int DRIVE_FRONT_LEFT_S = 49;
+    public static final int DRIVE_FRONT_LEFT_D = 40;
+    public static final int DRIVE_BACK_LEFT_S = 43;
+    public static final int DRIVE_BACK_LEFT_D = 46;
 
     public static final int DRIVE_CANCODER_FRONT_RIGHT = 60;
     public static final int DRIVE_CANCODER_BACK_RIGHT = 57;

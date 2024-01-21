@@ -12,15 +12,17 @@ import java.util.Map;
 
 public class ExampleAutoChooser extends Nt4AutoValidationChooser {
     private final Map<AutoEvent, Command> commandMap = Map.of(
-            new AutoEvent(AutoAction.DoNothing, FieldLocation.Middle), new PlaceHolderCommand(),
-            new AutoEvent(AutoAction.DoNothing, FieldLocation.Left), new PlaceHolderCommand(),
-            new AutoEvent(AutoAction.DoNothing, FieldLocation.Right), new PlaceHolderCommand(),
-            new AutoEvent(AutoAction.FigureEight, FieldLocation.Left), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Figure8")),
-            new AutoEvent(AutoAction.TwoPieceMoveLeft, FieldLocation.Left), new PlaceHolderCommand()
+            new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand(),
+            new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand(),
+            new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand(),
+            new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossRight")),
+            new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft")),
+            new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid")),
+            new AutoEvent(AutoAction.TwoPieceMoveLeft, FieldLocation.SpeakerRight), new PlaceHolderCommand()
     );
 
     public ExampleAutoChooser() {
-        super(AutoAction.DoNothing, FieldLocation.Middle);
+        super(AutoAction.DoNothing, FieldLocation.SpeakFront);
     }
 
 
