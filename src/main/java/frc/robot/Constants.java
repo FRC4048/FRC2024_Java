@@ -44,7 +44,7 @@ public final class Constants {
     public static final int DRIVE_BACK_LEFT_S = 43;
     public static final int DRIVE_BACK_LEFT_D = 46;
 
-    public static final int DRIVE_CANCODER_FRONT_RIGHT = 60;
+    public static final int DRIVE_CANCODER_FRONT_RIGHT = 59;
     public static final int DRIVE_CANCODER_BACK_RIGHT = 57;
     public static final int DRIVE_CANCODER_FRONT_LEFT = 56;
     public static final int DRIVE_CANCODER_BACK_LEFT = 58;
@@ -150,10 +150,10 @@ public final class Constants {
     public static final double AUTO_TURN_TIMEOUT = 1;
     public static final double SUBSTATION_ALIGN_THRESHOLD = 2;
 
-    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 218.76;
-    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 9.0;
-    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 351.3;
-    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 299.13;
+    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 0;
+    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 0;
+    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 0;
+    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 0;
 
 
     public static final double GRIPPER_OPENING_SPEED = 1;

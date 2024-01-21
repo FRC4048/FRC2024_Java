@@ -42,11 +42,14 @@ public class RobotContainer {
     private SwerveDrivetrain drivetrain;
     private final CommandXboxController controller = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-    private final ExampleAutoChooser autoChooser = new ExampleAutoChooser();
+    private final ExampleAutoChooser autoChooser;
 
     public RobotContainer() {
         setupDriveTrain();
         setupPathPlaning();
+        autoChooser = new ExampleAutoChooser();
+        Rotation2d rotation2d = RobotContainer.shouldFlip() ? new Rotation2d(Math.PI): new Rotation2d(0);
+        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), rotation2d));
         configureBindings();
     }
 
@@ -82,9 +85,6 @@ public class RobotContainer {
         AHRS navxGyro = new AHRS();
         navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
-        Rotation2d rotation2d = RobotContainer.shouldFlip() ? new Rotation2d(Math.PI): new Rotation2d(0);
-        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), rotation2d));
-
     }
 
     private void configureBindings() {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swervev2.components;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,9 +18,9 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder steerEncoder;
     private double steerOffset = 0;
-    private final WPI_CANCoder absEncoder;
+    private final CANcoder absEncoder;
 
-    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, WPI_CANCoder absEncoder, RelativeEncoder driveEncoder, RelativeEncoder steerEncoder,
+    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, CANcoder absEncoder, RelativeEncoder driveEncoder, RelativeEncoder steerEncoder,
                                 double driveVelFactor, double drivePosFactor, double steerPosFactor) {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
@@ -87,7 +88,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
     @Override
     public void setSteerOffset(double zeroAbs) {
         steerEncoder.setPosition(0);
-        steerOffset = Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition());
+        steerOffset = (zeroAbs * 2 * Math.PI) - (absEncoder.getAbsolutePosition().getValue() * 2 * Math.PI);
         steerOffset = normalizeAngle(steerOffset);
     }
     public SwerveModulePosition getPosition(){
@@ -106,4 +107,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
         return angleInRad;
     }
 
+    public CANcoder getAbsEncoder() {
+        return absEncoder;
+    }
 }
