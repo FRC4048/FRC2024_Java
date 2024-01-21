@@ -18,21 +18,7 @@ public abstract class AutoChooser {
         return provider;
     }
     public Translation2d getStartingPosition(){
-        switch (provider.getSelectedLocation()){
-            case Left -> {
-                return provider.getSelectedAction().getLeftLocation();
-            }
-            case Middle -> {
-                return provider.getSelectedAction().getMiddleLocation();
-            }
-            case Right -> {
-                return provider.getSelectedAction().getRightLocation();
-            }
-            default -> {
-                DriverStation.reportError("No auto action selected",true);
-                return new Translation2d(0,0);
-            }
-        }
+        return provider.getSelectedLocation().getLocation();
     }
 
 }

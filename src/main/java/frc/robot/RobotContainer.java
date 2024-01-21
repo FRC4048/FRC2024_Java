@@ -82,7 +82,8 @@ public class RobotContainer {
         AHRS navxGyro = new AHRS();
         navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
-        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), new Rotation2d(Math.toRadians(0))));
+        Rotation2d rotation2d = RobotContainer.shouldFlip() ? new Rotation2d(Math.PI): new Rotation2d(0);
+        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), rotation2d));
 
     }
 
