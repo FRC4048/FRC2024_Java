@@ -9,7 +9,7 @@ public class ShootTest extends Command {
 
     private Shooter shooter;
     private Timer timer = new Timer();
-    private final double MOTOR_RUN_TIME = 2;
+    private final double MOTOR_RUN_TIME = 20;
 
     public ShootTest(Shooter shooter) {
         this.shooter = shooter;
@@ -19,21 +19,17 @@ public class ShootTest extends Command {
     @Override
     public void initialize() {
         //Reset and start timers
+        shooter.setShooterMotor1RPM(Constants.SHOOTER_MOTOR_1_RPM);
+        shooter.setShooterMotor2RPM(Constants.SHOOTER_MOTOR_2_RPM);
         timer.reset();
         timer.start();
-    }
-
-    @Override
-    public void execute() {
-        //Spin motors
-        shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
     }
 
     @Override 
     public boolean isFinished() {
         //Check is timer has passed 2 seconds
         if (timer.advanceIfElapsed(MOTOR_RUN_TIME)) {
-            shooter.stopMotor();
+            shooter.stopShooter();
             return true;
         }
 

@@ -6,53 +6,118 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Shooter extends SubsystemBase {
   
-  private final CANSparkMax shooterWheel1;
-  private final CANSparkMax shooterWheel2;
-  private final DigitalInput shooterSensor;
+  private final CANSparkMax shooterMotor1;
+  private final CANSparkMax shooterMotor2;
+  private final DigitalInput shooterSensor1;
+  private final DigitalInput shooterSensor2;
+  private final SparkPIDController shooterMotor1PID;
+  private final SparkPIDController shooterMotor2PID;
 
   public Shooter() {
     
-    this.shooterWheel1 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_1, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterWheel2 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_2, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterSensor = new DigitalInput(Constants.SHOOTER_SENSOR_ID);
+    this.shooterMotor1 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_1, CANSparkLowLevel.MotorType.kBrushless);
+    this.shooterMotor2 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_2, CANSparkLowLevel.MotorType.kBrushless);
+    this.shooterSensor1 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
+    this.shooterSensor2 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
 
-    shooterWheel1.restoreFactoryDefaults();
-    shooterWheel2.restoreFactoryDefaults();
+    shooterMotor1.restoreFactoryDefaults();
+    shooterMotor2.restoreFactoryDefaults();
 
-    this.shooterWheel1.setIdleMode(IdleMode.kCoast);
-    this.shooterWheel2.setIdleMode(IdleMode.kCoast);
+    this.shooterMotor1.setIdleMode(IdleMode.kCoast);
+    this.shooterMotor2.setIdleMode(IdleMode.kCoast);
   
+    this.shooterMotor1PID = shooterMotor1.getPIDController();
+    this.shooterMotor2PID = shooterMotor2.getPIDController();
+
+    shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_1_PID_P);
+    shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_1_PID_I);
+    shooterMotor1PID.setD(Constants.SHOOTER_MOTOR_1_PID_D);
+    shooterMotor1PID.setIZone(Constants.SHOOTER_MOTOR_1_PID_IZ);
+    shooterMotor1PID.setFF(Constants.SHOOTER_MOTOR_1_PID_FF);
+    shooterMotor1PID.setOutputRange(Constants.SHOOTER_MOTOR_1_MIN_OUTPUT, Constants.SHOOTER_MOTOR_1_MAX_OUTPUT);
+
+    shooterMotor2PID.setP(Constants.SHOOTER_MOTOR_2_PID_P);
+    shooterMotor2PID.setI(Constants.SHOOTER_MOTOR_2_PID_I);
+    shooterMotor2PID.setD(Constants.SHOOTER_MOTOR_2_PID_D);
+    shooterMotor2PID.setIZone(Constants.SHOOTER_MOTOR_2_PID_IZ);
+    shooterMotor2PID.setFF(Constants.SHOOTER_MOTOR_2_PID_FF);
+    shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_2_MIN_OUTPUT, Constants.SHOOTER_MOTOR_2_MAX_OUTPUT);
   }
 
   //Spin shooter motors
-  public void spinMotors(double speed) {
-    shooterWheel1.set(speed);
-    shooterWheel2.set(speed);
+  public void setShooterMotor1Speed(double speed) {
+    shooterMotor1.set(speed);
+  }
+
+  public void setShooterMotor2Speed(double speed) {
+    shooterMotor2.set(speed);
+  }
+
+  public double getShooterMotor1Speed() {
+    return shooterMotor1.get();
+  }
+
+  public double getShooterMotor2Speed() {
+    return shooterMotor2.get();
+  }
+
+  public void setShooterMotor1RPM(double rpm) {
+    shooterMotor1PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
+  }
+
+  public void setShooterMotor2RPM(double rpm) {
+    shooterMotor2PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
+  }
+
+  public RelativeEncoder getMotorEncodor1() {
+    return shooterMotor1.getEncoder();
+  }
+
+  public RelativeEncoder getMotorEncodor2() {
+    return shooterMotor2.getEncoder();
+  }
+
+  public double getShooterMotor1RPM() {
+    return getMotorEncodor1().getVelocity();
+  }
+
+  public double getShooterMotor2RPM() {
+    return getMotorEncodor2().getVelocity();
   }
 
   //Stop shooter motors
-  public void stopMotor() {
-    shooterWheel1.set(0);
-    shooterWheel2.set(0);
+  public void stopShooter() {
+    shooterMotor1.set(0);
+    shooterMotor2.set(0);
   }
 
-  //Get the status of the shooter sensor
-  public boolean getShooterSensorActivated() {
-    return shooterSensor.get();
+  //Get the status of the shooter sensor 1
+  public boolean getShooterSensor1Activated() {
+    return shooterSensor1.get();
+  }
+
+  //Get the status of the shooter sensor 2
+  public boolean getShooterSensor2Activated() {
+    return shooterSensor2.get();
   }
 
   @Override
   public void periodic() {
     //Update the Shuffleboard
-    SmartShuffleboard.put("Shooter", "Shooter Motor 1", shooterWheel1.get());
-    SmartShuffleboard.put("Shooter", "Shooter Motor 2", shooterWheel2.get());
-    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensorActivated());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 1 Speed", getShooterMotor1Speed());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 2 Speed", getShooterMotor2Speed());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 1 RPM", getShooterMotor1RPM());
+    SmartShuffleboard.put("Shooter", "Shooter Motor 2 RPM", getShooterMotor2RPM());
+    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensor1Activated());
+    SmartShuffleboard.put("Shooter", "Shooter Sensor 2", getShooterSensor2Activated());
   }
 
 }

@@ -17,12 +17,33 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 public final class Constants {
   
   //Shooter
-  public static final int SHOOTER_MOTOR_ID_1 = 44;
-  public static final int SHOOTER_MOTOR_ID_2 = 45;
+  public static final int SHOOTER_MOTOR_ID_1 = 41;
+  public static final int SHOOTER_MOTOR_ID_2 = 61;
 
-  public static final int SHOOTER_SENSOR_ID = 0;
+  public static final int SHOOTER_SENSOR_ID_1 = 0;
+  public static final int SHOOTER_SENSOR_ID_2 = 1;
 
   public static final double SHOOTER_MOTOR_SPEED = 0.75;
+
+  public static final double SHOOTER_MOTOR_1_RPM = 12000;
+  public static final double SHOOTER_MOTOR_2_RPM = 12000;
+
+  public static final double SHOOTER_MOTOR_1_PID_P = 5e-5;
+  public static final double SHOOTER_MOTOR_1_PID_I = 0;
+  public static final double SHOOTER_MOTOR_1_PID_D = 5e-5;
+  public static final double SHOOTER_MOTOR_1_PID_IZ = 0;
+  public static final double SHOOTER_MOTOR_1_PID_FF = 0.000015;
+  public static final double SHOOTER_MOTOR_1_MAX_OUTPUT = 1;
+  public static final double SHOOTER_MOTOR_1_MIN_OUTPUT = -1;
+
+  public static final double SHOOTER_MOTOR_2_PID_P = 5e-5;
+  public static final double SHOOTER_MOTOR_2_PID_I = 0;
+  public static final double SHOOTER_MOTOR_2_PID_D = 6e-6;
+  public static final double SHOOTER_MOTOR_2_PID_IZ = 0;
+  public static final double SHOOTER_MOTOR_2_PID_FF = 0.000015;
+  public static final double SHOOTER_MOTOR_2_MAX_OUTPUT = 1;
+  public static final double SHOOTER_MOTOR_2_MIN_OUTPUT = -1;
+
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 2;

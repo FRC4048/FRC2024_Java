@@ -23,18 +23,14 @@ public class Shoot extends Command {
         //Rest timer
         timer.reset();
         activated = false;
+        shooter.setShooterMotor1RPM(Constants.SHOOTER_MOTOR_1_RPM);
+        shooter.setShooterMotor2RPM(Constants.SHOOTER_MOTOR_2_RPM);
     }
-
-    @Override
-    public void execute() {
-        //Spin motors once started
-        shooter.spinMotors(Constants.SHOOTER_MOTOR_SPEED);
-        }
 
     @Override 
     public boolean isFinished() {
         //Check if sensor has been activated then check if timer has passed 0.5 seconds
-        if ((shooter.getShooterSensorActivated() == true) || (activated == true)) {
+        if ((shooter.getShooterSensor1Activated() == true) || (activated == true)) {
             timer.start();
             activated = true;
             if (timer.hasElapsed(SHOOTER_TIME_AFTER_TRIGGER) == true) {
@@ -54,7 +50,7 @@ public class Shoot extends Command {
     @Override
     public void end(boolean interrupted) {
         //Stop and reset everything once command has ended
-        shooter.stopMotor();
+        shooter.stopShooter();
         timer.stop();
         activated = false;
     }
