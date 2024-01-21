@@ -39,6 +39,7 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
             }
         });
     }
-    protected abstract boolean isValid(AutoAction action,FieldLocation location);
+
+    protected abstract boolean isValid(AutoAction action, FieldLocation location);
 
 }
