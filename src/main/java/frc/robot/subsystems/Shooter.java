@@ -52,7 +52,7 @@ public class Shooter extends SubsystemBase {
     //Update the Shuffleboard
     SmartShuffleboard.put("Shooter", "Shooter Motor 1", shooterWheel1.get());
     SmartShuffleboard.put("Shooter", "Shooter Motor 2", shooterWheel2.get());
-    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", shooterSensor.get());
+    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensorActivated());
   }
 
 }
