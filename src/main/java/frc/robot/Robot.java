@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.drive.WheelAlign;
-import frc.robot.logging.Logger;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.diag.Diagnostics;
 
 /**

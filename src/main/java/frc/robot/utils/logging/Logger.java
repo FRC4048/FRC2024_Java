@@ -1,4 +1,4 @@
-package frc.robot.logging;
+package frc.robot.utils.logging;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;

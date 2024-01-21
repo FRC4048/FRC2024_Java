@@ -1,4 +1,4 @@
-package frc.robot.logging;
+package frc.robot.utils.logging;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
