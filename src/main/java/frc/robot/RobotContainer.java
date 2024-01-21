@@ -75,9 +75,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    //Create Shoot Button (A)
+    //Create Shoot Button (A/B)
     controller.button(XboxController.Button.kA.value).onTrue(new Shoot(shooter));
-
     controller.button(XboxController.Button.kB.value).onTrue(new ShootTest(shooter));
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
