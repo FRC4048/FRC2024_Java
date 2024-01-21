@@ -83,7 +83,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
-    controller.button(XboxController.Button.kA.value).whileTrue(new StaticClimb(climber).andThen(new BalancePID(climber)).repeatedly());
+    //controller.button(XboxController.Button.kA.value).onTrue(new StaticClimb(climber).andThen(new BalancePID(climber)).repeatedly());
+    controller.button(XboxController.Button.kA.value).onTrue(new BalancePID(climber));
+    controller.button(XboxController.Button.kB.value).onTrue(new StaticClimb(climber));
   }
 
   /**
