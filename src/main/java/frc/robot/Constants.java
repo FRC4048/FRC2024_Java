@@ -5,9 +5,7 @@
 package frc.robot;
 
 public final class Constants {
-    public static class OperatorConstants {
-        public static final int kDriverControllerPort = 0;
-    }
+    public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
