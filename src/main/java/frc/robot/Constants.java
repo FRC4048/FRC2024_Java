@@ -150,10 +150,10 @@ public final class Constants {
     public static final double AUTO_TURN_TIMEOUT = 1;
     public static final double SUBSTATION_ALIGN_THRESHOLD = 2;
 
-    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 55.107;
-    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 338.64;
-    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 21.708;
-    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 137.02;
+    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 54.35;
+    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
+    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
+    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
 
 
     public static final double GRIPPER_OPENING_SPEED = 1;
