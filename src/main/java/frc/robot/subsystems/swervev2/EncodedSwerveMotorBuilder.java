@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 
 public class EncodedSwerveMotorBuilder {
@@ -20,7 +21,7 @@ public class EncodedSwerveMotorBuilder {
           WPI_CANCoder canCoder = new WPI_CANCoder(motorConfig.getCanCoderId());
           double driveVelConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio() * 60);
           double drivePosConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio());
-          double steerPosConvFactor = 2 * Math.PI / conversionConfig.getSteerGearRatio();
+          double steerPosConvFactor = 2 * Math.PI / Constants.CHASSIS_STEER_GEAR_RATIO;
           return new EncodedSwerveSparkMax(driveMotor, turnMotor, canCoder, driveVelConvFactor, drivePosConvFactor, steerPosConvFactor);
      }
 }

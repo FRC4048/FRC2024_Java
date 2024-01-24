@@ -18,6 +18,10 @@ public class WheelAlign extends Command {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
+    }
+
+    @Override
+    public void execute() {
         drivetrain.setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO,Constants.FRONT_RIGHT_ABS_ENCODER_ZERO,Constants.BACK_LEFT_ABS_ENCODER_ZERO,Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
     }
 
@@ -29,7 +33,7 @@ public class WheelAlign extends Command {
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) >= delay;
+        return true;
     }
 
     @Override
