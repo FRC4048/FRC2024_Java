@@ -51,4 +51,10 @@ public final class Constants {
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 9.0;
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 351.3;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 299.13;
+
+    //Feeder
+    public static final int FEEDER_MOTOR_ID = 1;
+    
+    public static final double FEEDER_MOTOR_SPEED = 0.5;
+
 }
