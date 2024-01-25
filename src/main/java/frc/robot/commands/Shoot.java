@@ -20,7 +20,7 @@ public class Shoot extends Command {
 
     @Override
     public void initialize() {
-        //Rest timer
+        //Rest timers
         timer.reset();
         activated = false;
         shooter.setShooterMotor1RPM(Constants.SHOOTER_MOTOR_1_RPM);

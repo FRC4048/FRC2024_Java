@@ -28,6 +28,7 @@ public final class Constants {
   public static final double SHOOTER_MOTOR_1_RPM = 12000;
   public static final double SHOOTER_MOTOR_2_RPM = 12000;
 
+  //Shooter motor 1 PID constants
   public static final double SHOOTER_MOTOR_1_PID_P = 5e-5;
   public static final double SHOOTER_MOTOR_1_PID_I = 0;
   public static final double SHOOTER_MOTOR_1_PID_D = 5e-5;
@@ -35,10 +36,11 @@ public final class Constants {
   public static final double SHOOTER_MOTOR_1_PID_FF = 0.000015;
   public static final double SHOOTER_MOTOR_1_MAX_OUTPUT = 1;
   public static final double SHOOTER_MOTOR_1_MIN_OUTPUT = -1;
-
+  
+  //Shooter motor 2 PID constants
   public static final double SHOOTER_MOTOR_2_PID_P = 5e-5;
   public static final double SHOOTER_MOTOR_2_PID_I = 0;
-  public static final double SHOOTER_MOTOR_2_PID_D = 6e-6;
+  public static final double SHOOTER_MOTOR_2_PID_D = 5e-5;
   public static final double SHOOTER_MOTOR_2_PID_IZ = 0;
   public static final double SHOOTER_MOTOR_2_PID_FF = 0.000015;
   public static final double SHOOTER_MOTOR_2_MAX_OUTPUT = 1;

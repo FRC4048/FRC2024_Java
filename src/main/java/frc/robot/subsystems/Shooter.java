@@ -37,6 +37,7 @@ public class Shooter extends SubsystemBase {
     this.shooterMotor1PID = shooterMotor1.getPIDController();
     this.shooterMotor2PID = shooterMotor2.getPIDController();
 
+    //Set up PID for motor 1
     shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_1_PID_P);
     shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_1_PID_I);
     shooterMotor1PID.setD(Constants.SHOOTER_MOTOR_1_PID_D);
@@ -44,6 +45,7 @@ public class Shooter extends SubsystemBase {
     shooterMotor1PID.setFF(Constants.SHOOTER_MOTOR_1_PID_FF);
     shooterMotor1PID.setOutputRange(Constants.SHOOTER_MOTOR_1_MIN_OUTPUT, Constants.SHOOTER_MOTOR_1_MAX_OUTPUT);
 
+    //Set up PID for motor 2
     shooterMotor2PID.setP(Constants.SHOOTER_MOTOR_2_PID_P);
     shooterMotor2PID.setI(Constants.SHOOTER_MOTOR_2_PID_I);
     shooterMotor2PID.setD(Constants.SHOOTER_MOTOR_2_PID_D);
@@ -52,43 +54,52 @@ public class Shooter extends SubsystemBase {
     shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_2_MIN_OUTPUT, Constants.SHOOTER_MOTOR_2_MAX_OUTPUT);
   }
 
-  //Spin shooter motors
+  //Spin shooter motor 1
   public void setShooterMotor1Speed(double speed) {
     shooterMotor1.set(speed);
   }
 
+  //Spin shooter motor 2
   public void setShooterMotor2Speed(double speed) {
     shooterMotor2.set(speed);
   }
 
+  //Get shooter motor 1 speed
   public double getShooterMotor1Speed() {
     return shooterMotor1.get();
   }
 
+  //Get shooter motor 2 speed
   public double getShooterMotor2Speed() {
     return shooterMotor2.get();
   }
 
+  //Set shooter motor 1 RPM with PID (preffered)
   public void setShooterMotor1RPM(double rpm) {
     shooterMotor1PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
   }
 
+  //Set shooter motor 2 RPM with PID (preffered)
   public void setShooterMotor2RPM(double rpm) {
     shooterMotor2PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
   }
 
+  //Get motor 1 encodor
   public RelativeEncoder getMotorEncodor1() {
     return shooterMotor1.getEncoder();
   }
 
+  //Get motor 2 encodor
   public RelativeEncoder getMotorEncodor2() {
     return shooterMotor2.getEncoder();
   }
 
+  //Get motor 1 speed RPM
   public double getShooterMotor1RPM() {
     return getMotorEncodor1().getVelocity();
   }
 
+  //Get motor 2 speed RPM
   public double getShooterMotor2RPM() {
     return getMotorEncodor2().getVelocity();
   }

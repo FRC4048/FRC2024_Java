@@ -9,7 +9,7 @@ public class ShootTest extends Command {
 
     private Shooter shooter;
     private Timer timer = new Timer();
-    private final double MOTOR_RUN_TIME = 20;
+    private final double MOTOR_RUN_TIME = 2;
 
     public ShootTest(Shooter shooter) {
         this.shooter = shooter;
