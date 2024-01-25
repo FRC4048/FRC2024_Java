@@ -9,16 +9,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
     private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
     private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private final SwerveDrivetrain drivetrain;
+    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
+    private final Feeder feeder = new Feeder();
     public RobotContainer() {
 
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
@@ -43,6 +47,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        //controller.button(XboxController.Button.kX.value).onTrue(new ...);
     }
 
     public SwerveDrivetrain getDrivetrain() {

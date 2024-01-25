@@ -7,6 +7,8 @@ package frc.robot;
 public final class Constants {
     public static final boolean ENABLE_LOGGING = true;
 
+    public static final int CONTROLLER_PORT = 2;
+
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
@@ -54,7 +56,7 @@ public final class Constants {
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 1;
-    
+    public static final int FEEDER_SENSOR_ID = 0;
     public static final double FEEDER_MOTOR_SPEED = 0.5;
 
 }
