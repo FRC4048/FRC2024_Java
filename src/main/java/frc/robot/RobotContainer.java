@@ -14,6 +14,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootTest;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.drive.WheelAlign;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
@@ -46,11 +47,11 @@ public class RobotContainer {
         Gain steerGain = Gain.of(Constants.STEER_PID_FF_V, Constants.STEER_PID_FF_S);
 
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.CHASSIS_DRIVE_GEAR_RATIO, Constants.CHASSIS_STEER_GEAR_RATIO);
-        SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
+        SwervePidConfig pidConfig = new SwervePidConfig(drivePid,steerPid,driveGain,steerGain,constraints);
         AHRS navxGyro = new AHRS();
         navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
-        drivetrain.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
+        drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
         configureBindings();
     }
 
@@ -61,7 +62,7 @@ public class RobotContainer {
     controller.button(XboxController.Button.kB.value).onTrue(new ShootTest(shooter));
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-    }
+  }
 
     public SwerveDrivetrain getDrivetrain() {
         return drivetrain;
