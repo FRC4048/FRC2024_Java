@@ -40,6 +40,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
         driveEncoder.setVelocityConversionFactor(driveVelFactor);
         driveEncoder.setPositionConversionFactor(drivePosFactor);
         steerEncoder.setPositionConversionFactor(steerPosFactor);
+        steerEncoder.setVelocityConversionFactor(steerPosFactor/60);
     }
 
     @Override
@@ -106,4 +107,11 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
         return angleInRad;
     }
 
+    public WPI_CANCoder getAbsEnc() {
+        return absEncoder;
+    }
+
+    public double getSteerEncoderRawPos() {
+        return steerEncoder.getPosition();
+    }
 }
