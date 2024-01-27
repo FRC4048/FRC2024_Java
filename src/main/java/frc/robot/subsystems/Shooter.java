@@ -38,20 +38,20 @@ public class Shooter extends SubsystemBase {
     this.shooterMotor2PID = shooterMotor2.getPIDController();
 
     //Set up PID for motor 1
-    shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_1_PID_P);
-    shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_1_PID_I);
-    shooterMotor1PID.setD(Constants.SHOOTER_MOTOR_1_PID_D);
-    shooterMotor1PID.setIZone(Constants.SHOOTER_MOTOR_1_PID_IZ);
-    shooterMotor1PID.setFF(Constants.SHOOTER_MOTOR_1_PID_FF);
-    shooterMotor1PID.setOutputRange(Constants.SHOOTER_MOTOR_1_MIN_OUTPUT, Constants.SHOOTER_MOTOR_1_MAX_OUTPUT);
+    shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_PID_P);
+    shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_PID_I);
+    shooterMotor1PID.setD(Constants.SHOOTER_MOTOR_PID_D);
+    shooterMotor1PID.setIZone(Constants.SHOOTER_MOTOR_PID_IZ);
+    shooterMotor1PID.setFF(Constants.SHOOTER_MOTOR_PID_FF);
+    shooterMotor1PID.setOutputRange(Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
 
     //Set up PID for motor 2
-    shooterMotor2PID.setP(Constants.SHOOTER_MOTOR_2_PID_P);
-    shooterMotor2PID.setI(Constants.SHOOTER_MOTOR_2_PID_I);
-    shooterMotor2PID.setD(Constants.SHOOTER_MOTOR_2_PID_D);
-    shooterMotor2PID.setIZone(Constants.SHOOTER_MOTOR_2_PID_IZ);
-    shooterMotor2PID.setFF(Constants.SHOOTER_MOTOR_2_PID_FF);
-    shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_2_MIN_OUTPUT, Constants.SHOOTER_MOTOR_2_MAX_OUTPUT);
+    shooterMotor2PID.setP(Constants.SHOOTER_MOTOR_PID_P);
+    shooterMotor2PID.setI(Constants.SHOOTER_MOTOR_PID_I);
+    shooterMotor2PID.setD(Constants.SHOOTER_MOTOR_PID_D);
+    shooterMotor2PID.setIZone(Constants.SHOOTER_MOTOR_PID_IZ);
+    shooterMotor2PID.setFF(Constants.SHOOTER_MOTOR_PID_FF);
+    shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
   }
 
   //Spin shooter motor 1
