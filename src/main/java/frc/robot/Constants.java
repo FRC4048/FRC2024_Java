@@ -24,7 +24,7 @@ public final class Constants {
   public static final double RAMP_PID_FF = 1.00;
   public static final double RAMP_ERROR_IZONE = 0.00;
   public static final double RAMP_POS = 0.0;
-  public static final int RAMP_ID = 41;
+  public static final int RAMP_ID = 45;
 
   public static final boolean DRIVETRAIN_DEBUG = false;
     public static final boolean ARM_DEBUG = false;

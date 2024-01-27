@@ -85,7 +85,8 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new Drive(drivetrain, ()-> joyleft.getY(), ()-> joyleft.getX(), ()-> joyright.getX()));
   }
   public void putShuffleboardCommands() {
-    controller.button(XboxController.Button.kA.value).onTrue(new RampMove(ramp, 250));
+    controller.button(XboxController.Button.kA.value).onTrue(new RampMove(ramp, 400));
+    controller.button(XboxController.Button.kB.value).onTrue(new RampMove(ramp, 500));
     SmartShuffleboard.putCommand("Ramp", "SetArmPID", new RampMove(ramp, 1200));
 
   }

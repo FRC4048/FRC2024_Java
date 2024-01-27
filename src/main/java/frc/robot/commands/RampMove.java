@@ -17,12 +17,11 @@ public class RampMove extends Command{
     @Override
     public void initialize() {
         super.initialize();
-        ramp.resetEncoder();
+        ramp.setRampPos(degrees);
     }
 
     @Override
     public void execute() {
-        ramp.setRampPos(degrees);
     }
     
     @Override

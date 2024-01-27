@@ -26,6 +26,7 @@ public class Ramp extends SubsystemBase {
         neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
+        resetEncoder();
         neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
 
