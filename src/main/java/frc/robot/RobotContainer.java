@@ -9,11 +9,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootTest;
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.drive.WheelAlign;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -28,10 +26,6 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Shooter shooter = new Shooter();
-
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController controller =
-        new CommandXboxController(Constants.kDriverControllerPort);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -58,12 +52,12 @@ public class RobotContainer {
 
     private void configureBindings() {
 
-    //Create Shoot Button (A/B)
-    controller.button(XboxController.Button.kA.value).onTrue(new Shoot(shooter));
-    controller.button(XboxController.Button.kB.value).onTrue(new ShootTest(shooter));
-
     drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+
     SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
+    SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+    SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter));
+
   }
 
     public SwerveDrivetrain getDrivetrain() {

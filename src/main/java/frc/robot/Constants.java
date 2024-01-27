@@ -27,9 +27,6 @@ public final class Constants {
     public static final double SHOOTER_MOTOR_MAX_OUTPUT = 1;
     public static final double SHOOTER_MOTOR_MIN_OUTPUT = -1;
     
-    //Controller
-    public static final int kDriverControllerPort = 2;
-
     public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS

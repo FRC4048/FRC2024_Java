@@ -27,24 +27,23 @@ public class Shoot extends Command {
         shooter.setShooterMotor2RPM(Constants.SHOOTER_MOTOR_2_RPM);
     }
 
-    @Override 
-    public boolean isFinished() {
-        //Check if sensor has been activated then check if timer has passed 0.5 seconds
-        if ((shooter.getShooterSensor1Activated() == true) || (shooter.getShooterSensor2Activated() == true) || (activated == true)) {
+    @Override
+    public void execute() {
+        if (((shooter.getShooterSensor1Activated() == true) || (shooter.getShooterSensor2Activated() == true)) && activated == false) {
             timer.start();
             activated = true;
-            if (timer.hasElapsed(SHOOTER_TIME_AFTER_TRIGGER) == true) {
+        }
+    }
+
+    @Override 
+    public boolean isFinished() {
+        if ((timer.hasElapsed(SHOOTER_TIME_AFTER_TRIGGER)) && (activated == true)) {
                 return true;
             }
 
             else {
                 return false;
             }
-        }
-
-        else {
-            return false;
-        }
     }
 
     @Override
