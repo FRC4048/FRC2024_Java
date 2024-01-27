@@ -17,14 +17,15 @@ import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.commands.RampMove;
+import frc.robot.subsystems.Ramp;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class RobotContainer {
     private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
     private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private final SwerveDrivetrain drivetrain;
-
-    // The robot's subsystems and commands are defined here...
+    private Ramp ramp;
     private final Shooter shooter = new Shooter();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -47,8 +48,19 @@ public class RobotContainer {
         navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
         drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
+    
+        // Configure the trigger bindings
+        ramp = new Ramp();
         configureBindings();
-    }
+        putShuffleboardCommands();
+
+  }
+  public void putShuffleboardCommands() {
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+
+  }
+
 
     private void configureBindings() {
 

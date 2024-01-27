@@ -5,6 +5,13 @@
 package frc.robot;
 
 public final class Constants {
+    public static final double RAMP_PID_P = 1.00;
+    public static final double RAMP_PID_I = 0.00;
+    public static final double RAMP_PID_D = 0.00;
+    public static final double RAMP_PID_FF = 1.00;
+    public static final double RAMP_ERROR_IZONE = 0.00;
+    public static final double RAMP_POS = 0.0;
+    public static final int RAMP_ID = 45;
   
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44;
