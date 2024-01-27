@@ -13,14 +13,6 @@ public final class Constants {
   public static final double RAMP_POS = 0.0;
   public static final int RAMP_ID = 45;
 
-  public static final boolean DRIVETRAIN_DEBUG = false;
-  public static final boolean ARM_DEBUG = false;
-  public static final boolean EXTENDER_DEBUG = false;
-
-  public static final boolean GRIPPER_DEBUG = false;
-  public static final boolean PDB_DEBUG = false;
-  public static final boolean APRILTAG_DEBUG = false;
-
   public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
