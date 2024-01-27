@@ -9,11 +9,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.commands.StartFeeder;
 import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
@@ -45,7 +47,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        //controller.button(XboxController.Button.kX.value).onTrue(new StartFeeder(feeder));
+        
+        controller.button(XboxController.Button.kX.value).onTrue(new StartFeeder(feeder));
     }
 
     public SwerveDrivetrain getDrivetrain() {
