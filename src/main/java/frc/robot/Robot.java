@@ -22,12 +22,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
-        new SequentialCommandGroup(
-                new ResetGyro(robotContainer.getDrivetrain(), 2),
-                new SetInitOdom(robotContainer.getDrivetrain(),robotContainer.getAutoChooser())
-        ).schedule();
-
-
+        new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
 
     @Override

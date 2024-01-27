@@ -26,6 +26,9 @@ public class WheelAlign extends Command {
         super.end(interrupted);
     }
 
+    /**
+     * Has to be in init because execute was not getting called when command was in robot init for some reason
+     */
     @Override
     public void initialize() {
         super.initialize();

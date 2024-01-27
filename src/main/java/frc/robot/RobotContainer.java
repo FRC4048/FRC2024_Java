@@ -11,9 +11,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -21,13 +18,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.ExampleAutoChooser;
-import frc.robot.commands.ResetGyro;
-import frc.robot.commands.drive.WheelAlign;
+import frc.robot.commands.SetInitOdom;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import java.util.Optional;
 
@@ -48,9 +43,8 @@ public class RobotContainer {
         setupDriveTrain();
         setupPathPlaning();
         autoChooser = new ExampleAutoChooser();
+        autoChooser.addOnValidationCommand(()-> new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
-//        drivetrain.setGyroOffset(autoChooser.getStartingPosition().getRotation().getDegrees());
-//        drivetrain.resetOdometry(autoChooser.getStartingPosition());
         configureBindings();
     }
 
