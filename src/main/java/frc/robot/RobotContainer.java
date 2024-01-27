@@ -24,7 +24,6 @@ public class RobotContainer {
     private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
     private final Feeder feeder = new Feeder();
     public RobotContainer() {
-
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -47,7 +46,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        //controller.button(XboxController.Button.kX.value).onTrue(new ...);
+        //controller.button(XboxController.Button.kX.value).onTrue(new StartFeeder(feeder));
     }
 
     public SwerveDrivetrain getDrivetrain() {
