@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.ExampleAutoChooser;
 import frc.robot.commands.ResetGyro;
@@ -48,8 +49,8 @@ public class RobotContainer {
         setupPathPlaning();
         autoChooser = new ExampleAutoChooser();
         autoChooser.forceRefresh();
-        drivetrain.setGyroOffset(autoChooser.getStartingPosition().getRotation().getDegrees());
-        drivetrain.resetOdometry(autoChooser.getStartingPosition().getTranslation());
+//        drivetrain.setGyroOffset(autoChooser.getStartingPosition().getRotation().getDegrees());
+//        drivetrain.resetOdometry(autoChooser.getStartingPosition());
         configureBindings();
     }
 
@@ -60,11 +61,11 @@ public class RobotContainer {
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(1, 0.0, 0), // Translation PID constants
-                        new PIDConstants(1, 0.0, 0), // Rotation PID constants
-                        0.3, // Max module speed, in m/s
+                        new PIDConstants(5, 0.0, 0), // Translation PID constants
+                        new PIDConstants(5, 0.0, 0), // Rotation PID constants
+                        3, // Max module speed, in m/s
                         0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
-                        new ReplanningConfig(true,true,1.0,0.25)
+                        new ReplanningConfig()
                 ), RobotContainer::shouldFlip, drivetrain);
     }
 
@@ -100,5 +101,9 @@ public class RobotContainer {
     public static boolean shouldFlip(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
+    public AutoChooser getAutoChooser() {
+        return autoChooser;
     }
 }

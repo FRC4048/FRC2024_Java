@@ -22,7 +22,7 @@ public enum FieldLocation {
      }
      public Pose2d getLocation(){
           double x = RobotContainer.shouldFlip() ? RED_X_POS - xPose: xPose;
-          double radian = RobotContainer.shouldFlip() ? angle + Math.PI: angle;
+          double radian = RobotContainer.shouldFlip() ? Math.PI-angle: angle;
           return new Pose2d(x, yPos, Rotation2d.fromRadians(radian));
      }
 }

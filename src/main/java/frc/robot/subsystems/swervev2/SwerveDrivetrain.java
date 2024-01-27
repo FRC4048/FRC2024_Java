@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -37,19 +38,16 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
     private double getGyro() {
-        return (gyro.getAngle() % 360) ;
+        return (gyro.getAngle() % 360)  * -1;
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void periodic() {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
         SmartDashboard.putNumber("gyro",gyroValue);
-        SmartDashboard.putNumber("FrontLeftAbs",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("FrontRightAbs",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackLeftAbs",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackRightAbs",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-
+        SmartDashboard.putNumber("swerveAngle",poseEstimator.getEstimatedPose().getRotation().getDegrees());
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -148,13 +146,17 @@ public class SwerveDrivetrain extends SubsystemBase {
         return poseEstimator.getEstimatedPose();
     }
 
-    public void resetOdometry(Translation2d pose2d) {
-        poseEstimator.resetOdometry(Math.toRadians(gyroValue), pose2d);
+    public void resetOdometry(Translation2d pose2d,Rotation2d rotation2d) {
+        poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
     }
     public void resetOdometry(Pose2d pose2d) {
-        resetOdometry(pose2d.getTranslation());
+        resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
     }
     public void setGyroOffset(double degrees) {
         gyro.setAngleAdjustment(degrees);
+    }
+
+    public Rotation2d getGyroAngle() {
+        return new Rotation2d(Math.toRadians(gyroValue));
     }
 }
