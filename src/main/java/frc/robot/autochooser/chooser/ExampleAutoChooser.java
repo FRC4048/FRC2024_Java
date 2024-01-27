@@ -29,6 +29,7 @@ public class ExampleAutoChooser extends Nt4AutoValidationChooser {
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), AutoBuilder.followPath(null),
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft")),
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid")),
+            new AutoEvent(AutoAction.FigureEight, FieldLocation.ZERO), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Figure8")),
             new AutoEvent(AutoAction.TwoPieceMoveLeft, FieldLocation.SpeakerRight), new PlaceHolderCommand()
     );
 

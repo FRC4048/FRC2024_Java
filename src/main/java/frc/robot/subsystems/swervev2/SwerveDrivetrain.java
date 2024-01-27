@@ -3,6 +3,7 @@ package frc.robot.subsystems.swervev2;
 import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -19,48 +20,54 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
+/**
+ * blue centric //TODO make work for red
+ */
 public class SwerveDrivetrain extends SubsystemBase {
 
     private final List<Translation2d> bezierPoints;
-
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
     private final GenericSwerveModule backRight;
 
 
-    private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2);
-    private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH / 2, -Constants.ROBOT_WIDTH / 2);
-    private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2);
-    private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, -Constants.ROBOT_WIDTH / 2);
-    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
+    private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
+    private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
+    private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
+    private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
+    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
 
     private final PathPlannerPath path;
-   
+
 
 
     private final AHRS gyro;
     private double gyroValue = 0;
 
+
     private double getGyro() {
-        return (gyro.getAngle() % 360) * -1;
+        return (gyro.getAngle() % 360)  * -1;
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void periodic() {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        SmartDashboard.putNumber("gyro", gyroValue);
-
+        SmartDashboard.putNumber("gyro",gyroValue);
+        SmartDashboard.putNumber("swerveAngle",poseEstimator.getEstimatedPose().getRotation().getDegrees());
     }
 
-    public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig, KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro) {
-
+    public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
+                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
+    {
         this.gyro = gyro;
         EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
@@ -80,6 +87,19 @@ public class SwerveDrivetrain extends SubsystemBase {
         bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)), new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)));
         path = new PathPlannerPath(bezierPoints, new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
 
+        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
     }
 
     public void putShuffleboardCommands() {
@@ -134,7 +154,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
 
- 
+
 
     public void resetGyro() {
         gyro.reset();
@@ -164,8 +184,17 @@ public class SwerveDrivetrain extends SubsystemBase {
         return poseEstimator;
     }
 
+    public void resetOdometry(Translation2d pose2d,Rotation2d rotation2d) {
+        poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
+    }
     public void resetOdometry(Pose2d pose2d) {
-        poseEstimator.resetOdometry(gyroValue, pose2d);
+        resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
+    }
+    public void setGyroOffset(double degrees) {
+        gyro.setAngleAdjustment(degrees);
+    }
 
+    public Rotation2d getGyroAngle() {
+        return new Rotation2d(Math.toRadians(gyroValue));
     }
 }
