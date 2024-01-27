@@ -1,19 +1,23 @@
 package frc.robot.subsystems.swervev2;
 
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
+/**
+ * blue centric //TODO make work for red
+ */
 public class SwerveDrivetrain extends SubsystemBase {
     
     private final GenericSwerveModule frontLeft;
@@ -26,6 +30,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
+    private final SwervePosEstimator poseEstimator;
 
     private final AHRS gyro;
     private double gyroValue = 0;
@@ -38,6 +43,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         gyroValue = getGyro();
+        poseEstimator.updatePosition(gyroValue);
+        SmartDashboard.putNumber("gyro",gyroValue);
+
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -53,10 +61,11 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
     }
 
 
@@ -94,11 +103,11 @@ public class SwerveDrivetrain extends SubsystemBase {
         backRight.getSwerveMotor().resetRelEnc();
     }
 
-    public void setSteerOffset(){
-        frontLeft.getSwerveMotor().setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO);
-        backLeft.getSwerveMotor().setSteerOffset(Constants.BACK_LEFT_ABS_ENCODER_ZERO);
-        frontRight.getSwerveMotor().setSteerOffset(Constants.FRONT_RIGHT_ABS_ENCODER_ZERO);
-        backRight.getSwerveMotor().setSteerOffset(Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
+    public void setSteerOffset(double absEncoderZeroFL,double absEncoderZeroFR, double absEncoderZeroBL,double absEncoderZeroBR){
+        frontLeft.getSwerveMotor().setSteerOffset(absEncoderZeroFL);
+        frontRight.getSwerveMotor().setSteerOffset(absEncoderZeroFR);
+        backLeft.getSwerveMotor().setSteerOffset(absEncoderZeroBL);
+        backRight.getSwerveMotor().setSteerOffset(absEncoderZeroBR);
     }
 
     public void resetGyro() {
@@ -118,5 +127,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public GenericSwerveModule getBackRight() {
         return backRight;
+    }
+    public Pose2d getPose() {
+        return poseEstimator.getEstimatedPose();
+    }
+    public void resetOdometry(Pose2d pose2d){
+        poseEstimator.resetOdometry(gyroValue,pose2d);
+
     }
 }
