@@ -14,13 +14,20 @@ import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.RampMove;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Ramp;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import edu.wpi.first.wpilibj.XboxController;
+
 
 public class RobotContainer {
-    private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
-    private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
-    private final SwerveDrivetrain drivetrain;
+  private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+  private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+  private final SwerveDrivetrain drivetrain;
+  private Ramp ramp;
   public RobotContainer() {
     SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
     SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
@@ -39,8 +46,19 @@ public class RobotContainer {
     navxGyro.setAngleAdjustment(0);
     this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     drivetrain.resetOdometry(new Pose2d(0,0,new Rotation2d(Math.toRadians(0))));
-        configureBindings();
-    }
+    
+    // Configure the trigger bindings
+    ramp = new Ramp();
+    configureBindings();
+    putShuffleboardCommands();
+
+  }
+  public void putShuffleboardCommands() {
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+    SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+
+  }
+
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
