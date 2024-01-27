@@ -86,7 +86,5 @@ public class Ramp extends SubsystemBase {
         pidController.setI(pidI);
         pidController.setD(pidD);
         pidController.setFF(pidFF);
-
-        //System.out.println("-------------->>>>>>> Set pid to " + pidP + "/" + pidI + "/" + pidD + "/" + pidFF);
     }
 }

@@ -16,18 +16,9 @@ public class RampMove extends Command{
 
     @Override
     public void initialize() {
-        super.initialize();
         ramp.setRampPos(degrees);
     }
 
-    @Override
-    public void execute() {
-    }
-    
-    @Override
-    public void end(boolean Interrupted) {
-        super.end(Interrupted);
-    }
 
     @Override
     public boolean isFinished() {
