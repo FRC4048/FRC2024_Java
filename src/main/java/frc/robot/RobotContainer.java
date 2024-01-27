@@ -19,6 +19,7 @@ import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class RobotContainer {
     private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
@@ -62,6 +63,7 @@ public class RobotContainer {
     controller.button(XboxController.Button.kB.value).onTrue(new ShootTest(shooter));
 
     drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+    SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
   }
 
     public SwerveDrivetrain getDrivetrain() {
