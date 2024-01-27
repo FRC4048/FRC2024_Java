@@ -18,10 +18,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.ExampleAutoChooser;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.ResetGyro;
+import frc.robot.commands.drive.WheelAlign;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
@@ -40,7 +40,6 @@ public class RobotContainer {
     private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
     private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private SwerveDrivetrain drivetrain;
-    private final CommandXboxController controller = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
     private final ExampleAutoChooser autoChooser;
 
@@ -48,8 +47,9 @@ public class RobotContainer {
         setupDriveTrain();
         setupPathPlaning();
         autoChooser = new ExampleAutoChooser();
-        Rotation2d rotation2d = RobotContainer.shouldFlip() ? new Rotation2d(Math.PI): new Rotation2d(0);
-        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), rotation2d));
+        autoChooser.forceRefresh();
+        drivetrain.setGyroOffset(autoChooser.getStartingPosition().getRotation().getDegrees());
+        drivetrain.resetOdometry(autoChooser.getStartingPosition().getTranslation());
         configureBindings();
     }
 
@@ -60,8 +60,8 @@ public class RobotContainer {
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5, 0.0, 0.0), // Rotation PID constants
+                        new PIDConstants(5, 0.0, 0), // Translation PID constants
+                        new PIDConstants(7, 0.0, 0), // Rotation PID constants
                         3, // Max module speed, in m/s
                         0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig(true,true,1.0,0.25)
@@ -83,11 +83,7 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.CHASSIS_DRIVE_GEAR_RATIO, Constants.CHASSIS_STEER_GEAR_RATIO);
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
-        navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
-        Rotation2d rotation2d = RobotContainer.shouldFlip() ? new Rotation2d(Math.PI): new Rotation2d(0);
-        drivetrain.resetOdometry(new Pose2d(autoChooser.getStartingPosition(), rotation2d));
-
     }
 
     private void configureBindings() {

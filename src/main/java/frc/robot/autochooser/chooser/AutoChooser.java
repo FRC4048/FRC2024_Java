@@ -17,7 +17,7 @@ public abstract class AutoChooser {
     public AutoEventProvider getProvider() {
         return provider;
     }
-    public Translation2d getStartingPosition(){
+    public Pose2d getStartingPosition(){
         return provider.getSelectedLocation().getLocation();
     }
 

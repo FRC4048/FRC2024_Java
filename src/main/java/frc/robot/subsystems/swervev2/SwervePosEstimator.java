@@ -3,6 +3,7 @@ package frc.robot.subsystems.swervev2;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -48,14 +49,14 @@ public class SwervePosEstimator {
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
-    public void resetOdometry(double gyroValue,Pose2d pose2d){
+    public void resetOdometry(double gyroValue, Translation2d pose2d){
         this.poseEstimator.resetPosition(new Rotation2d(gyroValue),
                 new SwerveModulePosition[] {
                         frontLeftMotor.getPosition(),
                         frontRightMotor.getPosition(),
                         backLeftMotor.getPosition(),
                         backRightMotor.getPosition(),
-                },pose2d);
+                },new Pose2d(pose2d,new Rotation2d(gyroValue)));
     }
     public Pose2d getEstimatedPose(){
         return field.getRobotPose();
