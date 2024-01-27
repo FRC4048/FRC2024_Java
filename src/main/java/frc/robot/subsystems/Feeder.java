@@ -35,5 +35,6 @@ public class Feeder extends SubsystemBase{
     @Override
     public void periodic() {
         SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
+        SmartShuffleboard.put("Feeder", "Feeder Sensor", getFeederSensor());
     }
 }
