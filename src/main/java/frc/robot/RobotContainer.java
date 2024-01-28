@@ -43,7 +43,7 @@ public class RobotContainer {
         setupDriveTrain();
         setupPathPlaning();
         autoChooser = new ExampleAutoChooser();
-        autoChooser.addOnValidationCommand(()-> new SetInitOdom(drivetrain,autoChooser));
+        autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
         configureBindings();
     }

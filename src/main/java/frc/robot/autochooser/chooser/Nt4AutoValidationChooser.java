@@ -49,8 +49,17 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
         });
     }
     public void forceRefresh(){
-        SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_LOCATION_FEEDBACK_NAME,getProvider().getSelectedLocation().toString());
-        SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_ACTION_FEEDBACK_NAME,getProvider().getSelectedAction().toString());
+        if (isValid(getProvider().getSelectedAction(), getProvider().getSelectedLocation())) {
+            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_LOCATION_FEEDBACK_NAME,getProvider().getSelectedLocation().toString());
+            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_ACTION_FEEDBACK_NAME,getProvider().getSelectedAction().toString());
+            onValidEvents.forEach(c -> {
+                try { c.call().schedule(); } catch (Exception e) { throw new RuntimeException(e); }
+            });
+        }else {
+            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME, "INVALID");
+            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, "INVALID");
+        }
+
     }
 
     protected abstract boolean isValid(AutoAction action, FieldLocation location);
