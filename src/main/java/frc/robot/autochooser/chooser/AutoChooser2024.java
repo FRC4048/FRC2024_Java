@@ -10,7 +10,7 @@ import frc.robot.autochooser.event.AutoEvent;
 
 import java.util.Map;
 
-public class ExampleAutoChooser extends Nt4AutoValidationChooser {
+public class AutoChooser2024 extends Nt4AutoValidationChooser {
     private final Map<AutoEvent, Command> commandMap = Map.of(
             new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand(),
             new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand(),
@@ -20,7 +20,7 @@ public class ExampleAutoChooser extends Nt4AutoValidationChooser {
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid"))
     );
 
-    public ExampleAutoChooser() {
+    public AutoChooser2024() {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
     }
 

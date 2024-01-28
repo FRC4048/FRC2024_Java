@@ -18,14 +18,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
-import frc.robot.autochooser.chooser.ExampleAutoChooser;
+import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetInitOdom;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
-import frc.robot.subsystems.Ramp;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
@@ -41,12 +40,13 @@ public class RobotContainer {
     private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private SwerveDrivetrain drivetrain;
     private final Ramp ramp;
-    private final ExampleAutoChooser autoChooser;
+    private final AutoChooser2024 autoChooser;
 
     public RobotContainer() {
         setupDriveTrain();
+        registerPathPlanableCommands();
         setupPathPlaning();
-        autoChooser = new ExampleAutoChooser();
+        autoChooser = new AutoChooser2024();
         autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
         ramp = new Ramp();
@@ -54,8 +54,14 @@ public class RobotContainer {
         putShuffleboardCommands();
     }
 
+    /**
+     * NamedCommands
+     */
+    private void registerPathPlanableCommands() {
+        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
+    }
+
     private void setupPathPlaning() {
-        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand());
         AutoBuilder.configureHolonomic(drivetrain::getPose,
                 drivetrain::resetOdometry,
                 drivetrain::speedsFromStates,

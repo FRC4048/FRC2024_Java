@@ -13,14 +13,12 @@ import frc.robot.commands.SetInitOdom;
 import frc.robot.commands.drive.WheelAlign;
 
 public class Robot extends TimedRobot {
-    private final RobotContainer robotContainer;
+    private RobotContainer robotContainer;
     private Command autoCommand;
-    public Robot (){
-        robotContainer = new RobotContainer();
-    }
 
     @Override
     public void robotInit() {
+        robotContainer = new RobotContainer();
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
@@ -47,5 +45,12 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
 
+    }
+
+    @Override
+    public void teleopInit() {
+        if (autoCommand != null) {
+            autoCommand.cancel();
+        }
     }
 }

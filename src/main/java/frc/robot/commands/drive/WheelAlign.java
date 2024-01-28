@@ -9,15 +9,7 @@ import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 
 public class WheelAlign extends Command {
     private final SwerveDrivetrain drivetrain;
-    private final double degree;
-
     public WheelAlign(SwerveDrivetrain drivetrain){
-        this.drivetrain = drivetrain;
-        this.degree = 0;
-        addRequirements(drivetrain);
-    }
-    public WheelAlign(SwerveDrivetrain drivetrain, double degree){
-        this.degree = degree;
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
