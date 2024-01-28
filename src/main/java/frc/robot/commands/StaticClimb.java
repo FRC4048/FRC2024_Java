@@ -1,7 +1,7 @@
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
-import frc.robot.utils.ClimberState;
 import frc.robot.Constants;
 
 public class StaticClimb extends Command {
@@ -16,18 +16,30 @@ public class StaticClimb extends Command {
     @Override
     public void initialize() {
         System.out.println("Im Climbing");
-        climber.setClimberState(ClimberState.NORMALDOWN);
+        startTime=Timer.getFPGATimestamp();
+
     }
     @Override
     public void execute() {
-        climber.raise(false);
+        if (climber.getGyroPitch() > Constants.CLIMBER_BALANCE_THRESH) {
+            climber.balanceleft(Constants.CLIMBER_BALANCE_LOW_SPEED);
+        } else if (-climber.getGyroPitch()>Constants.CLIMBER_BALANCE_THRESH) {
+            climber.balanceright(Constants.CLIMBER_BALANCE_LOW_SPEED);
+        } else {
+            climber.raise(false);
+        }
+        
     }
     @Override
     public boolean isFinished() {
-        if (climber.getNavxGyroValue() > Constants.CLIMBER_BALANCE_THRESH) {
+        if (Timer.getFPGATimestamp()-startTime>10) {
             return true;
         } else {
             return false;
         }
+    }
+    @Override
+    public void end(boolean interrupted) {
+        climber.stop();
     }
 }
