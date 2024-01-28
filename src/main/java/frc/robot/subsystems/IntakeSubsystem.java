@@ -37,8 +37,12 @@ public class IntakeSubsystem extends SubsystemBase{
         intakeMotor.set(0);
     }
 
-    public void raiseIntake(double speed) {
+    public void moveRaiseIntake(double speed) {
         intakeRaiseMotor.set(speed);
+    }
+
+    public void stopRaiseIntake() {
+        intakeRaiseMotor.set(0);
     }
 
     public boolean isRingInIntake() {

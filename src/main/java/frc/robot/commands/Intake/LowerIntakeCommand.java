@@ -12,7 +12,12 @@ public class LowerIntakeCommand extends Command {
   
     @Override
     public void execute() {
-        intakeSubsystem.raiseIntake(-0.3); // INTAKE_RAISE_MOTOR_SPEED constant
+        intakeSubsystem.moveRaiseIntake(-0.3); // INTAKE_RAISE_MOTOR_SPEED constant
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        intakeSubsystem.stopMotor();
     }
 
     @Override
