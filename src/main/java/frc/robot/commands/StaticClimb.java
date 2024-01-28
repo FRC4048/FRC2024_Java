@@ -2,7 +2,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
 import frc.robot.utils.ClimberState;
-import frc.robot.utils.Constants;
+import frc.robot.Constants;
 
 public class StaticClimb extends Command {
     private final Climber climber;
@@ -24,7 +24,7 @@ public class StaticClimb extends Command {
     }
     @Override
     public boolean isFinished() {
-        if (climber.getNavxGyroValue() > Constants.BALANCE_THRESH) {
+        if (climber.getNavxGyroValue() > Constants.CLIMBER_BALANCE_THRESH) {
             return true;
         } else {
             return false;

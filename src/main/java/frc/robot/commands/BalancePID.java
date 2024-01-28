@@ -1,7 +1,7 @@
 package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.utils.Constants;
+import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.SimponsMethod;
@@ -24,7 +24,7 @@ public class BalancePID extends Command{
         super.initialize();
         counter=0;
         startTime=Timer.getFPGATimestamp();
-        System.out.println("Im getting balanced");
+        System.out.println("Im getting ");
         climber.setClimberState(ClimberState.BALANCE);
     }
     @Override
@@ -33,13 +33,13 @@ public class BalancePID extends Command{
         double dir = Math.signum(pitch);
         /*double speed = Math.abs(pitch) > Constants.BALANCE_THRESH ? 
          MathUtil.clamp(Constants.BALANCE_kP*(climber.getArmUnderExtend()+(SimponsMethod.integrate(0.00,Timer.getFPGATimestamp()))/Constants.BALANCE_kTi+Constants.Balance_KTd*climber.getinstatenousDeravative()), Constants.BALANCE_LOW_SPEED, Constants.BALANCE_HIGH_SPEED) : 0;*/
-        double speed = Math.abs(pitch) > Constants.BALANCE_THRESH ? dir*Constants.BALANCE_LOW_SPEED : 0;
+        double speed = Math.abs(pitch) > Constants.CLIMBER_BALANCE_THRESH ? dir*Constants.CLIMBER_BALANCE_LOW_SPEED : 0;
         climber.balance(speed);
     }
     @Override
     public boolean isFinished() {
         double pitch = climber.getNavxGyroValue();
-        if (Math.abs(pitch)<Constants.BALANCE_THRESH) {
+        if (Math.abs(pitch)<Constants.CLIMBER_BALANCE_THRESH) {
             System.out.println("Im Balanced");
             climber.setClimberState(ClimberState.STOPPED);
             return true;

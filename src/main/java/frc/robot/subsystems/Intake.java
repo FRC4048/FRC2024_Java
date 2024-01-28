@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.Constants;
+import frc.robot.Constants;
 import frc.robot.utils.IntakeState; 
 
 public class Intake extends SubsystemBase {

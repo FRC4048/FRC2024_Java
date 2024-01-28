@@ -9,7 +9,7 @@ import com.revrobotics.CANSparkMax;
 
 import frc.robot.commands.BalancePID;
 import frc.robot.utils.ClimberState;
-import frc.robot.utils.Constants;
+import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
