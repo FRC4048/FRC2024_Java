@@ -61,11 +61,8 @@ public final class Constants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
 
     public static final double ArmSeperationDistance = 5.00; 
-    public static final double INTAKE_SPEED = 1.00;
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
-    public static final int INTAKE_MOTOR1_ID = 4;
-    public static final int INTAKE_MOTOR2_ID = 5;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;
     public static final int CLIMBER_MOTOR1_ID = 44;
@@ -76,4 +73,5 @@ public final class Constants {
     public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_BALANCE_THRESH=30;
+    public static final double CLIMBER_TIMEOUT_S=10;
 }

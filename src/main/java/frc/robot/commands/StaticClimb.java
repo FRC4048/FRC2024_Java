@@ -14,7 +14,6 @@ public class StaticClimb extends Command {
     }
     @Override
     public void initialize() {
-        System.out.println("Im Climbing");
         startTime=Timer.getFPGATimestamp();
 
     }
@@ -25,13 +24,13 @@ public class StaticClimb extends Command {
         } else if (-climber.getGyroPitch()>Constants.CLIMBER_BALANCE_THRESH) {
             climber.balanceright(Constants.CLIMBER_BALANCE_LOW_SPEED);
         } else {
-            climber.raise(false);
+            climber.raise(false); // reverse raises down the arms
         }
         
     }
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp()-startTime>10) {
+        if (Timer.getFPGATimestamp()-startTime>Constants.CLIMBER_TIMEOUT_S) {
             return true;
         } else {
             return false;
