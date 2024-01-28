@@ -41,13 +41,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         return (gyro.getAngle() % 360)  * -1;
     }
 
-    @SuppressWarnings("removal")
     @Override
     public void periodic() {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        SmartDashboard.putNumber("gyro",gyroValue);
-        SmartDashboard.putNumber("swerveAngle",poseEstimator.getEstimatedPose().getRotation().getDegrees());
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
