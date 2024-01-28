@@ -226,7 +226,7 @@ public final class Constants {
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
-    public static final double CLIMBER_BALANCE_LOW_SPEED=0.30;
+    public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_BALANCE_THRESH=30;
 }
