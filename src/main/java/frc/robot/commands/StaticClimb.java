@@ -1,12 +1,11 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Climber;
 import frc.robot.Constants;
+import frc.robot.subsystems.Climber;
 
 public class StaticClimb extends Command {
     private final Climber climber;
-    private int counter;
     private double startTime;
 
     public StaticClimb(Climber climber) {

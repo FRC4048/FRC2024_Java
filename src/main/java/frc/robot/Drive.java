@@ -1,11 +1,10 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
-
-import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
     private SwerveDrivetrain drivetrain;
