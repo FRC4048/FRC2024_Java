@@ -1,6 +1,5 @@
 package frc.robot.commands.Intake;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +24,7 @@ public class IntakeRingCommand extends Command {
   
     @Override
     public void execute() {
-        intakeSubsystem.spinMotor(0.3);
+        intakeSubsystem.spinMotor(0.3); // intake motor speed constant
         if (intakeSubsystem.isRingInIntake()) {
             ringDetections++;
         } else {
@@ -36,7 +35,7 @@ public class IntakeRingCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.spinMotor(0);
+        intakeSubsystem.stopMotor();
     }
 
     @Override
