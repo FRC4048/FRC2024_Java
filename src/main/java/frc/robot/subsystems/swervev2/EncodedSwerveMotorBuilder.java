@@ -1,9 +1,7 @@
 package frc.robot.subsystems.swervev2;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
