@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Robot;
 import frc.robot.Constants;
-import frc.robot.utils.SmartShuffleboard;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
