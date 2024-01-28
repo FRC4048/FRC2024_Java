@@ -59,14 +59,13 @@ public class RobotContainer {
   public void putShuffleboardCommands() {
     SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
     SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-
+    SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+    SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
   }
 
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        controller.button(XboxController.Button.kB.value).onTrue(new StaticClimb(climber));
-    SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));   
   }
 
 
