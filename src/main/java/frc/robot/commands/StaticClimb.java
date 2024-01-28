@@ -15,6 +15,7 @@ public class StaticClimb extends Command {
     }
     @Override
     public void initialize() {
+        System.out.println("Im Climbing");
         climber.setClimberState(ClimberState.NORMALDOWN);
     }
     @Override
