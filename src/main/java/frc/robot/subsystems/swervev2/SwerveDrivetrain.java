@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.drive.WheelAlign;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -46,6 +45,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
         SmartDashboard.putNumber("gyro",gyroValue);
+        SmartDashboard.putNumber("FrontLeftAbs",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+        SmartDashboard.putNumber("FrontRightAbs",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+        SmartDashboard.putNumber("BackLeftAbs",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+        SmartDashboard.putNumber("BackRightAbs",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
 
     }
 
@@ -62,12 +65,15 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
-        new WheelAlign(this).schedule();
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
     }
 
 
