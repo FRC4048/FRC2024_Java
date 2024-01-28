@@ -4,21 +4,23 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 
 public class WheelAlign extends Command {
     private final SwerveDrivetrain drivetrain;
-
     public WheelAlign(SwerveDrivetrain drivetrain){
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
     }
-
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
     }
 
+    /**
+     * Has to be in init because execute was not getting called when command was in robot init for some reason
+     */
     @Override
     public void initialize() {
         super.initialize();
