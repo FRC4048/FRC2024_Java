@@ -16,13 +16,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
+import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.ExampleAutoChooser;
 import frc.robot.commands.SetInitOdom;
+import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.subsystems.Ramp;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
 
@@ -33,10 +37,10 @@ import java.util.Optional;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
-    private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+    private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+    private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private SwerveDrivetrain drivetrain;
-
+    private final Ramp ramp;
     private final ExampleAutoChooser autoChooser;
 
     public RobotContainer() {
@@ -45,7 +49,9 @@ public class RobotContainer {
         autoChooser = new ExampleAutoChooser();
         autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
+        ramp = new Ramp();
         configureBindings();
+        putShuffleboardCommands();
     }
 
     private void setupPathPlaning() {
@@ -80,9 +86,14 @@ public class RobotContainer {
         AHRS navxGyro = new AHRS();
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
+    public void putShuffleboardCommands() {
+        SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+        SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+
+    }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, () -> joyleft.getY(), () -> joyleft.getX(), () -> joyright.getX()));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
     }
 
     public SwerveDrivetrain getDrivetrain() {
