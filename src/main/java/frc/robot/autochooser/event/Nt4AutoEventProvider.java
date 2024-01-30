@@ -32,7 +32,7 @@ public class Nt4AutoEventProvider implements AutoEventProvider {
         this.actionChooser = new SendableChooser<>();
         this.locationChooser = new SendableChooser<>();
         Arrays.stream(AutoAction.values()).forEach(a -> actionChooser.addOption(a.getName(), a));
-        Arrays.stream(FieldLocation.values()).forEach(l -> locationChooser.addOption(l.name(), l));
+        Arrays.stream(FieldLocation.values()).forEach(l -> locationChooser.addOption(l.getShuffleboardName(), l));
         actionChooser.setDefaultOption(getDefaultActionOption().getName(), getDefaultActionOption());
         locationChooser.setDefaultOption(getDefaultLocationOption().name(), getDefaultLocationOption());
         this.autoTab = Shuffleboard.getTab(AUTO_TAB_NAME);

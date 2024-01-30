@@ -14,6 +14,7 @@ public class Drive extends Command {
     private final DoubleSupplier fwdSupplier;
     private final DoubleSupplier strSupplier;
     private final DoubleSupplier rtSupplier;
+    private boolean shouldFlip;
 
 
     public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
@@ -24,14 +25,18 @@ public class Drive extends Command {
         this.rtSupplier = rtSupplier;
     }
 
+    @Override
+    public void initialize() {
+        this.shouldFlip = RobotContainer.shouldFlip();
+    }
 
     @Override
     public void execute() {
-        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.3);
-        double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
-        double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
+        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.1);
+        double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.1);
+        double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.1);
 
-        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
+        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(fwd*(shouldFlip?1:-1), -str, -rcw, true);
         drivetrain.drive(driveStates);
     }
 
