@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -37,19 +38,13 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
     private double getGyro() {
-        return (gyro.getAngle() % 360) * -1;
+        return (gyro.getAngle() % 360)  * -1;
     }
 
     @Override
     public void periodic() {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        SmartDashboard.putNumber("gyro",gyroValue);
-        SmartDashboard.putNumber("FrontLeftAbs",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("FrontRightAbs",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackLeftAbs",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackRightAbs",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -76,14 +71,20 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
     }
 
+    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
+        return fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
+                : new ChassisSpeeds(xSpeed, ySpeed, rotation);
+    }
 
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-                fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(Math.toRadians(gyroValue)))
-                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    public void drive(ChassisSpeeds speeds) {
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
+    }
+
+    public ChassisSpeeds speedsFromStates() {
+        return kinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -104,14 +105,14 @@ public class SwerveDrivetrain extends SubsystemBase {
         backRight.getSwerveMotor().getDriveMotor().set(0.0);
     }
 
-    public void zeroRelativeEncoders(){
+    public void zeroRelativeEncoders() {
         frontLeft.getSwerveMotor().resetRelEnc();
         frontRight.getSwerveMotor().resetRelEnc();
         backLeft.getSwerveMotor().resetRelEnc();
         backRight.getSwerveMotor().resetRelEnc();
     }
 
-    public void setSteerOffset(double absEncoderZeroFL,double absEncoderZeroFR, double absEncoderZeroBL,double absEncoderZeroBR){
+    public void setSteerOffset(double absEncoderZeroFL, double absEncoderZeroFR, double absEncoderZeroBL, double absEncoderZeroBR) {
         frontLeft.getSwerveMotor().setSteerOffset(absEncoderZeroFL);
         frontRight.getSwerveMotor().setSteerOffset(absEncoderZeroFR);
         backLeft.getSwerveMotor().setSteerOffset(absEncoderZeroBL);
@@ -121,6 +122,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     public void resetGyro() {
         gyro.reset();
     }
+
     public GenericSwerveModule getFrontLeft() {
         return frontLeft;
     }
@@ -136,11 +138,22 @@ public class SwerveDrivetrain extends SubsystemBase {
     public GenericSwerveModule getBackRight() {
         return backRight;
     }
+
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPose();
     }
-    public void resetOdometry(Pose2d pose2d){
-        poseEstimator.resetOdometry(gyroValue,pose2d);
 
+    public void resetOdometry(Translation2d pose2d,Rotation2d rotation2d) {
+        poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
+    }
+    public void resetOdometry(Pose2d pose2d) {
+        resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
+    }
+    public void setGyroOffset(double degrees) {
+        gyro.setAngleAdjustment(degrees);
+    }
+
+    public Rotation2d getGyroAngle() {
+        return new Rotation2d(Math.toRadians(gyroValue));
     }
 }
