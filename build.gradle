@@ -67,14 +67,21 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+<<<<<<< HEAD
 test {
      useJUnitPlatform()
      systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
+=======
+//test {
+//    useJUnitPlatform()
+//    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+//}
+>>>>>>> 8a0f1ef9a08b7fda2c3215c0cb4c8c15c61db2bd
 
 // Simulation configuration (e.g. environment variables).
 wpi.sim.addGui().defaultEnabled = true
