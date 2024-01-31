@@ -37,13 +37,9 @@ public class RobotContainer {
     private Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private SwerveDrivetrain drivetrain;
 
-    private final ExampleAutoChooser autoChooser;
-
     public RobotContainer() {
         setupDriveTrain();
         setupPathPlaning();
-        autoChooser = new ExampleAutoChooser();
-        autoChooser.forceRefresh();
 //        drivetrain.setGyroOffset(autoChooser.getStartingPosition().getRotation().getDegrees());
 //        drivetrain.resetOdometry(autoChooser.getStartingPosition());
         configureBindings();
@@ -93,9 +89,5 @@ public class RobotContainer {
     public static boolean shouldFlip(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-    }
-
-    public AutoChooser getAutoChooser() {
-        return autoChooser;
     }
 }

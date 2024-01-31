@@ -84,18 +84,13 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)), new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)));
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(90)), new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
 
-        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.SetInitOdom;
 import frc.robot.commands.drive.WheelAlign;
@@ -23,9 +24,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new SequentialCommandGroup(
-                new ResetGyro(robotContainer.getDrivetrain(), 2),
-                new SetInitOdom(robotContainer.getDrivetrain(),robotContainer.getAutoChooser())
-        ).schedule();
+                new ResetGyro(robotContainer.getDrivetrain(), 2)).schedule();
 
 
     }
@@ -43,7 +42,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        autoCommand = robotContainer.getAutoCommand();
         if (autoCommand!=null){
             autoCommand.schedule();
         }

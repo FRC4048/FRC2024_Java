@@ -21,4 +21,9 @@ public abstract class AutoChooser {
         return provider.getSelectedLocation().getLocation();
     }
 
+    public void schedule() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'schedule'");
+    }
+
 }
