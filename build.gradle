@@ -75,6 +75,12 @@ test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
+=========
+//test {
+//    useJUnitPlatform()
+//    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+//}
+>>>>>>>>> Temporary merge branch 2
 
 // Simulation configuration (e.g. environment variables).
 wpi.sim.addGui().defaultEnabled = true
