@@ -99,7 +99,7 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-
+        SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
     }
 
     private void configureBindings() {
