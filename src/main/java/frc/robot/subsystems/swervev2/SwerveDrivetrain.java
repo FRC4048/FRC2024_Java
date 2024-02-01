@@ -46,7 +46,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         SmartShuffleboard.put("Drive", "FLEncoder", frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         SmartShuffleboard.put("Drive", "FREncoder", frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         SmartShuffleboard.put("Drive", "BLEncoder", backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartShuffleboard.put("Drive", "BREncoder", backRight.getSwerveMotor().getSteerEncoderRawPos());
+        SmartShuffleboard.put("Drive", "BREncoder", backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
     }
