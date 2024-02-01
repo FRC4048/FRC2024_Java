@@ -24,7 +24,7 @@ public class IntakeRingCommand extends Command {
   
     @Override
     public void execute() {
-        intakeSubsystem.spinMotor(0.3); // intake motor speed constant
+        intakeSubsystem.spinMotor(0.3); // Constants.INTAKE_MOTOR_SPEED
         if (intakeSubsystem.isRingInIntake()) {
             ringDetections++;
         } else {
