@@ -31,7 +31,7 @@ public class Drive extends Command {
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
         double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
 
-        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
+        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, Constants.FIELD_RELATIVE);
         drivetrain.drive(driveStates);
     }
 
