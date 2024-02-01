@@ -5,26 +5,81 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.autochooser.chooser.AutoChooser;
+import frc.robot.commands.RampMove;
+import frc.robot.commands.ReportErrorCommand;
+import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.SetInitOdom;
+import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.commands.StartFeeder;
 import frc.robot.subsystems.Feeder;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
+
+/**
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * subsystems, commands, and trigger mappings) should be declared here.
+ */
 
 public class RobotContainer {
     private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
     private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
-    private final SwerveDrivetrain drivetrain;
-    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
+    private SwerveDrivetrain drivetrain;
+    private final Ramp ramp;
+    private final AutoChooser2024 autoChooser;
     private final Feeder feeder = new Feeder();
+
     public RobotContainer() {
+        setupDriveTrain();
+        registerPathPlanableCommands();
+        setupPathPlaning();
+        autoChooser = new AutoChooser2024();
+        autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
+        autoChooser.forceRefresh();
+        ramp = new Ramp();
+        configureBindings();
+        putShuffleboardCommands();
+    }
+
+    /**
+     * NamedCommands
+     */
+    private void registerPathPlanableCommands() {
+        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
+    }
+
+    private void setupPathPlaning() {
+        AutoBuilder.configureHolonomic(drivetrain::getPose,
+                drivetrain::resetOdometry,
+                drivetrain::speedsFromStates,
+                drivetrain::drive,
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(5, 0.0, 0), // Translation PID constants
+                        new PIDConstants(5, 0.0, 0), // Rotation PID constants
+                        3, // Max module speed, in m/s
+                        0.5, // Drive base radius in meters. Distance from robot center to the furthest module.
+                        new ReplanningConfig()
+                ), RobotContainer::shouldFlip, drivetrain);
+    }
+
+    private void setupDriveTrain() {
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -39,19 +94,31 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.CHASSIS_DRIVE_GEAR_RATIO, Constants.CHASSIS_STEER_GEAR_RATIO);
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
-        navxGyro.setAngleAdjustment(0);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
-        drivetrain.resetOdometry(new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
-        configureBindings();
+    }
+    public void putShuffleboardCommands() {
+        SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+        SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+
     }
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        
-        controller.button(XboxController.Button.kX.value).onTrue(new StartFeeder(feeder));
     }
 
     public SwerveDrivetrain getDrivetrain() {
         return drivetrain;
+    }
+
+    public Command getAutoCommand() {
+        return autoChooser.getAutoCommand();
+    }
+    public static boolean shouldFlip(){
+        Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
+    public AutoChooser getAutoChooser() {
+        return autoChooser;
     }
 }
