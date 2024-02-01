@@ -5,15 +5,36 @@
 package frc.robot;
 
 public final class Constants {
-  public static final double RAMP_PID_P = 1.00;
-  public static final double RAMP_PID_I = 0.00;
-  public static final double RAMP_PID_D = 0.00;
-  public static final double RAMP_PID_FF = 1.00;
-  public static final double RAMP_ERROR_IZONE = 0.00;
-  public static final double RAMP_POS = 0.0;
-  public static final int RAMP_ID = 45;
+    public static final double RAMP_PID_P = 1.00;
+    public static final double RAMP_PID_I = 0.00;
+    public static final double RAMP_PID_D = 0.00;
+    public static final double RAMP_PID_FF = 1.00;
+    public static final double RAMP_ERROR_IZONE = 0.00;
+    public static final double RAMP_POS = 0.0;
+    public static final int RAMP_ID = 45;
+  
+    //Shooter
+    public static final int SHOOTER_MOTOR_ID_1 = 44;
+    public static final int SHOOTER_MOTOR_ID_2 = 45;
 
-  public static final boolean ENABLE_LOGGING = true;
+    public static final int SHOOTER_SENSOR_ID_1 = 0;
+    public static final int SHOOTER_SENSOR_ID_2 = 1;
+
+    public static final double SHOOTER_MOTOR_SPEED = 0.75;
+
+    public static final double SHOOTER_MOTOR_1_RPM = 12000;
+    public static final double SHOOTER_MOTOR_2_RPM = 12000;
+
+    //Shooter motor PID constants
+    public static final double SHOOTER_MOTOR_PID_P = 5e-5;
+    public static final double SHOOTER_MOTOR_PID_I = 0;
+    public static final double SHOOTER_MOTOR_PID_D = 5e-5;
+    public static final double SHOOTER_MOTOR_PID_IZ = 0;
+    public static final double SHOOTER_MOTOR_PID_FF = 0.000015;
+    public static final double SHOOTER_MOTOR_MAX_OUTPUT = 1;
+    public static final double SHOOTER_MOTOR_MIN_OUTPUT = -1;
+    
+    public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;

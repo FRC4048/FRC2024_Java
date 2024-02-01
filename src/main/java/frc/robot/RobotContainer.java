@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
+import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootTest;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.AutoChooser2024;
@@ -36,12 +39,14 @@ import java.util.Optional;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
-    private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
-    private SwerveDrivetrain drivetrain;
-    private final Ramp ramp;
-    private final AutoChooser2024 autoChooser;
+      private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+      private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+      private SwerveDrivetrain drivetrain;
+      private final Ramp ramp;
+      private final AutoChooser2024 autoChooser;
+      private final Shooter shooter = new Shooter();
 
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         setupDriveTrain();
         registerPathPlanableCommands();
@@ -76,10 +81,11 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
+    
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
-        SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
-        SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
-        SwerveIdConfig backRightIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_RIGHT_D, Constants.DRIVE_BACK_RIGHT_S, Constants.DRIVE_CANCODER_BACK_RIGHT);
+            SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
+            SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
+            SwerveIdConfig backRightIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_RIGHT_D, Constants.DRIVE_BACK_RIGHT_S, Constants.DRIVE_CANCODER_BACK_RIGHT);
 
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 4, 2 * Math.PI * 10);
         PID drivePid = PID.of(Constants.DRIVE_PID_P, Constants.DRIVE_PID_I, Constants.DRIVE_PID_D);
@@ -95,7 +101,8 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-
+        SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+        SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter));
     }
 
     private void configureBindings() {
