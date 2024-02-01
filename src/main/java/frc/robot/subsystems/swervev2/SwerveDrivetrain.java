@@ -45,6 +45,19 @@ public class SwerveDrivetrain extends SubsystemBase {
     public void periodic() {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
+        frontLeft.setP(SmartShuffleboard.getDouble("Test", "P", Constants.STEER_PID_P));
+        frontRight.setP(SmartShuffleboard.getDouble("Test", "P", Constants.STEER_PID_P));
+        backRight.setP(SmartShuffleboard.getDouble("Test", "P", Constants.STEER_PID_P));
+        backLeft.setP(SmartShuffleboard.getDouble("Test", "P", Constants.STEER_PID_P));
+        frontLeft.setI(SmartShuffleboard.getDouble("Test", "I", Constants.STEER_PID_I));
+        frontRight.setI(SmartShuffleboard.getDouble("Test", "I", Constants.STEER_PID_I));
+        backRight.setI(SmartShuffleboard.getDouble("Test", "I", Constants.STEER_PID_I));
+        backLeft.setI(SmartShuffleboard.getDouble("Test", "I", Constants.STEER_PID_I));
+        frontLeft.setD(SmartShuffleboard.getDouble("Test", "D", Constants.STEER_PID_D));
+        frontRight.setD(SmartShuffleboard.getDouble("Test", "D", Constants.STEER_PID_D));
+        backRight.setD(SmartShuffleboard.getDouble("Test", "D", Constants.STEER_PID_D));
+        backLeft.setD(SmartShuffleboard.getDouble("Test", "D", Constants.STEER_PID_D));
+       
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,

@@ -63,4 +63,17 @@ public class GenericSwerveModule implements frc.robot.subsystems.swervev2.type.S
         return swerveMotor;
     }
 
+    public void setP(double P) {
+        turningPIDController.setP(P);
+    }
+
+    public void setI(double I) {
+        turningPIDController.setI(I);
+    }
+
+    public void setD(double D) {
+        turningPIDController.setD(D);
+    }
+
+
 }

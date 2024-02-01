@@ -14,12 +14,15 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.drive.WheelAlign;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -91,10 +94,17 @@ public class RobotContainer {
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
+    
     }
     public void putShuffleboardCommands() {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+        SmartShuffleboard.put("Test", "P", Constants.STEER_PID_P);   
+        SmartShuffleboard.put("Test", "I", Constants.STEER_PID_I);
+        SmartShuffleboard.put("Test", "D", Constants.STEER_PID_D);
+
+
+        
 
     }
 
