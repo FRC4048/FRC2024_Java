@@ -13,6 +13,8 @@ public final class Constants {
   public static final double RAMP_POS = 0.0;
   public static final int RAMP_ID = 45;
 
+  public static final boolean DEPLOYER_DEBUG = false;
+  
   public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
@@ -59,4 +61,17 @@ public final class Constants {
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
+
+    //Deployer Constants (NOTE! These are currently all just placeholder values taken from last years similar "extender" constants)
+    public static final int DEPLOYER_RESET_TIMEOUT = 2;
+    public static final double DEPLOYER_DEPLOY_TIMEOUT = 3;
+    public static final int DEPLOYER_MOTOR_ID = 6;
+    public static final double DEPLOYER_MANUAL_SPEED = 0.5;
+    public static final double DEPLOYER_AUTO_MIN_SPEED = 0.3;
+    public static final double DEPLOYER_AUTO_MAX_SPEED = 1;
+    public static final double DEPLOYER_SPEED_SLOW_THRESHOLD = 1750;
+    public static final double DEPLOYER_DESTINATION_THRESHOLD = 50;
+    public static final int MAX_DEPLOYER_ENCODER_VALUE = 7342;
+    public static final int DEPLOYER_MAX_LENGTH = 74; //in inches
+    public static final int DEPLOYER_MIN_LENGTH = 44; // in inches
 }
