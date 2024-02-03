@@ -10,8 +10,8 @@ public class Constants2024 extends GameConstants {
     public static final int RAMP_ID = 45;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44;
-    public static final int SHOOTER_MOTOR_ID_2 = 45;
+    public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_2 = 4500; //needs to be changed
 
     public static final int SHOOTER_SENSOR_ID_1 = 0;
     public static final int SHOOTER_SENSOR_ID_2 = 1;
