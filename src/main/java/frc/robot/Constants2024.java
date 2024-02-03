@@ -56,7 +56,7 @@ public class Constants2024 extends GameConstants {
 
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
-    public static final double STEER_PID_D = 0;
+    public static final double STEER_PID_D = 0.005;
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
@@ -68,10 +68,10 @@ public class Constants2024 extends GameConstants {
     public static final double ROBOT_WIDTH = 0.5969;
     public static final double ROBOT_LENGTH = 0.5969;
 
-    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.89;
-    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 260.24;
-    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 307.44;
-    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.25;
+    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.28;
+    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 261.56;
+    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 306.29;
+    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Inverted steer
     public static boolean INVERTED_STEER = false;
