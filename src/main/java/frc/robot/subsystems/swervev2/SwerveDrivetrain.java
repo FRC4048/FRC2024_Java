@@ -87,7 +87,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d((distance*Math.sin(degrees))-0.01, distance*Math.cos(degrees)-0.01, Rotation2d.fromDegrees(0)), new Pose2d((distance*Math.sin(degrees)), distance*Math.cos(degrees), Rotation2d.fromDegrees(0)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d((distance*Math.sin(degrees))-0.1, distance*Math.cos(degrees)-0.01, Rotation2d.fromDegrees(0)), new Pose2d((distance*Math.sin(degrees)), distance*Math.cos(degrees), Rotation2d.fromDegrees(0)));
         path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
 
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
