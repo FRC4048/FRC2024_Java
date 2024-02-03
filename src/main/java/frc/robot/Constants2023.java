@@ -10,7 +10,8 @@ public class Constants2023 extends GameConstants{
     public static final int RAMP_ID = 45;
   
   
-  
+    public static final boolean FIELD_RELATIVE = false;
+
       //S = STEER, D = DRIVE, Drivetrain ConstantsS
       public static final int DRIVE_FRONT_RIGHT_S = 49;
       public static final int DRIVE_FRONT_RIGHT_D = 40;
@@ -51,4 +52,6 @@ public class Constants2023 extends GameConstants{
       public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
       public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
       public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
+      //Inverted steer
+      public static boolean INVERTED_STEER = false;
 }
