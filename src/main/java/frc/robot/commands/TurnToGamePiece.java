@@ -13,15 +13,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class TurnToGamePiece extends Command{
     private final SwerveDrivetrain drivetrain;
-    private DoubleSupplier x_position;
-    private DoubleSupplier y_position;
+    //private DoubleSupplier x_position;
+    //private DoubleSupplier y_position;
+    private double x_position;
+    private double y_position;
     private double rcw;
     private double fwd;
     private double str;
     private DoubleSupplier rtSupplier;
 
 
-    public TurnToGamePiece(SwerveDrivetrain drivetrain, DoubleSupplier x_position, DoubleSupplier y_position) {
+    public TurnToGamePiece(SwerveDrivetrain drivetrain, double x_position, double y_position) {
         this.x_position = x_position;
         this.y_position = y_position;
         this.drivetrain = drivetrain;
@@ -37,12 +39,12 @@ public class TurnToGamePiece extends Command{
 
     @Override
     public void execute() {
-        if (y_position.getAsDouble() < 300) {
+        if (y_position < 300) {
                 double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
                 ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
                 drivetrain.drive(driveStates);
             }
-         else if (y_position.getAsDouble() > 340) {
+         else if (y_position > 340) {
                 double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, -0.3);
                 ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
                 drivetrain.drive(driveStates);
@@ -51,7 +53,7 @@ public class TurnToGamePiece extends Command{
 
     @Override
     public boolean isFinished() {
-        if (300 < y_position.getAsDouble() || 340 > y_position.getAsDouble()) {
+        if (300 < y_position || 340 > y_position) {
             return true;
         }
         return false;

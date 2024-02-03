@@ -20,6 +20,7 @@ import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.TurnToGamePiece;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -95,6 +96,8 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+        SmartShuffleboard.putCommand("Drive", "Turn Left", new TurnToGamePiece(drivetrain, 100, 600));
+        SmartShuffleboard.putCommand("Drive", "Turn Left1", new TurnToGamePiece(drivetrain, 100, 200));
 
     }
 
