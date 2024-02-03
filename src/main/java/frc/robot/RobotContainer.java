@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
-import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootTest;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.SetInitOdom;
-import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
@@ -37,22 +37,20 @@ import java.util.Optional;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
-    private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
-    private SwerveDrivetrain drivetrain;
-    private final Ramp ramp;
-    private final AutoChooser2024 autoChooser;
-    private final Shooter shooter = new Shooter();
+      private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
+      private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
+      private SwerveDrivetrain drivetrain;
+      private final Ramp ramp;
+      private final AutoChooser2024 autoChooser;
+      private final Shooter shooter = new Shooter();
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
-        autoChooser.addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser));
+        autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
         ramp = new Ramp();
         configureBindings();
@@ -81,7 +79,7 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
-
+    
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -119,10 +117,9 @@ public class RobotContainer {
 
     /**
      * Returns a boolean based on the current alliance color assigned by the FMS.
-     *
      * @return true if red, false if blue
      */
-    public static boolean shouldFlip() {
+    public static boolean shouldFlip(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
