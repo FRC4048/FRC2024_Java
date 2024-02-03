@@ -62,9 +62,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.INVERTED_STEER);
