@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
+import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootTest;
 import frc.robot.subsystems.Shooter;
