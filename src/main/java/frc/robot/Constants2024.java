@@ -48,10 +48,10 @@ public class Constants2024 extends GameConstants{
       public static final double ROBOT_WIDTH = 0.5969;
       public static final double ROBOT_LENGTH = 0.5969;
   
-      public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 188.79;
-      public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 173.76;
-      public static final double BACK_LEFT_ABS_ENCODER_ZERO = 305.77;
-      public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.62;
+      public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.89;
+      public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 260.24;
+      public static final double BACK_LEFT_ABS_ENCODER_ZERO = 307.44;
+      public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 155.75;
 
       //Inverted steer
       public static boolean INVERTED_STEER = false;

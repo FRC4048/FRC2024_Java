@@ -1,12 +1,11 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
-
-import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
     private final SwerveDrivetrain drivetrain;
