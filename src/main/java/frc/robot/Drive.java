@@ -1,12 +1,11 @@
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
-
-import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
     private final SwerveDrivetrain drivetrain;
@@ -31,7 +30,7 @@ public class Drive extends Command {
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
         double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
 
-        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
+        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, Constants.FIELD_RELATIVE);
         drivetrain.drive(driveStates);
     }
 
