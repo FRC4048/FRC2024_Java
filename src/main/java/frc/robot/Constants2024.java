@@ -30,7 +30,7 @@ public class Constants2024 extends GameConstants {
     public static final double SHOOTER_MOTOR_MAX_OUTPUT = 1;
     public static final double SHOOTER_MOTOR_MIN_OUTPUT = -1;
 
-    public static final boolean FIELD_RELATIVE = false;
+    public static final boolean FIELD_RELATIVE = true;
 
     //S = STEER, D = DRIVE, Drivetrain ConstantsS
     public static final int DRIVE_FRONT_RIGHT_S = 27;
@@ -63,10 +63,10 @@ public class Constants2024 extends GameConstants {
     public static final double CHASSIS_DRIVE_GEAR_RATIO = 8.142857; // this value should be x:1
     public static final double CHASSIS_STEER_GEAR_RATIO = 12.8; // this value should be x:1
 
-    public static final double MAX_VELOCITY = 4.0; // 4 meters per second
+    public static final double MAX_VELOCITY = 4.8; // 4 meters per second
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
-    public static final double ROBOT_WIDTH = 0.5969;
-    public static final double ROBOT_LENGTH = 0.5969;
+    public static final double ROBOT_WIDTH = 0.8636;
+    public static final double ROBOT_LENGTH = 0.8636;
 
     public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.28;
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 261.56;
@@ -75,6 +75,9 @@ public class Constants2024 extends GameConstants {
 
     //Inverted steer
     public static boolean INVERTED_STEER = false;
+    public static final boolean SHOOTER_DEBUG = false;
+    public static final boolean RAMP_DEBUG = false;
+
 
 
 }
