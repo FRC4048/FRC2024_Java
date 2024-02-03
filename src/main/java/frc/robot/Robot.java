@@ -7,9 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.SetInitOdom;
 import frc.robot.commands.drive.WheelAlign;
 
 public class Robot extends TimedRobot {
