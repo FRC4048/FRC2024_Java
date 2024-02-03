@@ -4,10 +4,10 @@ public enum SwerveMotor {
     
     
 
-    MK4(false, false, false, false, 
+    MK4(true, false, true, false, 
     12.8, 8.142857),
-    MK4I(false, false, false, false, 
-    150f/7f, 8.142857);
+    MK4I(false, true, false, true, 
+    150f/7f, 8.142857); //old
 
     SwerveMotor(boolean frontRightInverted, boolean frontLeftInverted, boolean backRightInverted, boolean backLeftInverted, double steerRatio, double driveRatio) {
         this.frontRightInverted = frontRightInverted;
