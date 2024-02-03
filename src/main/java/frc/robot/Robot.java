@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.SetInitOdom;
 import frc.robot.commands.drive.WheelAlign;
 
 public class Robot extends TimedRobot {

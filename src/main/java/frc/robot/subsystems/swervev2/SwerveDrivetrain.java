@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants2023;
+import frc.robot.Constants2024;
 import frc.robot.RobotContainer;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
@@ -37,13 +39,13 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final GenericSwerveModule backRight;
 
     private final double distance = 5;
-    private final double degrees = 0 + Constants.ON_THE_FLY_ANGLE_OFFSET;
+    private final double degrees = 0 + Constants2023.ON_THE_FLY_ANGLE_OFFSET;
 
 
-    private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
-    private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
-    private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
-    private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
+    private final Translation2d frontLeftLocation = new Translation2d(Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
+    private final Translation2d frontRightLocation = new Translation2d(Constants2023.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
+    private final Translation2d backLeftLocation = new Translation2d(-Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
+    private final Translation2d backRightLocation = new Translation2d(-Constants2023.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
 
@@ -94,10 +96,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
     }
 
     public void putShuffleboardCommands() {
@@ -111,7 +113,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants2023.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
     }
 
