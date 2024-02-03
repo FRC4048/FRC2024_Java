@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
@@ -81,7 +80,7 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
-    
+
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
             SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
             SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -102,7 +101,6 @@ public class RobotContainer {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
         SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-        SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter));
     }
 
     private void configureBindings() {
@@ -116,6 +114,11 @@ public class RobotContainer {
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
     }
+
+    /**
+     * Returns a boolean based on the current alliance color assigned by the FMS.
+     * @return true if red, false if blue
+     */
     public static boolean shouldFlip(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
