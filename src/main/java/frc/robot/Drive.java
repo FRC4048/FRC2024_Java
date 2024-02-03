@@ -13,7 +13,7 @@ public class Drive extends Command {
     private final DoubleSupplier fwdSupplier;
     private final DoubleSupplier strSupplier;
     private final DoubleSupplier rtSupplier;
-    private final boolean shouldFlip;
+    private boolean shouldFlip;
 
 
     public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
@@ -22,6 +22,10 @@ public class Drive extends Command {
         this.fwdSupplier = fwdSupplier;
         this.strSupplier = strSupplier;
         this.rtSupplier = rtSupplier;
+    }
+
+    @Override
+    public void initialize() {
         this.shouldFlip = RobotContainer.shouldFlip();
     }
 
