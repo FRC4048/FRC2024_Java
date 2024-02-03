@@ -114,6 +114,11 @@ public class RobotContainer {
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
     }
+
+    /**
+     * Returns a boolean based on the current alliance color assigned by the FMS.
+     * @return true if red, false if blue
+     */
     public static boolean shouldFlip(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
