@@ -36,6 +36,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final GenericSwerveModule backLeft;
     private final GenericSwerveModule backRight;
 
+    private final double distance = 5;
+    private final double degrees = 0 + Constants.ON_THE_FLY_ANGLE_OFFSET;
+
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
@@ -84,7 +87,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(90)), new Pose2d(poseEstimator.getEstimatedPose().getX()+1, poseEstimator.getEstimatedPose().getY()+1, Rotation2d.fromDegrees(0)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d((distance*Math.sin(degrees))-0.01, distance*Math.cos(degrees)-0.01, Rotation2d.fromDegrees(0)), new Pose2d((distance*Math.sin(degrees)), distance*Math.cos(degrees), Rotation2d.fromDegrees(0)));
         path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
 
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
