@@ -77,6 +77,7 @@ public class Constants2024 extends GameConstants {
     public static boolean INVERTED_STEER = false;
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
+    public static final boolean SWERVE_DEBUG = false;
 
 
 
