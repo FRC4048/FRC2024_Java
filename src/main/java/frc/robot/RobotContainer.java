@@ -9,10 +9,12 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
@@ -73,7 +75,7 @@ public class RobotContainer {
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(5, 0.0, 0), // Translation PID constants
                         new PIDConstants(5, 0.0, 0), // Rotation PID constants
-                        4.8, // Max module speed, in m/s
+                        Constants.MAX_VELOCITY, // Max module speed, in m/s
                         0.4, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
                 ), RobotContainer::shouldFlip, drivetrain);
