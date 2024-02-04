@@ -2,17 +2,17 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Feeder extends SubsystemBase{
 
-    private final PWMTalonSRX feederMotor;
+    private final WPI_TalonSRX feederMotor;
     private final DigitalInput feederSensor;
 
     public Feeder() {
-        this.feederMotor = new PWMTalonSRX(Constants.FEEDER_MOTOR_ID);
+        this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederSensor = new DigitalInput(Constants.FEEDER_SENSOR_ID);
     }
 
