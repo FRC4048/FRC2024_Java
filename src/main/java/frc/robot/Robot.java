@@ -4,18 +4,33 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.drive.WheelAlign;
+import frc.robot.utils.diag.Diagnostics;
+import frc.robot.utils.logging.Logger;
 
 public class Robot extends TimedRobot {
+    private static Diagnostics diagnostics;
+    private Command autonomousCommand;
+    private double loopTime = 0;
+
     private RobotContainer robotContainer;
     private Command autoCommand;
 
     @Override
     public void robotInit() {
+        if (Constants.ENABLE_LOGGING) {
+            DataLogManager.start();
+            DriverStation.startDataLog(DataLogManager.getLog(), true);
+        }
+        diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
@@ -24,31 +39,61 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
+        Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
     }
 
     @Override
-    public void testInit() {
-        // Cancels all running commands at the start of test mode.
-        CommandScheduler.getInstance().cancelAll();
+    public void disabledInit() {
+    }
+
+    @Override
+    public void disabledPeriodic() {
     }
 
     @Override
     public void autonomousInit() {
-        autoCommand = robotContainer.getAutoCommand();
-        if (autoCommand!=null){
-            autoCommand.schedule();
+        autonomousCommand = robotContainer.getAutoCommand();
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
         }
     }
 
     @Override
     public void autonomousPeriodic() {
-
+        loopTime = Timer.getFPGATimestamp();
     }
 
     @Override
     public void teleopInit() {
-        if (autoCommand != null) {
-            autoCommand.cancel();
+        diagnostics.reset();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
         }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        loopTime = Timer.getFPGATimestamp();
+    }
+
+    @Override
+    public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void testPeriodic() {
+        loopTime = 0;
+        diagnostics.refresh();
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        loopTime = Timer.getFPGATimestamp();
+    }
+
+    public static Diagnostics getDiagnostics() {
+        return diagnostics;
     }
 }
