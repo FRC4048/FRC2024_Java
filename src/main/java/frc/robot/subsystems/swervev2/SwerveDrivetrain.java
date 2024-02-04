@@ -8,10 +8,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -65,10 +63,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
-        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.INVERTED_STEER);
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.INVERTED_STEER);
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.INVERTED_STEER);
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.INVERTED_STEER);
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
