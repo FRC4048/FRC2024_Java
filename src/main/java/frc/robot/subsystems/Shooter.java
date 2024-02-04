@@ -126,12 +126,13 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     //Update the Shuffleboard
-    SmartShuffleboard.put("Shooter", "Shooter Motor 1 Speed", getShooterMotor1Speed());
-    SmartShuffleboard.put("Shooter", "Shooter Motor 2 Speed", getShooterMotor2Speed());
-    SmartShuffleboard.put("Shooter", "Shooter Motor 1 RPM", getShooterMotor1RPM());
-    SmartShuffleboard.put("Shooter", "Shooter Motor 2 RPM", getShooterMotor2RPM());
-    SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensor1Activated());
-    SmartShuffleboard.put("Shooter", "Shooter Sensor 2", getShooterSensor2Activated());
+    if (Constants.SHOOTER_DEBUG){
+      SmartShuffleboard.put("Shooter", "Shooter Motor 1 Speed", getShooterMotor1Speed());
+      SmartShuffleboard.put("Shooter", "Shooter Motor 2 Speed", getShooterMotor2Speed());
+      SmartShuffleboard.put("Shooter", "Shooter Motor 1 RPM", getShooterMotor1RPM());
+      SmartShuffleboard.put("Shooter", "Shooter Motor 2 RPM", getShooterMotor2RPM());
+      SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensor1Activated());
+      SmartShuffleboard.put("Shooter", "Shooter Sensor 2", getShooterSensor2Activated());
+    }
   }
-
 }
