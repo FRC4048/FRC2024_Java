@@ -33,6 +33,7 @@ public class Constants2024 extends GameConstants {
     public static final boolean FIELD_RELATIVE = true;
 
     //S = STEER, D = DRIVE, Drivetrain ConstantsS
+    public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
     public static final int DRIVE_FRONT_RIGHT_S = 27;
     public static final int DRIVE_FRONT_RIGHT_D = 57;
     public static final int DRIVE_BACK_RIGHT_S = 28;
@@ -60,8 +61,6 @@ public class Constants2024 extends GameConstants {
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
-    public static final double CHASSIS_DRIVE_GEAR_RATIO = 8.142857; // this value should be x:1
-    public static final double CHASSIS_STEER_GEAR_RATIO = 12.8; // this value should be x:1
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
