@@ -8,10 +8,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -43,6 +43,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.SWERVE_DEBUG){
+            SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+        }
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
     }
@@ -60,15 +66,15 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
-        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
@@ -156,4 +162,5 @@ public class SwerveDrivetrain extends SubsystemBase {
     public Rotation2d getGyroAngle() {
         return new Rotation2d(Math.toRadians(gyroValue));
     }
+
 }
