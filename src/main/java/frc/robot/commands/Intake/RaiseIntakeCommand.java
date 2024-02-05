@@ -12,7 +12,7 @@ public class RaiseIntakeCommand extends Command {
   
     @Override
     public void execute() {
-        intakeSubsystem.moveRaiseIntake(0.3); // Constants.INTAKE_RAISE_MOTOR_SPEED
+        intakeSubsystem.setRaiseIntake(0.3); // Constants.INTAKE_RAISE_MOTOR_SPEED
     }
 
     @Override

@@ -9,7 +9,7 @@ public class IntakeRingCommand extends Command {
     private IntakeSubsystem intakeSubsystem;
     private double initTime;
     private int ringDetections;
-    private int timeOut = 20;
+    private int timeOut = 5; // temporary until  done testing
 
     public IntakeRingCommand(IntakeSubsystem intakeSubsystem, int timeOut) {
         addRequirements(intakeSubsystem);
