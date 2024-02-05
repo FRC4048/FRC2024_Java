@@ -8,25 +8,26 @@ import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkLowLevel;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class IntakeSubsystem extends SubsystemBase{
-    private final WPI_TalonSRX intakeMotor;
-    private final WPI_TalonSRX intakeRaiseMotor;
+    private final CANSparkMax intakeMotor;
+    private final CANSparkMax intakeRaiseMotor;
     private final DigitalInput intakeSensor1;
     private final DigitalInput intakeSensor2;
 
 
     public IntakeSubsystem() {
-        this.intakeMotor = new WPI_TalonSRX(45);
-        this.intakeRaiseMotor = new WPI_TalonSRX(Constants.INTAKE_RAISE_MOTOR_ID);
+        this.intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
+        this.intakeRaiseMotor = new CANSparkMax(Constants.INTAKE_RAISE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         this.intakeSensor1 = new DigitalInput(Constants.INTAKE_SENSOR_ID_1);
         this.intakeSensor2 = new DigitalInput(Constants.INTAKE_SENSOR_ID_2);
         
-        intakeMotor.configFactoryDefault();
-        intakeRaiseMotor.configFactoryDefault();
+        intakeMotor.restoreFactoryDefaults();
 
-        intakeMotor.configContinuousCurrentLimit(20);
+        this.intakeMotor.setIdleMode(IdleMode.kCoast);
     }
     
     public void spinMotor(double speed) {
