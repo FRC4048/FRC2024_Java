@@ -26,8 +26,10 @@ public class IntakeSubsystem extends SubsystemBase{
         this.intakeSensor2 = new DigitalInput(Constants.INTAKE_SENSOR_ID_2);
         
         intakeMotor.restoreFactoryDefaults();
+        intakeRaiseMotor.restoreFactoryDefaults();
 
         this.intakeMotor.setIdleMode(IdleMode.kCoast);
+        this.intakeRaiseMotor.setIdleMode(IdleMode.kCoast);
     }
     
     public void spinMotor(double speed) {
