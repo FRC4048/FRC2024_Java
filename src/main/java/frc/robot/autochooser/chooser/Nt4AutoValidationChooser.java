@@ -24,12 +24,12 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
         Nt4AutoEventProvider provider = (Nt4AutoEventProvider) getProvider();
         SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME, provider.getDefaultActionOption().toString())
                 .withPosition(2,2).withSize(2,1);
-        SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, provider.getDefaultLocationOption().toString())
+        SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, provider.getDefaultLocationOption().getShuffleboardName())
                 .withPosition(0,2).withSize(2,1);
         provider.setOnActionChangeListener(action -> {
             if (isValid(action, provider.getSelectedLocation())) {
                 SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME, action.toString());
-                SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, provider.getSelectedLocation().toString());
+                SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, provider.getSelectedLocation().getShuffleboardName());
             } else {
                 SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME, "INVALID");
                 SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, "INVALID");
@@ -37,7 +37,7 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
         });
         provider.setOnLocationChangeListener(autoLocation -> {
             if (isValid(provider.getSelectedAction(), autoLocation)) {
-                SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, autoLocation.toString());
+                SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME, autoLocation.getShuffleboardName());
                 SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME, provider.getSelectedAction().toString());
                 onValidEvents.forEach(c -> {
                     try { c.call().schedule(); } catch (Exception e) { throw new RuntimeException(e); }
@@ -50,7 +50,7 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
     }
     public void forceRefresh(){
         if (isValid(getProvider().getSelectedAction(), getProvider().getSelectedLocation())) {
-            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_LOCATION_FEEDBACK_NAME,getProvider().getSelectedLocation().toString());
+            SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_LOCATION_FEEDBACK_NAME,getProvider().getSelectedLocation().getShuffleboardName());
             SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_ACTION_FEEDBACK_NAME,getProvider().getSelectedAction().toString());
             onValidEvents.forEach(c -> {
                 try { c.call().schedule(); } catch (Exception e) { throw new RuntimeException(e); }
