@@ -48,6 +48,10 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
             }
         });
     }
+
+    /**
+     * manually checks if shuffleboard contains a valid {@link AutoAction} and {@link FieldLocation}
+     */
     public void forceRefresh(){
         if (isValid(getProvider().getSelectedAction(), getProvider().getSelectedLocation())) {
             SmartShuffleboard.put(Nt4AutoEventProvider.AUTO_TAB_NAME,AUTO_LOCATION_FEEDBACK_NAME,getProvider().getSelectedLocation().getShuffleboardName());
@@ -63,6 +67,10 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
     }
 
     protected abstract boolean isValid(AutoAction action, FieldLocation location);
+
+    /**
+     * @param consumer Command that you want to run when a new Valid event is chosen
+     */
     public void addOnValidationCommand(Callable<Command> consumer){
         onValidEvents.add(consumer);
     }
