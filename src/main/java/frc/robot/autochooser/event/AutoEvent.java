@@ -5,10 +5,12 @@ import frc.robot.autochooser.FieldLocation;
 
 import java.util.Objects;
 
+/**
+ * Wrapper Class, that Contains a {@link frc.robot.autochooser.AutoAction} and a {@link frc.robot.autochooser.FieldLocation}
+ */
 public class AutoEvent {
      private final AutoAction action;
      private final FieldLocation location;
-     ;
 
      public AutoEvent(AutoAction action, FieldLocation location) {
           this.action = action;

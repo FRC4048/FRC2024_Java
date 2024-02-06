@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
 
+/**
+ * Class to estimate the current position of the robot,
+ * given the serve wheel encoders (through swerve model states)
+ * and the initial position of the robot
+ */
 public class SwervePosEstimator {
     private final Field2d field = new Field2d();
-
     private final GenericEncodedSwerve frontLeftMotor;
     private final GenericEncodedSwerve frontRightMotor;
     private final GenericEncodedSwerve backLeftMotor;
@@ -37,6 +41,12 @@ public class SwervePosEstimator {
                 new Pose2d());
         SmartDashboard.putData(field);
     }
+
+    /**
+     * updates odometry, should be called in periodic
+     * @param gyroValueDeg current gyro value (angle of robot)
+     * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
+     */
     public void updatePosition(double gyroValueDeg){
         if (DriverStation.isEnabled()){
             poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
@@ -49,14 +59,20 @@ public class SwervePosEstimator {
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
-    public void resetOdometry(double radians, Translation2d pose2d){
+
+    /**
+     * @param radians robot angle to reset odometry to
+     * @param translation2d robot field position to reset odometry to
+     * @see SwerveDrivePoseEstimator#resetPosition(Rotation2d, SwerveModulePosition[], Pose2d)
+     */
+    public void resetOdometry(double radians, Translation2d translation2d){
         this.poseEstimator.resetPosition(new Rotation2d(radians),
                 new SwerveModulePosition[] {
                         frontLeftMotor.getPosition(),
                         frontRightMotor.getPosition(),
                         backLeftMotor.getPosition(),
                         backRightMotor.getPosition(),
-                },new Pose2d(pose2d,new Rotation2d(radians)));
+                },new Pose2d(translation2d,new Rotation2d(radians)));
     }
     public Pose2d getEstimatedPose(){
         return field.getRobotPose();
