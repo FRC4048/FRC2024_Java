@@ -29,6 +29,8 @@ import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.commands.StartFeeder;
+import frc.robot.subsystems.Feeder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
@@ -39,6 +41,7 @@ import java.util.Optional;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
 public class RobotContainer {
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
@@ -46,6 +49,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
+      private final Feeder feeder = new Feeder();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -104,6 +108,7 @@ public class RobotContainer {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
         SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+        SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
     }
 
     private void configureBindings() {
