@@ -61,9 +61,10 @@ public class SwervePosEstimator {
             TimestampedDoubleArray vision = subscriber.getAtomic();
             Pose2d pose2d = new Pose2d(vision.value[0], vision.value[1], new Rotation2d(vision.value[2]));
             Logger.logPose2d("RawVision",pose2d, Constants.ENABLE_LOGGING);
-            if (vision.value[0] == -1 && vision.value[1] == -1 && vision.value[2] == -1){
-                poseEstimator.addVisionMeasurement(pose2d,vision.timestamp);
-            }
+            field.setRobotPose(pose2d);
+//            if (vision.value[0] == -1 && vision.value[1] == -1 && vision.value[2] == -1){
+//                poseEstimator.addVisionMeasurement(pose2d,vision.timestamp);
+//            }
             poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
                     new SwerveModulePosition[] {
                             frontLeftMotor.getPosition(),
@@ -72,7 +73,6 @@ public class SwervePosEstimator {
                             backRightMotor.getPosition(),
                     });
         }
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 
     /**
