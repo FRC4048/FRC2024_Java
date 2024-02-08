@@ -6,10 +6,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
+import frc.robot.utils.logging.Logger;
 
 /**
  * Class to estimate the current position of the robot,
@@ -23,7 +29,7 @@ public class SwervePosEstimator {
     private final GenericEncodedSwerve backLeftMotor;
     private final GenericEncodedSwerve backRightMotor;
     private final SwerveDrivePoseEstimator poseEstimator;
-
+    private final DoubleArraySubscriber subscriber;
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -39,6 +45,9 @@ public class SwervePosEstimator {
                         backRightMotor.getPosition(),
                 },
                 new Pose2d());
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("ROS");
+        subscriber = table.getDoubleArrayTopic("odometry").subscribe(new double[]{-1,-1,-1});
         SmartDashboard.putData(field);
     }
 
@@ -49,6 +58,12 @@ public class SwervePosEstimator {
      */
     public void updatePosition(double gyroValueDeg){
         if (DriverStation.isEnabled()){
+            TimestampedDoubleArray vision = subscriber.getAtomic();
+            Pose2d pose2d = new Pose2d(vision.value[0], vision.value[1], new Rotation2d(vision.value[2]));
+            Logger.logPose2d("RawVision",pose2d, Constants.ENABLE_LOGGING);
+            if (vision.value[0] == -1 && vision.value[1] == -1 && vision.value[2] == -1){
+                poseEstimator.addVisionMeasurement(pose2d,vision.timestamp);
+            }
             poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
                     new SwerveModulePosition[] {
                             frontLeftMotor.getPosition(),
@@ -81,4 +96,5 @@ public class SwervePosEstimator {
     public Field2d getField() {
         return field;
     }
+
 }
