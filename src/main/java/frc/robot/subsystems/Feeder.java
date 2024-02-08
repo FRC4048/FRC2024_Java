@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase{
 
@@ -34,7 +33,7 @@ public class Feeder extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
-        SmartShuffleboard.put("Feeder", "Feeder Sensor", getFeederSensor());
+//        SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
+//        SmartShuffleboard.put("Feeder", "Feeder Sensor", getFeederSensor());
     }
 }
