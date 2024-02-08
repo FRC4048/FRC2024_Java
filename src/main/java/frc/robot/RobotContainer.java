@@ -9,28 +9,21 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootTest;
-import frc.robot.subsystems.Shooter;
-import frc.robot.commands.RampMove;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.*;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
-import frc.robot.commands.StartFeeder;
-import frc.robot.subsystems.Feeder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
@@ -80,7 +73,7 @@ public class RobotContainer {
                         new PIDConstants(5, 0.0, 0), // Translation PID constants
                         new PIDConstants(5, 0.0, 0), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to the furthest module.
+                        Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
                 ), RobotContainer::shouldFlip, drivetrain);
     }

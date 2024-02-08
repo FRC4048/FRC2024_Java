@@ -48,6 +48,8 @@ public class Constants2024 extends GameConstants {
     public static final int DRIVE_CANCODER_FRONT_LEFT = 40;
     public static final int DRIVE_CANCODER_BACK_LEFT = 39;
 
+    public static final double ROBOT_RADIUS =  0.381;
+
     //PID Constants
     public static final double DRIVE_PID_P = 1;
     public static final double DRIVE_PID_I = 0;
