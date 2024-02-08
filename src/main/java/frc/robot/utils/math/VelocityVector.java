@@ -17,4 +17,10 @@ public class VelocityVector {
     public double getYSpeed(){
         return Math.sin(angle.getRadians()) * velocity;
     }
+    public double getVelocity(){
+        return velocity;
+    }
+    public Rotation2d getAngle(){
+        return angle;
+    }
 }
