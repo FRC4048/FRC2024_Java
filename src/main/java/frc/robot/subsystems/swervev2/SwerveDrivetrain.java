@@ -7,6 +7,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -31,6 +36,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
 
+    private final DoubleArraySubscriber subscriber;
+    private final double visionArray[];
+
+    Pose2d visionPose;
+
     private final AHRS gyro;
     private double gyroValue = 0;
 
@@ -49,6 +59,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         }
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
+        poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - 0.02);
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
     }
 
@@ -74,6 +85,14 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("ROS");
+        subscriber = table.getDoubleArrayTopic("odometry").subscribe(new double[]{-1,-1,-1});
+
+        visionArray = subscriber.get();
+        visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])));
+
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
