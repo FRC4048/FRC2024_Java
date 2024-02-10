@@ -1,21 +1,21 @@
 package frc.robot.subsystems.swervev2;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
-import frc.robot.utils.logging.Logger;
 
 /**
  * Class to estimate the current position of the robot,
@@ -30,6 +30,11 @@ public class SwervePosEstimator {
     private final GenericEncodedSwerve backRightMotor;
     private final SwerveDrivePoseEstimator poseEstimator;
     private final DoubleArraySubscriber subscriber;
+    /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+
+    /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -58,21 +63,17 @@ public class SwervePosEstimator {
      */
     public void updatePosition(double gyroValueDeg){
         if (DriverStation.isEnabled()){
-            TimestampedDoubleArray vision = subscriber.getAtomic();
-            Pose2d pose2d = new Pose2d(vision.value[0], vision.value[1], new Rotation2d(vision.value[2]));
-            Logger.logPose2d("RawVision",pose2d, Constants.ENABLE_LOGGING);
-            field.setRobotPose(pose2d);
-//            if (vision.value[0] == -1 && vision.value[1] == -1 && vision.value[2] == -1){
-//                poseEstimator.addVisionMeasurement(pose2d,vision.timestamp);
-//            }
             poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
                     new SwerveModulePosition[] {
                             frontLeftMotor.getPosition(),
                             frontRightMotor.getPosition(),
                             backLeftMotor.getPosition(),
                             backRightMotor.getPosition(),
+
                     });
         }
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
+
     }
 
     /**
