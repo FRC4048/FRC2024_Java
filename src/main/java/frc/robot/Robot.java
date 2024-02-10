@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,6 +16,9 @@ import frc.robot.commands.ResetGyro;
 import frc.robot.commands.drive.WheelAlign;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.Logger;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
 
 public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
@@ -23,6 +27,8 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robotContainer;
     private Command autoCommand;
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
     @Override
     public void robotInit() {
@@ -41,6 +47,14 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
+        Color detectedColor = m_colorSensor.getColor();
+        double IR = m_colorSensor.getIR();
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
+        SmartDashboard.putNumber("Infrared", IR);
+        double proximity = m_colorSensor.getProximity();
+        SmartDashboard.putNumber("Proximity", proximity);
     }
 
     @Override
