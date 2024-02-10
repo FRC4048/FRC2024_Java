@@ -1,6 +1,8 @@
 package frc.robot.subsystems.swervev2;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -59,7 +61,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         }
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - 0.02);
+        poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp() - 0.02);
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
     }
 
