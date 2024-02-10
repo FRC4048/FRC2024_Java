@@ -5,13 +5,16 @@ import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+/**
+ * Superclass of {@link AutoEventProvider} that uses Network Tables to get
+ * {@link AutoAction AutoActions} and {@link FieldLocation fieldLocations}<br>
+ */
 public class Nt4AutoEventProvider implements AutoEventProvider {
     public static final String AUTO_TAB_NAME = "Auto";
     public static final String ACTION_FIELD_NAME = "Auto Action";
@@ -57,9 +60,15 @@ public class Nt4AutoEventProvider implements AutoEventProvider {
         return defaultFieldLocation;
     }
 
+    /**
+     * @param listener function to be called when the value in {@link #actionChooser} changes
+     */
     public void setOnActionChangeListener(Consumer<AutoAction> listener){
         actionChooser.onChange(listener);
     }
+    /**
+     * @param listener function to be called when the value in {@link #locationChooser} changes
+     */
     public void setOnLocationChangeListener(Consumer<FieldLocation> listener){
         locationChooser.onChange(listener);
     }

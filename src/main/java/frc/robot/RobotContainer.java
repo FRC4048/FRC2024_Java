@@ -9,22 +9,17 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.Shoot;
-import frc.robot.commands.ShootTest;
-import frc.robot.subsystems.Shooter;
-import frc.robot.commands.RampMove;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.*;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
@@ -39,6 +34,7 @@ import java.util.Optional;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
 public class RobotContainer {
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
@@ -46,6 +42,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
+      private final Feeder feeder = new Feeder();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -101,9 +98,18 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
-        SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
-        SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-        SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+        if (Constants.RAMP_DEBUG){
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+        }
+        if (Constants.SHOOTER_DEBUG){
+            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+
+        }
+        if (Constants.FEEDER_DEBUG){
+            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+        }
+
     }
 
     private void configureBindings() {
