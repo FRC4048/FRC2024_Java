@@ -7,11 +7,13 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
+import frc.robot.utils.logging.Logger;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -28,16 +30,24 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
 
+    private GenericEntry gyroEntry;
     private final AHRS gyro;
-    private double gyroValue = 0;
+    private double gyroValue;
 
 
+    private double getNavxGyroValue() {
+        return gyroValue;
+    }
+    
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
     }
 
     @Override
     public void periodic() {
+        gyroValue = getGyro();
+        gyroEntry.setDouble(getNavxGyroValue());
+        Logger.logDouble("/drivetrain/gyro", gyroValue, Constants.ENABLE_LOGGING);
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
