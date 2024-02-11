@@ -1,62 +1,58 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Solenoid;
-import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class IntakeSubsystem extends SubsystemBase{
-    private final CANSparkMax intakeMotor;
-    private final CANSparkMax intakeRaiseMotor;
-    private final DigitalInput intakeSensor1;
-    private final DigitalInput intakeSensor2;
-
+    private final WPI_TalonSRX intakeMotor1;
+    private final WPI_TalonSRX intakeMotor2;
 
     public IntakeSubsystem() {
-        this.intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        this.intakeRaiseMotor = new CANSparkMax(Constants.INTAKE_RAISE_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
-        this.intakeSensor1 = new DigitalInput(Constants.INTAKE_SENSOR_ID_1);
-        this.intakeSensor2 = new DigitalInput(Constants.INTAKE_SENSOR_ID_2);
+        this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
+        this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
         
-        intakeMotor.restoreFactoryDefaults();
-        intakeRaiseMotor.restoreFactoryDefaults();
+        intakeMotor1.setInverted(false);
+        intakeMotor2.setInverted(false);
 
-        this.intakeMotor.setIdleMode(IdleMode.kCoast);
-        this.intakeRaiseMotor.setIdleMode(IdleMode.kCoast);
+        //Set current stall limit (All of these values are tests for now)
+        intakeMotor1.configPeakCurrentLimit(30);
+        intakeMotor1.configPeakCurrentDuration(100);
+        intakeMotor1.configContinuousCurrentLimit(20);
+        intakeMotor1.enableCurrentLimit(true);
+
+        intakeMotor2.configPeakCurrentLimit(30);
+        intakeMotor2.configPeakCurrentDuration(100);
+        intakeMotor2.configContinuousCurrentLimit(20);
+        intakeMotor2.enableCurrentLimit(true);
     }
     
-    public void spinMotor(double speed) {
-        intakeMotor.set(speed);
+    public void setMotorSpeed(double motor1Speed, double motor2Speed) {
+        intakeMotor1.set(motor1Speed);
+        intakeMotor2.set(motor2Speed);
     }
 
-    public void stopMotor() {
-        intakeMotor.set(0);
+    public double getMotor1Speed() {
+        return intakeMotor1.get();
     }
 
-    public void setRaiseIntake(double speed) {
-        intakeRaiseMotor.set(speed);
+    public double getMotor2Speed() {
+        return intakeMotor2.get();
     }
 
-    public void stopRaiseIntake() {
-        intakeRaiseMotor.set(0);
+    public void stopMotors() {
+        intakeMotor1.set(0);
+        intakeMotor2.set(0);
     }
 
-    public boolean isRingInIntake() {
-        return !intakeSensor1.get() || !intakeSensor2.get();
-    }
+    @Override
+    public void periodic() {
+        SmartShuffleboard.put("Intake", "Intake Motor 1 Speed", getMotor1Speed());
+        SmartShuffleboard.put("Intake", "Intake Motor 2 Speed", getMotor2Speed());
 
-    public boolean getIntakeSensor1() {
-        return intakeSensor1.get();
-    }
-    
-    public boolean getIntakeSensor2() {
-        return intakeSensor2.get();
+        SmartShuffleboard.put("Intake", "Intake Motor 1 current", intakeMotor1.getStatorCurrent());
+        SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
     }
 }
