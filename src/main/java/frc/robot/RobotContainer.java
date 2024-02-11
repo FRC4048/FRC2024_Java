@@ -16,8 +16,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.*;
-import frc.robot.subsystems.Feeder;
+import frc.robot.commands.RampMove;
+import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
@@ -42,7 +44,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
-      private final Feeder feeder = new Feeder();
+//      private final Feeder feeder = new Feeder();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -107,13 +109,19 @@ public class RobotContainer {
 
         }
         if (Constants.FEEDER_DEBUG){
-            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+//            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
 
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX,()-> {
+            if (joyleft.getRawButton(1)) {
+                return Alignable.SPEAKER;
+            } else if (joyright.getRawButton(1)) {
+                return Alignable.AMP;
+            } return null;
+        }));
     }
 
     public SwerveDrivetrain getDrivetrain() {
