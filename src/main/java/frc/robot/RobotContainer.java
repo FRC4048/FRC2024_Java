@@ -25,6 +25,9 @@ import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Ramp;
+import frc.robot.commands.StaticClimb;
 import frc.robot.subsystems.ColorSensor;
 
 import java.util.Optional;
@@ -45,6 +48,7 @@ public class RobotContainer {
       private final Shooter shooter = new Shooter();
       private final Feeder feeder = new Feeder();
       private final ColorSensor colorSensor = new ColorSensor();
+      private Climber climber;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -96,6 +100,7 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
+        climber = new Climber(navxGyro);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
 
@@ -112,7 +117,10 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
             SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder, colorSensor));
         }
-        
+        if (Constants.CLIMBER_DEBUG) {      
+          SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+        }
+
     }
 
     private void configureBindings() {
