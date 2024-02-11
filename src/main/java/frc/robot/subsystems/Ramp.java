@@ -49,18 +49,20 @@ public class Ramp extends SubsystemBase {
     }
 
     public void periodic() {
+        if (Constants.RAMP_DEBUG){
+            SmartShuffleboard.put("Ramp", "P Gain", pidController.getP());
+            SmartShuffleboard.put("Ramp", "I Gain", pidController.getI());
+            SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
+            SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
+            SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
+            SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
+            // pid tuning
+            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
+            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
+            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
+            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
+        }
 
-        SmartShuffleboard.put("Ramp", "P Gain", pidController.getP());
-        SmartShuffleboard.put("Ramp", "I Gain", pidController.getI());
-        SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
-        SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
-        SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
-        SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
-        // pid tuning
-        pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
-        pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
-        pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
-        pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
     }
 
     public void setRampPos(double rotations) {

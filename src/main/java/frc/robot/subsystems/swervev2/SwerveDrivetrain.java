@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swervev2;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,12 +12,15 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.GameConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
+import frc.robot.utils.diag.DiagSparkMaxEncoder;
 
-/**
- * blue centric //TODO make work for red
- */
+
 public class SwerveDrivetrain extends SubsystemBase {
     
     private final GenericSwerveModule frontLeft;
@@ -36,19 +40,19 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
     private double getGyro() {
-        return (gyro.getAngle() % 360) * -1;
+        return (gyro.getAngle() % 360)  * -1;
     }
 
     @Override
     public void periodic() {
+        if (Constants.SWERVE_DEBUG){
+            SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+        }
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        SmartDashboard.putNumber("gyro",gyroValue);
-        SmartDashboard.putNumber("FrontLeftAbs",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("FrontRightAbs",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackLeftAbs",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-        SmartDashboard.putNumber("BackRightAbs",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -60,29 +64,52 @@ public class SwerveDrivetrain extends SubsystemBase {
         EncodedSwerveSparkMax encodedSwerveSparkMaxBL = new EncodedSwerveMotorBuilder(backLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxBR = new EncodedSwerveMotorBuilder(backRightConfig, conversionConfig).build();
 
+
         this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(false);
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
-        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(true);
-        this.backRight.getSwerveMotor().getSteerMotor().setInverted(true);
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getDriveMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getDriveMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getDriveMotor()));
+   
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getSteerMotor()));
+  
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Left", Constants.DIAG_ABS_SPARK_ENCODER, frontLeft.getSwerveMotor().getAbsEnc()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
+    }   
+
+
+    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
+        return fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
+                : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
 
-
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
-                fieldRelative
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(Math.toRadians(gyroValue)))
-                        : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    public void drive(ChassisSpeeds speeds) {
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
+    }
+
+    public ChassisSpeeds speedsFromStates() {
+        return kinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -103,14 +130,14 @@ public class SwerveDrivetrain extends SubsystemBase {
         backRight.getSwerveMotor().getDriveMotor().set(0.0);
     }
 
-    public void zeroRelativeEncoders(){
+    public void zeroRelativeEncoders() {
         frontLeft.getSwerveMotor().resetRelEnc();
         frontRight.getSwerveMotor().resetRelEnc();
         backLeft.getSwerveMotor().resetRelEnc();
         backRight.getSwerveMotor().resetRelEnc();
     }
 
-    public void setSteerOffset(double absEncoderZeroFL,double absEncoderZeroFR, double absEncoderZeroBL,double absEncoderZeroBR){
+    public void setSteerOffset(double absEncoderZeroFL, double absEncoderZeroFR, double absEncoderZeroBL, double absEncoderZeroBR) {
         frontLeft.getSwerveMotor().setSteerOffset(absEncoderZeroFL);
         frontRight.getSwerveMotor().setSteerOffset(absEncoderZeroFR);
         backLeft.getSwerveMotor().setSteerOffset(absEncoderZeroBL);
@@ -120,6 +147,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     public void resetGyro() {
         gyro.reset();
     }
+
     public GenericSwerveModule getFrontLeft() {
         return frontLeft;
     }
@@ -135,11 +163,23 @@ public class SwerveDrivetrain extends SubsystemBase {
     public GenericSwerveModule getBackRight() {
         return backRight;
     }
+
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPose();
     }
-    public void resetOdometry(Pose2d pose2d){
-        poseEstimator.resetOdometry(gyroValue,pose2d);
 
+    public void resetOdometry(Translation2d pose2d,Rotation2d rotation2d) {
+        poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
     }
+    public void resetOdometry(Pose2d pose2d) {
+        resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
+    }
+    public void setGyroOffset(double degrees) {
+        gyro.setAngleAdjustment(degrees);
+    }
+
+    public Rotation2d getGyroAngle() {
+        return new Rotation2d(Math.toRadians(gyroValue));
+    }
+
 }
