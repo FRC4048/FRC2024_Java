@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +15,7 @@ public class Feeder extends SubsystemBase{
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederSensor = new DigitalInput(Constants.FEEDER_SENSOR_ID);
+        this.feederMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     public void setFeederMotorSpeed(double speed) {

@@ -25,6 +25,7 @@ import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.subsystems.ColorSensor;
 
 import java.util.Optional;
 
@@ -43,6 +44,7 @@ public class RobotContainer {
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
       private final Feeder feeder = new Feeder();
+      private final ColorSensor colorSensor = new ColorSensor();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -109,7 +111,7 @@ public class RobotContainer {
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
-
+        SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder, colorSensor));
     }
 
     private void configureBindings() {
