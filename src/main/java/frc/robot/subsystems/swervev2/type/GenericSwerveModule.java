@@ -1,8 +1,5 @@
 package frc.robot.subsystems.swervev2.type;
 
-import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -13,7 +10,11 @@ import frc.robot.Gain;
 import frc.robot.PID;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
 
-public class GenericSwerveModule implements frc.robot.subsystems.swervev2.type.StatedSwerve {
+/**
+ * Generic Swerve Module that takes four {@link edu.wpi.first.math.kinematics.SwerveModuleState SwerveModuleStates}
+ * in conjunction with a turn and drive pid and moves the motors accordingly
+ */
+public class GenericSwerveModule implements StatedSwerve {
     private final PIDController drivePIDController;
     private final ProfiledPIDController turningPIDController;
     private final SimpleMotorFeedforward driveFeedforward;
@@ -34,6 +35,12 @@ public class GenericSwerveModule implements frc.robot.subsystems.swervev2.type.S
         return new SwerveModuleState(swerveMotor.getDriveEncVel(),new Rotation2d(swerveMotor.getSteerEncPosition()));
     }
 
+    /**
+     * optimizes desired state to turn in the direction requiring the least amount of turning.
+     * takes desired state and applies turn and steer pid.
+     * finally sets the power of the turn and steer motor to the result of the pid
+     * @param desiredState the raw target state
+     */
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(swerveMotor.getSteerEncPosition()));
