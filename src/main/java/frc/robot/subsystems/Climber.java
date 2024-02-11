@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -11,7 +12,7 @@ public class Climber extends SubsystemBase {
     private final CANSparkMax SparkMax2;
     private final AHRS navxGyro;
 
-    public Climber(AHRS navxGyro){
+    public Climber(AHRS navxGyro) {
         this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID, CANSparkMax.MotorType.kBrushless);
         this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID, CANSparkMax.MotorType.kBrushless);
         this.navxGyro = navxGyro;
@@ -32,10 +33,10 @@ public class Climber extends SubsystemBase {
      *                if false the motors will spin in the outtake direction
      */
     public void raise(boolean upward){
-        double speed = upward ? Constants.CLIMBER_SPEED : Constants.CLIMBER_SPEED*-1;
+        double speed = upward ? Constants.CLIMBER_RAISING_SPEED : Constants.CLIMBER_SPEED*-1;
         SparkMax1.set(speed);
         SparkMax2.set(speed);
-    }  
+    }
     public void balanceright(double speed) {
         SparkMax1.set(speed);
         SparkMax2.set(0);

@@ -13,12 +13,14 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -27,7 +29,6 @@ import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Ramp;
-import frc.robot.commands.StaticClimb;
 
 import java.util.Optional;
 
@@ -47,6 +48,7 @@ public class RobotContainer {
       private final Shooter shooter = new Shooter();
       private final Feeder feeder = new Feeder();
       private Climber climber;
+      private final ServoSubsystem servo = new ServoSubsystem();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -116,6 +118,8 @@ public class RobotContainer {
         }
         if (Constants.CLIMBER_DEBUG) {      
           SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
+          SmartShuffleboard.putCommand("Climber", "Lock Unlock Ratchet",new RatchetingMechanism(servo));
         }
 
     }
