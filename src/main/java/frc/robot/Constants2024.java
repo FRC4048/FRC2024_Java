@@ -79,9 +79,15 @@ public class Constants2024 extends GameConstants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 306.29;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
-
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
     public static final int FEEDER_SENSOR_ID = 0;
+
+    //Intake
+    public static final int INTAKE_MOTOR_1_ID = 11;
+    public static final int INTAKE_MOTOR_2_ID = 12;
+
+    public static final double INTAKE_MOTOR_1_SPEED = 0.75;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.75;
 }

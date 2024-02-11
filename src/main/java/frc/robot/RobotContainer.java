@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.*;
+import frc.robot.commands.Intake.StartIntake;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
@@ -43,6 +45,7 @@ public class RobotContainer {
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
       private final Feeder feeder = new Feeder();
+      private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -109,6 +112,8 @@ public class RobotContainer {
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
+
+        SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem));
 
     }
 
