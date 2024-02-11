@@ -110,8 +110,9 @@ public class RobotContainer {
         }
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+            SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder, colorSensor));
         }
-        SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder, colorSensor));
+        
     }
 
     private void configureBindings() {

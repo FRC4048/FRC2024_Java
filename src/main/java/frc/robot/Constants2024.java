@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.util.Color;
 
 public class Constants2024 extends GameConstants {
     //DEBUGS
@@ -86,6 +85,5 @@ public class Constants2024 extends GameConstants {
     public static final double FEEDER_MOTOR_SPEED = 0.2;
     public static final int FEEDER_MOTOR_ID = 12;
     public static final int FEEDER_SENSOR_ID = 0;
-    public static final Color K_PIECE_TARGET = new Color(0.559326171875,0.364013671875,0.0771484375);
-    public static final Color K_PLASTIC_TARGET = new Color(0.288330078125,0.478759765625,0.2333984375);
+    
 }
