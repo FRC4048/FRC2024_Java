@@ -26,7 +26,7 @@ public class RobotContainer {
   private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
   private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
   private final SwerveDrivetrain drivetrain;
-  private Climber climber = null;
+  private final Climber climber;
   private Ramp ramp;
   public RobotContainer() {
     SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
@@ -58,8 +58,11 @@ public class RobotContainer {
   public void putShuffleboardCommands() {
     SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
     SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-    SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
-    SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
+    if (Constants.CLIMBER_DEBUG) {      
+      SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+      SmartShuffleboard.putCommand("TEST","WheelAlign",new WheelAlign(drivetrain));
+    }
+    
   }
 
 

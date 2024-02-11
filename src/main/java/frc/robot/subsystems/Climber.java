@@ -50,7 +50,9 @@ public class Climber extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
+        if (Constants.CLIMBER_DEBUG) {
+            SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
+        }
         SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
         SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
     } 
