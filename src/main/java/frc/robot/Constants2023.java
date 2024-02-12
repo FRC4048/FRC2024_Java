@@ -85,9 +85,4 @@ public class Constants2023 extends GameConstants {
     public static final int FEEDER_MOTOR_ID = 11;
     public static final int FEEDER_SENSOR_ID = 0;
 
-    //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.5;
-    public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 0;
-
 }
