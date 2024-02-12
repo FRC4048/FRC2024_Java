@@ -16,14 +16,18 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.SetInitOdom;
+import frc.robot.commands.*;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Ramp;
+import frc.robot.commands.StaticClimb;
 
 import java.util.Optional;
 
@@ -41,7 +45,8 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
-//      private final Feeder feeder = new Feeder();
+      private final Feeder feeder = new Feeder();
+      private Climber climber;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -93,14 +98,26 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
+        climber = new Climber(navxGyro);
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
 
     public void putShuffleboardCommands() {
-//        SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
-//        SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-//        SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-//        SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+        if (Constants.RAMP_DEBUG){
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+        }
+        if (Constants.SHOOTER_DEBUG){
+            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
+
+        }
+        if (Constants.FEEDER_DEBUG){
+            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+        }
+        if (Constants.CLIMBER_DEBUG) {
+          SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+        }
+
     }
 
     private void configureBindings() {
