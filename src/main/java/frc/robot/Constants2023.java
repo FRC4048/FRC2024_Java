@@ -1,11 +1,6 @@
 package frc.robot;
 
 public class Constants2023 extends GameConstants {
-    //DEBUG
-    public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
-    public static final boolean SWERVE_DEBUG = false;
-    public static final boolean FEEDER_DEBUG = false;
     //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;

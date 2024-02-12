@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -36,11 +36,11 @@ public class Climber extends SubsystemBase {
         SparkMax1.set(speed);
         SparkMax2.set(speed);
     }  
-    public void balanceright(double speed) {
+    public void balanceRight(double speed) {
         SparkMax1.set(speed);
         SparkMax2.set(0);
     }
-    public void balanceleft(double speed) {
+    public void balanceLeft(double speed) {
         SparkMax1.set(0);
         SparkMax2.set(speed);
     }
@@ -52,8 +52,8 @@ public class Climber extends SubsystemBase {
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
+            SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
+            SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
         }
-        SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
-        SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
     } 
 }
