@@ -16,10 +16,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.RampMove;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.SetInitOdom;
-import frc.robot.commands.Shoot;
+import frc.robot.commands.*;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
@@ -27,9 +25,6 @@ import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Ramp;
-import frc.robot.commands.StaticClimb;
 
 import java.util.Optional;
 
@@ -81,7 +76,7 @@ public class RobotContainer {
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         0.4, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
-                ), RobotContainer::shouldFlip, drivetrain);
+                ), RobotContainer::isRedAlliance, drivetrain);
     }
 
     private void setupDriveTrain() {
@@ -144,7 +139,7 @@ public class RobotContainer {
      * Returns a boolean based on the current alliance color assigned by the FMS.
      * @return true if red, false if blue
      */
-    public static boolean shouldFlip(){
+    public static boolean isRedAlliance(){
         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }

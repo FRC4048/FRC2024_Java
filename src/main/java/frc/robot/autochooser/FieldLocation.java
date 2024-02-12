@@ -2,7 +2,6 @@ package frc.robot.autochooser;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.RobotContainer;
 
 public enum FieldLocation {
@@ -25,13 +24,13 @@ public enum FieldLocation {
           this.redName = redName;
      }
      public Pose2d getLocation(){
-          double x = RobotContainer.shouldFlip() ? RED_X_POS - xPose: xPose;
-          double radian = RobotContainer.shouldFlip() ? Math.PI-angle: angle;
+          double x = RobotContainer.isRedAlliance() ? RED_X_POS - xPose: xPose;
+          double radian = RobotContainer.isRedAlliance() ? Math.PI-angle: angle;
           return new Pose2d(x, yPos, Rotation2d.fromRadians(radian));
      }
 
      public String getShuffleboardName(){
-          return RobotContainer.shouldFlip() ? redName : blueName;
+          return RobotContainer.isRedAlliance() ? redName : blueName;
      }
 
 }
