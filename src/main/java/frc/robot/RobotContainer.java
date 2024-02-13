@@ -20,6 +20,7 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
@@ -46,7 +47,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
-//      private final Feeder feeder = new Feeder();
+      private final Feeder feeder = new Feeder();
       private Climber climber;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -113,7 +114,7 @@ public class RobotContainer {
 
         }
         if (Constants.FEEDER_DEBUG){
-//            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
         if (Constants.CLIMBER_DEBUG) {
           SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
@@ -146,8 +147,5 @@ public class RobotContainer {
 
     public AutoChooser getAutoChooser() {
         return autoChooser;
-    }
-    public boolean canAutoShoot(){
-        if (drivetrain.isFacingTarget());
     }
 }

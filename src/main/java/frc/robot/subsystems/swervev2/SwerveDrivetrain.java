@@ -196,6 +196,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public void setAlignable(Alignable alignable) {
         this.alignable = alignable;
-        SmartDashboard.putString("Alignable", alignable.toString());
+        if (Constants.SWERVE_DEBUG) {
+            SmartDashboard.putString("Alignable", alignable.toString());
+        }
     }
 }
