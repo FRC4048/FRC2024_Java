@@ -128,6 +128,10 @@ public class RobotContainer {
         return drivetrain;
     }
 
+    public Ramp getRamp() {
+        return ramp;
+    }
+
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
     }

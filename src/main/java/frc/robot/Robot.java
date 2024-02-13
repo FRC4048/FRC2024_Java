@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.ResetGyro;
+import frc.robot.commands.ResetRamp;
 import frc.robot.commands.drive.WheelAlign;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.Logger;
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         loopTime = Timer.getFPGATimestamp();
+        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override

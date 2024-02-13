@@ -74,6 +74,14 @@ public class Ramp extends SubsystemBase {
         return encoder.getPosition();
     }
 
+    public boolean getForwardSwitch() {
+        return neoMotor.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+    }
+
+    public boolean getReversedSwitch() {
+        return neoMotor.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
+    }
+
     public void changeRampPos(double increment) {
         double newRampPos = Math.max(0.0, Math.min(40.0, this.ramppos + increment));
         setRampPos(newRampPos);
