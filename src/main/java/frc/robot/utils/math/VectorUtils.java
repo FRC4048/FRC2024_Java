@@ -36,7 +36,7 @@ public class VectorUtils {
      * @return the X displacement of the projectile following a theoretical parabola with level starting and ending y values
      */
     public static double horizontalRange(VelocityVector velocityVector) {
-        return ((Math.pow(velocityVector.getVelocity(), 2) * Math.sin(velocityVector.getAngle().getRadians() * 2))) / 9.8;
+        return ((Math.pow(velocityVector.getVelocity(), 2) * Math.sin(velocityVector.getAngle().getRadians() * 2))) / (-1 * Constants.GRAVITY);
     }
 
     private static boolean isDirect(VelocityVector velocityVector, double deltaX) {
