@@ -79,7 +79,7 @@ public class RobotContainer {
                         new PIDConstants(5, 0.0, 0), // Translation PID constants
                         new PIDConstants(5, 0.0, 0), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to the furthest module.
+                        Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
                 ), RobotContainer::isRedAlliance, drivetrain);
     }
