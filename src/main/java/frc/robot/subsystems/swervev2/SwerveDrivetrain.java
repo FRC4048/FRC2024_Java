@@ -183,10 +183,17 @@ public class SwerveDrivetrain extends SubsystemBase {
         return new Rotation2d(Math.toRadians(gyroValue));
     }
 
+    /**
+     * should only be set to true if you {@link #alignable} is not null
+     * @param facingTarget if you are facing target or not
+     */
     public void setFacingTarget(boolean facingTarget) {
         this.faceingTarget = facingTarget;
     }
 
+    /**
+     * @return return true if you have reached target, else return false
+     */
     public boolean isFacingTarget() {
         return faceingTarget;
     }
