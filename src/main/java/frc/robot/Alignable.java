@@ -6,7 +6,7 @@ import java.util.function.BiFunction;
 
 public enum Alignable {
     AMP(0,0,0,(x,y)-> new Rotation2d(Math.PI / 2)),
-    SPEAKER(0.46,16.46,5.67,(x2,y2)-> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y2/x2))));
+    SPEAKER(0.46,17.46,5.67,(x2,y2)-> new Rotation2d(Math.atan(y2/x2)));
 
     private final double blueX;
     private final double redX;
