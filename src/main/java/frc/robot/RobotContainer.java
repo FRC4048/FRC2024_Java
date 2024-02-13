@@ -77,7 +77,7 @@ public class RobotContainer {
                         new PIDConstants(5, 0.0, 0), // Translation PID constants
                         new PIDConstants(5, 0.0, 0), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to the furthest module.
+                        Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
                 ), RobotContainer::shouldFlip, drivetrain);
     }
@@ -114,7 +114,7 @@ public class RobotContainer {
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
-        if (Constants.CLIMBER_DEBUG) {      
+        if (Constants.CLIMBER_DEBUG) {
           SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
         }
 
