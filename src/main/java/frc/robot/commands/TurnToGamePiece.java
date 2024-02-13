@@ -39,12 +39,12 @@ public class TurnToGamePiece extends Command{
 
     @Override
     public void execute() {
-        if (y_position < 300) {
+        if (y_position < -.1) {
                 double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
                 ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
                 drivetrain.drive(driveStates);
             }
-         else if (y_position > 340) {
+         else if (y_position > .1) {
                 double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, -0.3);
                 ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
                 drivetrain.drive(driveStates);
@@ -53,7 +53,7 @@ public class TurnToGamePiece extends Command{
 
     @Override
     public boolean isFinished() {
-        if (300 < y_position || 340 > y_position) {
+        if (-.1 < y_position || .1 > y_position) {
             return true;
         }
         return false;
