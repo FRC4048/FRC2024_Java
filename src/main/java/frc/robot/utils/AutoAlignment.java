@@ -15,9 +15,12 @@ public class AutoAlignment {
         return calcTurnSpeed(alignable,currentPos.getRotation(),currentPos.getX(),currentPos.getY());
     }
     public static double angleFromTarget(Alignable alignable, Rotation2d currentAngle, double x, double y){
-        return currentAngle.minus(alignable.getAngle(x,y)).getDegrees();
+        return currentAngle.minus(getAngle(alignable,x,y)).getDegrees();
     }
     public static double angleFromTarget(Alignable alignable,Pose2d currentPose){
         return angleFromTarget(alignable,currentPose.getRotation(),currentPose.getX(),currentPose.getY());
+    }
+    public static Rotation2d getAngle(Alignable alignable, double x, double y) {
+        return alignable.getAngleFromDistFunc().apply(x - alignable.getX(), y - alignable.getY());
     }
 }

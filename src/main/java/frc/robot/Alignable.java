@@ -28,7 +28,7 @@ public enum Alignable {
         return y;
     }
 
-    public Rotation2d getAngle(double x, double y) {
-        return functionFromDist.apply(x - getX(), y - getY());
+    public BiFunction<Double,Double,Rotation2d> getAngleFromDistFunc() {
+        return functionFromDist;
     }
 }
