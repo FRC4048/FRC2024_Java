@@ -71,6 +71,7 @@ public class Constants2024 extends GameConstants {
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
     public static final double ROBOT_WIDTH = 0.8636;
     public static final double ROBOT_LENGTH = 0.8636;
+    public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees
 
     public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.28;
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 261.56;

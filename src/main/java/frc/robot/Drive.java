@@ -1,11 +1,12 @@
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
+import frc.robot.utils.AutoAlignment;
+
+import java.util.function.DoubleSupplier;
 
 public class Drive extends Command {
     private final SwerveDrivetrain drivetrain;
@@ -15,27 +16,33 @@ public class Drive extends Command {
     private final DoubleSupplier rtSupplier;
     private boolean shouldFlip;
 
-
     public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
-        addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.fwdSupplier = fwdSupplier;
         this.strSupplier = strSupplier;
         this.rtSupplier = rtSupplier;
+        addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
-        this.shouldFlip = RobotContainer.shouldFlip();
+        this.shouldFlip = RobotContainer.isRedAlliance();
     }
 
     @Override
     public void execute() {
+        Alignable alignable = drivetrain.getAlignable();
         double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.3);
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
-        double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
-
-        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(fwd*(shouldFlip?1:-1), str*(shouldFlip?1:-1), -rcw, Constants.FIELD_RELATIVE);
+        double rcw;
+        if (alignable == null){
+            rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble() * Constants.MAX_VELOCITY, 0.3);
+            drivetrain.setFacingTarget(false);
+        } else {
+            rcw = AutoAlignment.calcTurnSpeed(alignable, drivetrain.getPose()) * Constants.MAX_ANGULAR_SPEED;
+            drivetrain.setFacingTarget(AutoAlignment.angleFromTarget(alignable,drivetrain.getPose()) < Constants.AUTO_ALIGN_THRESHOLD);
+        }
+        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(fwd*(shouldFlip ? 1 : -1), str*(shouldFlip ? 1 : -1), -rcw, Constants.FIELD_RELATIVE);
         drivetrain.drive(driveStates);
     }
 
