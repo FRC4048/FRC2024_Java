@@ -1,6 +1,7 @@
 package frc.robot;
 
 public class Constants2023 extends GameConstants {
+    //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
     public static final double RAMP_PID_D = 0.00;
@@ -61,20 +62,23 @@ public class Constants2023 extends GameConstants {
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
+    public static final double ROBOT_RADIUS =  0.4191;
+
 
     public static final double MAX_VELOCITY = 4.0; // 4 meters per second
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
     public static final double ROBOT_WIDTH = 0.5969;
     public static final double ROBOT_LENGTH = 0.5969;
+    public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees
 
     public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 54.35;
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
-    //Inverted steer
-    public static boolean INVERTED_STEER = false;
-      public static final boolean SHOOTER_DEBUG = false;
-      public static final boolean RAMP_DEBUG = false;
-      public static final boolean SWERVE_DEBUG = false;
+
+    //Feeder
+    public static final double FEEDER_MOTOR_SPEED = 0.5;
+    public static final int FEEDER_MOTOR_ID = 11;
+    public static final int FEEDER_SENSOR_ID = 0;
 
 }
