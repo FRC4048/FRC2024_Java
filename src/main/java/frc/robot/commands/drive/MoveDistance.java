@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +19,9 @@ public class MoveDistance extends Command {
   private double startPoseX;
   private double startPoseY;
   private SwerveDrivetrain drivetrain;
+  private final double changexThreshold  = 1.0;
+  private final double changeyThreshold = 1.0;
+  private boolean underneathThreshold;
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeX, double changeY, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,6 +30,7 @@ public class MoveDistance extends Command {
     this.changeY = changeY;
     this.maxSpeed = maxSpeed;
     addRequirements(drivetrain);
+    underneathThreshold = (changeX <= changexThreshold) && (changeX <= changexThreshold);
   }
 
   // Called when the command is initially scheduled.
@@ -46,7 +50,7 @@ public class MoveDistance extends Command {
       double ratio = changeY / maxSpeed;
       speedX = changeX / ratio;
     }
-    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, true));
+    if (underneathThreshold) drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, true));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -65,6 +69,6 @@ public class MoveDistance extends Command {
     if (Math.abs(startPoseX - drivetrain.getPose().getX()) > Math.abs(changeX) && Math.abs(startPoseY - drivetrain.getPose().getY()) > Math.abs(changeY)) {
       return true;
     }
-    return ((Timer.getFPGATimestamp() - startTime) >= 2);
+    return (((Timer.getFPGATimestamp() - startTime) >= 2) || underneathThreshold);
   }
 }
