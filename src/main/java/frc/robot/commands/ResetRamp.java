@@ -16,12 +16,13 @@ public class ResetRamp extends Command {
   public ResetRamp(Ramp ramp) {
     this.ramp = ramp;
     addRequirements(ramp);
-    startTime = Timer.getFPGATimestamp();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    startTime = Timer.getFPGATimestamp();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
