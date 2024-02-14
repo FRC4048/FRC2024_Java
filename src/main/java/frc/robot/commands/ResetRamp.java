@@ -38,6 +38,6 @@ public class ResetRamp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getForwardSwitch()) || ((Timer.getFPGATimestamp() - startTime) >= 0.5));
+    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 0.5));
   }
 }
