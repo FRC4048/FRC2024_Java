@@ -5,8 +5,8 @@ import frc.robot.subsystems.Ramp;
 
 public class RampMove extends Command{
     
-    private Ramp ramp;
-    private double degrees;
+    private final Ramp ramp;
+    private final double degrees;
 
     public RampMove(Ramp ramp, double degrees) {
         this.ramp = ramp;

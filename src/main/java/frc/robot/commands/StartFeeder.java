@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Feeder;
 import frc.robot.Constants;
+import frc.robot.subsystems.Feeder;
 
 public class StartFeeder extends Command {
 
-    private Feeder feeder;
+    private final Feeder feeder;
 
     public StartFeeder(Feeder feeder) {
         this.feeder = feeder;
@@ -25,12 +25,6 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        if (feeder.getFeederSensor() == true) {
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return feeder.getFeederSensor();
     }
 }

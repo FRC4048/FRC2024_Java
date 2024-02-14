@@ -1,9 +1,7 @@
 package frc.robot;
 
 public class Constants2024 extends GameConstants {
-
     //RAMP
-
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
     public static final double RAMP_PID_D = 0.00;
@@ -11,6 +9,8 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
+    public static final double RAMP_MAX_RPM_VELOCITY = 500;
+    public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
@@ -23,6 +23,7 @@ public class Constants2024 extends GameConstants {
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
+    public static final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MOTOR_PID_P = 5e-5;
@@ -51,7 +52,6 @@ public class Constants2024 extends GameConstants {
     public static final int DRIVE_CANCODER_FRONT_LEFT = 40;
     public static final int DRIVE_CANCODER_BACK_LEFT = 39;
 
-    public static final double ROBOT_RADIUS =  0.381;
 
     //PID Constants
     public static final double DRIVE_PID_P = 1;
@@ -66,6 +66,7 @@ public class Constants2024 extends GameConstants {
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
+    public static final double ROBOT_RADIUS =  0.381;
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
@@ -84,7 +85,7 @@ public class Constants2024 extends GameConstants {
     public static final int FEEDER_MOTOR_ID = 11;
     public static final int FEEDER_SENSOR_ID = 0;
 
-    public static final double ARM_SEPERATION_DISTANCE = 5.00; 
+    public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;

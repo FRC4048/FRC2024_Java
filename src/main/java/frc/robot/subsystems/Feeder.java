@@ -28,6 +28,9 @@ public class Feeder extends SubsystemBase{
         feederMotor.set(0);
     }
 
+    /**
+     * @return returns true if feeder sensor is connected to digital IO
+     */
     public boolean getFeederSensor() {
         return feederSensor.get();
     }
