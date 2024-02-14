@@ -5,9 +5,11 @@ import java.util.List;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.EventMarker;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.RotationTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,9 +39,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
     private final GenericSwerveModule backRight;
+    // private final List<RotationTarget> holonomicRotationTargets;
 
-    private final double distance = 5;
-    private final double degrees = 0 + Constants2023.ON_THE_FLY_ANGLE_OFFSET;
+    private final double distance = 3;  
+    private final double degrees = 180;
 
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
@@ -50,11 +53,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final SwervePosEstimator poseEstimator;
 
     private final PathPlannerPath path;
+    // private final EventMarker eventMarker;
 
 
 
     private final AHRS gyro;
-    private double gyroValue = 0;
+    private double gyroValue = 70;
 
 
     private double getGyro() {
@@ -89,8 +93,13 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(false);
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d((distance*Math.sin(degrees))-0.1, distance*Math.cos(degrees)-0.01, Rotation2d.fromDegrees(0)), new Pose2d((distance*Math.sin(degrees)), distance*Math.cos(degrees), Rotation2d.fromDegrees(0)));
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        // bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(distance*Math.cos(Math.toRadians(degrees)-0.001), distance*Math.sin(Math.toRadians(degrees))-0.001, Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        // holonomicRotationTargets = new RotationTarget(degrees, getGyroAngle())
+        // path = new PathPlannerPath(,)
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(degrees)));
+        path.preventFlipping = true;
+        // eventMarker = new EventMarker(,);
 
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(false);

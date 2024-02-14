@@ -56,5 +56,5 @@ public class Constants2023 extends GameConstants{
       public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
       public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
       //Inverted steer
-      public static boolean INVERTED_STEER = false;
+      public static boolean INVERTED_STEER = true;
 }
