@@ -35,10 +35,10 @@ public class SwervePosEstimator{
     private final DoubleArraySubscriber subscriber;
    
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
-    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 9999);
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.2, 0.2, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(9999, 9999, 0.001);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.01, 0.01, 0.3);
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
