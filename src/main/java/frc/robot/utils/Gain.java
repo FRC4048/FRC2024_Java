@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.utils;
 
 public class Gain {
     private final double v;

@@ -1,6 +1,7 @@
-package frc.robot;
+package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.RobotContainer;
 
 import java.util.function.BiFunction;
 

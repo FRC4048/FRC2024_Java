@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swervev2;
 
 public enum SwerveModuleProfile {
     MK4(true, false, true, false,

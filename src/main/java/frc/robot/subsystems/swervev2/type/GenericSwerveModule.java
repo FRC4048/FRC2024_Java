@@ -6,9 +6,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.Gain;
-import frc.robot.PID;
 import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
+import frc.robot.utils.Gain;
+import frc.robot.utils.PID;
 
 /**
  * Generic Swerve Module that takes four {@link edu.wpi.first.math.kinematics.SwerveModuleState SwerveModuleStates}

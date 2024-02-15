@@ -1,9 +1,12 @@
-package frc.robot;
+package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.swervev2.SwerveDrivetrain;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 
 import java.util.function.DoubleSupplier;
@@ -32,7 +35,7 @@ public class Drive extends Command {
     @Override
     public void execute() {
         Alignable alignable = drivetrain.getAlignable();
-        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.3);
+        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()* Constants.MAX_VELOCITY,0.3);
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
         ChassisSpeeds driveStates;
         if (alignable == null){
