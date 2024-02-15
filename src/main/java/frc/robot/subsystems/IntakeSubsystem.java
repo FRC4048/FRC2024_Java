@@ -17,15 +17,15 @@ public class IntakeSubsystem extends SubsystemBase{
         intakeMotor1.setInverted(false);
         intakeMotor2.setInverted(false);
 
-        //Set current stall limit (All of these values are tests for now)
-        intakeMotor1.configPeakCurrentLimit(30);
-        intakeMotor1.configPeakCurrentDuration(100);
-        intakeMotor1.configContinuousCurrentLimit(20);
+        //Configure current limits *VALUES HAVE TO BE TWEAKED*
+        intakeMotor1.configPeakCurrentLimit(Constants.INTAKE_MOTOR_PEAK_CURRENT_LIMIT);
+        intakeMotor1.configPeakCurrentDuration(Constants.INTAKE_MOTOR_PEAK_CURRENT_DURATION);
+        intakeMotor1.configContinuousCurrentLimit(Constants.INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT);
         intakeMotor1.enableCurrentLimit(true);
 
-        intakeMotor2.configPeakCurrentLimit(30);
-        intakeMotor2.configPeakCurrentDuration(100);
-        intakeMotor2.configContinuousCurrentLimit(20);
+        intakeMotor2.configPeakCurrentLimit(Constants.INTAKE_MOTOR_PEAK_CURRENT_LIMIT);
+        intakeMotor2.configPeakCurrentDuration(Constants.INTAKE_MOTOR_PEAK_CURRENT_DURATION);
+        intakeMotor2.configContinuousCurrentLimit(Constants.INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT);
         intakeMotor2.enableCurrentLimit(true);
     }
     
