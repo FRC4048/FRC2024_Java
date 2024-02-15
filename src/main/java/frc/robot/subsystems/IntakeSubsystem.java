@@ -21,12 +21,12 @@ public class IntakeSubsystem extends SubsystemBase{
         intakeMotor1.configPeakCurrentLimit(Constants.INTAKE_MOTOR_PEAK_CURRENT_LIMIT);
         intakeMotor1.configPeakCurrentDuration(Constants.INTAKE_MOTOR_PEAK_CURRENT_DURATION);
         intakeMotor1.configContinuousCurrentLimit(Constants.INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT);
-        intakeMotor1.enableCurrentLimit(true);
+        intakeMotor1.enableCurrentLimit(Constants.INTAKE_CURRENT_LIMIT_ENABLED);
 
         intakeMotor2.configPeakCurrentLimit(Constants.INTAKE_MOTOR_PEAK_CURRENT_LIMIT);
         intakeMotor2.configPeakCurrentDuration(Constants.INTAKE_MOTOR_PEAK_CURRENT_DURATION);
         intakeMotor2.configContinuousCurrentLimit(Constants.INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT);
-        intakeMotor2.enableCurrentLimit(true);
+        intakeMotor2.enableCurrentLimit(Constants.INTAKE_CURRENT_LIMIT_ENABLED);
     }
     
     public void setMotorSpeed(double motor1Speed, double motor2Speed) {
@@ -49,10 +49,12 @@ public class IntakeSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+        if (Constants.INTAKE_DEBUG){
         SmartShuffleboard.put("Intake", "Intake Motor 1 Speed", getMotor1Speed());
         SmartShuffleboard.put("Intake", "Intake Motor 2 Speed", getMotor2Speed());
 
         SmartShuffleboard.put("Intake", "Intake Motor 1 current", intakeMotor1.getStatorCurrent());
         SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
+        }
     }
 }

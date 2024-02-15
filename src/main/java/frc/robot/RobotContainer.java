@@ -122,9 +122,9 @@ public class RobotContainer {
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
         }
-
+        if (Constants.INTAKE_DEBUG){
         SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem));
-
+        }
     }
 
     private void configureBindings() {
