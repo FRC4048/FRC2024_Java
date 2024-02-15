@@ -14,7 +14,13 @@ public class ColorSensor extends SubsystemBase{
     private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch m_colorMatcher = new ColorMatch();
-    String colorObject;
+    public enum ColorObject  {
+            Piece,
+            Plastic,
+            None
+        }
+    private ColorObject piece = ColorObject.None;
+
     public ColorSensor() {
         m_colorMatcher.addColorMatch(GameConstants.C_PIECE_TARGET);
         m_colorMatcher.addColorMatch(GameConstants.C_PLASTIC_TARGET);
@@ -23,17 +29,24 @@ public class ColorSensor extends SubsystemBase{
     public void periodic() {
         Color detectedColor = m_colorSensor.getColor();
         double IR = m_colorSensor.getIR();
-        
+        String colorObject = "";
         double proximity = m_colorSensor.getProximity();
         
         ColorMatchResult matchedColor = m_colorMatcher.matchClosestColor(detectedColor);
-        if (matchedColor.color == GameConstants.C_PIECE_TARGET) {
-            colorObject="Piece";
-        } else if (matchedColor.color == GameConstants.C_PLASTIC_TARGET) {
-            colorObject="Plastic";
-        } else {
-            colorObject="None";
-        }
+        if (matchedColor.color == GameConstants.C_PIECE_TARGET) piece  = ColorObject.Piece;
+        else if (matchedColor.color == GameConstants.C_PLASTIC_TARGET) piece  = ColorObject.Plastic;
+        else piece  = ColorObject.None;
+        switch(piece) {
+            case Piece:
+              colorObject = "Piece";
+              break;
+            case Plastic:
+               colorObject = "Plastic";
+              break;
+            case None:
+              colorObject = "None";
+              break;
+          }
         if (GameConstants.COLOR_SENSOR_DEBUG){
             SmartShuffleboard.put("Feeder","Red", detectedColor.red);
             SmartShuffleboard.put("Feeder","Green", detectedColor.green);
@@ -49,10 +62,7 @@ public class ColorSensor extends SubsystemBase{
         return m_colorSensor.getColor();
     }
     public boolean pieceSeen() {
-        if (colorObject=="Piece") {
-            return true;
-        } else {
-            return false;
-        }
+        return (piece == ColorObject.Piece);
     }
+    
 }
