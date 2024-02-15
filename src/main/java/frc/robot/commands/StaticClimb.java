@@ -20,9 +20,9 @@ public class StaticClimb extends Command {
     @Override
     public void execute() {
         if (climber.getGyroPitch() > Constants.CLIMBER_BALANCE_THRESH) {
-            climber.balanceleft(Constants.CLIMBER_BALANCE_LOW_SPEED);
+            climber.balanceLeft(Constants.CLIMBER_BALANCE_LOW_SPEED);
         } else if (-climber.getGyroPitch()>Constants.CLIMBER_BALANCE_THRESH) {
-            climber.balanceright(Constants.CLIMBER_BALANCE_LOW_SPEED);
+            climber.balanceRight(Constants.CLIMBER_BALANCE_LOW_SPEED);
         } else {
             climber.raise(false); // reverse raises down the arms
         }
