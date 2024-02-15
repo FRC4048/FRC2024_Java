@@ -2,7 +2,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 
 public class AutoAlignment {
     public static double calcTurnSpeed(Alignable alignable, Rotation2d currentAngle, double x, double y){

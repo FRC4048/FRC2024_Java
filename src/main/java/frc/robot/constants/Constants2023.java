@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.constants;
 
 import frc.robot.swervev2.SwerveModuleProfile;
 

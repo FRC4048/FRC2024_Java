@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.constants;
 
 public class GameConstants {
     public static final boolean ENABLE_LOGGING = true;
