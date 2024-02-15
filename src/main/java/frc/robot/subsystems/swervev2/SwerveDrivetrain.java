@@ -14,12 +14,14 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 /**
  * blue centric //TODO make work for red
@@ -61,8 +63,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         }
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
-        poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp() - 0.02);
+        poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
+    
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
