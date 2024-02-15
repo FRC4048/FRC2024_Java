@@ -2,20 +2,40 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.GameConstants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Feeder extends SubsystemBase{
 
     private final WPI_TalonSRX feederMotor;
     private final DigitalInput feederSensor;
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    private final ColorMatch m_colorMatcher = new ColorMatch();
+
+    public enum ColorObject {
+        Piece,
+        Plastic,
+        None
+    }
+
+    private ColorObject piece = ColorObject.None;
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederSensor = new DigitalInput(Constants.FEEDER_SENSOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        m_colorMatcher.addColorMatch(GameConstants.C_PIECE_TARGET);
+        m_colorMatcher.addColorMatch(GameConstants.C_PLASTIC_TARGET);
     }
 
     public void setFeederMotorSpeed(double speed) {
@@ -33,12 +53,48 @@ public class Feeder extends SubsystemBase{
     public boolean getFeederSensor() {
         return feederSensor.get();
     }
+    public Color getColor() {
+        return m_colorSensor.getColor();
+    }
+    public boolean pieceSeen() {
+        return (piece == ColorObject.Piece);
+    }
 
     @Override
     public void periodic() {
-        if (Constants.FEEDER_DEBUG){
+        Color detectedColor = m_colorSensor.getColor();
+        double IR = m_colorSensor.getIR();
+        String colorObject = "";
+        double proximity = m_colorSensor.getProximity();
+
+        ColorMatchResult matchedColor = m_colorMatcher.matchClosestColor(detectedColor);
+        if (matchedColor.color == GameConstants.C_PIECE_TARGET)
+            piece = ColorObject.Piece;
+        else if (matchedColor.color == GameConstants.C_PLASTIC_TARGET)
+            piece = ColorObject.Plastic;
+        else
+            piece = ColorObject.None;
+        switch (piece) {
+            case Piece:
+                colorObject = "Piece";
+                break;
+            case Plastic:
+                colorObject = "Plastic";
+                break;
+            case None:
+                colorObject = "None";
+                break;
+        }
+        if (Constants.FEEDER_DEBUG) {
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
             SmartShuffleboard.put("Feeder", "Feeder Sensor", getFeederSensor());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", detectedColor.red);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", detectedColor.green);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", detectedColor.blue);
+            SmartShuffleboard.put("Feeder", "Color Sensor",  "Infrared", IR);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Proximity", proximity);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "ObjectSeen", colorObject);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
         }
     }
 }
