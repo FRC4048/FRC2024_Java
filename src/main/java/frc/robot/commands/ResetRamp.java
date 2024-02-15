@@ -27,7 +27,7 @@ public class ResetRamp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ramp.changeRampPos(99);
+    ramp.changeRampPos(99); //made this up so check it + hoping it goes up and not down.
   }
 
   // Called once the command ends or is interrupted.
@@ -39,6 +39,6 @@ public class ResetRamp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 0.5));
+    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 0.5)); //Assuming that Forward Switch is the tope one
   }
 }

@@ -58,12 +58,12 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override
     public void autonomousPeriodic() {
         loopTime = Timer.getFPGATimestamp();
-        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override
