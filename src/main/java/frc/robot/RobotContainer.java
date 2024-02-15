@@ -42,7 +42,7 @@ public class RobotContainer {
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
-      private final JoystickButton joyRightButton1 = new JoystickButton(joyleft,1);
+      private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
       private SwerveDrivetrain drivetrain;
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
