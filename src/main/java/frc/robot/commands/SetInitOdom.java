@@ -15,7 +15,7 @@ public class SetInitOdom extends Command {
 
     @Override
     public void initialize() {
-        drivetrain.setGyroOffset(chooser.getStartingPosition().getRotation().getDegrees()*-1);
+        drivetrain.setGyroOffset(chooser.getStartingPosition().getRotation().getDegrees() * -1);
         drivetrain.resetOdometry(chooser.getStartingPosition());
     }
     @Override

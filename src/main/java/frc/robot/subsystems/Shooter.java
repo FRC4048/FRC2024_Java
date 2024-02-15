@@ -25,11 +25,11 @@ public class Shooter extends SubsystemBase {
     this.shooterSensor1 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
     this.shooterSensor2 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
 
-    shooterMotor1.setInverted(false);
-    shooterMotor2.setInverted(true);
-
     shooterMotor1.restoreFactoryDefaults();
     shooterMotor2.restoreFactoryDefaults();
+
+    shooterMotor1.setInverted(false);
+    shooterMotor2.setInverted(true);
 
     this.shooterMotor1.setIdleMode(IdleMode.kCoast);
     this.shooterMotor2.setIdleMode(IdleMode.kCoast);
@@ -51,22 +51,30 @@ public class Shooter extends SubsystemBase {
     shooterMotor2PID.setFF(Constants.SHOOTER_MOTOR_PID_FF);
     shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
   }
-
+  /**
+   * @param speed value between -1 and 1 to set shooter motor 1 to
+   */
   public void setShooterMotor1Speed(double speed) {
     shooterMotor1.set(speed);
   }
 
-  //Spin shooter motor 2
+  /**
+   * @param speed value between -1 and 1 to set shooter motor 2 to
+   */
   public void setShooterMotor2Speed(double speed) {
     shooterMotor2.set(speed);
   }
 
-  //Get shooter motor 1 speed
+  /**
+   * @return shooter motor 1 speed
+   */
   public double getShooterMotor1Speed() {
     return shooterMotor1.get();
   }
 
-  //Get shooter motor 2 speed
+  /**
+   * @return shooter motor 2 speed
+   */
   public double getShooterMotor2Speed() {
     return shooterMotor2.get();
   }

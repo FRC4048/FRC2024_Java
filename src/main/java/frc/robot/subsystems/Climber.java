@@ -32,7 +32,7 @@ public class Climber extends SubsystemBase {
      *                if false the motors will spin in the outtake direction
      */
     public void raise(boolean upward){
-        double speed = upward ? Constants.CLIMBER_SPEED : Constants.CLIMBER_SPEED*-1;
+        double speed = upward ? Constants.CLIMBER_SPEED : Constants.CLIMBER_SPEED * -1;
         SparkMax1.set(speed);
         SparkMax2.set(speed);
     }  
