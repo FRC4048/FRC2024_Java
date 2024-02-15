@@ -15,7 +15,7 @@ public class AutoAlignment {
         return calcTurnSpeed(alignable,currentPos.getRotation(),currentPos.getX(),currentPos.getY());
     }
     public static double angleFromTarget(Alignable alignable, Rotation2d currentAngle, double x, double y){
-        return currentAngle.minus(getAngle(alignable,x,y)).getDegrees();
+        return getAngle(alignable,x,y).minus(currentAngle).getDegrees();
     }
     public static double angleFromTarget(Alignable alignable,Pose2d currentPose){
         return angleFromTarget(alignable,currentPose.getRotation(),currentPose.getX(),currentPose.getY());

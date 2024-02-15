@@ -34,15 +34,16 @@ public class Drive extends Command {
         Alignable alignable = drivetrain.getAlignable();
         double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.3);
         double str = MathUtil.applyDeadband(strSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
-        double rcw;
+        ChassisSpeeds driveStates;
         if (alignable == null){
-            rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble() * Constants.MAX_VELOCITY, 0.3);
+            double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble() * Constants.MAX_VELOCITY, 0.3);
             drivetrain.setFacingTarget(false);
+            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), -rcw, Constants.FIELD_RELATIVE);
         } else {
-            rcw = AutoAlignment.calcTurnSpeed(alignable, drivetrain.getPose()) * Constants.MAX_ANGULAR_SPEED;
+            double rcw = AutoAlignment.calcTurnSpeed(alignable, drivetrain.getPose()) * Constants.MAX_ANGULAR_SPEED;
             drivetrain.setFacingTarget(AutoAlignment.angleFromTarget(alignable,drivetrain.getPose()) < Constants.AUTO_ALIGN_THRESHOLD);
+            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), rcw, Constants.FIELD_RELATIVE);
         }
-        ChassisSpeeds driveStates = drivetrain.createChassisSpeeds(fwd*(shouldFlip ? 1 : -1), str*(shouldFlip ? 1 : -1), -rcw, Constants.FIELD_RELATIVE);
         drivetrain.drive(driveStates);
     }
 
