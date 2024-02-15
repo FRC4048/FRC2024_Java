@@ -75,14 +75,14 @@ public class Ramp extends SubsystemBase {
     }
 
     /**
-     * @return If the Forward Limit Switch is presse3d
+     * @return If the Forward Limit Switch is pressed
      */
     public boolean getForwardSwitchState() {
         return neoMotor.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
     }
 
     /**
-     * @return If the Reversed Limit Switch is presse3d
+     * @return If the Reversed Limit Switch is pressed
      */
     public boolean getReversedSwitchState() {
         return neoMotor.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
