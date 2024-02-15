@@ -86,7 +86,7 @@ public final class Constants {
     //Deployer Constants (NOTE! These are currently all just placeholder values taken from last years similar "extender" constants)
     public static final int DEPLOYER_RESET_TIMEOUT = 2;
     public static final double DEPLOYER_DEPLOY_TIMEOUT = 3;
-    public static final int DEPLOYER_MOTOR_ID = 6;
+    public static final int DEPLOYER_MOTOR_ID = 11;
     public static final double DEPLOYER_MANUAL_SPEED = 0.5;
     public static final double DEPLOYER_AUTO_MIN_SPEED = 0.3;
     public static final double DEPLOYER_AUTO_MAX_SPEED = 1;

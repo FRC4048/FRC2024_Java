@@ -18,11 +18,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootTest;
+import frc.robot.commands.UseDeployer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetInitOdom;
+import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
@@ -45,6 +47,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
+      private final Deployer deployer = new Deployer();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -103,6 +106,7 @@ public class RobotContainer {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
         SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
         SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter));
+        SmartShuffleboard.putCommand("Deployer", "UseDeployer", new UseDeployer(deployer));
     }
 
     private void configureBindings() {

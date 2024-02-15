@@ -68,7 +68,6 @@ public class Deployer extends SubsystemBase{
         return deployerMotor.isRevLimitSwitchClosed() == 1;
     }
 
-
     @Override
     public void periodic() {
         if (Constants.DEPLOYER_DEBUG) {
@@ -77,6 +76,16 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "Rev Limit", revLimitReached());
         }
         //Another place with logging code in last year's extender class
+    }
+
+    //Spin deployer motor
+    public void setDeployerMotorSpeed(double speed) {
+        deployerMotor.set(speed);
+    }
+
+    //Get deployer motor speed
+    public double getDeployerMotorSpeed() {
+        return deployerMotor.get();
     }
 
     // I'm not completely sure what the following code does (again, it is based on last year's "extender" subsystem), but it uses the "ProtectionMechanism" susbsystem, which is currently not implemented in this year's code, so I am leaving it commented out for now.
