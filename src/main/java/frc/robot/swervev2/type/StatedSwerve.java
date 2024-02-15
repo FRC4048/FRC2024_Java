@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev2.type;
+package frc.robot.swervev2.type;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 

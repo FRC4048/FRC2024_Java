@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev2.components;
+package frc.robot.swervev2.components;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;

@@ -1,8 +1,7 @@
-package frc.robot.subsystems.swervev2.components;
+package frc.robot.swervev2.components;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;

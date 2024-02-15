@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev2.components;
+package frc.robot.swervev2.components;
 
 public interface SwerveMotorEncoder {
     double getSteerEncPosition();

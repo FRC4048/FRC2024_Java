@@ -1,15 +1,15 @@
-package frc.robot.subsystems.swervev2;
+package frc.robot.swervev2;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Constants;
-import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
+import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 
 /**
- * Utility class to build an {@link frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax}
+ * Utility class to build an {@link frc.robot.swervev2.components.EncodedSwerveSparkMax}
  * from a motorConfig and a Conversion Config <br>
- * @see frc.robot.subsystems.swervev2.SwerveIdConfig
- * @see frc.robot.subsystems.swervev2.KinematicsConversionConfig
+ * @see frc.robot.swervev2.SwerveIdConfig
+ * @see frc.robot.swervev2.KinematicsConversionConfig
  */
 public class EncodedSwerveMotorBuilder {
      private final SwerveIdConfig motorConfig;

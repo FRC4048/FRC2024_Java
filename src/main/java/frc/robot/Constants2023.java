@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.swervev2.SwerveModuleProfile;
+
 public class Constants2023 extends GameConstants {
     //RAMP
     public static final double RAMP_PID_P = 1.00;

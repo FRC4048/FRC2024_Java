@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev2;
+package frc.robot.swervev2;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -15,7 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.swervev2.components.GenericEncodedSwerve;
+import frc.robot.swervev2.components.GenericEncodedSwerve;
 
 /**
  * Class to estimate the current position of the robot,
