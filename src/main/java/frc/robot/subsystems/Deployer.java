@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 ///This class is meant to manage the motor that "deploys" the intake, by rotating in order to raise and lower the intake area.
@@ -72,8 +73,8 @@ public class Deployer extends SubsystemBase{
     public void periodic() {
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
-            SmartShuffleboard.put("Deployer", "Fwd Limt", fwdLimitReached());
-            SmartShuffleboard.put("Deployer", "Rev Limit", revLimitReached());
+            SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
+            SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
         //Another place with logging code in last year's extender class
     }
@@ -87,6 +88,16 @@ public class Deployer extends SubsystemBase{
     public double getDeployerMotorSpeed() {
         return deployerMotor.get();
     }
+
+    public boolean isDeployerFowardLimitSwitchClosed() {
+        return deployerMotor.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+
+    public boolean isDeployerReverseLimitSwitchClosed() {
+        return deployerMotor.getSensorCollection().isRevLimitSwitchClosed();
+    }
+
+    //
 
     // I'm not completely sure what the following code does (again, it is based on last year's "extender" subsystem), but it uses the "ProtectionMechanism" susbsystem, which is currently not implemented in this year's code, so I am leaving it commented out for now.
     /*
