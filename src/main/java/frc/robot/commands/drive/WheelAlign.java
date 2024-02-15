@@ -20,7 +20,6 @@ public class WheelAlign extends Command {
      */
     @Override
     public void initialize() {
-        super.initialize();
         drivetrain.setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO,Constants.FRONT_RIGHT_ABS_ENCODER_ZERO,Constants.BACK_LEFT_ABS_ENCODER_ZERO,Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
     }
 
