@@ -56,6 +56,8 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
             SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
+            SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
+            SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
             // pid tuning
             pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
             pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
