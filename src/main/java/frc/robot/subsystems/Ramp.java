@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkLimitSwitch.Type;
-
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -42,10 +41,11 @@ public class Ramp extends SubsystemBase {
         pidController.setSmartMotionMinOutputVelocity(0.0, 0);
         pidController.setSmartMotionMaxAccel(1500.0, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
-
-        SmartShuffleboard.put("Ramp", "PID P", pidP);
-        SmartShuffleboard.put("Ramp", "PID I", pidI);
-        SmartShuffleboard.put("Ramp", "PID D", pidD);
+        if (Constants.RAMP_DEBUG){
+            SmartShuffleboard.put("Ramp", "PID P", pidP);
+            SmartShuffleboard.put("Ramp", "PID I", pidI);
+            SmartShuffleboard.put("Ramp", "PID D", pidD);
+        }
     }
 
     public void periodic() {
