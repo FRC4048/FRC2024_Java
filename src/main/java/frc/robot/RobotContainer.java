@@ -13,7 +13,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -21,8 +20,8 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.*;
 import frc.robot.subsystems.Climber;
-import frc.robot.commands.Intake.StartIntake;
 import frc.robot.subsystems.Feeder;
+import frc.robot.commands.Intake.StartIntake;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.ServoSubsystem;
@@ -32,9 +31,6 @@ import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 import frc.robot.subsystems.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev2.SwervePidConfig;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Ramp;
-
 import java.util.Optional;
 
 /**
