@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Feeder extends SubsystemBase{
@@ -28,6 +28,9 @@ public class Feeder extends SubsystemBase{
         feederMotor.set(0);
     }
 
+    /**
+     * @return returns true if feeder sensor is connected to digital IO
+     */
     public boolean getFeederSensor() {
         return feederSensor.get();
     }
