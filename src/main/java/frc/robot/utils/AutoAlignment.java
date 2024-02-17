@@ -2,8 +2,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Alignable;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 
 public class AutoAlignment {
     public static double calcTurnSpeed(Alignable alignable, Rotation2d currentAngle, double x, double y){
@@ -15,7 +14,7 @@ public class AutoAlignment {
         return calcTurnSpeed(alignable,currentPos.getRotation(),currentPos.getX(),currentPos.getY());
     }
     public static double angleFromTarget(Alignable alignable, Rotation2d currentAngle, double x, double y){
-        return currentAngle.minus(getAngle(alignable,x,y)).getDegrees();
+        return getAngle(alignable,x,y).minus(currentAngle).getDegrees();
     }
     public static double angleFromTarget(Alignable alignable,Pose2d currentPose){
         return angleFromTarget(alignable,currentPose.getRotation(),currentPose.getX(),currentPose.getY());

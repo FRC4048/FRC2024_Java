@@ -1,7 +1,6 @@
 package frc.robot.autochooser.event;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,9 +22,6 @@ public class Nt4AutoEventProvider implements AutoEventProvider {
     private final SendableChooser<AutoAction> actionChooser;
     private final SendableChooser<FieldLocation> locationChooser;
 
-    private final ShuffleboardTab autoTab;
-    private final ComplexWidget autoActionChooser;
-    private final ComplexWidget autoLocationChooser;
     private final AutoAction defaultAutoAction;
     private final FieldLocation defaultFieldLocation;
 
@@ -38,9 +34,9 @@ public class Nt4AutoEventProvider implements AutoEventProvider {
         Arrays.stream(FieldLocation.values()).forEach(l -> locationChooser.addOption(l.getShuffleboardName(), l));
         actionChooser.setDefaultOption(getDefaultActionOption().getName(), getDefaultActionOption());
         locationChooser.setDefaultOption(getDefaultLocationOption().name(), getDefaultLocationOption());
-        this.autoTab = Shuffleboard.getTab(AUTO_TAB_NAME);
-        this.autoActionChooser = autoTab.add(ACTION_FIELD_NAME,actionChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0,0).withSize(4,1);
-        this.autoLocationChooser = autoTab.add(LOCATION_FIELD_NAME,locationChooser).withPosition(0,1).withSize(4,1);
+        ShuffleboardTab autoTab = Shuffleboard.getTab(AUTO_TAB_NAME);
+        autoTab.add(ACTION_FIELD_NAME, actionChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(4, 1);
+        autoTab.add(LOCATION_FIELD_NAME, locationChooser).withPosition(0, 1).withSize(4, 1);
     }
     public AutoAction getSelectedAction() {
         return actionChooser.getSelected() == null ? getDefaultActionOption() : actionChooser.getSelected();
