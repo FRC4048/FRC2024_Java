@@ -10,15 +10,15 @@ public class Constants2023 extends GameConstants {
     public static final double RAMP_PID_FF = 1.00;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
-    public static final int RAMP_ID = 45;
+    public static final int RAMP_ID = 10;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
-    public static final int SHOOTER_MOTOR_ID_2 = 4500; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_1 = 52; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_2 = 53; //needs to be changed
 
-    public static final int SHOOTER_SENSOR_ID_1 = 0;
+    public static final int SHOOTER_SENSOR_ID_1 = 2;
     public static final int SHOOTER_SENSOR_ID_2 = 1;
 
     public static final double SHOOTER_MOTOR_SPEED = 0.75;
@@ -99,4 +99,15 @@ public class Constants2023 extends GameConstants {
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+
+    public static final int CONTROLLER_ID = 3;
+    public static final double INTAKE_MOTOR_1_SPEED = 1.00;
+    public static final double INTAKE_MOTOR_2_SPEED = 1.00;
+    public static final int INTAKE_MOTOR_1_ID = 13;
+    public static final int INTAKE_MOTOR_2_ID = 12;
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
+    public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+    
 }

@@ -15,8 +15,8 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
-    public static final int SHOOTER_MOTOR_ID_2 = 45; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_1 = 100; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_2 =99; //needs to be changed
 
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
