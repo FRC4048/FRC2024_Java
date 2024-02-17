@@ -5,5 +5,4 @@
 package frc.robot;
 
 public final class Constants extends Constants2023{
-
 }

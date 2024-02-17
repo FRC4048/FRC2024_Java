@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 
 public class ResetGyro extends Command {
-    private SwerveDrivetrain drivetrain;
-    private int delay;
+    private final SwerveDrivetrain drivetrain;
+    private final int delay;
     private double startTime;
 
     public ResetGyro(SwerveDrivetrain drivetrain, int delay){

@@ -1,25 +1,24 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkLimitSwitch.Type;
-
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class Ramp extends SubsystemBase {
-    private CANSparkMax neoMotor;
-    private RelativeEncoder encoder;
-    private SparkPIDController pidController;
+    private final CANSparkMax neoMotor;
+    private final RelativeEncoder encoder;
+    private final SparkPIDController pidController;
     private double pidP = Constants.RAMP_PID_P;
     private double pidI = Constants.RAMP_PID_I;
     private double pidD = Constants.RAMP_PID_D;
     private double pidFF = Constants.RAMP_PID_FF;
-    private double ramppos = Constants.RAMP_POS;
+    private double rampPos = Constants.RAMP_POS;
     private double iZoneError = Constants.RAMP_ERROR_IZONE;
 
     public Ramp() {
@@ -38,14 +37,15 @@ public class Ramp extends SubsystemBase {
         pidController.setFF(pidFF);
         pidController.setOutputRange(-1, 1);
 
-        pidController.setSmartMotionMaxVelocity(500.0, 0);
+        pidController.setSmartMotionMaxVelocity(Constants.RAMP_MAX_RPM_VELOCITY, 0);
         pidController.setSmartMotionMinOutputVelocity(0.0, 0);
-        pidController.setSmartMotionMaxAccel(1500.0, 0);
+        pidController.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
-
-        SmartShuffleboard.put("Ramp", "PID P", pidP);
-        SmartShuffleboard.put("Ramp", "PID I", pidI);
-        SmartShuffleboard.put("Ramp", "PID D", pidD);
+        if (Constants.RAMP_DEBUG){
+            SmartShuffleboard.put("Ramp", "PID P", pidP);
+            SmartShuffleboard.put("Ramp", "PID I", pidI);
+            SmartShuffleboard.put("Ramp", "PID D", pidD);
+        }
     }
 
     public void periodic() {
@@ -55,7 +55,7 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
             SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
-            SmartShuffleboard.put("Ramp", "Desired pos", ramppos);
+            SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             // pid tuning
             pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
             pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
@@ -67,7 +67,7 @@ public class Ramp extends SubsystemBase {
 
     public void setRampPos(double rotations) {
         pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-        this.ramppos = rotations;
+        this.rampPos = rotations;
     }
 
     public double getRampPos() {
@@ -75,7 +75,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void changeRampPos(double increment) {
-        double newRampPos = Math.max(0.0, Math.min(40.0, this.ramppos + increment));
+        double newRampPos = Math.max(0.0, Math.min(40.0, this.rampPos + increment));
         setRampPos(newRampPos);
     }
 
