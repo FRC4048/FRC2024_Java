@@ -71,21 +71,29 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
-        visionArray = subscriber.get();
+       
+        visionArray = subscriber.get(); 
+       
         visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])));
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
+        
         if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
-            if (visionArrayX != visionArray[0] && visionArrayY != visionArray[1] && visionArrayRot != visionArray[2])
-                poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
+            if (visionArrayX != visionArray[0] && visionArrayY != visionArray[1] && visionArrayRot != visionArray[2]) {
+                 poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
+            
+            
+            }
+        visionArrayX = visionArray[0];
+        visionArrayY = visionArray[1];
+        visionArrayRot = visionArray[2];
+               
         }
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
         SmartShuffleboard.put("Test", "x", visionArray[0]);
         SmartShuffleboard.put("Test", "Y", visionArray[1]);
         SmartShuffleboard.put("Test", "Rot", visionArray[2]);
-        visionArrayX = visionArray[0];
-        visionArrayY = visionArray[1];
-        visionArrayRot = visionArray[2];
+        
 
 
     }
@@ -131,6 +139,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
         subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1});
+        
 
 
 
