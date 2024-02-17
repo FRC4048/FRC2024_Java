@@ -38,7 +38,7 @@ public class Constants2024 extends GameConstants {
 
     public static final boolean FIELD_RELATIVE = true;
 
-    //S = STEER, D = DRIVE, Drivetrain ConstantsS
+    //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
     public static final int DRIVE_FRONT_RIGHT_S = 27;
     public static final int DRIVE_FRONT_RIGHT_D = 57;
