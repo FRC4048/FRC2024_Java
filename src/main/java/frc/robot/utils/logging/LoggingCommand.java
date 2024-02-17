@@ -4,7 +4,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
 
 import java.util.Set;
 
