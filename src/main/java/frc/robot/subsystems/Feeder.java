@@ -24,8 +24,6 @@ public class Feeder extends SubsystemBase{
     private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch colorMatcher = new ColorMatch();
 
-    private ColorObject piece;
-
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederSensor = new DigitalInput(Constants.FEEDER_SENSOR_ID);
@@ -52,17 +50,16 @@ public class Feeder extends SubsystemBase{
         return colorSensor.getColor();
     }
     public boolean pieceSeen() {
-        return (piece == ColorObject.Piece);
+        return (getPiece() == ColorObject.Piece);
     }
 
     @Override
     public void periodic() {
-        Color detectedColor = colorSensor.getColor();
-        double IR = colorSensor.getIR();
-        double proximity = colorSensor.getProximity();
-        ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);
-        piece = ColorObject.getFromColor(matchedColor.color);
         if (Constants.FEEDER_DEBUG) {
+                    Color detectedColor = colorSensor.getColor();
+            double IR = colorSensor.getIR();
+            double proximity = colorSensor.getProximity();
+            ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
             SmartShuffleboard.put("Feeder", "Feeder Sensor", getFeederSensor());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Red", detectedColor.red);
@@ -70,8 +67,16 @@ public class Feeder extends SubsystemBase{
             SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", detectedColor.blue);
             SmartShuffleboard.put("Feeder", "Color Sensor",  "Infrared", IR);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Proximity", proximity);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "ObjectSeen", piece == null ? "null" : piece.getName());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "ObjectSeen", getPiece() == null ? "null" : getPiece().getName());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
         }
+    }
+
+    public ColorObject getPiece() {
+        Color detectedColor = colorSensor.getColor();
+        double IR = colorSensor.getIR();
+        double proximity = colorSensor.getProximity();
+        ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);
+        return ColorObject.getFromColor(matchedColor.color);
     }
 }
