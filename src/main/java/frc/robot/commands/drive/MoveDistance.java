@@ -19,9 +19,10 @@ public class MoveDistance extends Command {
   private double startPoseX;
   private double startPoseY;
   private SwerveDrivetrain drivetrain;
-  private final double changeXThreshold  = 1.0;
-  private final double changeYThreshold = 1.0;
-  private boolean overThreshold; //Just to make sure that the request given in MoveDistance is not too high.
+  private final double maxChangeX  = 1.0;
+  private final double maxChangeY = 1.0;
+  private double xChangeThreshhold = 0.1524;
+  private double yChangeThreshhold = 0.1524;
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeX, double changeY, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +31,6 @@ public class MoveDistance extends Command {
     this.changeY = changeY;
     this.maxSpeed = maxSpeed;
     addRequirements(drivetrain);
-    overThreshold = (changeX >= changeXThreshold) && (changeY >= changeYThreshold);
   }
 
   // Called when the command is initially scheduled.
@@ -50,7 +50,7 @@ public class MoveDistance extends Command {
       double ratio = changeY / maxSpeed;
       speedX = changeX / ratio;
     }
-    if (!overThreshold) drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, true));
+    if ((changeX <= maxChangeX) && (changeX <= maxChangeY)) drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, true));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -66,9 +66,9 @@ public class MoveDistance extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(startPoseX - drivetrain.getPose().getX()) > Math.abs(changeX) && Math.abs(startPoseY - drivetrain.getPose().getY()) > Math.abs(changeY)) {
+    if (Math.abs(startPoseX - drivetrain.getPose().getX()) > (Math.abs(changeX) + xChangeThreshhold) && Math.abs(startPoseY - drivetrain.getPose().getY()) > (Math.abs(changeY) + yChangeThreshhold)) {
       return true;
     }
-    return (((Timer.getFPGATimestamp() - startTime) >= 2) || overThreshold);
+    return (((Timer.getFPGATimestamp() - startTime) >= 2) || !((changeX <= maxChangeX) && (changeX <= maxChangeY)));
   }
 }
