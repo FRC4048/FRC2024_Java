@@ -91,8 +91,8 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;
-    public static final int CLIMBER_MOTOR1_ID = 44;
-    public static final int CLIMBER_MOTOR2_ID = 45;
+    public static final int CLIMBER_MOTOR1_ID = 1144;
+    public static final int CLIMBER_MOTOR2_ID = 145;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
@@ -102,7 +102,7 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_TIMEOUT_S=10;
 
     //Intake
-    public static final int INTAKE_MOTOR_1_ID = 11;
+    public static final int INTAKE_MOTOR_1_ID = 111;
     public static final int INTAKE_MOTOR_2_ID = 12;
 
     public static final double INTAKE_MOTOR_1_SPEED = 1.00;
