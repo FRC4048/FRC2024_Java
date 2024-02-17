@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.FeederColorMatcher;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
