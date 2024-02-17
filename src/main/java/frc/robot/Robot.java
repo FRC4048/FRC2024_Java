@@ -33,9 +33,9 @@ public class Robot extends TimedRobot {
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
+        new ResetRamp(robotContainer.getRamp()).schedule();
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
-        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override

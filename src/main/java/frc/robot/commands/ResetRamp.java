@@ -14,11 +14,10 @@ public class ResetRamp extends Command {
   private double startTime;
 
   /*
-   * Possible better algo
-   * 
-   *  end
-   *   - get current encoder position
-   *   - do setReference to that position
+   *When we get the robot:
+   *TODO: Check if the forward limit switch is the top limit switch otherwise, swap getForwardSwitchState() with getReversedSwitchState()
+   *TODO: Check if the motor pulls the cannon up otherwise multiply the value by negative one
+   *TODO: Check if the motor is at a reasonable speed
    */
 
   public ResetRamp(Ramp ramp) {
@@ -30,13 +29,12 @@ public class ResetRamp extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
+    ramp.setMotor(0.3); //assuming positive is forward with a random speed
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    ramp.setMotor(0.3); //assuming positive is forward
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -48,6 +46,11 @@ public class ResetRamp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the tope one
+    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the top one
+  }
+
+  @Override
+  public boolean runsWhenDisabled() {
+    return true;
   }
 }
