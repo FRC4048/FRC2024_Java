@@ -21,12 +21,13 @@ public class RaiseArms extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    climber.raise(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    climber.raise(true);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -35,9 +36,6 @@ public class RaiseArms extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT) {
-      return true;
-    }
-    return false;
+    return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT;
   }
 }

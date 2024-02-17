@@ -16,6 +16,10 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
 
+    //Servo
+    public static final int SERVO_POS_0 = 0;
+    public static final int SERVO_POS_1 = 1;
+
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 99; //needs to be changed
     public static final int SHOOTER_MOTOR_ID_2 = 98; //needs to be changed

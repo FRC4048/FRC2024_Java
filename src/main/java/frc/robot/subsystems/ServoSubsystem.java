@@ -12,28 +12,24 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class ServoSubsystem extends SubsystemBase {
   private final Servo servo;
-  private double servoPosition;
-  private double servoSpeed;
   /** Creates a new Servo. */
   public ServoSubsystem() {
     this.servo = new Servo(Constants.SERVO_ID);
   }
-  public void set_Servo(double position) {
-    servo.set(position);
+  public void setServo(double degrees) {
+    servo.setAngle(degrees);
   }
-  public double get_Servo() {
-    return servoPosition;
+  public double getServo() {
+    return servo.getPosition();
   }
-  public double get_Speed() {
-    return servoSpeed;
+  public double getSpeed() {
+    return servo.getSpeed();
   }
   @Override
   public void periodic() {
-    servoPosition=servo.getPosition();
-    servoSpeed=servo.getSpeed();
     if (Constants.CLIMBER_DEBUG) {
-      SmartShuffleboard.put("Climber", "Climber Servo Position", servoPosition);
-      SmartShuffleboard.put("Climber", "Climber Servo Speed", servoSpeed);
+      SmartShuffleboard.put("Climber", "Climber Servo Position", getServo());
+      SmartShuffleboard.put("Climber", "Climber Servo Speed", getSpeed());
     }
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ServoSubsystem;
 
 public class RatchetingMechanism extends Command {
@@ -17,10 +18,10 @@ public class RatchetingMechanism extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (servo.get_Servo() == 0.0) {
-      servo.set_Servo(1.0);
-    } else if (servo.get_Servo() == 1.0) {
-      servo.set_Servo(0.0);
+    if (servo.getServo() == Constants.SERVO_POS_0) {
+      servo.setServo(Constants.SERVO_POS_1);
+    } else if (servo.getServo() == Constants.SERVO_POS_1) {
+      servo.setServo(Constants.SERVO_POS_0);
     }
   }
 
