@@ -18,9 +18,9 @@ public class RatchetingMechanism extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (servo.getServo() == Constants.SERVO_POS_0) {
+    if (servo.getServoAngle() == Constants.SERVO_POS_0) {
       servo.setServoAngle(Constants.SERVO_POS_1);
-    } else if (servo.getServo() == Constants.SERVO_POS_1) {
+    } else if (servo.getServoAngle() == Constants.SERVO_POS_1) {
       servo.setServoAngle(Constants.SERVO_POS_0);
     }
   }

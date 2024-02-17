@@ -19,8 +19,8 @@ public class ServoSubsystem extends SubsystemBase {
   public void setServoAngle(double degrees) {
     servo.setAngle(degrees);
   }
-  public double getServo() {
-    return servo.getPosition();
+  public double getServoAngle() {
+    return servo.getAngle();
   }
   public double getSpeed() {
     return servo.getSpeed();
@@ -28,7 +28,7 @@ public class ServoSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (Constants.CLIMBER_DEBUG) {
-      SmartShuffleboard.put("Climber", "Climber Servo Position", getServo());
+      SmartShuffleboard.put("Climber", "Climber Servo Angle", getServoAngle());
       SmartShuffleboard.put("Climber", "Climber Servo Speed", getSpeed());
     }
   }
