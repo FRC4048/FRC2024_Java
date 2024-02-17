@@ -18,7 +18,7 @@ public class Constants2024 extends GameConstants {
 
     //Servo
     public static final int SERVO_POS_0 = 0;
-    public static final int SERVO_POS_1 = 1;
+    public static final int SERVO_POS_1 = 180;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 99; //needs to be changed

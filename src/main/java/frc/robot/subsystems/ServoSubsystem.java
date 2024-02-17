@@ -16,7 +16,7 @@ public class ServoSubsystem extends SubsystemBase {
   public ServoSubsystem() {
     this.servo = new Servo(Constants.SERVO_ID);
   }
-  public void setServo(double degrees) {
+  public void setServoAngle(double degrees) {
     servo.setAngle(degrees);
   }
   public double getServo() {

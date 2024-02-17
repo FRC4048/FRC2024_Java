@@ -19,9 +19,9 @@ public class RatchetingMechanism extends Command {
   @Override
   public void initialize() {
     if (servo.getServo() == Constants.SERVO_POS_0) {
-      servo.setServo(Constants.SERVO_POS_1);
+      servo.setServoAngle(Constants.SERVO_POS_1);
     } else if (servo.getServo() == Constants.SERVO_POS_1) {
-      servo.setServo(Constants.SERVO_POS_0);
+      servo.setServoAngle(Constants.SERVO_POS_0);
     }
   }
 
