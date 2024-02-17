@@ -84,15 +84,16 @@ public class SwerveDrivetrain extends SubsystemBase {
             
             
             }
-        visionArrayX = visionArray[0];
-        visionArrayY = visionArray[1];
-        visionArrayRot = visionArray[2];
+        
                
         }
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
         SmartShuffleboard.put("Test", "x", visionArray[0]);
         SmartShuffleboard.put("Test", "Y", visionArray[1]);
         SmartShuffleboard.put("Test", "Rot", visionArray[2]);
+        visionArrayX = visionArray[0];
+        visionArrayY = visionArray[1];
+        visionArrayRot = visionArray[2];
         
 
 
