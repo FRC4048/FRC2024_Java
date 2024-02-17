@@ -67,9 +67,23 @@ public class Ramp extends SubsystemBase {
 
     }
 
-    public void setRampPos(double rotations) {
-        pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
-        this.rampPos = rotations;
+    public void setRampPos(double targetPosition) {
+        pidController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+        this.rampPos = targetPosition;
+    }
+    
+    /**
+     * This Java Docs is bad
+     * Sets the motor speed
+     * Check if forward had a positive or negative speed value
+     * @param speed the speed (0-1)
+     */
+    public void setMotor(double speed) {
+        neoMotor.set(speed);
+    }
+
+    public void stopMotor() {
+        neoMotor.set(0.0);
     }
 
     public double getRampPos() {
@@ -96,6 +110,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void resetEncoder() {
+        this.rampPos = 0;
         encoder.setPosition(0);
     }
 

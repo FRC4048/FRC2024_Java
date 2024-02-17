@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
         new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
+        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override
@@ -58,7 +59,6 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
-        new ResetRamp(robotContainer.getRamp());
     }
 
     @Override

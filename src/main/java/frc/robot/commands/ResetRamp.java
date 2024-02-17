@@ -13,6 +13,14 @@ public class ResetRamp extends Command {
   private Ramp ramp; 
   private double startTime;
 
+  /*
+   * Possible better algo
+   * 
+   *  end
+   *   - get current encoder position
+   *   - do setReference to that position
+   */
+
   public ResetRamp(Ramp ramp) {
     this.ramp = ramp;
     addRequirements(ramp);
@@ -27,18 +35,19 @@ public class ResetRamp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ramp.changeRampPos(99); //made this up so check it + hoping it goes up and not down.
+    ramp.setMotor(0.3); //assuming positive is forward
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    ramp.stopMotor();
     ramp.resetEncoder();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 0.5)); //Assuming that Forward Switch is the tope one
+    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the tope one
   }
 }

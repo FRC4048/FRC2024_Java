@@ -111,6 +111,7 @@ public class RobotContainer {
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+            SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
         }
         if (Constants.SHOOTER_DEBUG){
             SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
