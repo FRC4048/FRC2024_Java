@@ -58,7 +58,7 @@ public class RobotContainer {
       private final Feeder feeder = new Feeder();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-      private final CommandXboxController controller = new CommandXboxController(0);
+      private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -130,7 +130,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
         }
         if (Constants.INTAKE_DEBUG){
-        SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
         }
     }
 
