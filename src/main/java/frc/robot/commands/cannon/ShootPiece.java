@@ -4,18 +4,21 @@
 
 package frc.robot.commands.cannon;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootPiece extends ParallelCommandGroup {
+public class ShootPiece extends ParallelRaceGroup {
   /** Creates a new ShootPiece. */
   public ShootPiece(Shooter shooter, Feeder feeder) {
-    new Shoot(shooter);
-    new StartFeeder(feeder);
-    addCommands();
+    addCommands(
+    new Shoot(shooter),
+    new SequentialCommandGroup(new StartFeeder(feeder), new WaitCommand(2))
+    );
   }
 }
