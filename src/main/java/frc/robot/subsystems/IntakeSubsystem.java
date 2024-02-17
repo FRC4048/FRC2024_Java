@@ -1,18 +1,17 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class IntakeSubsystem extends SubsystemBase{
     private final WPI_TalonSRX intakeMotor1;
     private final WPI_TalonSRX intakeMotor2;
 
     public IntakeSubsystem() {
-        this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
-        this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
+        this.intakeMotor1 = new WPI_TalonSRX(11);
+        this.intakeMotor2 = new WPI_TalonSRX(12);
         
         intakeMotor1.setInverted(false);
         intakeMotor2.setInverted(false);
