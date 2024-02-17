@@ -39,6 +39,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
+    private double visionArrayX = 0;
+    private double visionArrayY = 0;
+    private double visionArrayRot = 0;
+
+
 
     private final DoubleArraySubscriber subscriber;
     private double visionArray[];
@@ -66,12 +71,17 @@ public class SwerveDrivetrain extends SubsystemBase {
         gyroValue = getGyro();
         poseEstimator.updatePosition(gyroValue);
         if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
-            poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
+            if (visionArrayX != visionArray[0] && visionArrayY != visionArray[1] && visionArrayRot != visionArray[2])
+                poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
         }
         Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
         SmartShuffleboard.put("Test", "x", visionArray[0]);
         SmartShuffleboard.put("Test", "Y", visionArray[1]);
         SmartShuffleboard.put("Test", "Rot", visionArray[2]);
+        visionArrayX = visionArray[0];
+        visionArrayY = visionArray[1];
+        visionArrayRot = visionArray[2];
+        
     
     }
 
