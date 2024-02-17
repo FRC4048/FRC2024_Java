@@ -21,14 +21,13 @@ public class FeederColorMatcher extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEED);
     startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEED);
   }
 
   // Called once the command ends or is interrupted.

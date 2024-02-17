@@ -5,7 +5,7 @@ public class Constants2023 extends GameConstants {
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
-    public static final boolean FEEDER_DEBUG = false;
+    public static final boolean FEEDER_DEBUG = true;
     //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
@@ -19,7 +19,7 @@ public class Constants2023 extends GameConstants {
     public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
     public static final int SHOOTER_MOTOR_ID_2 = 4500; //needs to be changed
 
-    public static final int SHOOTER_SENSOR_ID_1 = 0;
+    public static final int SHOOTER_SENSOR_ID_1 = 2;
     public static final int SHOOTER_SENSOR_ID_2 = 1;
 
     public static final double SHOOTER_MOTOR_SPEED = 0.75;
