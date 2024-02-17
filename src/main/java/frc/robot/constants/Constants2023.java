@@ -38,7 +38,7 @@ public class Constants2023 extends GameConstants {
 
     public static final boolean FIELD_RELATIVE = true;
 
-    //S = STEER, D = DRIVE, Drivetrain ConstantsS
+    //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4I;
     public static final int DRIVE_FRONT_RIGHT_S = 49;
     public static final int DRIVE_FRONT_RIGHT_D = 40;
@@ -90,8 +90,8 @@ public class Constants2023 extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;
-    public static final int CLIMBER_MOTOR1_ID = 44;
-    public static final int CLIMBER_MOTOR2_ID = 45;
+    public static final int CLIMBER_MOTOR1_ID = 144;
+    public static final int CLIMBER_MOTOR2_ID = 145;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
