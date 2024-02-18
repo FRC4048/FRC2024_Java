@@ -7,28 +7,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class ServoSubsystem extends SubsystemBase {
-  private final Servo servo;
-  /** Creates a new Servo. */
-  public ServoSubsystem() {
-    this.servo = new Servo(Constants.SERVO_ID);
-  }
-  public void setServoAngle(double degrees) {
-    servo.setAngle(degrees);
-  }
-  public double getServoAngle() {
-    return servo.getAngle();
-  }
-  public double getSpeed() {
-    return servo.getSpeed();
-  }
-  @Override
-  public void periodic() {
-    if (Constants.CLIMBER_DEBUG) {
-      SmartShuffleboard.put("Climber", "Climber Servo Angle", getServoAngle());
-      SmartShuffleboard.put("Climber", "Climber Servo Speed", getSpeed());
+    private final Servo servo;
+
+    public ServoSubsystem() {
+        this.servo = new Servo(Constants.SERVO_ID);
     }
-  }
+
+    public void setServoAngle(double degrees) {
+        servo.setAngle(degrees);
+    }
 }
