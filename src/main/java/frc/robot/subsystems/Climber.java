@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -11,12 +10,14 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 public class Climber extends SubsystemBase {
     private final CANSparkMax SparkMax1;
     private final CANSparkMax SparkMax2;
+    private final Servo servo;
     private final AHRS navxGyro;
 
-    public Climber(AHRS navxGyro) {
+    public Climber(AHRS navxGyro, Servo servo) {
         this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID, CANSparkMax.MotorType.kBrushless);
         this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID, CANSparkMax.MotorType.kBrushless);
         this.navxGyro = navxGyro;
+        this.servo = servo;
     }
     public double getGyroPitch() { // when the robot is mounted north south this is the right thingy to use
         return (navxGyro.getPitch() % 360); 
@@ -29,8 +30,15 @@ public class Climber extends SubsystemBase {
     }
 
     /**
+     * @param angle in degrees
+     */
+    public void setServoAngle(double angle){
+        this.servo.setAngle(angle);
+    }
+
+    /**
      * sets the speed of both motors to the IntakeSpeed defined in the {@link Constants} file
-     * @param forward if true the motors will spin in the intake directions,
+     * @param upward if true the motors will spin in the intake directions,
      *                if false the motors will spin in the outtake direction
      */
     public void raise(boolean upward){
