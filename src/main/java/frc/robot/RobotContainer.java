@@ -145,7 +145,7 @@ public class RobotContainer {
         SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, -0.3048, 0, 0.4));
         SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
         SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
-        SmartShuffleboard.putCommand("Drivetrain", "Move Right + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
+        SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
 
 
     }
