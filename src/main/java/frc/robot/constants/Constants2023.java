@@ -13,6 +13,7 @@ public class Constants2023 extends GameConstants {
     public static final int RAMP_ID = 45;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
+    public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
