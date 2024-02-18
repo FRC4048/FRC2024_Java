@@ -140,7 +140,6 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-        intakeSubsystem.setDefaultCommand(new SpinIntake(intakeSubsystem, controller::getLeftY));
     }
 
     public SwerveDrivetrain getDrivetrain() {
