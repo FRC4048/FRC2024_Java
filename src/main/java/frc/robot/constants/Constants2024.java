@@ -18,6 +18,7 @@ public class Constants2024 extends GameConstants {
     //Servo
     public static final int SERVO_POS_0 = 0;
     public static final int SERVO_POS_1 = 180;
+    public static final int SERVO_ID = 0;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
@@ -98,7 +99,6 @@ public class Constants2024 extends GameConstants {
     public static final int OUTTAKE_MOTOR2_ID = 7;
     public static final int CLIMBER_MOTOR1_ID = 1144;
     public static final int CLIMBER_MOTOR2_ID = 145;
-    public static final int SERVO_ID = 0;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
