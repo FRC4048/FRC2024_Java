@@ -6,13 +6,13 @@ import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 
-public class UseDeployer extends Command {
+public class DeployerLower extends Command {
     
     private Deployer deployer;
     private Timer timer = new Timer();
-    private final double MOTOR_RUN_TIME = 10;
+    private final double MOTOR_RUN_TIME = Constants.DEPLOYER_LOWER_TIMEOUT;
 
-    public UseDeployer(Deployer deployer) {
+    public DeployerLower(Deployer deployer) {
         this.deployer = deployer;
         addRequirements(deployer);
     }
@@ -20,7 +20,7 @@ public class UseDeployer extends Command {
     @Override
     public void initialize() {
         //Reset and start timers
-        deployer.setDeployerMotorSpeed(50);
+        deployer.setDeployerMotorSpeed(Constants.DEPLOYER_LOWER_SPEED);
         timer.reset();
         timer.start();
     }

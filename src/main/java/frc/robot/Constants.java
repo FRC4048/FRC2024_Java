@@ -83,9 +83,11 @@ public final class Constants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
 
-    //Deployer Constants (NOTE! These are currently all just placeholder values taken from last years similar "extender" constants)
-    public static final int DEPLOYER_RESET_TIMEOUT = 2;
-    public static final double DEPLOYER_DEPLOY_TIMEOUT = 3;
+    //Deployer Constants (NOTE! Most of these are currently just placeholder values taken from last years similar "extender" constants)
+    public static final int DEPLOYER_LOWER_TIMEOUT = 5;
+    public static final double DEPLOYER_RAISE_TIMEOUT = 5;
+    public static final double DEPLOYER_LOWER_SPEED = 0.5;
+    public static final double DEPLOYER_RAISE_SPEED = -0.5;
     public static final int DEPLOYER_MOTOR_ID = 11;
     public static final double DEPLOYER_MANUAL_SPEED = 0.5;
     public static final double DEPLOYER_AUTO_MIN_SPEED = 0.3;

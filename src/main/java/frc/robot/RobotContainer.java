@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootTest;
-import frc.robot.commands.UseDeployer;
+import frc.robot.commands.DeployerLower;
+import frc.robot.commands.DeployerRaise;
+import frc.robot.commands.DeployerTest;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.RampMove;
 import frc.robot.commands.ReportErrorCommand;
@@ -106,7 +108,8 @@ public class RobotContainer {
         SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
         SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
         SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter));
-        SmartShuffleboard.putCommand("Deployer", "UseDeployer", new UseDeployer(deployer));
+        SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
+        SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
     }
 
     private void configureBindings() {
