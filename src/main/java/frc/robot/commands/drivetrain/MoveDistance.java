@@ -14,16 +14,12 @@ public class MoveDistance extends Command {
   private double startTime;
   private double changeX;
   private double changeY;
-  private double speedX;
-  private double speedY;
   private double maxSpeed;
-  private double startPoseX;
-  private double startPoseY;
+  private double desiredPoseX;
+  private double desiredPoseY;
   private SwerveDrivetrain drivetrain;
-  private final double maxChangeX = 1.0; //TODO: Refine This Number
-  private final double maxChangeY = 1.0; //TODO: Refine This Number
-  private final double xChangeThreshhold = 0.01524; //TODO: Refine This Number
-  private final double yChangeThreshhold = 0.01524; //TODO: Refine This Number
+  private final double xChangeThreshhold = 0.0762; // TODO: Refine This Number
+  private final double yChangeThreshhold = 0.0762; // TODO: Refine This Number
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeX, double changeY, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,30 +34,22 @@ public class MoveDistance extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    startPoseX = drivetrain.getPose().getX();
-    startPoseY = drivetrain.getPose().getY();
+    desiredPoseX = drivetrain.getPose().getX() + changeX;
+    desiredPoseY = drivetrain.getPose().getY() + changeY;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    speedY = 0;
-    speedX = 0;
-    if ((changeX == 0) && (changeY == 0)) {}
-    else {
-      speedX = (changeX * maxSpeed)/(Math.abs(changeX) + Math.abs(changeY));
-      speedY = (changeY * maxSpeed)/(Math.abs(changeX) + Math.abs(changeY));
+    double speedY = 0;
+    double speedX = 0;
+    changeX = desiredPoseX - drivetrain.getPose().getX();
+    changeY = desiredPoseY - drivetrain.getPose().getY();
+    if ((changeX != 0) || (changeY != 0)) {
+      speedX = (changeX * maxSpeed) / (Math.abs(changeX) + Math.abs(changeY));
+      speedY = (changeY * maxSpeed) / (Math.abs(changeX) + Math.abs(changeY));
     }
-    if ((Math.abs(changeX) <= maxChangeX) && (Math.abs(changeY) <= maxChangeY)) {
-      drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
-      System.out.println("I'm Driving");
-      System.out.println(speedX);
-      System.out.println(speedY);
-    }
-    else {
-      System.out.println("Stopped");
-    }
-    System.out.println(speedX + " " + speedY);
+    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
   }
 
   // Called once the command ends or is interrupted.
@@ -73,12 +61,9 @@ public class MoveDistance extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println((Timer.getFPGATimestamp() - startTime));
-    System.out.println((startPoseX - drivetrain.getPose().getX()));
-    System.out.println((startPoseY - drivetrain.getPose().getY()));
-    if (Math.abs(startPoseX - drivetrain.getPose().getX()) > (Math.abs(changeX)) && Math.abs(startPoseY - drivetrain.getPose().getY()) > (Math.abs(changeY))) {
+    if (Math.abs(drivetrain.getPose().getX() - desiredPoseX) <= xChangeThreshhold && Math.abs(drivetrain.getPose().getY() - desiredPoseY) <= yChangeThreshhold) {
       return true;
     }
-    return (((Timer.getFPGATimestamp() - startTime) >= 5) || ((Math.abs(changeX) >= maxChangeX) && (Math.abs(changeY) >= maxChangeY)));
+    return ((Timer.getFPGATimestamp() - startTime) >= 5);
   }
 }
