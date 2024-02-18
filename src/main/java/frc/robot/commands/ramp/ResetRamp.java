@@ -6,6 +6,7 @@ package frc.robot.commands.ramp;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 
 public class ResetRamp extends Command {
@@ -29,7 +30,7 @@ public class ResetRamp extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    ramp.setMotor(0.3); //assuming positive is forward with a random speed
+    ramp.setMotor(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
   }
 
   // Called every time the scheduler runs while the command is scheduled.
