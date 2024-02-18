@@ -103,9 +103,5 @@ public class Constants2023 extends GameConstants {
     public static final double CLIMBER_TIMEOUT_S=10;
 
     //Deployer Constants
-    public static final int DEPLOYER_LOWER_TIMEOUT = 5;
-    public static final double DEPLOYER_RAISE_TIMEOUT = 5;
-    public static final double DEPLOYER_LOWER_SPEED = 0.5;
-    public static final double DEPLOYER_RAISE_SPEED = -0.5;
     public static final int DEPLOYER_MOTOR_ID = 11;
 }
