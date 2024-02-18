@@ -25,6 +25,7 @@ import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.*;
@@ -123,6 +124,7 @@ public class RobotContainer {
         }
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+            SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder));
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
