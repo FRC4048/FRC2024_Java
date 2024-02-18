@@ -2,8 +2,7 @@ package frc.robot.constants;
 
 import frc.robot.swervev2.SwerveModuleProfile;
 
-
-public class Constants2024 extends GameConstants {
+public class ConstantsTestbed extends GameConstants {
     //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
@@ -11,16 +10,16 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_PID_FF = 1.00;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
-    public static final int RAMP_ID = 47;
+    public static final int RAMP_ID = 0;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
-    public static final int SHOOTER_MOTOR_ID_2 = 45; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_1 = 44;
+    public static final int SHOOTER_MOTOR_ID_2 = 45;
 
-    public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
-    public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
+    public static final int SHOOTER_SENSOR_ID_1 = 3;
+    public static final int SHOOTER_SENSOR_ID_2 = 4;
 
     public static final double SHOOTER_MOTOR_SPEED = 0.75;
 
@@ -41,19 +40,19 @@ public class Constants2024 extends GameConstants {
 
     //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
-    public static final int DRIVE_FRONT_RIGHT_S = 27;
-    public static final int DRIVE_FRONT_RIGHT_D = 57;
-    public static final int DRIVE_BACK_RIGHT_S = 28;
-    public static final int DRIVE_BACK_RIGHT_D = 58;
-    public static final int DRIVE_FRONT_LEFT_S = 30;
-    public static final int DRIVE_FRONT_LEFT_D = 60;
-    public static final int DRIVE_BACK_LEFT_S = 29;
-    public static final int DRIVE_BACK_LEFT_D = 59;
+    public static final int DRIVE_FRONT_RIGHT_S = 0;
+    public static final int DRIVE_FRONT_RIGHT_D = 0;
+    public static final int DRIVE_BACK_RIGHT_S = 0;
+    public static final int DRIVE_BACK_RIGHT_D = 0;
+    public static final int DRIVE_FRONT_LEFT_S = 0;
+    public static final int DRIVE_FRONT_LEFT_D = 0;
+    public static final int DRIVE_BACK_LEFT_S = 0;
+    public static final int DRIVE_BACK_LEFT_D = 0;
 
-    public static final int DRIVE_CANCODER_FRONT_RIGHT = 37;
-    public static final int DRIVE_CANCODER_BACK_RIGHT = 38;
-    public static final int DRIVE_CANCODER_FRONT_LEFT = 40;
-    public static final int DRIVE_CANCODER_BACK_LEFT = 39;
+    public static final int DRIVE_CANCODER_FRONT_RIGHT = 0;
+    public static final int DRIVE_CANCODER_BACK_RIGHT = 0;
+    public static final int DRIVE_CANCODER_FRONT_LEFT = 0;
+    public static final int DRIVE_CANCODER_BACK_LEFT = 0;
 
 
     //PID Constants
@@ -85,15 +84,15 @@ public class Constants2024 extends GameConstants {
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 2; // this should be changed to the color sensor
+    public static final int FEEDER_SENSOR_ID = 0;
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
-    public static final int OUTTAKE_MOTOR1_ID = 6;
-    public static final int OUTTAKE_MOTOR2_ID = 7;
-    public static final int CLIMBER_MOTOR1_ID = 1144;
-    public static final int CLIMBER_MOTOR2_ID = 145;
+    public static final int OUTTAKE_MOTOR1_ID = 0;
+    public static final int OUTTAKE_MOTOR2_ID = 0;
+    public static final int CLIMBER_MOTOR1_ID = 44;
+    public static final int CLIMBER_MOTOR2_ID = 45;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
@@ -103,11 +102,11 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_TIMEOUT_S=10;
 
     //Intake
-    public static final int INTAKE_MOTOR_1_ID = 111;
+    public static final int INTAKE_MOTOR_1_ID = 11;
     public static final int INTAKE_MOTOR_2_ID = 12;
 
-    public static final double INTAKE_MOTOR_1_SPEED = 0.4;
-    public static final double INTAKE_MOTOR_2_SPEED = 0.4;
+    public static final double INTAKE_MOTOR_1_SPEED = 1.00;
+    public static final double INTAKE_MOTOR_2_SPEED = 1.00;
 
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
