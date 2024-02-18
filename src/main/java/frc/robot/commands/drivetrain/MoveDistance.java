@@ -6,6 +6,7 @@ package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 
 public class MoveDistance extends Command {
@@ -19,17 +20,17 @@ public class MoveDistance extends Command {
   private double startPoseX;
   private double startPoseY;
   private SwerveDrivetrain drivetrain;
-  private final double maxChangeX  = 1.0;
-  private final double maxChangeY = 1.0;
-  private double xChangeThreshhold = 0.1524;
-  private double yChangeThreshhold = 0.1524;
+  private final double maxChangeX = 1.0; //TODO: Refine This Number
+  private final double maxChangeY = 1.0; //TODO: Refine This Number
+  private final double xChangeThreshhold = 0.01524; //TODO: Refine This Number
+  private final double yChangeThreshhold = 0.01524; //TODO: Refine This Number
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeX, double changeY, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
     this.changeX = changeX;
     this.changeY = changeY;
-    this.maxSpeed = maxSpeed;
+    this.maxSpeed = Math.abs(maxSpeed);
     addRequirements(drivetrain);
   }
 
@@ -39,23 +40,37 @@ public class MoveDistance extends Command {
     startTime = Timer.getFPGATimestamp();
     startPoseX = drivetrain.getPose().getX();
     startPoseY = drivetrain.getPose().getY();
-
-    if (Math.abs(changeX) > Math.abs(changeY)) {
-      speedX = Math.signum(changeX) * maxSpeed;
-      double ratio = changeX / maxSpeed;
-      speedY = changeY / ratio;
-    } 
-    else {
-      speedY = Math.signum(changeY) * maxSpeed;
-      double ratio = changeY / maxSpeed;
-      speedX = changeX / ratio;
-    }
-    if ((changeX <= maxChangeX) && (changeX <= maxChangeY)) drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, true));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    speedY = 0;
+    speedX = 0;
+    if ((changeX == 0) && (changeY == 0)) {}
+    else if (Math.abs(changeX) > Math.abs(changeY)) {
+      speedY = changeY * maxSpeed / Math.abs(changeX);
+      speedX = Math.signum(changeX) * (maxSpeed - Math.signum(changeY) * speedY );
+    }
+    else if (Math.abs(changeX) > Math.abs(changeY)) {
+      speedX = changeX * maxSpeed / Math.abs(changeY);
+      speedY = Math.signum(changeY) * (maxSpeed - Math.signum(changeX) * speedX);
+    }
+    else {  
+      speedX = maxSpeed / 2;
+      speedY = maxSpeed / 2;
+    }
+    if ((Math.abs(changeX) <= maxChangeX) && (Math.abs(changeY) <= maxChangeY)) {
+      drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
+      System.out.println("I'm Driving");
+      System.out.println(speedX);
+      System.out.println(speedY);
+    }
+    else {
+      System.out.println("Stopped");
+    }
+    System.out.println(speedX + " " + speedY);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -66,9 +81,12 @@ public class MoveDistance extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(startPoseX - drivetrain.getPose().getX()) > (Math.abs(changeX) + xChangeThreshhold) && Math.abs(startPoseY - drivetrain.getPose().getY()) > (Math.abs(changeY) + yChangeThreshhold)) {
+    System.out.println((Timer.getFPGATimestamp() - startTime));
+    System.out.println((startPoseX - drivetrain.getPose().getX()));
+    System.out.println((startPoseY - drivetrain.getPose().getY()));
+    if (Math.abs(startPoseX - drivetrain.getPose().getX()) > (Math.abs(changeX)) && Math.abs(startPoseY - drivetrain.getPose().getY()) > (Math.abs(changeY))) {
       return true;
     }
-    return (((Timer.getFPGATimestamp() - startTime) >= 2) || !((changeX <= maxChangeX) && (changeX <= maxChangeY)));
+    return (((Timer.getFPGATimestamp() - startTime) >= 5) || ((Math.abs(changeX) >= maxChangeX) && (Math.abs(changeY) >= maxChangeY)));
   }
 }
