@@ -16,8 +16,8 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 46; //needs to be changed
-    public static final int SHOOTER_MOTOR_ID_2 = 49; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_2 = 45; //needs to be changed
 
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
@@ -83,8 +83,8 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.2;
-    public static final int FEEDER_MOTOR_ID = 12;
+    public static final double FEEDER_MOTOR_SPEED = 0.5;
+    public static final int FEEDER_MOTOR_ID = 11;
     public static final int FEEDER_SENSOR_ID = 0;
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
