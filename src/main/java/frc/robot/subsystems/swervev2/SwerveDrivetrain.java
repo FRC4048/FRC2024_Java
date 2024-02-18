@@ -1,8 +1,6 @@
 package frc.robot.subsystems.swervev2;
 
 import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,12 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Alignable;
@@ -25,8 +17,6 @@ import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
-import frc.robot.utils.logging.Logger;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -42,17 +32,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
-    private double visionArrayX = 0;
-    private double visionArrayY = 0;
-    private double visionArrayRot = 0;
-
-
-
-    private final DoubleArraySubscriber subscriber;
-    private double visionArray[];
-
-    Pose2d visionPose;
-
     private final AHRS gyro;
     private double gyroValue = 0;
     private boolean faceingTarget = false;
@@ -71,32 +50,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
-       
-        visionArray = subscriber.get(); 
-       
-        visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])));
-        gyroValue = getGyro();
-        poseEstimator.updatePosition(gyroValue);
-        
-        if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
-            if (visionArrayX != visionArray[0] && visionArrayY != visionArray[1] && visionArrayRot != visionArray[2]) {
-                 poseEstimator.addVisionEstimate(visionPose, Timer.getFPGATimestamp());
-            
-            
-            }
-        
-               
-        }
-        Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
-        SmartShuffleboard.put("Test", "x", visionArray[0]);
-        SmartShuffleboard.put("Test", "Y", visionArray[1]);
-        SmartShuffleboard.put("Test", "Rot", visionArray[2]);
-        visionArrayX = visionArray[0];
-        visionArrayY = visionArray[1];
-        visionArrayRot = visionArray[2];
-        
-
-
+        poseEstimator.updatePositionWithVis(getGyro());
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -136,14 +90,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
-
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("ROS");
-        subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1});
-        
-
-
-
     }
 
 
