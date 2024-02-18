@@ -84,7 +84,7 @@ public class ConstantsTestbed extends GameConstants {
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 870;
+    public static final int FEEDER_SENSOR_ID = 30;
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
