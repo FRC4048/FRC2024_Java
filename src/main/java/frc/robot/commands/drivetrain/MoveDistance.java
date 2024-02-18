@@ -48,17 +48,9 @@ public class MoveDistance extends Command {
     speedY = 0;
     speedX = 0;
     if ((changeX == 0) && (changeY == 0)) {}
-    else if (Math.abs(changeX) > Math.abs(changeY)) {
-      speedY = changeY * maxSpeed / Math.abs(changeX);
-      speedX = Math.signum(changeX) * (maxSpeed - Math.signum(changeY) * speedY );
-    }
-    else if (Math.abs(changeX) > Math.abs(changeY)) {
-      speedX = changeX * maxSpeed / Math.abs(changeY);
-      speedY = Math.signum(changeY) * (maxSpeed - Math.signum(changeX) * speedX);
-    }
-    else {  
-      speedX = maxSpeed / 2;
-      speedY = maxSpeed / 2;
+    else {
+      speedX = (changeX * maxSpeed)/(Math.abs(changeX) + Math.abs(changeY));
+      speedY = (changeY * maxSpeed)/(Math.abs(changeX) + Math.abs(changeY));
     }
     if ((Math.abs(changeX) <= maxChangeX) && (Math.abs(changeY) <= maxChangeY)) {
       drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
