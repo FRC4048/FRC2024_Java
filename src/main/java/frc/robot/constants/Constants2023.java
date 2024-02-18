@@ -83,7 +83,7 @@ public class Constants2023 extends GameConstants {
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 0;
+    public static final int FEEDER_SENSOR_ID = 2; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
@@ -99,4 +99,17 @@ public class Constants2023 extends GameConstants {
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+
+    //Intake
+    public static final int INTAKE_MOTOR_1_ID = 111;
+    public static final int INTAKE_MOTOR_2_ID = 12;
+
+    public static final double INTAKE_MOTOR_1_SPEED = 1.00;
+    public static final double INTAKE_MOTOR_2_SPEED = 1.00;
+
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
+    public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
 }
