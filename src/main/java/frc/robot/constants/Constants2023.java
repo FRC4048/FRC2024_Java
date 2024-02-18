@@ -82,6 +82,26 @@ public class Constants2023 extends GameConstants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
 
+    //Feeder
+    public static final double FEEDER_MOTOR_SPEED = 0.5;
+    public static final int FEEDER_MOTOR_ID = 11;
+    public static final int FEEDER_SENSOR_ID = 0;
+
+    public static final double ARM_SEPERATION_DISTANCE = 5.00;
+    public static final double OUTTAKE_SPEED = 1.00;
+    public static final double CLIMBER_SPEED = 0.10;
+    public static final int OUTTAKE_MOTOR1_ID = 6;
+    public static final int OUTTAKE_MOTOR2_ID = 7;
+    public static final int CLIMBER_MOTOR1_ID = 144;
+    public static final int CLIMBER_MOTOR2_ID = 145;
+    public static final double CLIMBER_BALANCE_kP = 1;
+    public static final double CLIMBER_BALANCE_kTi = 1;
+    public static final double CLIMBER_Balance_KTd = 1;
+    public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
+    public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_BALANCE_THRESH=30;
+    public static final double CLIMBER_TIMEOUT_S=10;
+
     //Deployer Constants
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
     public static final double DEPLOYER_RAISE_TIMEOUT = 5;
