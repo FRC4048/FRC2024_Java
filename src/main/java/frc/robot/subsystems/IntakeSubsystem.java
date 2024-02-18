@@ -10,8 +10,8 @@ public class IntakeSubsystem extends SubsystemBase{
     private final WPI_TalonSRX intakeMotor2;
 
     public IntakeSubsystem() {
-        this.intakeMotor1 = new WPI_TalonSRX(11);
-        this.intakeMotor2 = new WPI_TalonSRX(12);
+        this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
+        this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
         
         intakeMotor1.setInverted(false);
         intakeMotor2.setInverted(false);
