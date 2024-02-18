@@ -6,13 +6,14 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class StartIntake extends Command {
-    private IntakeSubsystem intakeSubsystem;
-    private Timer timer = new Timer();
-    private final int MOTOR_RUN_TIME = 5; // temporary until  done testing
+    private final IntakeSubsystem intakeSubsystem;
+    private final Timer timer = new Timer();
+    private final int motorRunTime; // temporary until  done testing
 
-    public StartIntake(IntakeSubsystem intakeSubsystem) {
+    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
+        this.motorRunTime = motorRunTime;
     }
 
     @Override
@@ -33,12 +34,6 @@ public class StartIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        if (timer.hasElapsed(MOTOR_RUN_TIME)) {
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return timer.hasElapsed(motorRunTime);
     }
 }

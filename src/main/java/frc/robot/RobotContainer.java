@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
@@ -58,6 +59,7 @@ public class RobotContainer {
       private final Feeder feeder = new Feeder();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+      private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -130,7 +132,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
         }
         if (Constants.INTAKE_DEBUG){
-        SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
         }
     }
 
