@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
@@ -130,6 +131,7 @@ public class RobotContainer {
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
         }
         if (Constants.INTAKE_DEBUG){
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
