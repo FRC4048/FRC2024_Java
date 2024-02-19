@@ -15,10 +15,12 @@ public class Constants2023 extends GameConstants {
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
     //Servo
-    public static final int SERVO_POS_0 = 0;
-    public static final int SERVO_POS_1 = 180;
-    public static final int SERVO_ID = 0;
-
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ID = 0;
+    public static final int RIGHT_SERVO_ID = 1;
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
     public static final int SHOOTER_MOTOR_ID_2 = 4500; //needs to be changed
