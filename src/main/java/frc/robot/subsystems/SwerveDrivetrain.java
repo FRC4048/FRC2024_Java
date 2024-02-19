@@ -10,15 +10,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
 import frc.robot.Robot;
+import frc.robot.constants.Constants;
 import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
-import frc.robot.utils.logging.Logger;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -34,7 +33,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
-
     private final AHRS gyro;
     private double gyroValue = 0;
     private boolean faceingTarget = false;
@@ -54,8 +52,11 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
         gyroValue = getGyro();
-        poseEstimator.updatePosition(gyroValue);
-        Logger.logPose2d("EstimatedPose",getPose(),Constants.ENABLE_LOGGING);
+        if (SmartDashboard.getBoolean("USE VISION",false)){
+            poseEstimator.updatePositionWithVis(gyroValue);
+        }else {
+            poseEstimator.updatePosition(gyroValue);
+        }
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
@@ -95,6 +96,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
+        SmartDashboard.putBoolean("USE VISION",false);
     }
 
 

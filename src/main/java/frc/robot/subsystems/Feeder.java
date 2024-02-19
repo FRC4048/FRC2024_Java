@@ -20,7 +20,7 @@ public class Feeder extends SubsystemBase{
 
     private final WPI_TalonSRX feederMotor;
     private final DigitalInput feederSensor;
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch colorMatcher = new ColorMatch();
 
@@ -59,7 +59,7 @@ public class Feeder extends SubsystemBase{
     @Override
     public void periodic() {
         if (Constants.FEEDER_DEBUG) {
-                    Color detectedColor = colorSensor.getColor();
+            Color detectedColor = colorSensor.getColor();
             double IR = colorSensor.getIR();
             double proximity = colorSensor.getProximity();
             ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);

@@ -13,6 +13,7 @@ public class ConstantsTestbed extends GameConstants {
     public static final int RAMP_ID = 130;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
+    public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44;
@@ -49,10 +50,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final int DRIVE_BACK_LEFT_S = 490;
     public static final int DRIVE_BACK_LEFT_D = 500;
 
-    public static final int DRIVE_CANCODER_FRONT_RIGHT = 510;
-    public static final int DRIVE_CANCODER_BACK_RIGHT = 520;
-    public static final int DRIVE_CANCODER_FRONT_LEFT = 530;
-    public static final int DRIVE_CANCODER_BACK_LEFT = 540;
+    public static final int DRIVE_CANCODER_FRONT_RIGHT = 520;
+    public static final int DRIVE_CANCODER_BACK_RIGHT = 530;
+    public static final int DRIVE_CANCODER_FRONT_LEFT = 540;
+    public static final int DRIVE_CANCODER_BACK_LEFT = 550;
 
 
     //PID Constants
