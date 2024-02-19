@@ -14,6 +14,14 @@ public class ConstantsTestbed extends GameConstants {
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
+    
+    //Servo
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ID = 19;
+    public static final int RIGHT_SERVO_ID = 18;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44;
@@ -99,8 +107,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_Balance_KTd = 1;
     public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double RAISING_TIMEOUT = 0;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 211;
