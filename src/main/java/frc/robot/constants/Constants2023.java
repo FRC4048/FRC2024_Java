@@ -90,7 +90,7 @@ public class Constants2023 extends GameConstants {
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
+    public static final int FEEDER_SENSOR_ID = 2; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
@@ -106,8 +106,10 @@ public class Constants2023 extends GameConstants {
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
 
-    //Intake
+    public static final double RAISING_TIMEOUT = 0;
+   //Intake
     public static final int INTAKE_MOTOR_1_ID = 111;
     public static final int INTAKE_MOTOR_2_ID = 12;
 
