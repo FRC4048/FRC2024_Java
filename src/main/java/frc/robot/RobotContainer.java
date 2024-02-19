@@ -46,6 +46,7 @@ import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
+import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 /**
@@ -71,7 +72,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        setupDriveTrain();
+        setupDriveTrain(); 
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
@@ -125,24 +126,23 @@ public class RobotContainer {
 
     public void putShuffleboardCommands() {
         if (Constants.RAMP_DEBUG){
-            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
-            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-            SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 400)));
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", CommandUtil.logged(new RampMove(ramp, 500)));
+            SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG){
-            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-
+            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
         }
         if (Constants.FEEDER_DEBUG){
-            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
-            SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder));
+            SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
+            SmartShuffleboard.putCommand("Feeder", "StartFeeder", CommandUtil.logged(new FeederColorMatcher(feeder)));
         }
         if (Constants.CLIMBER_DEBUG) {
-            SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
-          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
+            SmartShuffleboard.putCommand("Climber", "Climb", CommandUtil.logged(new StaticClimb(climber)));
+          SmartShuffleboard.putCommand("Climber", "RaiseArms", CommandUtil.logged(new RaiseArms(climber)));
         }
         if (Constants.INTAKE_DEBUG){
-            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intakeSubsystem,5)));
         }
     }
 

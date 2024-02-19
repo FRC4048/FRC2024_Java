@@ -11,11 +11,11 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
 
     //DEBUGS
-    public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
-    public static final boolean SWERVE_DEBUG = false;
-    public static final boolean FEEDER_DEBUG = false;
+    public static final boolean SHOOTER_DEBUG = true;
+    public static final boolean RAMP_DEBUG = true;
+    public static final boolean SWERVE_DEBUG = true;
+    public static final boolean FEEDER_DEBUG = true;
     public static final boolean CLIMBER_DEBUG = true;
-    public static final boolean INTAKE_DEBUG = false;
+    public static final boolean INTAKE_DEBUG = true;
 
 }
