@@ -34,6 +34,7 @@ public class RaiseArms extends Command {
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
+  //TODO look at limit switches
   @Override
   public boolean isFinished() {
     return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT;

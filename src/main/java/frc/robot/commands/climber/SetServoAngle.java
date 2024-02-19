@@ -5,17 +5,20 @@ import frc.robot.subsystems.Climber;
 
 public class SetServoAngle extends Command {
     private final Climber climber;
-    private final double targetAngle;
+    private final double leftTargetAngle;
+    private final double rightTargetAngle;
 
-    public SetServoAngle(Climber climber, double targetAngle){
+    public SetServoAngle(Climber climber, double leftTargetAngle, double rightTargetAngle){
         this.climber = climber;
-        this.targetAngle = targetAngle;
+        this.leftTargetAngle = leftTargetAngle;
+        this.rightTargetAngle = rightTargetAngle;
         addRequirements(climber);
     }
 
     @Override
     public void execute() {
-        climber.setServoAngle(targetAngle);
+        climber.setLeftServoAngle(leftTargetAngle);
+        climber.setRightServoAngle(rightTargetAngle);
     }
 
     @Override

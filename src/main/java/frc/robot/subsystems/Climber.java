@@ -10,14 +10,16 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 public class Climber extends SubsystemBase {
     private final CANSparkMax SparkMax1;
     private final CANSparkMax SparkMax2;
-    private final Servo servo;
+    private final Servo leftServo;
+    private final Servo rightServo;
     private final AHRS navxGyro;
 
-    public Climber(AHRS navxGyro, Servo servo) {
+    public Climber(AHRS navxGyro) {
         this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_MOTOR1_ID, CANSparkMax.MotorType.kBrushless);
         this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_MOTOR2_ID, CANSparkMax.MotorType.kBrushless);
+        this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
+        this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.navxGyro = navxGyro;
-        this.servo = servo;
     }
     public double getGyroPitch() { // when the robot is mounted north south this is the right thingy to use
         return (navxGyro.getPitch() % 360); 
@@ -32,8 +34,11 @@ public class Climber extends SubsystemBase {
     /**
      * @param angle in degrees
      */
-    public void setServoAngle(double angle){
-        this.servo.setAngle(angle);
+    public void setLeftServoAngle(double angle){
+        this.leftServo.setAngle(angle);
+    }
+    public void setRightServoAngle(double angle){
+        this.rightServo.setAngle(angle);
     }
 
     /**
