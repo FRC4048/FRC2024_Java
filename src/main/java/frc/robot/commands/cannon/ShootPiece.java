@@ -18,7 +18,7 @@ public class ShootPiece extends ParallelRaceGroup {
   public ShootPiece(Shooter shooter, Feeder feeder) {
     addCommands(
     new Shoot(shooter),
-    new SequentialCommandGroup(new StartFeeder(feeder), new WaitCommand(2))
+    new SequentialCommandGroup(new WaitCommand(0.5), new StartFeeder(feeder), new WaitCommand(2))
     );
   }
 }
