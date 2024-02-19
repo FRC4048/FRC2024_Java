@@ -5,10 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 
 public enum FieldLocation {
-     SpeakerLeft(0.66,6.60,Math.toRadians(-120)),
-     SpeakFront(1.25,5.50,0),
-     SpeakerRight(0.66,4.50,Math.toRadians(120)),
-     ZERO(0, 0,0);
      SpeakerLeft(0.66,6.60,Math.toRadians(-120),"Speaker Left","Speaker Right"),
      SpeakFront(1.25,5.50,Math.PI,"Speaker Front","Speaker Front"),
      SpeakerRight(0.66,4.50,Math.toRadians(120),"Speaker Right","Speaker Left"),
