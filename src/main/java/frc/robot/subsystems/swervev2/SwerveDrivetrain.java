@@ -94,7 +94,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(true);
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
         // bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(distance*Math.cos(Math.toRadians(degrees)-0.001), distance*Math.sin(Math.toRadians(degrees))-0.001, Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        //bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX(), poseEstimator.getEstimatedPose().getY(), Rotation2d.fromDegrees(0)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+
         // holonomicRotationTargets = new RotationTarget(degrees, getGyroAngle())
         // path = new PathPlannerPath(,)
         path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(degrees)));
