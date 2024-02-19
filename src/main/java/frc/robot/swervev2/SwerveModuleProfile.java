@@ -2,7 +2,7 @@ package frc.robot.swervev2;
 
 public enum SwerveModuleProfile {
     MK4(true, false, true, false,
-            12.8, 8.142857, false),
+            12.8, 6.75, false),
     MK4I(true, false, true, false,
             150f / 7f, 8.142857, true); //old
 
