@@ -23,15 +23,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants2023;
-import frc.robot.Constants2024;
 import frc.robot.RobotContainer;
 import frc.robot.autochooser.chooser.AutoChooser;
-import frc.robot.subsystems.swervev2.components.EncodedSwerveSparkMax;
-import frc.robot.subsystems.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
@@ -46,10 +41,10 @@ import frc.robot.utils.diag.DiagSparkMaxEncoder;
 public class SwerveDrivetrain extends SubsystemBase {
 
     private List<Translation2d> bezierPoints;
-    private final GenericSwerveModule frontLeft;
-    private final GenericSwerveModule frontRight;
-    private final GenericSwerveModule backLeft;
-    private final GenericSwerveModule backRight;
+    private GenericSwerveModule frontLeft;
+    private GenericSwerveModule frontRight;
+    private GenericSwerveModule backLeft;
+    private GenericSwerveModule backRight;
     // private final List<RotationTarget> holonomicRotationTargets;
 
     private final double distance = 3;
@@ -72,7 +67,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backLeftLocation = new Translation2d(-Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d backRightLocation = new Translation2d(-Constants2023.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
-    private final SwervePosEstimator poseEstimator;
+    private SwervePosEstimator poseEstimator;
 
     private PathPlannerPath path;
     // private final EventMarker eventMarker;

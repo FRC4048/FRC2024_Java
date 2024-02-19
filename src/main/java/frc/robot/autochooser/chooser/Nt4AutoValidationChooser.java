@@ -1,5 +1,8 @@
 package frc.robot.autochooser.chooser;
 
+import java.util.concurrent.Callable;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.event.Nt4AutoEventProvider;
@@ -54,7 +57,6 @@ public abstract class Nt4AutoValidationChooser extends AutoChooser {
      * @param consumer Command that you want to run when a new Valid event is chosen
      */
     public void addOnValidationCommand(Callable<Command> consumer){
-        onValidEvents.add(consumer);
     }
 
 }

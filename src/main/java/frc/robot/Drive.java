@@ -2,10 +2,11 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.swervev2.SwerveDrivetrain;
 
 public class Drive extends Command {
     private final SwerveDrivetrain drivetrain;
@@ -16,7 +17,6 @@ public class Drive extends Command {
 
 
     public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
-        addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.fwdSupplier = fwdSupplier;
         this.strSupplier = strSupplier;

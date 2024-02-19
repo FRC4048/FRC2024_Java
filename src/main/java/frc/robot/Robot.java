@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private double loopTime = 0;
 
-    private final RobotContainer robotContainer;
+    private RobotContainer robotContainer;
     private Command autoCommand;
     public Robot (){
         robotContainer = new RobotContainer();

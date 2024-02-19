@@ -1,5 +1,7 @@
 package frc.robot;
 
+import frc.robot.constants.GameConstants;
+
 public class Constants2023 extends GameConstants{
 
     public static final double ON_THE_FLY_ANGLE_OFFSET = 80;

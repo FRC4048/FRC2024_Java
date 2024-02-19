@@ -23,17 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.autochooser.chooser.ExampleAutoChooser;
-import frc.robot.commands.ResetGyro;
-import frc.robot.commands.drive.WheelAlign;
-import frc.robot.subsystems.swervev2.KinematicsConversionConfig;
-import frc.robot.subsystems.swervev2.SwerveDrivetrain;
-import frc.robot.subsystems.swervev2.SwerveIdConfig;
-import frc.robot.subsystems.swervev2.SwervePidConfig;
-import java.util.Optional;
-
-import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
-import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
