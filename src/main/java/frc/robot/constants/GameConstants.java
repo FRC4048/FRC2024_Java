@@ -18,6 +18,6 @@ public class GameConstants {
     public static final boolean CLIMBER_DEBUG = true;
     public static final boolean INTAKE_DEBUG = false;
 
-    public static final double DRIVE_THRESHHOLD_METERS = 0.0762;// TODO: Refine This Number
+    public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
 
 }
