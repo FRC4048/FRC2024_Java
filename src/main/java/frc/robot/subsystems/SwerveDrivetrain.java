@@ -42,16 +42,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private boolean faceingTarget = false;
     private Alignable alignable = null;
 
-    private final DoubleSubscriber xSub;
-    private final DoubleSubscriber ySub;
-    private final DoubleSubscriber zSub;
-    private final DoubleSubscriber fpsSub;
-    private final DoubleSubscriber probSub;
-    private double x;
-    private double y;
-    private double z;
-    private double fps;
-    private double prob;
+    
 
 
     private double getGyro() {
@@ -67,16 +58,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
 
-        x = xSub.get();
-        y = ySub.get();
-        z = zSub.get();
-        fps = fpsSub.get();
-        prob = probSub.get();
-        SmartShuffleboard.put("Test", "x", x);
-        SmartShuffleboard.put("Test", "y", y);
-        SmartShuffleboard.put("Test", "z", z);
-        SmartShuffleboard.put("Test", "prob", prob);
-        SmartShuffleboard.put("Test", "fps", fps);
+        
         gyroValue = getGyro();
         if (SmartDashboard.getBoolean("USE VISION",false)){
             poseEstimator.updatePositionWithVis(gyroValue);
@@ -123,13 +105,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
         SmartDashboard.putBoolean("USE VISION",false);
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("Luxonis");
-        xSub = table.getDoubleTopic("x").subscribe(-1);
-        ySub = table.getDoubleTopic("y").subscribe(-1);
-        zSub = table.getDoubleTopic("z").subscribe(-1);
-        fpsSub = table.getDoubleTopic("fps").subscribe(-1);
-        probSub = table.getDoubleTopic("prob").subscribe(-1);
+        
     }
 
 
