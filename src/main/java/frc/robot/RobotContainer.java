@@ -25,6 +25,8 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
+import frc.robot.commands.cannon.ShootTest;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
@@ -35,15 +37,18 @@ import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.commands.cannon.StartFeeder;
+import frc.robot.commands.cannon.StartIntake;
+import frc.robot.commands.climber.StaticClimb;
+import frc.robot.commands.deployer.DeployerLower;
+import frc.robot.commands.deployer.DeployerRaise;
+import frc.robot.commands.drivetrain.Drive;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.*;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
@@ -65,6 +70,7 @@ public class RobotContainer {
       private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
+      private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -125,6 +131,10 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+        if (Constants.DEPLOYER_DEBUG) {
+            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
+        }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
