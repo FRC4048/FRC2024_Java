@@ -52,18 +52,16 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
         gyroValue = getGyro();
-        poseEstimator.updatePositionWithVis(gyroValue);
-//        if (SmartDashboard.getBoolean("USE VISION",false)){
-//            poseEstimator.updatePositionWithVis(gyroValue);
-//        }else{
-//            poseEstimator.updatePosition(gyroValue);
-//        }
+        if (SmartDashboard.getBoolean("USE VISION",false)){
+            poseEstimator.updatePositionWithVis(gyroValue);
+        }else {
+            poseEstimator.updatePosition(gyroValue);
+        }
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
                             KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
     {
-        SmartDashboard.putBoolean("USE VISION",false);
         this.gyro = gyro;
         EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
@@ -98,6 +96,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
+        SmartDashboard.putBoolean("USE VISION",false);
     }
 
 
