@@ -34,7 +34,7 @@ public class TurnToGamepiece extends Command{
     private boolean finished = false;
 
 
-    public void TurnToGamepiece(SwerveDrivetrain drivetrain) {
+    public TurnToGamepiece(SwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
@@ -51,35 +51,37 @@ public class TurnToGamepiece extends Command{
         super.initialize();
         double fwd = 0;
         double str = 0;
-        double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
+        //double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
+        double rcw =0.3;
 
     }
 
     @Override
     public void execute() {
-        if (-.1 > x || .1 < x) {
-        x = xSub.get();
-        y = ySub.get();
-        z = zSub.get();
-        fps = fpsSub.get();
-        prob = probSub.get();
         SmartShuffleboard.put("Test", "x", x);
         SmartShuffleboard.put("Test", "y", y);
         SmartShuffleboard.put("Test", "z", z);
         SmartShuffleboard.put("Test", "prob", prob);
         SmartShuffleboard.put("Test", "fps", fps);
-        if (x < -.1) {
+        if (-.1 > x || .1 < x) {
+            x = xSub.get();
+            y = ySub.get();
+            z = zSub.get();
+            fps = fpsSub.get();
+            prob = probSub.get();
+        
+            if (x < -.1) {
                 
                 driveStates = drivetrain.createChassisSpeeds(-fwd, -str, rcw, true);
                 drivetrain.drive(driveStates);
             }
-         else if (x > .1) {
+            else if (x > .1) {
                 driveStates = drivetrain.createChassisSpeeds(-fwd, -str, -rcw, true);
                 drivetrain.drive(driveStates);
         } 
-        } if (-.1 < x || .1 > x) {
-            str = MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
-            rcw = 0;
+            } if (-.1 < x || .1 > x) {
+            str = .3;
+            fwd = 0;
             driveStates = drivetrain.createChassisSpeeds(-fwd, str, -rcw, true);
             drivetrain.drive(driveStates);
             if (y == -1) {

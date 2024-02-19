@@ -24,6 +24,7 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.TurnToGamepiece;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.ShootTest;
 import frc.robot.commands.cannon.StartFeeder;
@@ -130,6 +131,7 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+            SmartShuffleboard.putCommand("Test", "Gamepiece", new TurnToGamepiece(drivetrain));
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
