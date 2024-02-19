@@ -19,6 +19,7 @@ import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -63,6 +64,17 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
+
+        x = xSub.get();
+        y = ySub.get();
+        z = zSub.get();
+        fps = fpsSub.get();
+        prob = probSub.get();
+        SmartShuffleboard.put("Test", "x", x);
+        SmartShuffleboard.put("Test", "y", y);
+        SmartShuffleboard.put("Test", "z", z);
+        SmartShuffleboard.put("Test", "prob", prob);
+        SmartShuffleboard.put("Test", "fps", fps);
         gyroValue = getGyro();
         if (SmartDashboard.getBoolean("USE VISION",false)){
             poseEstimator.updatePositionWithVis(gyroValue);
