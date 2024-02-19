@@ -111,7 +111,6 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
     public static final double RAISING_TIMEOUT = 0;
-    public static final boolean CLIMBER_DEBUG = true;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 111;
