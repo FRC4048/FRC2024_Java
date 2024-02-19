@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -25,10 +22,11 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
-import frc.robot.commands.cannon.ShootTest;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
+import frc.robot.commands.deployer.DeployerLower;
+import frc.robot.commands.deployer.DeployerRaise;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
@@ -40,18 +38,13 @@ import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.commands.cannon.StartFeeder;
-import frc.robot.commands.cannon.StartIntake;
-import frc.robot.commands.climber.StaticClimb;
-import frc.robot.commands.deployer.DeployerLower;
-import frc.robot.commands.deployer.DeployerRaise;
-import frc.robot.commands.drivetrain.Drive;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -167,8 +160,14 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-        joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        joyLeftButton1.onTrue(new InstantCommand(() -> {
+            AutoAlignment.resetPid();
+            drivetrain.setAlignable(Alignable.SPEAKER);
+        })).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        joyRightButton1.onTrue(new InstantCommand(() -> {
+            AutoAlignment.resetPid();
+            drivetrain.setAlignable(Alignable.AMP);
+        })).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
     }
 
     public SwerveDrivetrain getDrivetrain() {

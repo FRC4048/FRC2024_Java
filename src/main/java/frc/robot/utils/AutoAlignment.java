@@ -1,14 +1,25 @@
 package frc.robot.utils;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 
 public class AutoAlignment {
+    private final static PIDController turnController = new PIDController(0.005,0,0.0003);
+    static {
+        turnController.enableContinuousInput(-180,180);
+    }
     public static double calcTurnSpeed(Alignable alignable, Rotation2d currentAngle, double x, double y){
-        double diff = angleFromTarget(alignable,currentAngle,x,y);
-        if (Math.abs(diff) < Constants.AUTO_ALIGN_THRESHOLD) return 0;
-        return (Math.abs(diff)) / (360) * Math.signum(diff);
+        double targetAngle = getAngle(alignable,x,y).getDegrees();
+        if (Math.abs(currentAngle.getDegrees()-targetAngle) < Constants.AUTO_ALIGN_THRESHOLD){
+            return 0;
+        }
+        double clamp = MathUtil.clamp(turnController.calculate(currentAngle.getDegrees(), targetAngle), -1, 1);
+        SmartDashboard.putNumber("TURN_PID",clamp);
+        return clamp;
     }
     public static double calcTurnSpeed(Alignable alignable, Pose2d currentPos){
         return calcTurnSpeed(alignable,currentPos.getRotation(),currentPos.getX(),currentPos.getY());
@@ -21,5 +32,8 @@ public class AutoAlignment {
     }
     public static Rotation2d getAngle(Alignable alignable, double x, double y) {
         return alignable.getAngleFromDistFunc().apply(x - alignable.getX(), y - alignable.getY());
+    }
+    public static void resetPid(){
+//        turnController.reset();
     }
 }
