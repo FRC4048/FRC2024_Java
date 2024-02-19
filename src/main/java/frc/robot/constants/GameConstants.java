@@ -25,4 +25,6 @@ public class GameConstants {
     public static final double DEPLOYER_LOWER_SPEED = 0.5;
     public static final double DEPLOYER_RAISE_SPEED = -0.5;
 
+    public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
+
 }
