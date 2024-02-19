@@ -18,6 +18,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -119,6 +121,15 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
         this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants2023.INVERTED_STEER);
+
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("Luxonis");
+        xSub = table.getDoubleTopic("x").subscribe(-1);
+        ySub = table.getDoubleTopic("y").subscribe(-1);
+        zSub = table.getDoubleTopic("z").subscribe(-1);
+        fpsSub = table.getDoubleTopic("fps").subscribe(-1);
+        probSub = table.getDoubleTopic("prob").subscribe(-1);
+
     }
 
     public void putShuffleboardCommands() {
