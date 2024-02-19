@@ -25,11 +25,14 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
+import frc.robot.commands.cannon.ShootTest;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
+import frc.robot.commands.climber.SetServoAngle;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
@@ -139,10 +142,20 @@ public class RobotContainer {
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
-          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
+            SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
         }
         if (Constants.INTAKE_DEBUG){
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
+        }
+        if(Constants.MOTOR_TEST) {
+            SmartShuffleboard.putCommand("AllTest", "ClimberSparkMax", new StaticClimb(climber));
+            SmartShuffleboard.putCommand("AllTest", "ClimberServo", new SetServoAngle(climber,30, 30));
+            SmartShuffleboard.putCommand("AllTest", "Shooter", new ShootTest(shooter, 2));
+            SmartShuffleboard.putCommand("AllTest", "Intake", new StartIntake(intakeSubsystem, 2));
+            SmartShuffleboard.putCommand("AllTest", "Feeder", new StartFeeder(feeder));
+            SmartShuffleboard.putCommand("AllTest", "Drivetrain", new WheelAlign(drivetrain));
+            SmartShuffleboard.putCommand("AllTest", "Ramp", new RampMove(ramp, 30));
+            SmartShuffleboard.putCommand("AllTest", "RampReset", new ResetRamp(ramp));
         }
     }
 

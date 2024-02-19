@@ -63,6 +63,15 @@ public class Climber extends SubsystemBase {
         SparkMax1.set(0);
         SparkMax2.set(0);
     }
+
+    public void TestClimber() {
+        rightServo.setAngle(0);
+        leftServo.setAngle(0);
+        SparkMax1.set(0.2);
+        SparkMax2.set(0.2);
+        stop();
+    }
+
     @Override
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {

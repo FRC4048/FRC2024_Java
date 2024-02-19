@@ -1,0 +1,23 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/AllTest/Commands/ClimberServo": "Command",
+      "/Shuffleboard/AllTest/Commands/ClimberSparkMax": "Command",
+      "/Shuffleboard/AllTest/Commands/Drivetrain": "Command",
+      "/Shuffleboard/AllTest/Commands/Feeder": "Command",
+      "/Shuffleboard/AllTest/Commands/Intake": "Command",
+      "/Shuffleboard/AllTest/Commands/Ramp": "Command",
+      "/Shuffleboard/AllTest/Commands/RampReset": "Command",
+      "/Shuffleboard/AllTest/Commands/Shooter": "Command",
+      "/Shuffleboard/Auto/Auto Action": "String Chooser",
+      "/Shuffleboard/Auto/Location Chooser": "String Chooser",
+      "/Shuffleboard/Climber/Commands/Climb": "Command",
+      "/Shuffleboard/Climber/Commands/RaiseArms": "Command",
+      "/SmartDashboard/Field": "Field2d"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
