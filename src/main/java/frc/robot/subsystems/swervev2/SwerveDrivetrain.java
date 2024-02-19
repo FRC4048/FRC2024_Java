@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +44,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     private final double distance = 3;  
     private final double degrees = 180;
+    private final DoubleSubscriber 
 
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
