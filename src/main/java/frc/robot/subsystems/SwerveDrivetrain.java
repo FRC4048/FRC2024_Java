@@ -41,10 +41,10 @@ import frc.robot.utils.diag.DiagSparkMaxEncoder;
 public class SwerveDrivetrain extends SubsystemBase {
 
     private List<Translation2d> bezierPoints;
-    private GenericSwerveModule frontLeft;
-    private GenericSwerveModule frontRight;
-    private GenericSwerveModule backLeft;
-    private GenericSwerveModule backRight;
+    private final GenericSwerveModule frontLeft;
+    private final GenericSwerveModule frontRight;
+    private final GenericSwerveModule backLeft;
+    private final GenericSwerveModule backRight;
     // private final List<RotationTarget> holonomicRotationTargets;
 
     private final double distance = 3;
@@ -162,10 +162,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         fpsSub = table.getDoubleTopic("fps").subscribe(-1);
         probSub = table.getDoubleTopic("prob").subscribe(-1);
 
-        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
