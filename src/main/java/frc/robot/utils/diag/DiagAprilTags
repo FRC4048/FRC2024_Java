@@ -1,0 +1,24 @@
+package frc.robot.utils.diag;
+
+/**
+ * A diagnostics class for digital encoder. The diagnostics will turn green once the encoder has traveled at least a given
+ * distance from its initial position (measured at initialization or after a reset)
+ */
+public class DiagAprilTags extends DiagBoolean {
+
+    NetworkTableEntry tagX;    
+
+    /**
+     * Constructor
+     *
+     * @param name            - the name of the unit. Will be used on the Shuffleboard
+     */
+    public DiagAprilTags(String title, String name) {
+        super(title, name);
+    }
+
+    @Override
+    protected boolean getValue() {
+        if()
+    }
+}
