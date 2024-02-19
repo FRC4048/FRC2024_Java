@@ -19,8 +19,6 @@ public class MoveDistance extends Command {
   private double desiredPoseX;
   private double desiredPoseY;
   private SwerveDrivetrain drivetrain;
-  private final double xChangeThreshholdMeters = 0.0762; // TODO: Refine This Number
-  private final double yChangeThreshholdMeters = 0.0762; // TODO: Refine This Number
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -65,7 +63,7 @@ public class MoveDistance extends Command {
 
     double targetXDistance = Math.abs((drivetrain.getPose().getX() - desiredPoseX));
     double targetYDistance = Math.abs((drivetrain.getPose().getY() - desiredPoseY));
-    if (targetXDistance <= xChangeThreshholdMeters && targetYDistance <= yChangeThreshholdMeters) {
+    if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
       return true;
     }
     return ((Timer.getFPGATimestamp() - startTime) >= 5);
