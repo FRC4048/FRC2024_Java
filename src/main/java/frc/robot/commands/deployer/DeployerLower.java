@@ -28,7 +28,7 @@ public class DeployerLower extends Command {
     @Override 
     public boolean isFinished() {
         //Check is timer has passed 2 seconds
-        if (timer.advanceIfElapsed(MOTOR_RUN_TIME)) {
+        if (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerFowardLimitSwitchClosed()) {
             deployer.setDeployerMotorSpeed(0);
             return true;
         }

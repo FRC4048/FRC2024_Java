@@ -128,12 +128,10 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
-        SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
-        SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
-        SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-        SmartShuffleboard.putCommand("Shooter", "ShootTest", new ShootTest(shooter,Constants.SHOOTER_TIME_AFTER_TRIGGER));
-        SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
-        SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
+        if (Constants.DEPLOYER_DEBUG) {
+            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
+        }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));

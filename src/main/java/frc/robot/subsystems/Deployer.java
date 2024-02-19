@@ -61,14 +61,6 @@ public class Deployer extends SubsystemBase{
         return deployerMotor.getSelectedSensorPosition();
     }
 
-    public boolean fwdLimitReached() {
-        return deployerMotor.isFwdLimitSwitchClosed() == 1;
-    }
-
-    public boolean revLimitReached() {
-        return deployerMotor.isRevLimitSwitchClosed() == 1;
-    }
-
     @Override
     public void periodic() {
         if (Constants.DEPLOYER_DEBUG) {

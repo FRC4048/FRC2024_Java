@@ -17,8 +17,6 @@ public class Constants2023 extends GameConstants {
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 4400; //needs to be changed
     public static final int SHOOTER_MOTOR_ID_2 = 4500; //needs to be changed
-
-    public static final boolean DEPLOYER_DEBUG = true;
   
     public static final int SHOOTER_SENSOR_ID_1 = 0;
     public static final int SHOOTER_SENSOR_ID_2 = 1;
@@ -84,7 +82,7 @@ public class Constants2023 extends GameConstants {
 
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
-    public static final int FEEDER_MOTOR_ID = 11;
+    public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 0;
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
