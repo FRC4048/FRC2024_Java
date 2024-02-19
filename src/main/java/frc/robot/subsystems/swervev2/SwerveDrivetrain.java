@@ -44,7 +44,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     private final double distance = 3;  
     private final double degrees = 180;
-    private final DoubleSubscriber 
+    private final DoubleSubscriber xSub;
+    private final DoubleSubscriber ySub;
+    private final DoubleSubscriber zSub;
+    private final DoubleSubscriber fpsSub;
+    private final DoubleSubscriber probSub;
+    
 
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants2023.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
@@ -74,6 +79,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator.updatePosition(gyroValue);
         SmartDashboard.putNumber("gyro",gyroValue);
         SmartDashboard.putNumber("swerveAngle",poseEstimator.getEstimatedPose().getRotation().getDegrees());
+        
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
