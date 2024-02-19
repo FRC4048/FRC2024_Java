@@ -20,17 +20,21 @@ import java.util.List;
 import java.util.Map;
 
 public class ExampleAutoChooser extends Nt4AutoValidationChooser {
- 
+
 // Prevent the path from being flipped if the coordinates are already correct
     private final Map<AutoEvent, Command> commandMap = Map.of(
             new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand(),
             new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand(),
             new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand(),
+            new AutoEvent(AutoAction.DoNothing, FieldLocation.ZERO), new PlaceHolderCommand(),
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), AutoBuilder.followPath(null),
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft")),
             new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid")),
             new AutoEvent(AutoAction.FigureEight, FieldLocation.ZERO), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Figure8")),
             new AutoEvent(AutoAction.TwoPieceMoveLeft, FieldLocation.SpeakerRight), new PlaceHolderCommand()
+            new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid")),
+            new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Left")),
+            new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left"))
     );
 
     public ExampleAutoChooser() {

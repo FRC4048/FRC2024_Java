@@ -23,7 +23,6 @@ public class Drive extends Command {
         this.rtSupplier = rtSupplier;
     }
 
-
     @Override
     public void execute() {
         double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble()*Constants.MAX_VELOCITY,0.3);
