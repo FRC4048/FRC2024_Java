@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -37,6 +38,17 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
+
+    private final DoubleSubscriber xSub;
+    private final DoubleSubscriber ySub;
+    private final DoubleSubscriber zSub;
+    private final DoubleSubscriber fpsSub;
+    private final DoubleSubscriber probSub;
+    private double x;
+    private double y;
+    private double z;
+    private double fps;
+    private double prob;
 
 
     private double getGyro() {
