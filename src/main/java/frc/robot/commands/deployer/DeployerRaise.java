@@ -27,15 +27,13 @@ public class DeployerRaise extends Command {
 
     @Override 
     public boolean isFinished() {
-        //Check is timer has passed 2 seconds
-        if (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerReverseLimitSwitchClosed()) {
-            deployer.setDeployerMotorSpeed(0);
-            return true;
-        }
+        //Check is timer has passed timeout point or the deployer has reached the limit switch
+        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerReverseLimitSwitchClosed());
+    }
 
-        else {
-            return false;
-        }
+    @Override
+    public void end(boolean interrupted) {
+        deployer.setDeployerMotorSpeed(0);
     }
 
 }

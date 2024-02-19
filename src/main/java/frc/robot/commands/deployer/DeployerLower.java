@@ -27,15 +27,13 @@ public class DeployerLower extends Command {
 
     @Override 
     public boolean isFinished() {
-        //Check is timer has passed 2 seconds
-        if (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerFowardLimitSwitchClosed()) {
-            deployer.setDeployerMotorSpeed(0);
-            return true;
-        }
+        //Check is timer has passed timeout point or if deployer has reached limit switch
+        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerFowardLimitSwitchClosed());
+    }
 
-        else {
-            return false;
-        }
+    @Override
+    public void end(boolean interrupted) {
+        deployer.setDeployerMotorSpeed(0);
     }
 
 }
