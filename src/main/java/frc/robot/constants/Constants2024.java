@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 import frc.robot.swervev2.SwerveModuleProfile;
 
+
 public class Constants2024 extends GameConstants {
     //RAMP
     public static final double RAMP_PID_P = 1.00;
@@ -13,6 +14,14 @@ public class Constants2024 extends GameConstants {
     public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
+
+    //Servo
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ID = 0;
+    public static final int RIGHT_SERVO_ID = 1;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
@@ -84,7 +93,7 @@ public class Constants2024 extends GameConstants {
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
     public static final int FEEDER_MOTOR_ID = 11;
-    public static final int FEEDER_SENSOR_ID = 0;
+    public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final double OUTTAKE_SPEED = 1.00;
@@ -98,15 +107,18 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_Balance_KTd = 1;
     public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double RAISING_TIMEOUT = 0;
+    public static final boolean CLIMBER_DEBUG = true;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 111;
     public static final int INTAKE_MOTOR_2_ID = 12;
 
-    public static final double INTAKE_MOTOR_1_SPEED = 1.00;
-    public static final double INTAKE_MOTOR_2_SPEED = 1.00;
+    public static final double INTAKE_MOTOR_1_SPEED = 0.4;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.4;
 
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked

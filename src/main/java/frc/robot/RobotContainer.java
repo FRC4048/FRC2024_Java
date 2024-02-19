@@ -15,9 +15,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
@@ -25,6 +27,7 @@ import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.*;
@@ -57,6 +60,7 @@ public class RobotContainer {
       private final Feeder feeder = new Feeder();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+      private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -123,12 +127,14 @@ public class RobotContainer {
         }
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
+            SmartShuffleboard.putCommand("Feeder", "StartFeeder", new FeederColorMatcher(feeder));
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
         }
         if (Constants.INTAKE_DEBUG){
-        SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
         }
     }
 

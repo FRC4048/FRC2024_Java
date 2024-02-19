@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
 
-public class StaticClimb extends Command {
+public class  StaticClimb extends Command {
     private final Climber climber;
     private double startTime;
 
