@@ -79,7 +79,7 @@ public class SwervePosEstimator{
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
     public void updatePositionWithVis(double gyroValueDeg){
-        if (DriverStation.isEnabled()){
+        if (DriverStation.isTeleop()){
             double[] visionArray = subscriber.get();
             Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])).rotateBy(new Rotation2d(Math.PI)));
             if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
