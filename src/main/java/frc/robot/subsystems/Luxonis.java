@@ -25,10 +25,10 @@ public class Luxonis extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartShuffleboard.put("luxonis", "X", xEntry.getNumber(null));
-        SmartShuffleboard.put("luxonis", "Y", xEntry.getNumber(null));
-        SmartShuffleboard.put("luxonis", "Z", xEntry.getNumber(null));
-        SmartShuffleboard.put("luxonis", "FPS", xEntry.getNumber(null));
-        SmartShuffleboard.put("luxonis", "Prob", xEntry.getNumber(null));
+        SmartShuffleboard.put("luxonis", "X", xEntry.getNumber(0));
+        SmartShuffleboard.put("luxonis", "Y", xEntry.getNumber(0));
+        SmartShuffleboard.put("luxonis", "Z", xEntry.getNumber(0));
+        SmartShuffleboard.put("luxonis", "FPS", xEntry.getNumber(0));
+        SmartShuffleboard.put("luxonis", "Prob", xEntry.getNumber(0));
     }
 }

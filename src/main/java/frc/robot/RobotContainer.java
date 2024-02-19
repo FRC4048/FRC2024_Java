@@ -37,6 +37,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Luxonis;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -66,6 +67,7 @@ public class RobotContainer {
       private final Shooter shooter = new Shooter();
       private final Feeder feeder = new Feeder();
       private Climber climber;
+      private final Luxonis noteCamera = new Luxonis();
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
       private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 

@@ -113,4 +113,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
+    public static final double RAISING_TIMEOUT = 5.0;
+
+    public static final int LEFT_SERVO_ID = 4;
+    public static final int RIGHT_SERVO_ID = 5;
+    public static final double CLIMBER_RAISING_SPEED = .4;
 }
