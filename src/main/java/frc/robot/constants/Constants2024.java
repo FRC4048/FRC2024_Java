@@ -15,6 +15,14 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
 
+    //Servo
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ID = 0;
+    public static final int RIGHT_SERVO_ID = 1;
+
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
     public static final int SHOOTER_MOTOR_ID_2 = 45; //needs to be changed
@@ -99,8 +107,11 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_Balance_KTd = 1;
     public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double RAISING_TIMEOUT = 0;
+    public static final boolean CLIMBER_DEBUG = true;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 111;
