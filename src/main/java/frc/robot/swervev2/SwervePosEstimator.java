@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
+
 /**
  * Class to estimate the current position of the robot,
  * given the serve wheel encoders (through swerve model states)
@@ -33,10 +34,10 @@ public class SwervePosEstimator{
     private final DoubleArraySubscriber subscriber;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
-    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.05, 0.05, 0.3);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.7, 0.7, 0.3);
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -80,12 +81,13 @@ public class SwervePosEstimator{
     public void updatePositionWithVis(double gyroValueDeg){
         if (DriverStation.isEnabled()){
             double[] visionArray = subscriber.get();
-            Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])));
+            Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])).rotateBy(new Rotation2d(Math.PI)));
             if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
+                SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().getDegrees()});
                 poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
             }
-            updatePosition(gyroValueDeg);
         }
+        updatePosition(gyroValueDeg);
     }
 
     /**

@@ -53,11 +53,17 @@ public class SwerveDrivetrain extends SubsystemBase {
         }
         gyroValue = getGyro();
         poseEstimator.updatePositionWithVis(gyroValue);
+//        if (SmartDashboard.getBoolean("USE VISION",false)){
+//            poseEstimator.updatePositionWithVis(gyroValue);
+//        }else{
+//            poseEstimator.updatePosition(gyroValue);
+//        }
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
                             KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
     {
+        SmartDashboard.putBoolean("USE VISION",false);
         this.gyro = gyro;
         EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
