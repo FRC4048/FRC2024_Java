@@ -37,7 +37,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
  */
 public class SwerveDrivetrain extends SubsystemBase {
 
-    private final List<Translation2d> bezierPoints;
+    private List<Translation2d> bezierPoints;
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
@@ -51,6 +51,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final DoubleSubscriber zSub;
     private final DoubleSubscriber fpsSub;
     private final DoubleSubscriber probSub;
+    private double x;
+    private double y;
+    private double z;
+    private double fps;
+    private double prob;
     
 
 
@@ -61,7 +66,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
 
-    private final PathPlannerPath path;
+    private PathPlannerPath path;
     // private final EventMarker eventMarker;
 
 
@@ -81,6 +86,15 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator.updatePosition(gyroValue);
         SmartDashboard.putNumber("gyro",gyroValue);
         SmartDashboard.putNumber("swerveAngle",poseEstimator.getEstimatedPose().getRotation().getDegrees());
+        x = xSub.get();
+        y = ySub.get();
+        z = zSub.get();
+        fps = fpsSub.get();
+        prob = probSub.get();
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+x, poseEstimator.getEstimatedPose().getY()+y, Rotation2d.fromDegrees(0)), new Pose2d(poseEstimator.getEstimatedPose().getX()+x, poseEstimator.getEstimatedPose().getY()+y, Rotation2d.fromDegrees(0)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        path.preventFlipping = true;
+
         
     }
 
@@ -105,12 +119,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
         // bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(distance*Math.cos(Math.toRadians(degrees)-0.001), distance*Math.sin(Math.toRadians(degrees))-0.001, Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
         //bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX(), poseEstimator.getEstimatedPose().getY(), Rotation2d.fromDegrees(0)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
 
         // holonomicRotationTargets = new RotationTarget(degrees, getGyroAngle())
         // path = new PathPlannerPath(,)
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(degrees)));
-        path.preventFlipping = true;
+        
         // eventMarker = new EventMarker(,);
 
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(true);
