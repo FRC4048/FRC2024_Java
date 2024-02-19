@@ -91,10 +91,11 @@ public class SwerveDrivetrain extends SubsystemBase {
         z = zSub.get();
         fps = fpsSub.get();
         prob = probSub.get();
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(poseEstimator.getEstimatedPose().getX()+x, poseEstimator.getEstimatedPose().getY()+y, Rotation2d.fromDegrees(0)), new Pose2d(poseEstimator.getEstimatedPose().getX()+x, poseEstimator.getEstimatedPose().getY()+y, Rotation2d.fromDegrees(0)));
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
-        path.preventFlipping = true;
-
+        SmartShuffleboard.put("Test", "x", x);
+        SmartShuffleboard.put("Test", "y", y);
+        SmartShuffleboard.put("Test", "z", z);
+        SmartShuffleboard.put("Test", "prob", prob);
+        SmartShuffleboard.put("Test", "fps", fps);
         
     }
 
@@ -119,6 +120,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL, encodedSwerveSparkMaxFR, encodedSwerveSparkMaxBL, encodedSwerveSparkMaxBR, kinematics, getGyro());
         // bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(distance*Math.cos(Math.toRadians(degrees)-0.001), distance*Math.sin(Math.toRadians(degrees))-0.001, Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
         //bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(x, y, Rotation2d.fromDegrees(0)), new Pose2d(x, y, Rotation2d.fromDegrees(0)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        path.preventFlipping = true;
 
         // holonomicRotationTargets = new RotationTarget(degrees, getGyroAngle())
         // path = new PathPlannerPath(,)
