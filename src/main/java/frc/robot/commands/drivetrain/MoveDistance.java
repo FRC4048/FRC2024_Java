@@ -4,6 +4,7 @@
 
 package frc.robot.commands.drivetrain;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -43,11 +44,11 @@ public class MoveDistance extends Command {
   public void execute() {
     double speedY = 0;
     double speedX = 0;
-    changeX = desiredPoseX - drivetrain.getPose().getX();
-    changeY = desiredPoseY - drivetrain.getPose().getY();
-    if ((changeX != 0) || (changeY != 0)) {
-      speedX = (changeX * maxSpeed) / (Math.abs(changeX) + Math.abs(changeY));
-      speedY = (changeY * maxSpeed) / (Math.abs(changeX) + Math.abs(changeY));
+    double neededChangeX = desiredPoseX - drivetrain.getPose().getX();
+    double neededChangeY = desiredPoseY - drivetrain.getPose().getY();
+    if ((neededChangeX != 0) || (neededChangeY != 0)) {
+      speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
+      speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
     }
     drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
   }
@@ -61,7 +62,10 @@ public class MoveDistance extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(drivetrain.getPose().getX() - desiredPoseX) <= xChangeThreshhold && Math.abs(drivetrain.getPose().getY() - desiredPoseY) <= yChangeThreshhold) {
+
+    double targetXDistance = Math.abs((drivetrain.getPose().getX() - desiredPoseX));
+    double targetYDistance = Math.abs((drivetrain.getPose().getY() - desiredPoseY));
+    if (targetXDistance <= xChangeThreshhold && targetYDistance <= yChangeThreshhold) {
       return true;
     }
     return ((Timer.getFPGATimestamp() - startTime) >= 5);
