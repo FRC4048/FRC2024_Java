@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
@@ -28,8 +32,14 @@ import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
+import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -37,8 +47,6 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -119,6 +127,7 @@ public class RobotContainer {
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
+            SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
         }
         if (Constants.SHOOTER_DEBUG){
             SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
@@ -130,6 +139,7 @@ public class RobotContainer {
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
+          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
         }
         if (Constants.INTAKE_DEBUG){
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
@@ -144,6 +154,10 @@ public class RobotContainer {
 
     public SwerveDrivetrain getDrivetrain() {
         return drivetrain;
+    }
+
+    public Ramp getRamp() {
+        return ramp;
     }
 
     public Command getAutoCommand() {

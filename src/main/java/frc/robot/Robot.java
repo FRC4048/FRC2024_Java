@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
+import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.Logger;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        new ResetRamp(robotContainer.getRamp()).schedule();
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

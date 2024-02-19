@@ -5,4 +5,5 @@
 package frc.robot.constants;
 
 public final class Constants extends Constants2024{
+    public static final double GRAVITY = -9.81;
 }
