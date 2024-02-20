@@ -16,14 +16,17 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.ExitAndShoot;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.StartIntakeAndFeeder;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.ShootTest;
 import frc.robot.commands.cannon.StartFeeder;
@@ -169,6 +172,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        controller.button(XboxController.Button.kA.value).onTrue(new StartIntakeAndFeeder(feeder, intakeSubsystem, deployer, ramp, shooter));
+        controller.button(XboxController.Button.kX.value).onTrue(new ExitAndShoot(shooter, feeder));
     }
 
     public SwerveDrivetrain getDrivetrain() {
