@@ -46,11 +46,11 @@ public abstract class DiagBoolean implements Diagnosable {
         seenFalse = seenTrue = false;
     }
 
-    protected abstract boolean getValue(String type);
+    protected abstract boolean getValue();
 
     // Package protected
     boolean getDiagResult() {
-        boolean currentValue = getValue(null);
+        boolean currentValue = getValue();
         // Set the value for the state - whether the switch is pressed or not
         if (currentValue) {
             seenTrue = true;
