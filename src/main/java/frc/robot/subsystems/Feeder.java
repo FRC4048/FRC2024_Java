@@ -56,6 +56,10 @@ public class Feeder extends SubsystemBase{
         return (getPiece() == ColorObject.Piece);
     }
 
+    public boolean pieceNotSeen() {
+        return (getPiece() == ColorObject.Plastic);
+    }
+
     @Override
     public void periodic() {
         if (Constants.FEEDER_DEBUG) {
