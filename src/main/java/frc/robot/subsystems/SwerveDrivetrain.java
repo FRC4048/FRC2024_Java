@@ -22,6 +22,7 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboardTab;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -30,6 +31,17 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
     private final GenericSwerveModule backRight;
+
+    private DoubleSubscriber xSub;
+    private DoubleSubscriber ySub;
+    private DoubleSubscriber zSub;
+    private DoubleSubscriber fpsSub;
+    private DoubleSubscriber probSub;
+    private double x;
+    private double y;
+    private double z;
+    private double fps;
+    private double prob;
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
@@ -41,7 +53,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
-
+    
+   
     
 
 
@@ -57,6 +70,13 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
+            x = xSub.get();
+            y = ySub.get();
+            z = zSub.get();
+            fps = fpsSub.get();
+            prob = probSub.get();
+            SmartShuffleboard.put("Test", "x", x);
+            SmartShuffleboard.put("Test", "y", y);
 
         
         gyroValue = getGyro();
@@ -105,6 +125,13 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
         SmartDashboard.putBoolean("USE VISION",false);
+         NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("Luxonis");
+    xSub = table.getDoubleTopic("x").subscribe(-1);
+    ySub = table.getDoubleTopic("y").subscribe(-1);
+    zSub = table.getDoubleTopic("z").subscribe(-1);
+    fpsSub = table.getDoubleTopic("fps").subscribe(-1);
+    probSub = table.getDoubleTopic("prob").subscribe(-1);
         
     }
 
