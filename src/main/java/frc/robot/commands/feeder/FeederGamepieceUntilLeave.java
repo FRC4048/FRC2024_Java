@@ -20,7 +20,7 @@ public class FeederGamepieceUntilLeave extends Command{
     }
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEED);
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
     }
     @Override
     public void initialize() {

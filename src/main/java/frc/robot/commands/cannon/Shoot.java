@@ -11,7 +11,7 @@ public class Shoot extends Command {
     private final Timer timer = new Timer();
     private boolean activated = false;
     private double speed;
-    public Shoot(Shooter shooter,double speed) {
+    public Shoot(Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
     }

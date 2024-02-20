@@ -9,9 +9,11 @@ import frc.robot.subsystems.Shooter;
 
 public class ExitAndShoot extends SequentialCommandGroup{
     public ExitAndShoot(Shooter shooter, Feeder feeder) {
-        new ParallelCommandGroup(
-            new FeederGamepieceUntilLeave(feeder),
-            new Shoot(shooter)
-        );
+        addCommands(new ParallelCommandGroup(
+                new FeederGamepieceUntilLeave(feeder),
+                new Shoot(shooter)
+        ));
+        addRequirements(shooter,feeder);
+
     }  
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.ExitAndShoot;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.cannon.StartFeeder;
@@ -160,6 +161,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        controller.a().onTrue(new StartFeeder(feeder));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
     }

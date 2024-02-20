@@ -92,7 +92,8 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.7;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.3;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.7;
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 

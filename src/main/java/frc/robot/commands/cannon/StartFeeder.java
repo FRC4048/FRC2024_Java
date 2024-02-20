@@ -1,6 +1,7 @@
 package frc.robot.commands.cannon;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.ColorObject;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
@@ -15,7 +16,7 @@ public class StartFeeder extends Command {
 
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEED);
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
     }
 
     @Override
@@ -25,7 +26,6 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
-//        return feeder.getPiece().equals(ColorObject.Piece);
+        return feeder.getPiece().equals(ColorObject.Piece);
     }
 }
