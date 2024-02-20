@@ -93,7 +93,7 @@ public class Constants2024 extends GameConstants {
 
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
-    public static final int FEEDER_MOTOR_ID = 11;
+    public static final int FEEDER_MOTOR_ID = 211;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
@@ -112,7 +112,6 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
     public static final double RAISING_TIMEOUT = 0;
-    public static final boolean CLIMBER_DEBUG = true;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 111;
@@ -125,4 +124,7 @@ public class Constants2024 extends GameConstants {
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
+    //Deployer
+    public static final int DEPLOYER_MOTOR_ID = 11; //For testbed, I don't know the id for the motor on the robot
 }
