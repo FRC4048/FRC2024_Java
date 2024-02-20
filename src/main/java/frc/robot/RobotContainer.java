@@ -35,6 +35,7 @@ import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.feeder.FeederColorMatcher;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.ramp.RotateBigRampWheel;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
@@ -138,6 +139,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
+            SmartShuffleboard.putCommand("Ramp", "RotateBigRampWheel", new RotateBigRampWheel(ramp));
         }
         if (Constants.SHOOTER_DEBUG){
             SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
