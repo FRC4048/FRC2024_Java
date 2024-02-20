@@ -11,7 +11,7 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_PID_FF = 1.00;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
-    public static final int RAMP_ID = 47;
+    public static final int RAMP_ID = 57;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
@@ -21,8 +21,8 @@ public class Constants2024 extends GameConstants {
     public static final int RIGHT_SERVO_DISENGAGED = 180;
     public static final int LEFT_SERVO_ENGAGED = 0;
     public static final int LEFT_SERVO_DISENGAGED = 180;
-    public static final int LEFT_SERVO_ID = 0;
-    public static final int RIGHT_SERVO_ID = 1;
+    public static final int LEFT_SERVO_ID = 8;
+    public static final int RIGHT_SERVO_ID = 9;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
@@ -93,7 +93,7 @@ public class Constants2024 extends GameConstants {
 
     //Feeder
     public static final double FEEDER_MOTOR_SPEED = 0.5;
-    public static final int FEEDER_MOTOR_ID = 211;
+    public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
@@ -101,8 +101,8 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;
-    public static final int CLIMBER_MOTOR1_ID = 53;
-    public static final int CLIMBER_MOTOR2_ID = 52;
+    public static final int CLIMBER_LEFT = 53;
+    public static final int CLIMBER_RIGHT = 52;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
@@ -114,8 +114,8 @@ public class Constants2024 extends GameConstants {
     public static final double RAISING_TIMEOUT = 0;
 
     //Intake
-    public static final int INTAKE_MOTOR_1_ID = 111;
-    public static final int INTAKE_MOTOR_2_ID = 12;
+    public static final int INTAKE_MOTOR_1_ID = 6;
+    public static final int INTAKE_MOTOR_2_ID = 7;
 
     public static final double INTAKE_MOTOR_1_SPEED = 0.4;
     public static final double INTAKE_MOTOR_2_SPEED = 0.4;
@@ -126,5 +126,5 @@ public class Constants2024 extends GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Deployer
-    public static final int DEPLOYER_MOTOR_ID = 11; //For testbed, I don't know the id for the motor on the robot
+    public static final int DEPLOYER_MOTOR_ID = 10; //For testbed, I don't know the id for the motor on the robot
 }
