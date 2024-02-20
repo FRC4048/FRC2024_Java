@@ -40,14 +40,8 @@ import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.commands.cannon.StartFeeder;
-import frc.robot.commands.cannon.StartIntake;
-import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.deployer.DeployerLower;
 import frc.robot.commands.deployer.DeployerRaise;
-import frc.robot.commands.drivetrain.Drive;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
@@ -82,7 +76,7 @@ public class RobotContainer {
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
-        autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
+        autoChooser.addOnValidationCommand(()->CommandUtil.logged(new SetInitOdom(drivetrain,autoChooser)));
         autoChooser.forceRefresh();
         ramp = new Ramp();
         configureBindings();
@@ -132,8 +126,8 @@ public class RobotContainer {
 
     public void putShuffleboardCommands() {
         if (Constants.DEPLOYER_DEBUG) {
-            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
-            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
+            SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new DeployerLower(deployer)));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new DeployerRaise(deployer)));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 400)));
@@ -155,18 +149,18 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intakeSubsystem,5)));
         }
         if (Constants.SWERVE_DEBUG) {
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, -0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, -0.3048, 0, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , 0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , -0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4)));
         }
 
 
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        drivetrain.setDefaultCommand(CommandUtil.logged(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX)));
         joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
     }
