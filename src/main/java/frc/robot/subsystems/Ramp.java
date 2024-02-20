@@ -82,6 +82,10 @@ public class Ramp extends SubsystemBase {
         neoMotor.set(speed);
     }
 
+    public double getPosition() {
+        return neoMotor.getAlternateEncoder(50).getPosition();
+    }
+
     public void stopMotor() {
         neoMotor.set(0.0);
     }
