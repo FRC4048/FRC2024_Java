@@ -5,8 +5,7 @@ package frc.robot.utils.diag;
  * distance from its initial position (measured at initialization or after a reset)
  */
 public class DiagAprilTags extends DiagBoolean {
-
-    NetworkTableEntry tagX;    
+    private final DoubleArraySubscriber subscriber;  
 
     /**
      * Constructor
@@ -15,10 +14,14 @@ public class DiagAprilTags extends DiagBoolean {
      */
     public DiagAprilTags(String title, String name) {
         super(title, name);
+        NetworkTableInstance inst = NetworkTableInstance.getDefault();
+        NetworkTable table = inst.getTable("ROS");
+        subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1});
     }
 
     @Override
     protected boolean getValue() {
-        if()
+        double[] PastValues = subscriber.get();
+        return PastValues[0]!=-1 || PastValues[1]!=-1 || PastValues[2]!=-1;
     }
 }
