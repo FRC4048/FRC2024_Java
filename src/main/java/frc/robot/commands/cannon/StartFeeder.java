@@ -25,6 +25,7 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return feeder.getFeederSensor();
+        return false;
+//        return feeder.getPiece().equals(ColorObject.Piece);
     }
 }

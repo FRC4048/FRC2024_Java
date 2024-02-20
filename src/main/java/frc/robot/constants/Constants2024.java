@@ -11,7 +11,7 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_PID_FF = 1.00;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
-    public static final int RAMP_ID = 57;
+    public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
@@ -25,8 +25,8 @@ public class Constants2024 extends GameConstants {
     public static final int RIGHT_SERVO_ID = 9;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44; //needs to be changed
-    public static final int SHOOTER_MOTOR_ID_2 = 45; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_1 = 55; //needs to be changed
+    public static final int SHOOTER_MOTOR_ID_2 = 56; //needs to be changed
 
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
@@ -35,7 +35,7 @@ public class Constants2024 extends GameConstants {
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
+    public static final double SHOOTER_TIME_AFTER_TRIGGER = 5;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MOTOR_PID_P = 5e-5;
@@ -92,7 +92,7 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.5;
+    public static final double FEEDER_MOTOR_SPEED = 0.7;
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 

@@ -10,7 +10,8 @@ public class Shoot extends Command {
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;
-    public Shoot(Shooter shooter) {
+    private double speed;
+    public Shoot(Shooter shooter,double speed) {
         this.shooter = shooter;
         addRequirements(shooter);
     }
@@ -18,17 +19,11 @@ public class Shoot extends Command {
     @Override
     public void initialize() {
         timer.reset();
-        activated = false;
-        shooter.setShooterMotor1RPM(Constants.SHOOTER_MOTOR_1_RPM);
-        shooter.setShooterMotor2RPM(Constants.SHOOTER_MOTOR_2_RPM);
-    }
+        activated = true;
+        shooter.setShooterMotor2Speed(.90);
+        shooter.setShooterMotor1Speed(.5);
+        timer.start();
 
-    @Override
-    public void execute() {
-        if (((shooter.getShooterSensor1Activated()) || (shooter.getShooterSensor2Activated())) && !activated) {
-            timer.start();
-            activated = true;
-        }
     }
 
     @Override 

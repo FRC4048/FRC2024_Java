@@ -8,15 +8,16 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
-    private final CANSparkMax SparkMax1;
-    private final CANSparkMax SparkMax2;
+    private final CANSparkMax sparkMax1;
+    private final CANSparkMax sparkMax2; //invert this motor
     private final Servo leftServo;
     private final Servo rightServo;
     private final AHRS navxGyro;
 
     public Climber(AHRS navxGyro) {
-        this.SparkMax1 = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
-        this.SparkMax2 = new CANSparkMax(Constants.CLIMBER_RIGHT, CANSparkMax.MotorType.kBrushless);
+        this.sparkMax1 = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
+        this.sparkMax2 = new CANSparkMax(Constants.CLIMBER_RIGHT, CANSparkMax.MotorType.kBrushless);
+        this.sparkMax2.setInverted(true);
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.navxGyro = navxGyro;
@@ -48,20 +49,24 @@ public class Climber extends SubsystemBase {
      */
     public void raise(boolean upward){
         double speed = upward ? Constants.CLIMBER_RAISING_SPEED : Constants.CLIMBER_SPEED * -1;
-        SparkMax1.set(speed);
-        SparkMax2.set(speed);
+        sparkMax1.set(speed);
+        sparkMax2.set(speed);
     }
     public void balanceRight(double speed) {
-        SparkMax1.set(speed);
-        SparkMax2.set(0);
+        sparkMax1.set(speed);
+        sparkMax2.set(0);
     }
     public void balanceLeft(double speed) {
-        SparkMax1.set(0);
-        SparkMax2.set(speed);
+        sparkMax1.set(0);
+        sparkMax2.set(speed);
     }
     public void stop(){
-        SparkMax1.set(0);
-        SparkMax2.set(0);
+        sparkMax1.set(0);
+        sparkMax2.set(0);
+    }
+    public void setSpeeds(double spd1, double spd2){
+        sparkMax1.set(spd1);
+        sparkMax2.set(spd2);
     }
     @Override
     public void periodic() {

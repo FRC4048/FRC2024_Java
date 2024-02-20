@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,14 +21,16 @@ public class Ramp extends SubsystemBase {
     private double pidFF = Constants.RAMP_PID_FF;
     private double rampPos = Constants.RAMP_POS;
     private double iZoneError = Constants.RAMP_ERROR_IZONE;
+    private SparkLimitSwitch forwardLimitSwitch;
+    private SparkLimitSwitch backwardLimitSwitch;
 
     public Ramp() {
         neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         resetEncoder();
-        neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyClosed);
+        backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyClosed);
 
         pidController = neoMotor.getPIDController();
         pidController.setP(pidP);
@@ -94,14 +97,14 @@ public class Ramp extends SubsystemBase {
      * @return If the Forward Limit Switch is pressed
      */
     public boolean getForwardSwitchState() {
-        return neoMotor.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+        return forwardLimitSwitch.isPressed();
     }
 
     /**
      * @return If the Reversed Limit Switch is pressed
      */
     public boolean getReversedSwitchState() {
-        return neoMotor.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
+        return backwardLimitSwitch.isPressed();
     }
 
     public void changeRampPos(double increment) {
@@ -119,5 +122,8 @@ public class Ramp extends SubsystemBase {
         pidController.setI(pidI);
         pidController.setD(pidD);
         pidController.setFF(pidFF);
+    }
+    public void setSpeed(double spd){
+        neoMotor.set(spd);
     }
 }
