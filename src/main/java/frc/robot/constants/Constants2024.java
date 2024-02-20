@@ -5,10 +5,10 @@ import frc.robot.swervev2.SwerveModuleProfile;
 
 public class Constants2024 extends GameConstants {
     //RAMP
-    public static final double RAMP_PID_P = 1.00;
+    public static final double RAMP_PID_P = .00000000000000000001;
     public static final double RAMP_PID_I = 0.00;
     public static final double RAMP_PID_D = 0.00;
-    public static final double RAMP_PID_FF = 1.00;
+    public static final double RAMP_PID_FF = 0.01;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
