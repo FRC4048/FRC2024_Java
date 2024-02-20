@@ -29,8 +29,8 @@ public class Ramp extends SubsystemBase {
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         resetEncoder();
-        forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyClosed);
-        backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyClosed);
+        forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
 
         pidController = neoMotor.getPIDController();
         pidController.setP(pidP);
