@@ -6,7 +6,7 @@ public class GameConstants {
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
-    public static final int XBOX_CONTROLLER_ID = 3;
+    public static final int DRIVER_CONTROLLER_ID = 3;
     public static final int OPERATER_CONTROLLER_ID = 4;
     public static final double XBOX_CONTROLLER_JOYSTICK_DEADZONE = 0.3;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
