@@ -1,11 +1,11 @@
 package frc.robot.utils;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
+import frc.robot.utils.math.RangeUtils;
 
 public class AutoAlignment {
     private final static PIDController turnController = new PIDController(0.005,0,0.0003);
@@ -17,7 +17,7 @@ public class AutoAlignment {
         if (Math.abs(currentAngle.getDegrees()-targetAngle) < Constants.AUTO_ALIGN_THRESHOLD){
             return 0;
         }
-        double clamp = MathUtil.clamp(turnController.calculate(currentAngle.getDegrees(), targetAngle), -1, 1);
+        double clamp = RangeUtils.map(turnController.calculate(currentAngle.getDegrees(), targetAngle), -180, 180,-1,1);
         SmartDashboard.putNumber("TURN_PID",clamp);
         return clamp;
     }
