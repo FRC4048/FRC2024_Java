@@ -18,13 +18,13 @@ public class GameConstants {
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
-    public static final boolean DEPLOYER_DEBUG = false;
+    public static final boolean DEPLOYER_DEBUG = true;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
     public static final double DEPLOYER_RAISE_TIMEOUT = 5;
-    public static final double DEPLOYER_LOWER_SPEED = 0.5;
-    public static final double DEPLOYER_RAISE_SPEED = -0.5;
+    public static final double DEPLOYER_LOWER_SPEED = 0.9;
+    public static final double DEPLOYER_RAISE_SPEED = -0.9;
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.4;//0.4
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 

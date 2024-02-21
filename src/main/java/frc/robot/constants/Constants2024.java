@@ -92,7 +92,7 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.3;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.25;
     public static final double FEEDER_MOTOR_EXIT_SPEED = 0.7;
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
@@ -118,8 +118,8 @@ public class Constants2024 extends GameConstants {
     public static final int INTAKE_MOTOR_1_ID = 6;
     public static final int INTAKE_MOTOR_2_ID = 7;
 
-    public static final double INTAKE_MOTOR_1_SPEED = 0.4;
-    public static final double INTAKE_MOTOR_2_SPEED = 0.4;
+    public static final double INTAKE_MOTOR_1_SPEED = 1;
+    public static final double INTAKE_MOTOR_2_SPEED = 1;
 
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
