@@ -5,16 +5,16 @@ import frc.robot.swervev2.SwerveModuleProfile;
 
 public class Constants2024 extends GameConstants {
     //RAMP
-    public static final double RAMP_PID_P = 1.00;
-    public static final double RAMP_PID_I = 0.00;
+    public static final double RAMP_PID_P = 5E-5;
+    public static final double RAMP_PID_I = 1e-6;
     public static final double RAMP_PID_D = 0.00;
-    public static final double RAMP_PID_FF = 1.00;
+    public static final double RAMP_PID_FF = 0.000156;
     public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
-    public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
+    public static final double RESET_RAMP_SPEED = -0.3; //assuming positive is forward, also needs to be refined do the real robot
 
     //Servo
     public static final int RIGHT_SERVO_ENGAGED = 0;

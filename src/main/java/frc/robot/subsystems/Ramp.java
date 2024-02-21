@@ -21,8 +21,8 @@ public class Ramp extends SubsystemBase {
     private double pidFF = Constants.RAMP_PID_FF;
     private double rampPos = Constants.RAMP_POS;
     private double iZoneError = Constants.RAMP_ERROR_IZONE;
-    private SparkLimitSwitch forwardLimitSwitch;
-    private SparkLimitSwitch backwardLimitSwitch;
+    private final SparkLimitSwitch forwardLimitSwitch;
+    private final SparkLimitSwitch backwardLimitSwitch;
 
     public Ramp() {
         neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
@@ -105,11 +105,6 @@ public class Ramp extends SubsystemBase {
      */
     public boolean getReversedSwitchState() {
         return backwardLimitSwitch.isPressed();
-    }
-
-    public void changeRampPos(double increment) {
-        double newRampPos = Math.max(0.0, Math.min(40.0, this.rampPos + increment));
-        setRampPos(newRampPos);
     }
 
     public void resetEncoder() {

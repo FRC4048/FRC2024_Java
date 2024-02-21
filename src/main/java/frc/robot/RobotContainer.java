@@ -128,7 +128,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
         }
         if (Constants.RAMP_DEBUG){
-            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 400));
+            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 15 ));
             SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
         }
