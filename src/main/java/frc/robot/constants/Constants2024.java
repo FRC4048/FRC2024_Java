@@ -50,14 +50,14 @@ public class Constants2024 extends GameConstants {
 
     //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
-    public static final int DRIVE_FRONT_RIGHT_S = 27;
-    public static final int DRIVE_FRONT_RIGHT_D = 57;
-    public static final int DRIVE_BACK_RIGHT_S = 28;
-    public static final int DRIVE_BACK_RIGHT_D = 58;
-    public static final int DRIVE_FRONT_LEFT_S = 30;
-    public static final int DRIVE_FRONT_LEFT_D = 60;
-    public static final int DRIVE_BACK_LEFT_S = 29;
-    public static final int DRIVE_BACK_LEFT_D = 59;
+    public static final int DRIVE_FRONT_RIGHT_S = 29;
+    public static final int DRIVE_FRONT_RIGHT_D = 59;
+    public static final int DRIVE_BACK_RIGHT_S = 30;
+    public static final int DRIVE_BACK_RIGHT_D = 60;
+    public static final int DRIVE_FRONT_LEFT_S = 58;
+    public static final int DRIVE_FRONT_LEFT_D = 28;
+    public static final int DRIVE_BACK_LEFT_S = 58;
+    public static final int DRIVE_BACK_LEFT_D = 27;
 
     public static final int DRIVE_CANCODER_FRONT_RIGHT = 37;
     public static final int DRIVE_CANCODER_BACK_RIGHT = 38;
