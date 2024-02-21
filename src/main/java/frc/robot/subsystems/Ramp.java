@@ -121,4 +121,8 @@ public class Ramp extends SubsystemBase {
     public void setSpeed(double spd){
         neoMotor.set(spd);
     }
+    public double encoderToAngle(double encoderValue){
+        //y=mx+b
+        return 2.48 * encoderValue + 28.5;
+    }
 }

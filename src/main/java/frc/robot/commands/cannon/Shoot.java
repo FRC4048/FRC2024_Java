@@ -20,8 +20,8 @@ public class Shoot extends Command {
     public void initialize() {
         timer.reset();
         activated = true;
-        shooter.setShooterMotor2Speed(.90);
-        shooter.setShooterMotor1Speed(.5);
+        shooter.setShooterMotor2Speed(.2);
+        shooter.setShooterMotor1Speed(.2);
         timer.start();
 
     }
