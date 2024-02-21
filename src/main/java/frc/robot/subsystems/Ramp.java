@@ -45,9 +45,9 @@ public class Ramp extends SubsystemBase {
         pidController.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
         if (Constants.RAMP_DEBUG){
-            SmartShuffleboard.put("Ramp", "PID P", pidP);
-            SmartShuffleboard.put("Ramp", "PID I", pidI);
-            SmartShuffleboard.put("Ramp", "PID D", pidD);
+//            SmartShuffleboard.put("Ramp", "PID P", pidP);
+//            SmartShuffleboard.put("Ramp", "PID I", pidI);
+//            SmartShuffleboard.put("Ramp", "PID D", pidD);
         }
     }
 
@@ -61,17 +61,17 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
-            // pid tuning
-            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
-            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
-            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
-            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
+//            // pid tuning
+//            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
+//            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
+//            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
+//            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
         }
 
     }
 
     public void setRampPos(double targetPosition) {
-        pidController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+        pidController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
         this.rampPos = targetPosition;
     }
     
