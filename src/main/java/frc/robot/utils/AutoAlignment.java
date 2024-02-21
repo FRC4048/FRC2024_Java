@@ -8,7 +8,7 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.math.RangeUtils;
 
 public class AutoAlignment {
-    private final static PIDController turnController = new PIDController(0.005,0,0.0003);
+    private final static PIDController turnController = new PIDController(0.7,0,0.06);
     static {
         turnController.enableContinuousInput(-180,180);
     }
