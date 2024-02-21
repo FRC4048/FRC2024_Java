@@ -67,6 +67,9 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
             SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
+            SmartShuffleboard.put("Diagnostics","Deployer", "encoder", getEncoder());
+            SmartShuffleboard.put("Diagnostics","Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
+            SmartShuffleboard.put("Diagnostics","Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
         //Another place with logging code in last year's extender class
     }

@@ -24,8 +24,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final int RIGHT_SERVO_ID = 18;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44;
-    public static final int SHOOTER_MOTOR_ID_2 = 45;
+    public static final int SHOOTER_MOTOR_ID_1 = 144; //change back
+    public static final int SHOOTER_MOTOR_ID_2 = 145;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
@@ -100,8 +100,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_MOTOR1_ID = 144;
-    public static final int CLIMBER_MOTOR2_ID = 145;
+    public static final int CLIMBER_MOTOR1_ID = 44;
+    public static final int CLIMBER_MOTOR2_ID = 45;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
@@ -126,4 +126,7 @@ public class ConstantsTestbed extends GameConstants {
 
     //Deployer
     public static final int DEPLOYER_MOTOR_ID = 11;
+
+    public static final double REQUIRED_RAISE = 400;
+    public static final double REQUIRED_LOWER = 50;
 }
