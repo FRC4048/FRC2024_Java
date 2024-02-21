@@ -27,11 +27,16 @@ public class TurnToGamepiece extends Command {
     private DoubleSubscriber probSub;
     private double x;
     private double y;
+    private double startX;
+    private double startY;
     private double z;
     private double fps;
     private double prob;
     ChassisSpeeds driveStates;
+    double first = 0;
+    double cycle = 0;
     private boolean finished = false;
+    double startPose;
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
@@ -53,48 +58,65 @@ public class TurnToGamepiece extends Command {
         // double rcw =
         // MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
         double rcw = 0.3;
+        first = 0;
+        finished = false;
+        cycle = 0;
+        startPose = drivetrain.getPose().getRotation().getDegrees();
+        startX = xSub.get();
+        startY = ySub.get();
+        z = zSub.get();
+        fps = fpsSub.get();
+        prob = probSub.get();
+
+        
 
     }
 
     @Override
     public void execute() {
-            x = xSub.get();
-            y = ySub.get();
-            z = zSub.get();
-            fps = fpsSub.get();
-            prob = probSub.get();
-        if (-.1 > x || .1 < x) {
+
+        x = xSub.get();
+        y = ySub.get();
+            
+        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees()) - Math.abs(startPose) > Math.abs(Math.atan(startY/startX)) && first == 0)) {
             
 
-            if (x < -.1) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, .3, false);
+            if (x < 0) {
+                driveStates = drivetrain.createChassisSpeeds(0, 0, .1, false);
                 drivetrain.drive(driveStates);
-            } else if (x > .1) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, -.3, false);
+            } else if (x > 0) {
+                driveStates = drivetrain.createChassisSpeeds(0, 0, -.1, false);
                 drivetrain.drive(driveStates);
             }
         }
-        else if (-.1 < x || .1 > x) {
+        else {
             str = .3;
             fwd = 0;
-            driveStates = drivetrain.createChassisSpeeds(.3, 0, 0, false);
+            driveStates = drivetrain.createChassisSpeeds(1, 0, 0, false);
             drivetrain.drive(driveStates);
             if (y == 0) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, 0, false);
-                drivetrain.drive(driveStates);
-                finished = true;
+                
+                if (cycle == 30) {
+                    driveStates = drivetrain.createChassisSpeeds(0, 0, 0, false);
+                    drivetrain.drive(driveStates);
+                    finished = true;
+                }
+                cycle++;
             }
+            first++;
         }
     }
 
     @Override
     public boolean isFinished() {
+        
         return finished;
+        
     }
 
     @Override
     public void end(boolean interrupted) {
-        super.end(interrupted);
+        
+        }
+        
     }
-
-}
