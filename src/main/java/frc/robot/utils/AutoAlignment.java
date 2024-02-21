@@ -34,6 +34,6 @@ public class AutoAlignment {
         return alignable.getAngleFromDistFunc().apply(x - alignable.getX(), y - alignable.getY());
     }
     public static void resetPid(){
-//        turnController.reset();
+        turnController.reset();
     }
 }
