@@ -16,6 +16,9 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -62,6 +65,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class RobotContainer {
       private final CommandXboxController operaterController = new CommandXboxController(Constants.OPERATER_CONTROLLER_ID);
+    private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
@@ -74,7 +78,6 @@ public class RobotContainer {
       private final Feeder feeder = new Feeder();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-      private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -165,11 +168,19 @@ public class RobotContainer {
 
 
     }
+    
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-        joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        if (Constants.XBOX_JOYSTICK_DRIVE) {
+            drivetrain.setDefaultCommand(new Drive(drivetrain, controller::getLeftY, controller::getLeftX, controller::getRightX));
+            controller.leftTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+            controller.rightTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        }
+        else {
+            drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+            joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+            joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        }
     }
 
     public SwerveDrivetrain getDrivetrain() {
