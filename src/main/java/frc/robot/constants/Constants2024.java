@@ -50,19 +50,19 @@ public class Constants2024 extends GameConstants {
 
     //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
-    public static final int DRIVE_FRONT_RIGHT_S = 27;
-    public static final int DRIVE_FRONT_RIGHT_D = 57;
-    public static final int DRIVE_BACK_RIGHT_S = 28;
-    public static final int DRIVE_BACK_RIGHT_D = 58;
-    public static final int DRIVE_FRONT_LEFT_S = 30;
-    public static final int DRIVE_FRONT_LEFT_D = 60;
-    public static final int DRIVE_BACK_LEFT_S = 29;
-    public static final int DRIVE_BACK_LEFT_D = 59;
+    public static final int DRIVE_FRONT_RIGHT_S = 29;
+    public static final int DRIVE_FRONT_RIGHT_D = 59;
+    public static final int DRIVE_BACK_RIGHT_S = 30;
+    public static final int DRIVE_BACK_RIGHT_D = 60;
+    public static final int DRIVE_FRONT_LEFT_S = 28;
+    public static final int DRIVE_FRONT_LEFT_D = 58;
+    public static final int DRIVE_BACK_LEFT_S = 27;
+    public static final int DRIVE_BACK_LEFT_D = 57;
 
-    public static final int DRIVE_CANCODER_FRONT_RIGHT = 37;
-    public static final int DRIVE_CANCODER_BACK_RIGHT = 38;
-    public static final int DRIVE_CANCODER_FRONT_LEFT = 40;
-    public static final int DRIVE_CANCODER_BACK_LEFT = 39;
+    public static final int DRIVE_CANCODER_FRONT_RIGHT = 39;
+    public static final int DRIVE_CANCODER_BACK_RIGHT = 40;
+    public static final int DRIVE_CANCODER_FRONT_LEFT = 38;
+    public static final int DRIVE_CANCODER_BACK_LEFT = 37;
 
 
     //PID Constants
@@ -86,10 +86,10 @@ public class Constants2024 extends GameConstants {
     public static final double ROBOT_LENGTH = 0.8636;
     public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees
 
-    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 190.28;
-    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 261.56;
-    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 306.29;
-    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
+    public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 261.56;
+    public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 190.28;
+    public static final double BACK_LEFT_ABS_ENCODER_ZERO = 119.35;
+    public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 306.29;
 
     //Feeder
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.25;
