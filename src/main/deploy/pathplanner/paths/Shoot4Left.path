@@ -139,10 +139,10 @@
     {
       "name": "New Constraints Zone",
       "minWaypointRelativePos": 1.7,
-      "maxWaypointRelativePos": 2.05,
+      "maxWaypointRelativePos": 2.15,
       "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -152,8 +152,8 @@
       "minWaypointRelativePos": 3.75,
       "maxWaypointRelativePos": 4.15,
       "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -179,11 +179,18 @@
     },
     {
       "name": "SpoolShooter1",
-      "waypointRelativePos": 1.6500000000000001,
+      "waypointRelativePos": 1.5500000000000003,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpoolShooter"
+              }
+            }
+          ]
         }
       }
     },
@@ -193,7 +200,14 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
         }
       }
     },
@@ -201,9 +215,22 @@
       "name": "StartIntake2",
       "waypointRelativePos": 2.3000000000000003,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RampMoveCenter"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeAndFeeder"
+              }
+            }
+          ]
         }
       }
     },
@@ -228,7 +255,7 @@
       }
     },
     {
-      "name": "StartIntake",
+      "name": "StartIntake3",
       "waypointRelativePos": 4.85,
       "command": {
         "type": "parallel",
@@ -256,11 +283,28 @@
           "commands": []
         }
       }
+    },
+    {
+      "name": "MoveRamp1",
+      "waypointRelativePos": 1.35,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RampMoveCenter"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
