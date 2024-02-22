@@ -129,5 +129,10 @@ public class Constants2024 extends GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Deployer
-    public static final int DEPLOYER_MOTOR_ID = 10; //For testbed, I don't know the id for the motor on the robot
+    public static final int DEPLOYER_MOTOR_ID = 11; //For testbed, I don't know the id for the motor on the robot
+
+    public static final double REQUIRED_RAISE = 400;
+    public static final double REQUIRED_LOWER = 50;
+
+
 }
