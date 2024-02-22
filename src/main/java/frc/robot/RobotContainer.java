@@ -26,6 +26,7 @@ import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ShootAndCross;
+import frc.robot.commands.ShootAndCrossMid;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -158,6 +159,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Shoot and Cross", new ShootAndCross(drivetrain, shooter, ramp, intakeSubsystem));
+            SmartShuffleboard.putCommand("Drivetrain", "Shoot and Cross Mid", new ShootAndCrossMid(drivetrain,shooter,ramp,intakeSubsystem));
         }
 
 
