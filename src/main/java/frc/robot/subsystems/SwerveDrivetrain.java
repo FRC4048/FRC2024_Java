@@ -28,7 +28,7 @@ import java.util.List;
 
 public class SwerveDrivetrain extends SubsystemBase {
     
-    private List<Translation2d> bezeir;
+    private List<Translation2d> bezierPoints;
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
@@ -134,6 +134,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     zSub = table.getDoubleTopic("z").subscribe(-1);
     fpsSub = table.getDoubleTopic("fps").subscribe(-1);
     probSub = table.getDoubleTopic("prob").subscribe(-1);
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(x, y, Rotation2d.fromDegrees(0)), new Pose2d(x, y, Rotation2d.fromDegrees(0)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        path.preventFlipping = true;
         
     }
 
