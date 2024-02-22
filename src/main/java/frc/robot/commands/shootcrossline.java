@@ -4,31 +4,40 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.drivetrain.MoveDistance;
+import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class shootcrossline extends SequentialCommandGroup {
   /** Creates a new shootcrossline. */
-  public shootcrossline(SwerveDrivetrain SwerveDrivetrain, Shooter Shooter, Ramp ramp, IntakeSubsystem IntakeSubsystem) {
+  public shootcrossline(SwerveDrivetrain swerveDrivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intakeSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ResetRamp(ramp),
-      new StartIntake(IntakeSubsystem, 6), // adjust later
-      new MoveDistance(SwerveDrivetrain, (RobotContainer.isRedAlliance()?-2.9718:2.9718), 0, 0.3),
-      new Shoot(Shooter),
-      new MoveDistance(SwerveDrivetrain, (RobotContainer.isRedAlliance()?-1.0282:1.0282), 0, 0.3)
+      new ParallelRaceGroup(
+        new StartIntake(intakeSubsystem, 6), // adjust later
+        new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -2.9718 : 2.9718), 0, 0.3)),
+      new RampMove(ramp, 30), //refine later
+      new WaitCommand(0.05), //refine later
+      new Shoot(shooter),
+      new ParallelCommandGroup(
+        new ResetRamp(ramp),
+        new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -1.0282 : 1.0282), 0, 0.3))
     );
   }
 }
