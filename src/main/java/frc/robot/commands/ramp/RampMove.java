@@ -3,22 +3,28 @@ package frc.robot.commands.ramp;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Ramp;
 
+import java.util.function.DoubleSupplier;
+
 public class RampMove extends Command{
     
     private final Ramp ramp;
-    private final double degrees;
+    private final DoubleSupplier encoderValue;
 
-    public RampMove(Ramp ramp, double degrees) {
+    public RampMove(Ramp ramp, DoubleSupplier encoderValue) {
         this.ramp = ramp;
-        this.degrees = degrees;
+        this.encoderValue = encoderValue;
         addRequirements(this.ramp);
     }
 
     @Override
     public void initialize() {
-        ramp.setRampPos(degrees);
+        ramp.setRampPos(encoderValue.getAsDouble());
     }
 
+
+    @Override
+    public void execute() {
+    }
 
     @Override
     public boolean isFinished() {
