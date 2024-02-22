@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.AutoAlignment;
 
 public class SetAlignable extends Command {
     private final Alignable alignable;
@@ -16,7 +15,12 @@ public class SetAlignable extends Command {
 
     @Override
     public void initialize() {
-        AutoAlignment.resetPid();
+        drivetrain.getAlignableTurnPid().reset();
         drivetrain.setAlignable(alignable);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }
