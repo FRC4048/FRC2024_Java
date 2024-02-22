@@ -190,17 +190,20 @@ public class TurnToGamepiece extends Command {
         // double rcw =
         // MathUtil.applyDeadband(rtSupplier.getAsDouble()*Constants.MAX_VELOCITY, 0.3);
         double rcw = 0.3;
+        
         first = 0;
         finished = false;
         cycle = 0;
         startPose = drivetrain.getPose().getRotation().getDegrees();
         startX = xSub.get();
         startY = ySub.get();
+        double distance = startY+.5;
+        double degrees = Math.abs(Math.atan(startY+.5/startX));
         z = zSub.get();
         fps = fpsSub.get();
         prob = probSub.get();
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(x, y, Rotation2d.fromDegrees(0)), new Pose2d(x, y, Rotation2d.fromDegrees(0)));
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(degrees)));
         path.preventFlipping = true;
 
         
