@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,14 +21,16 @@ public class Ramp extends SubsystemBase {
     private double pidFF = Constants.RAMP_PID_FF;
     private double rampPos = Constants.RAMP_POS;
     private double iZoneError = Constants.RAMP_ERROR_IZONE;
+    private final SparkLimitSwitch forwardLimitSwitch;
+    private final SparkLimitSwitch backwardLimitSwitch;
 
     public Ramp() {
         neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         resetEncoder();
-        neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+        backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
 
         pidController = neoMotor.getPIDController();
         pidController.setP(pidP);
@@ -41,10 +44,10 @@ public class Ramp extends SubsystemBase {
         pidController.setSmartMotionMinOutputVelocity(0.0, 0);
         pidController.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
-        if (Constants.RAMP_DEBUG){
-            SmartShuffleboard.put("Ramp", "PID P", pidP);
-            SmartShuffleboard.put("Ramp", "PID I", pidI);
-            SmartShuffleboard.put("Ramp", "PID D", pidD);
+        if (Constants.RAMP_PID_DEBUG){
+//            SmartShuffleboard.put("Ramp", "PID P", pidP);
+//            SmartShuffleboard.put("Ramp", "PID I", pidI);
+//            SmartShuffleboard.put("Ramp", "PID D", pidD);
         }
     }
 
@@ -58,7 +61,9 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
-            // pid tuning
+        }
+        if (Constants.RAMP_PID_DEBUG){
+            //            // pid tuning
             pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
             pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
             pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
@@ -68,7 +73,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void setRampPos(double targetPosition) {
-        pidController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+        pidController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
         this.rampPos = targetPosition;
     }
     
@@ -94,19 +99,14 @@ public class Ramp extends SubsystemBase {
      * @return If the Forward Limit Switch is pressed
      */
     public boolean getForwardSwitchState() {
-        return neoMotor.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+        return forwardLimitSwitch.isPressed();
     }
 
     /**
      * @return If the Reversed Limit Switch is pressed
      */
     public boolean getReversedSwitchState() {
-        return neoMotor.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
-    }
-
-    public void changeRampPos(double increment) {
-        double newRampPos = Math.max(0.0, Math.min(40.0, this.rampPos + increment));
-        setRampPos(newRampPos);
+        return backwardLimitSwitch.isPressed();
     }
 
     public void resetEncoder() {
@@ -119,5 +119,12 @@ public class Ramp extends SubsystemBase {
         pidController.setI(pidI);
         pidController.setD(pidD);
         pidController.setFF(pidFF);
+    }
+    public void setSpeed(double spd){
+        neoMotor.set(spd);
+    }
+    public double encoderToAngle(double encoderValue){
+        //y=mx+b
+        return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
     }
 }
