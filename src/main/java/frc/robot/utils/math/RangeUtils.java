@@ -5,6 +5,5 @@ public class RangeUtils {
         double endRange = endMax - endMin;
         double startRange = startMax - startMin;
         return ((value - startMin) * endRange / startRange) + endMin;
-
     }
 }
