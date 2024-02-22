@@ -44,7 +44,7 @@ public class Ramp extends SubsystemBase {
         pidController.setSmartMotionMinOutputVelocity(0.0, 0);
         pidController.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
-        if (Constants.RAMP_DEBUG){
+        if (Constants.RAMP_PID_DEBUG){
 //            SmartShuffleboard.put("Ramp", "PID P", pidP);
 //            SmartShuffleboard.put("Ramp", "PID I", pidI);
 //            SmartShuffleboard.put("Ramp", "PID D", pidD);
@@ -61,11 +61,13 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
-//            // pid tuning
-//            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
-//            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
-//            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
-//            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
+        }
+        if (Constants.RAMP_PID_DEBUG){
+            //            // pid tuning
+            pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
+            pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
+            pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
+            pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
         }
 
     }
@@ -123,6 +125,6 @@ public class Ramp extends SubsystemBase {
     }
     public double encoderToAngle(double encoderValue){
         //y=mx+b
-        return 2.48 * encoderValue + 28.5;
+        return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
     }
 }

@@ -58,18 +58,17 @@ public class RobotContainer {
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
       private SwerveDrivetrain drivetrain;
-      private final Ramp ramp;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
       private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
+      private final Ramp ramp = new Ramp();
       private Climber climber;
       private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
       private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        ramp = new Ramp();
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
