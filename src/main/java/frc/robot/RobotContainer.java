@@ -24,6 +24,7 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.ShootAndCross;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.ShootTest;
 import frc.robot.commands.cannon.StartFeeder;
@@ -160,6 +161,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Shoot and Cross", new ShootAndCross(drivetrain, shooter, ramp, intakeSubsystem));
         }
 
 
