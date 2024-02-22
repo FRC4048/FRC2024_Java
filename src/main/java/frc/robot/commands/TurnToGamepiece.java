@@ -124,6 +124,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -205,6 +206,8 @@ public class TurnToGamepiece extends Command {
         bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(0.333*distance*Math.cos(Math.toRadians(degrees)), 0.333*distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)), new Pose2d(distance*Math.cos(Math.toRadians(degrees)), distance*Math.sin(Math.toRadians(degrees)), Rotation2d.fromDegrees(degrees)));
         path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(degrees)));
         path.preventFlipping = true;
+        AutoBuilder.followPath(path);
+        
 
         
 
@@ -223,13 +226,13 @@ public class TurnToGamepiece extends Command {
     @Override
     public boolean isFinished() {
         
-        return finished;
+        return y == 0;
         
     }
 
     @Override
     public void end(boolean interrupted) {
-        
+            drivetrain.stopMotor();
         }
         
     }
