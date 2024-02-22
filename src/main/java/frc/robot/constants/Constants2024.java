@@ -127,4 +127,8 @@ public class Constants2024 extends GameConstants {
 
     //Deployer
     public static final int DEPLOYER_MOTOR_ID = 11; //For testbed, I don't know the id for the motor on the robot
+
+    public static final double ALIGNABLE_PID_P = 0.7;
+    public static final double ALIGNABLE_PID_I = 0;
+    public static final double ALIGNABLE_PID_D = 0.06;
 }

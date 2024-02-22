@@ -14,13 +14,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.SetAlignable;
 import frc.robot.commands.cannon.Shoot;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
@@ -39,7 +39,6 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -160,14 +159,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(new InstantCommand(() -> {
-            AutoAlignment.resetPid();
-            drivetrain.setAlignable(Alignable.SPEAKER);
-        })).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-        joyRightButton1.onTrue(new InstantCommand(() -> {
-            AutoAlignment.resetPid();
-            drivetrain.setAlignable(Alignable.AMP);
-        })).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
+        joyRightButton1.onTrue(new SetAlignable(drivetrain,Alignable.AMP)).onFalse(new SetAlignable(drivetrain,null));
     }
 
     public SwerveDrivetrain getDrivetrain() {
