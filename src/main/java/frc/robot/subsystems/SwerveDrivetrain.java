@@ -23,10 +23,12 @@ import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboardTab;
+import java.util.List;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
     
+    private List<Translation2d> bezeir;
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
