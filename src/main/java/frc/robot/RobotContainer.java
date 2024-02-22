@@ -21,13 +21,12 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.ExitAndShoot;
 import frc.robot.commands.RaiseArms;
-import frc.robot.commands.ReportErrorCommand;
 import frc.robot.commands.StartIntakeAndFeeder;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
-import frc.robot.commands.deployer.DeployerLower;
-import frc.robot.commands.deployer.DeployerRaise;
+import frc.robot.commands.deployer.LowerDeployer;
+import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
@@ -70,13 +69,13 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        ramp = new Ramp();
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
         autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
-        ramp = new Ramp();
         configureBindings();
         putShuffleboardCommands();
     }
@@ -85,7 +84,8 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
+//        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
+        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp)); //place holder
     }
 
     private void setupPathPlaning() {
@@ -124,8 +124,8 @@ public class RobotContainer {
 
     public void putShuffleboardCommands() {
         if (Constants.DEPLOYER_DEBUG) {
-            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new DeployerLower(deployer));
-            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new DeployerRaise(deployer));
+            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new RaiseDeployer(deployer));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new LowerDeployer(deployer));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
