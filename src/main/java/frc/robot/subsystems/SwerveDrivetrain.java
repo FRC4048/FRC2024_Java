@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,6 +32,8 @@ import java.util.List;
 public class SwerveDrivetrain extends SubsystemBase {
     
     private List<Translation2d> bezierPoints;
+    private PathPlannerPath path;
+
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
