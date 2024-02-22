@@ -1,17 +1,23 @@
-package frc.robot.commands.cannon;
+package frc.robot.commands.feeder;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ColorObject;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
 public class StartFeeder extends Command {
 
     private final Feeder feeder;
+    private double startTime;
 
     public StartFeeder(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
+    }
+
+    @Override
+    public void initialize() {
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -26,6 +32,6 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return feeder.getPiece().equals(ColorObject.Piece);
+        return feeder.pieceSeen() || Timer.getFPGATimestamp() - startTime > 5.0;
     }
 }
