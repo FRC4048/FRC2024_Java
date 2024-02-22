@@ -124,7 +124,14 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -133,6 +140,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import java.util.List;
 
 public class TurnToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -159,6 +167,8 @@ public class TurnToGamepiece extends Command {
     double cycle = 0;
     private boolean finished = false;
     double startPose;
+    private List<Translation2d> bezierPoints;
+    private PathPlannerPath path;
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
@@ -189,6 +199,9 @@ public class TurnToGamepiece extends Command {
         z = zSub.get();
         fps = fpsSub.get();
         prob = probSub.get();
+        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(x, y, Rotation2d.fromDegrees(0)), new Pose2d(x, y, Rotation2d.fromDegrees(0)));
+        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
+        path.preventFlipping = true;
 
         
 
@@ -199,36 +212,11 @@ public class TurnToGamepiece extends Command {
 
         x = xSub.get();
         y = ySub.get();
-            
-        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees()) - Math.abs(startPose) < Math.abs(Math.atan(startY/startX)) && first == 0)) {
-            
-
-            if (x < 0) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, .1, false);
-                drivetrain.drive(driveStates);
-            } else if (x > 0) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, -.1, false);
-                drivetrain.drive(driveStates);
-            }
-        }
-        else {
-            str = .3;
-            fwd = 0;
-            driveStates = drivetrain.createChassisSpeeds(1, 0, 0, false);
-            drivetrain.drive(driveStates);
-            if (y == 0) {
-                
-                if (cycle == 30) {
-                    driveStates = drivetrain.createChassisSpeeds(0, 0, 0, false);
-                    drivetrain.drive(driveStates);
-                    finished = true;
-                }
-                cycle++;
-            }
-            first++;
-        }
+        
+        
     }
-
+            
+    
     @Override
     public boolean isFinished() {
         
