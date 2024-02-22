@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends Command {
+public class ShootSpeaker extends Command {
 
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;
     private double speed;
-    public Shoot(Shooter shooter) {
+    public ShootSpeaker(Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
     }
@@ -20,8 +20,8 @@ public class Shoot extends Command {
     public void initialize() {
         timer.reset();
         activated = true;
-        shooter.setShooterMotorLeftSpeed(0.6);
-        shooter.setShooterMotorRightSpeed(1);
+        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
+        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
         timer.start();
 
     }

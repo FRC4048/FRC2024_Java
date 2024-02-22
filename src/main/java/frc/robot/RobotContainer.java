@@ -22,6 +22,7 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.ExitAndShoot;
 import frc.robot.commands.RaiseArms;
 import frc.robot.commands.StartIntakeAndFeeder;
+import frc.robot.commands.cannon.ShootSpeaker;
 import frc.robot.commands.cannon.StartFeeder;
 import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
@@ -85,7 +86,9 @@ public class RobotContainer {
      */
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp)); //place holder
+        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder));
     }
 
     private void setupPathPlaning() {

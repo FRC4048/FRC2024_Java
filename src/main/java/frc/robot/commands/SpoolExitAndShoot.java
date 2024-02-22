@@ -8,13 +8,16 @@ import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 
-public class ExitAndShoot extends ParallelCommandGroup{
-    public ExitAndShoot(Shooter shooter, Feeder feeder) {
+public class SpoolExitAndShoot extends ParallelCommandGroup {
+    public SpoolExitAndShoot(Shooter shooter, Feeder feeder) {
         addCommands(
                 new ShootSpeaker(shooter),
-                new FeederGamepieceUntilLeave(feeder)
+                new SequentialCommandGroup(
+                        new WaitCommand(0.5),
+                        new FeederGamepieceUntilLeave(feeder)
+                )
         );
-        addRequirements(shooter,feeder);
+        addRequirements(shooter, feeder);
 
-    }  
+    }
 }
