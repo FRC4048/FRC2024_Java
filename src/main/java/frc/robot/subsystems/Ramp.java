@@ -8,13 +8,14 @@ import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class Ramp extends SubsystemBase {
     private final CANSparkMax neoMotor;
     private final RelativeEncoder encoder;
-    private final SparkPIDController pidController;
+    private final NeoPidMotor neoPidMotor;
     private double pidP = Constants.RAMP_PID_P;
     private double pidI = Constants.RAMP_PID_I;
     private double pidD = Constants.RAMP_PID_D;
@@ -31,19 +32,8 @@ public class Ramp extends SubsystemBase {
         resetEncoder();
         forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-
-        pidController = neoMotor.getPIDController();
-        pidController.setP(pidP);
-        pidController.setI(pidI);
-        pidController.setD(pidD);
-        pidController.setIZone(iZoneError);
-        pidController.setFF(pidFF);
-        pidController.setOutputRange(-1, 1);
-
-        pidController.setSmartMotionMaxVelocity(Constants.RAMP_MAX_RPM_VELOCITY, 0);
-        pidController.setSmartMotionMinOutputVelocity(0.0, 0);
-        pidController.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);
-        pidController.setSmartMotionAllowedClosedLoopError(0.0, 0);
+        neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF);
         if (Constants.RAMP_PID_DEBUG){
 //            SmartShuffleboard.put("Ramp", "PID P", pidP);
 //            SmartShuffleboard.put("Ramp", "PID I", pidI);
@@ -53,10 +43,10 @@ public class Ramp extends SubsystemBase {
 
     public void periodic() {
         if (Constants.RAMP_DEBUG){
-            SmartShuffleboard.put("Ramp", "P Gain", pidController.getP());
-            SmartShuffleboard.put("Ramp", "I Gain", pidController.getI());
-            SmartShuffleboard.put("Ramp", "D Gain", pidController.getD());
-            SmartShuffleboard.put("Ramp", "FF Gain", pidController.getFF());
+            SmartShuffleboard.put("Ramp", "P Gain", pidP);
+            SmartShuffleboard.put("Ramp", "I Gain", pidI);
+            SmartShuffleboard.put("Ramp", "D Gain", pidD);
+            SmartShuffleboard.put("Ramp", "FF Gain", pidFF);
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
@@ -73,7 +63,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void setRampPos(double targetPosition) {
-        pidController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
+        neoPidMotor.setPidPos(targetPosition);
         this.rampPos = targetPosition;
     }
     
@@ -110,15 +100,12 @@ public class Ramp extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        this.rampPos = 0;
+        this.rampPos = neoPidMotor.getCurrentPosition();
         encoder.setPosition(0);
     }
 
     public void setPID() {
-        pidController.setP(pidP);
-        pidController.setI(pidI);
-        pidController.setD(pidD);
-        pidController.setFF(pidFF);
+        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF);
     }
     public void setSpeed(double spd){
         neoMotor.set(spd);

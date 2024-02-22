@@ -5,9 +5,11 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Shooter extends SubsystemBase {
@@ -16,14 +18,18 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax shooterMotorRight;
   private final DigitalInput shooterSensorLeft;
   private final DigitalInput shooterSensorRight;
-  private final SparkPIDController shooterMotor1PID;
-  private final SparkPIDController shooterMotor2PID;
+  //private final SparkPIDController shooterMotor1PID;
+  //private final SparkPIDController shooterMotor2PID;
+  private final NeoPidMotor neoPidMotorLeft;
+  private final NeoPidMotor neoPidMotorRight;
 
   public Shooter() {
     this.shooterMotorLeft = new CANSparkMax(Constants.SHOOTER_MOTOR_LEFT, CANSparkLowLevel.MotorType.kBrushless);
     this.shooterMotorRight = new CANSparkMax(Constants.SHOOTER_MOTOR_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
     this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
     this.shooterSensorRight = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
+    neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
+    neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
 
     shooterMotorLeft.restoreFactoryDefaults();
     shooterMotorRight.restoreFactoryDefaults();
@@ -33,23 +39,9 @@ public class Shooter extends SubsystemBase {
 
     this.shooterMotorLeft.setIdleMode(IdleMode.kCoast);
     this.shooterMotorRight.setIdleMode(IdleMode.kCoast);
-  
-    this.shooterMotor1PID = shooterMotorLeft.getPIDController();
-    this.shooterMotor2PID = shooterMotorRight.getPIDController();
 
-    shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_PID_P);
-    shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_PID_I);
-    shooterMotor1PID.setD(Constants.SHOOTER_MOTOR_PID_D);
-    shooterMotor1PID.setIZone(Constants.SHOOTER_MOTOR_PID_IZ);
-    shooterMotor1PID.setFF(Constants.SHOOTER_MOTOR_PID_FF);
-    shooterMotor1PID.setOutputRange(Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
-
-    shooterMotor2PID.setP(Constants.SHOOTER_MOTOR_PID_P);
-    shooterMotor2PID.setI(Constants.SHOOTER_MOTOR_PID_I);
-    shooterMotor2PID.setD(Constants.SHOOTER_MOTOR_PID_D);
-    shooterMotor2PID.setIZone(Constants.SHOOTER_MOTOR_PID_IZ);
-    shooterMotor2PID.setFF(Constants.SHOOTER_MOTOR_PID_FF);
-    shooterMotor2PID.setOutputRange(Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
+    neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
+    neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
   }
   /**
    * @param speed value between -1 and 1 to set shooter motor 1 to
@@ -84,7 +76,7 @@ public class Shooter extends SubsystemBase {
    * @param rpm of motor
    */
   public void setShooterMotor1RPM(double rpm) {
-    shooterMotor1PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    neoPidMotorLeft.setPidPos(rpm);
   }
 
   /**
@@ -92,7 +84,7 @@ public class Shooter extends SubsystemBase {
    * @param rpm of motor
    */
   public void setShooterMotor2RPM(double rpm) {
-    shooterMotor2PID.setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    neoPidMotorRight.setPidPos(rpm);
   }
 
   /**
