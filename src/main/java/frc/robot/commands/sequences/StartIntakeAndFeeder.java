@@ -1,10 +1,10 @@
-package frc.robot.commands;
+package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feeder.StartFeeder;
-import frc.robot.commands.cannon.StartIntake;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
