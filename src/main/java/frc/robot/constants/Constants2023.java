@@ -124,4 +124,7 @@ public class Constants2023 extends GameConstants {
 
     //Deployer Constants
     public static final int DEPLOYER_MOTOR_ID = 11;
+
+    public static final double REQUIRED_RAISE = 400;
+    public static final double REQUIRED_LOWER = 50;
 }
