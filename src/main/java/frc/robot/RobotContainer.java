@@ -38,8 +38,6 @@ import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.commands.deployer.DeployerLower;
-import frc.robot.commands.deployer.DeployerRaise;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
@@ -130,7 +128,7 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
-            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommundUtil.logged(new LowerDeployer(deployer)));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
