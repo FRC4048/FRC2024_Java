@@ -68,8 +68,12 @@ public class NeoPidMotor {
         this.setPosition = position;
     }
 
-    public double getPidPosition() {
+    public double getSetPosition() {
         return setPosition;
+    }
+
+    public double getCurrentPosition() {
+        return encoder.getPosition();
     }
 
     /**
@@ -82,8 +86,12 @@ public class NeoPidMotor {
         this.setSpeed = speed;
     }
 
-    public double getPidSpeed() {
+    public double getSetSpeed() {
         return setSpeed;
+    }
+
+    public double getCurrentSpeed() {
+        return encoder.getVelocity();
     }
 
     public void setPid(double pidP, double pidI, double pidD) {
