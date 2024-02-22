@@ -141,8 +141,8 @@
       "minWaypointRelativePos": 1.7,
       "maxWaypointRelativePos": 2.15,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -152,8 +152,8 @@
       "minWaypointRelativePos": 3.75,
       "maxWaypointRelativePos": 4.15,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 0.5,
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
@@ -162,7 +162,7 @@
   "eventMarkers": [
     {
       "name": "StartIntake1",
-      "waypointRelativePos": 0.5499999999999999,
+      "waypointRelativePos": 0.25,
       "command": {
         "type": "parallel",
         "data": {
@@ -195,8 +195,42 @@
       }
     },
     {
-      "name": "Shoot1",
-      "waypointRelativePos": 1.9,
+      "name": "ShootAndReset",
+      "waypointRelativePos": 1.7999999999999998,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "FeederGamepieceUntilLeave"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SpoolShooter2",
+      "waypointRelativePos": 3.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpoolShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot2",
+      "waypointRelativePos": 3.95,
       "command": {
         "type": "parallel",
         "data": {
@@ -206,14 +240,20 @@
               "data": {
                 "name": "Shoot"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "FeederGamepieceUntilLeave"
+              }
             }
           ]
         }
       }
     },
     {
-      "name": "StartIntake2",
-      "waypointRelativePos": 2.3000000000000003,
+      "name": "StartIntake3",
+      "waypointRelativePos": 4.85,
       "command": {
         "type": "sequential",
         "data": {
@@ -221,7 +261,7 @@
             {
               "type": "named",
               "data": {
-                "name": "RampMoveCenter"
+                "name": "ResetRamp"
               }
             },
             {
@@ -235,42 +275,19 @@
       }
     },
     {
-      "name": "SpoolShooter2",
-      "waypointRelativePos": 3.6499999999999995,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "Shoot2",
-      "waypointRelativePos": 3.95,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "StartIntake3",
-      "waypointRelativePos": 4.85,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
       "name": "SpoolShooter",
       "waypointRelativePos": 5.550000000000001,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpoolShooter"
+              }
+            }
+          ]
         }
       }
     },
@@ -280,13 +297,26 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "FeederGamepieceUntilLeave"
+              }
+            }
+          ]
         }
       }
     },
     {
       "name": "MoveRamp1",
-      "waypointRelativePos": 1.35,
+      "waypointRelativePos": 1.25,
       "command": {
         "type": "parallel",
         "data": {
@@ -300,11 +330,51 @@
           ]
         }
       }
+    },
+    {
+      "name": "MoveRamp",
+      "waypointRelativePos": 3.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RampMoveCenter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.1999999999999997,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ResetRamp"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeAndFeeder"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 0.75,
+    "maxAcceleration": 0.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
