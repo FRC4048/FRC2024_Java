@@ -53,9 +53,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
-
-    private List<Translation2d> bezierPoints;
-
     
    
     

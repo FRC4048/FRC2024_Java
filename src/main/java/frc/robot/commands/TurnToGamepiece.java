@@ -200,7 +200,7 @@ public class TurnToGamepiece extends Command {
         x = xSub.get();
         y = ySub.get();
             
-        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees()) - Math.abs(startPose) > Math.abs(Math.atan(startY/startX)) && first == 0)) {
+        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees()) - Math.abs(startPose) < Math.abs(Math.atan(startY/startX)) && first == 0)) {
             
 
             if (x < 0) {
