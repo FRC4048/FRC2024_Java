@@ -64,7 +64,8 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
  */
 
 public class RobotContainer {
-    private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
+      private final CommandXboxController operaterController = new CommandXboxController(Constants.OPERATER_CONTROLLER_ID);
+      private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_ID);
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
@@ -171,9 +172,9 @@ public class RobotContainer {
 
     private void configureBindings() {
         if (Constants.XBOX_JOYSTICK_DRIVE) {
-            drivetrain.setDefaultCommand(new Drive(drivetrain, controller::getLeftY, controller::getLeftX, controller::getRightX));
-            controller.leftTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-            controller.rightTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+            drivetrain.setDefaultCommand(new Drive(drivetrain, driverController::getLeftY, driverController::getLeftX, driverController::getRightX));
+            driverController.leftTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+            driverController.rightTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         }
         else {
             drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
