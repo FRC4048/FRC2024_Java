@@ -1,16 +1,17 @@
-package frc.robot.commands.cannon;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends Command {
+public class ShootSpeaker extends Command {
 
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;
-    public Shoot(Shooter shooter) {
+    private double speed;
+    public ShootSpeaker(Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
     }
@@ -18,17 +19,11 @@ public class Shoot extends Command {
     @Override
     public void initialize() {
         timer.reset();
-        activated = false;
-        shooter.setShooterMotor1RPM(Constants.SHOOTER_MOTOR_1_RPM);
-        shooter.setShooterMotor2RPM(Constants.SHOOTER_MOTOR_2_RPM);
-    }
+        activated = true;
+        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
+        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+        timer.start();
 
-    @Override
-    public void execute() {
-        if (((shooter.getShooterSensor1Activated()) || (shooter.getShooterSensor2Activated())) && !activated) {
-            timer.start();
-            activated = true;
-        }
     }
 
     @Override 

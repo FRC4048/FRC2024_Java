@@ -1,5 +1,6 @@
-package frc.robot.commands.cannon;
+package frc.robot.commands.feeder;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
@@ -7,6 +8,7 @@ import frc.robot.subsystems.Feeder;
 public class StartFeeder extends Command {
 
     private final Feeder feeder;
+    private double startTime;
 
     public StartFeeder(Feeder feeder) {
         this.feeder = feeder;
@@ -14,8 +16,13 @@ public class StartFeeder extends Command {
     }
 
     @Override
+    public void initialize() {
+        startTime = Timer.getFPGATimestamp();
+    }
+
+    @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEED);
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
     }
 
     @Override
@@ -25,6 +32,6 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return feeder.getFeederSensor();
+        return feeder.pieceSeen() || Timer.getFPGATimestamp() - startTime > 5.0;
     }
 }
