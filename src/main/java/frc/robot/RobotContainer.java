@@ -209,4 +209,8 @@ public class RobotContainer {
     public AutoChooser getAutoChooser() {
         return autoChooser;
     }
+
+    public Shooter getShooter() {
+        return shooter;
+    }
 }

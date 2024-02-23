@@ -54,7 +54,6 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-            SmartShuffleboard.put("Test", "gyro", getGyroAngle().getDegrees());
         }
         gyroValue = getGyro();
         if (SmartDashboard.getBoolean("USE VISION",false)){

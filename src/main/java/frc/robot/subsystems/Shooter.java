@@ -68,15 +68,15 @@ public class Shooter extends SubsystemBase {
     shooterMotorRight.set(speed);
   }
 
-  public void setShooterSpeeds(RobotContainer robotContainer, SwerveDrivetrain drivetrain) {
-    if (((RobotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((RobotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
-      setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
-      setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
-      
-    }
-    if (((RobotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((RobotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
+  public void setShooterSpeeds(SwerveDrivetrain drivetrain) {
+    if (((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
       setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
       setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+      
+    }
+    if (((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
+      setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+      setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
       
     }
   }
@@ -84,6 +84,8 @@ public class Shooter extends SubsystemBase {
   /**
    * @return shooter motor 1 speed
    */
+
+  
   public double getShooterMotor1Speed() {
     return shooterMotorLeft.get();
   }
@@ -165,8 +167,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     if (Constants.SHOOTER_DEBUG){
-      SmartShuffleboard.put("Shooter", "Shooter Motor 1 Speed", getShooterMotor1Speed());
-      SmartShuffleboard.put("Shooter", "Shooter Motor 2 Speed", getShooterMotor2Speed());
+      SmartShuffleboard.put("Shooter", "Shooter Motor Left Speed", getShooterMotor1Speed());
+      SmartShuffleboard.put("Shooter", "Shooter Motor Right Speed", getShooterMotor2Speed());
       SmartShuffleboard.put("Shooter", "Shooter Motor 1 RPM", getShooterMotor1RPM());
       SmartShuffleboard.put("Shooter", "Shooter Motor 2 RPM", getShooterMotor2RPM());
       SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensor1Activated());
