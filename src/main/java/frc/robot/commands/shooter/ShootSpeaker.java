@@ -20,8 +20,8 @@ public class ShootSpeaker extends Command {
     public void initialize() {
         timer.reset();
         activated = true;
-        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
-        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_AMP_SPEED);
+        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_AMP_SPEED);
         timer.start();
 
     }
