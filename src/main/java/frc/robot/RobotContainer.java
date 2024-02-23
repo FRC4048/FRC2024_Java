@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -18,20 +21,29 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.RaiseArms;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.cannon.Shoot;
-import frc.robot.commands.cannon.ShootTest;
-import frc.robot.commands.cannon.StartFeeder;
-import frc.robot.commands.cannon.StartIntake;
+import frc.robot.commands.SetAlignable;
+import frc.robot.commands.climber.RaiseArms;
 import frc.robot.commands.climber.StaticClimb;
+import frc.robot.commands.deployer.LowerDeployer;
+import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.feeder.StartFeeder;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -39,8 +51,6 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -182,6 +192,10 @@ public class RobotContainer {
 
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
+    }
+
+    public Shooter getShooter() {
+        return shooter;
     }
 
     /**

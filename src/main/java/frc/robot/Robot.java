@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        robotContainer.getShooter().setShooterSpeeds(robotContainer, robotContainer.getDrivetrain());
     }
 
     @Override
