@@ -20,18 +20,12 @@ public class TurnToGamepiece extends Command {
     // private DoubleSupplier y_position;
     private DoubleSubscriber xSub;
     private DoubleSubscriber ySub;
-    private DoubleSubscriber zSub;
     private double x;
     private double y;
-    private double startX;
-    private double startY;
     ChassisSpeeds driveStates;
-    double first = 0;
-    double cycle = 0;
     private boolean finished = false;
-    double startPose;
     private final ProfiledPIDController PIDController;
-    private double rwd;
+    private double cycle;
 
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
@@ -41,62 +35,39 @@ public class TurnToGamepiece extends Command {
         NetworkTable table = inst.getTable("Luxonis");
         xSub = table.getDoubleTopic("x").subscribe(-1);
         ySub = table.getDoubleTopic("y").subscribe(-1);
-        zSub = table.getDoubleTopic("z").subscribe(-1);
+
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150, 2 * Math.PI * 150);
-        PIDController = new ProfiledPIDController(.01, 0, .00, constraints);
+        PIDController = new ProfiledPIDController(.0001, 0, .00, constraints);
 
     }
 
     @Override
     public void initialize() {
-        super.initialize();
-        first = 0;
         finished = false;
-        cycle = 0;
-        startPose = drivetrain.getGyroAngle().getDegrees();
-        startX = xSub.get();
-        startY = ySub.get();
-        rwd = 0;
-
-
-        
-
     }
 
     @Override
     public void execute() {
-        rwd = PIDController.calculate(Math.toDegrees(Math.atan(y/x)));
         x = xSub.get();
         y = ySub.get();
-        System.out.println(Math.abs(Math.toDegrees(Math.atan(startY/startX))));
-
-        
-            
-        if ((Math.abs(drivetrain.getGyroAngle().getDegrees() - startPose) < Math.abs(Math.toDegrees(Math.atan(startY/startX))))) {
-            driveStates = drivetrain.createChassisSpeeds(0, 0, -rwd, false);
+        if (Math.abs(x) >.1) {
+            driveStates = new ChassisSpeeds(0, 0, PIDController.calculate(x));
             drivetrain.drive(driveStates);
-        }
-        else {
-            driveStates = drivetrain.createChassisSpeeds(1, 0, 0, false);
+        } else if (y > -.4) {
+            driveStates = new ChassisSpeeds(.5, 0, 0);
             drivetrain.drive(driveStates);
-            if (y == 0) {
-                
-                if (cycle == 30) {
-                    driveStates = drivetrain.createChassisSpeeds(0, 0, 0, false);
-                    drivetrain.drive(driveStates);
-                    finished = true;
-                }
-                cycle++;
+        } else {
+            if (cycle > 30) {
+                driveStates = new ChassisSpeeds(0, 0, 0);
+                drivetrain.drive(driveStates);
+                finished = true;
             }
-            first++;
-        }
+        }        
     }
 
     @Override
     public boolean isFinished() {
-        
         return finished;
-        
     }
 
     @Override
