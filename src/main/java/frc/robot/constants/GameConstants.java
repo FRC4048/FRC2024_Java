@@ -12,7 +12,7 @@ public class GameConstants {
     public static final double JOYSTICK_DEADZONE = 0.3;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
-    public static final boolean DRIVE_WITH_XBOX = true;
+    public static final boolean DRIVE_WITH_XBOX = false;
     public static final double GRAVITY = -9.81;
 
     //DEBUGS
