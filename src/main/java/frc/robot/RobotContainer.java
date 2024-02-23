@@ -164,6 +164,8 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
+            SmartShuffleboard.put("Test", "Shooter Left", shooter.getShooterMotor1Speed());
+            SmartShuffleboard.put("Test", "Shooter Right", shooter.getShooterMotor2Speed());
         }
 
 
