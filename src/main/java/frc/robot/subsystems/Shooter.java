@@ -69,12 +69,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterSpeeds(RobotContainer robotContainer, SwerveDrivetrain drivetrain) {
-    if (((robotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((robotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
+    if (((RobotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((RobotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
       setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
       setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
       
     }
-    if (((robotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((robotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
+    if (((RobotContainer.isRedAlliance() == true) && (drivetrain.getGyroAngle().getDegrees() > 180)) || ((RobotContainer.isRedAlliance() == false) && (drivetrain.getGyroAngle().getDegrees() < 180))) {
       setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
       setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
       
