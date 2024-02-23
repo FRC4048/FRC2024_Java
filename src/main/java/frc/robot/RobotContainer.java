@@ -177,14 +177,8 @@ public class RobotContainer {
             joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
             joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         }
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         operaterController.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         operaterController.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
     }
 
     public SwerveDrivetrain getDrivetrain() {
