@@ -4,11 +4,11 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.TempLogging;
 
 public class MoveDistance extends Command {
   /** Creates a new MoveDistance. */
@@ -66,6 +66,10 @@ public class MoveDistance extends Command {
     if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
       return true;
     }
-    return ((Timer.getFPGATimestamp() - startTime) >= 5);
+    if ((Timer.getFPGATimestamp() - startTime) >= 5) {
+      TempLogging.moveDistanceTimeoutCounter.increaseTimeoutCount();
+      return true;
+    }
+    return false;
   }
 }
