@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkLimitSwitch;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -18,10 +19,14 @@ public class Climber extends SubsystemBase {
     private boolean raisedTrue;
     private boolean loweredTrue;
     private double climberPosition;
+    private final SparkLimitSwitch rightLimitSwitch;
+    private final SparkLimitSwitch leftLimitSwitch;
 
     public Climber(AHRS navxGyro) {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
         this.climberRight = new CANSparkMax(Constants.CLIMBER_RIGHT, CANSparkMax.MotorType.kBrushless);
+        rightLimitSwitch = climberRight.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        leftLimitSwitch = climberLeft.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         this.climberRight.setInverted(true);
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
@@ -50,13 +55,14 @@ public class Climber extends SubsystemBase {
 
     /**
      * sets the speed of both motors to the IntakeSpeed defined in the {@link Constants} file
-     * @param upward if true the motors will spin in the intake directions,
-     *                if false the motors will spin in the outtake direction
      */
-    public void raise(boolean upward){
-        double speed = upward ? Constants.CLIMBER_RAISING_SPEED : Constants.CLIMBER_SPEED * -1;
-        climberLeft.set(speed);
-        climberRight.set(speed);
+    public void raise(){
+        climberLeft.set(-Constants.CLIMBER_RAISING_SPEED);
+        climberRight.set(-Constants.CLIMBER_RAISING_SPEED);
+    }
+    public void lower(){
+        climberLeft.set(isLeftLimit() ? 0 : Constants.CLIMBER_RAISING_SPEED);
+        climberRight.set(isRightLimit() ? 0: Constants.CLIMBER_RAISING_SPEED);
     }
     public void balanceRight(double speed) {
         climberLeft.set(speed);
@@ -95,6 +101,15 @@ public class Climber extends SubsystemBase {
             SmartShuffleboard.put("Diagnostics", "Climber State", "Raised", raisedTrue);
             SmartShuffleboard.put("Diagnostics", "Climber State", "Lowered", loweredTrue);
             SmartShuffleboard.put("Diagnostics", "Climber State", "Position", climberPosition);
+            SmartShuffleboard.put("Climber", "leftLimitSwitch", leftLimitSwitch.isPressed());
+            SmartShuffleboard.put("Climber", "rightLimitSwitch", rightLimitSwitch.isPressed());
+            SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
         }
-    } 
+    }
+    public boolean isLeftLimit(){
+        return leftLimitSwitch.isPressed();
+    }
+    public boolean isRightLimit(){
+        return rightLimitSwitch.isPressed();
+    }
 }
