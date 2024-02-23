@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
 
-public class RaiseArms extends Command {
+public class LowerArms extends Command {
   private final Climber climber;
-  public RaiseArms(Climber climber) {
+  public LowerArms(Climber climber) {
     this.climber = climber;
     addRequirements(climber);
   }
@@ -26,7 +26,7 @@ public class RaiseArms extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.raise();
+    climber.lower();
   }
 
   // Called once the command ends or is interrupted.
@@ -39,6 +39,6 @@ public class RaiseArms extends Command {
   //TODO look at limit switches
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT;
+    return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT || (climber.isLeftLimit() && climber.isRightLimit());
   }
 }
