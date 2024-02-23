@@ -39,6 +39,6 @@ public class LowerArms extends Command {
   //TODO look at limit switches
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT;
+    return Timer.getFPGATimestamp() - startTime > Constants.RAISING_TIMEOUT || (climber.isLeftLimit() && climber.isRightLimit());
   }
 }
