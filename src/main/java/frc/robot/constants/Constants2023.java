@@ -127,4 +127,9 @@ public class Constants2023 extends GameConstants {
 
     //Deployer Constants
     public static final int DEPLOYER_MOTOR_ID = 11;
+
+    public static final double ALIGNABLE_PID_P = 0.015;
+    public static final double ALIGNABLE_PID_I = 0;
+    public static final double ALIGNABLE_PID_D = 0.0000;
+    public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
 }
