@@ -167,13 +167,13 @@ public class RobotContainer {
     
 
     private void configureBindings() {
-        if (Constants.XBOX_JOYSTICK_DRIVE) {
-            drivetrain.setDefaultCommand(new Drive(drivetrain, driverController::getLeftY, driverController::getLeftX, driverController::getRightX));
+        if (Constants.DRIVE_WITH_XBOX) {
+            drivetrain.setDefaultCommand(new Drive(drivetrain, driverController::getLeftY, driverController::getLeftX, driverController::getRightX, Constants.XBOX_CONTROLLER_JOYSTICK_DEADZONE));
             driverController.leftTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
             driverController.rightTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         }
         else {
-            drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+            drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, Constants.JOYSTICK_DEADZONE));
             joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
             joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         }
