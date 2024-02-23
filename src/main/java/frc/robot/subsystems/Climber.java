@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
+
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.utils.diag.DiagClimber;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
@@ -15,10 +15,6 @@ public class Climber extends SubsystemBase {
     private final Servo leftServo;
     private final Servo rightServo;
     private final AHRS navxGyro;
-    private final DiagClimber diagClimber;
-    private boolean raisedTrue;
-    private boolean loweredTrue;
-    private double climberPosition;
     private final SparkLimitSwitch rightLimitSwitch;
     private final SparkLimitSwitch leftLimitSwitch;
 
@@ -31,7 +27,6 @@ public class Climber extends SubsystemBase {
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.navxGyro = navxGyro;
-        this.diagClimber = new DiagClimber("Climber", "Climber", Constants.REQUIRED_RAISE, SparkMax1, Constants.REQUIRED_LOWER);
     }
     public double getGyroPitch() { // when the robot is mounted north south this is the right thingy to use
         return (navxGyro.getPitch() % 360); 
@@ -80,30 +75,47 @@ public class Climber extends SubsystemBase {
         climberLeft.set(spd1);
         climberRight.set(spd2);
     }
-    private boolean raisedTrue(){
-        return diagClimber.getDiagResultRaised();
+     /**
+     * 
+     * @return if left arm is raised
+     */
+    public boolean isLeftArmRaised() {
+        return (climberLeft.getAlternateEncoder(42).getPosition() >= Constants.REQUIRED_RAISE);
     }
-    private boolean loweredTrue(){
-        return diagClimber.getDiagResultLowered();
+    /**
+     * 
+     * @return if right arm is raised
+     */
+    public boolean isRightArmRaised() {
+        return (climberRight.getAlternateEncoder(42).getPosition() >= Constants.REQUIRED_RAISE);
     }
-    private double getClimberPosition(){
-        return diagClimber.getCurrentValue();
+    /**
+     * Delete this soon
+     * @return if left arm is lowered
+     */
+    public boolean isLeftArmLowered() {
+        return (climberLeft.getAlternateEncoder(42).getPosition() >= Constants.REQUIRED_LOWER);
+    }
+     /**
+     * Delete this soon
+     * @return if right arm is lowered
+     */
+    public boolean isRightArmLowered() {
+        return (climberRight.getAlternateEncoder(42).getPosition() >= Constants.REQUIRED_LOWER);
     }
     @Override
     public void periodic() {
-        raisedTrue = raisedTrue();
-        loweredTrue = loweredTrue();
-        climberPosition = getClimberPosition();
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.put("Climber", "Climber State", "Pitch", getGyroPitch());
             SmartShuffleboard.put("Climber", "Climber State", "Yaw", getGyroYaw());
             SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
-            SmartShuffleboard.put("Diagnostics", "Climber State", "Raised", raisedTrue);
-            SmartShuffleboard.put("Diagnostics", "Climber State", "Lowered", loweredTrue);
-            SmartShuffleboard.put("Diagnostics", "Climber State", "Position", climberPosition);
             SmartShuffleboard.put("Climber", "leftLimitSwitch", leftLimitSwitch.isPressed());
             SmartShuffleboard.put("Climber", "rightLimitSwitch", rightLimitSwitch.isPressed());
             SmartShuffleboard.put("Climber", "Climber State", "Roll", getGyroRoll());
+            SmartShuffleboard.put("Diagnostics", "Left Climber Lowered", isLeftArmLowered());
+            SmartShuffleboard.put("Diagnostics", "Right Climber Lowered", isRightArmLowered());
+            SmartShuffleboard.put("Diagnostics", "Left Climber Raised", isLeftArmRaised());
+            SmartShuffleboard.put("Diagnostics", "Right Climber Raised", isRightArmRaised());
         }
     }
     public boolean isLeftLimit(){
