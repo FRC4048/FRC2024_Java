@@ -186,6 +186,10 @@ public class RobotContainer {
         return ramp;
     }
 
+    public Deployer getDeployer() {
+        return deployer;
+    }
+
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
     }
