@@ -174,6 +174,7 @@ public class RobotContainer {
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
     }
