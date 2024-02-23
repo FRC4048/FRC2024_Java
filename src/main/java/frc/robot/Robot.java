@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
-        robotContainer.getShooter().setShooterSpeeds(robotContainer.getDrivetrain());
     }
 
     @Override

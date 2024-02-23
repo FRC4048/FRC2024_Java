@@ -87,13 +87,13 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntake", new StartIntake(intakeSubsystem,5));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
         NamedCommands.registerCommand("StartFeeder", new StartFeeder(feeder));
         NamedCommands.registerCommand("StartFeeder", new StartFeeder(feeder));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("FeederGamepieceUntilLeave", new FeederGamepieceUntilLeave(feeder));
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
-        NamedCommands.registerCommand("Shoot", new ShootSpeaker(shooter));
+        NamedCommands.registerCommand("Shoot", new ShootSpeaker(shooter, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));//this is an example
     }
@@ -180,7 +180,7 @@ public class RobotContainer {
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder, drivetrain));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
     }
