@@ -84,6 +84,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             prob = probSub.get();
             SmartShuffleboard.put("Test", "x", x);
             SmartShuffleboard.put("Test", "y", y);
+            SmartShuffleboard.put("Test", "z", z);
 
         
         gyroValue = getGyro();

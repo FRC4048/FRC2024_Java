@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -19,6 +20,7 @@ public class TurnToGamepiece extends Command {
     // private DoubleSupplier y_position;
     private DoubleSubscriber xSub;
     private DoubleSubscriber ySub;
+    private DoubleSubscriber zSub;
     private double x;
     private double y;
     private double startX;
@@ -28,7 +30,8 @@ public class TurnToGamepiece extends Command {
     double cycle = 0;
     private boolean finished = false;
     double startPose;
-    private final ProfiledPIDController turningPIDController;
+    private final ProfiledPIDController PIDController;
+    private double rwd;
 
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
@@ -38,7 +41,9 @@ public class TurnToGamepiece extends Command {
         NetworkTable table = inst.getTable("Luxonis");
         xSub = table.getDoubleTopic("x").subscribe(-1);
         ySub = table.getDoubleTopic("y").subscribe(-1);
-        turningPIDController = new ProfiledPIDController(.1, .1, .1);
+        zSub = table.getDoubleTopic("z").subscribe(-1);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150, 2 * Math.PI * 150);
+        PIDController = new ProfiledPIDController(.1, .0000, 0, constraints);
 
     }
 
@@ -59,20 +64,15 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public void execute() {
-
+        rwd = PIDController.calculate(Math.atan(y+.5/x));
         x = xSub.get();
         y = ySub.get();
+        
+        
             
-        if ((drivetrain.getPose().getRotation().getDegrees() - startPose > Math.atan(startY/startX) && first == 0)) {
-            
-
-            if (x < 0) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, .1, false);
-                drivetrain.drive(driveStates);
-            } else if (x > 0) {
-                driveStates = drivetrain.createChassisSpeeds(0, 0, -.1, false);
-                drivetrain.drive(driveStates);
-            }
+        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees() - startPose) < Math.abs(Math.toDegrees(Math.atan(startY+.5/startX))))) {
+            driveStates = drivetrain.createChassisSpeeds(0, 0, rwd, false);
+            drivetrain.drive(driveStates);
         }
         else {
             driveStates = drivetrain.createChassisSpeeds(1, 0, 0, false);
@@ -100,6 +100,6 @@ public class TurnToGamepiece extends Command {
     @Override
     public void end(boolean interrupted) {
         
-        }
+    }
         
     }
