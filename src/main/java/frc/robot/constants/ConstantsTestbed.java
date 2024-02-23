@@ -91,7 +91,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.5;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.7;
     public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 30;
 
@@ -100,8 +101,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_MOTOR1_ID = 144;
-    public static final int CLIMBER_MOTOR2_ID = 145;
+    public static final int CLIMBER_LEFT = 144;
+    public static final int CLIMBER_RIGHT = 145;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
@@ -109,7 +110,7 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
-    public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double CLIMBER_TIMEOUT_S= 10;
     public static final double RAISING_TIMEOUT = 0;
 
     //Intake
