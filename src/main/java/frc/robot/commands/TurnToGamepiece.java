@@ -43,7 +43,7 @@ public class TurnToGamepiece extends Command {
         ySub = table.getDoubleTopic("y").subscribe(-1);
         zSub = table.getDoubleTopic("z").subscribe(-1);
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150, 2 * Math.PI * 150);
-        PIDController = new ProfiledPIDController(.1, .0000, 0, constraints);
+        PIDController = new ProfiledPIDController(.01, 0, .00, constraints);
 
     }
 
@@ -53,9 +53,10 @@ public class TurnToGamepiece extends Command {
         first = 0;
         finished = false;
         cycle = 0;
-        startPose = drivetrain.getPose().getRotation().getDegrees();
+        startPose = drivetrain.getGyroAngle().getDegrees();
         startX = xSub.get();
         startY = ySub.get();
+        rwd = 0;
 
 
         
@@ -64,14 +65,15 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public void execute() {
-        rwd = PIDController.calculate(Math.atan(y+.5/x));
+        rwd = PIDController.calculate(Math.toDegrees(Math.atan(y/x)));
         x = xSub.get();
         y = ySub.get();
-        
+        System.out.println(Math.abs(Math.toDegrees(Math.atan(startY/startX))));
+
         
             
-        if ((Math.abs(drivetrain.getPose().getRotation().getDegrees() - startPose) < Math.abs(Math.toDegrees(Math.atan(startY+.5/startX))))) {
-            driveStates = drivetrain.createChassisSpeeds(0, 0, rwd, false);
+        if ((Math.abs(drivetrain.getGyroAngle().getDegrees() - startPose) < Math.abs(Math.toDegrees(Math.atan(startY/startX))))) {
+            driveStates = drivetrain.createChassisSpeeds(0, 0, -rwd, false);
             drivetrain.drive(driveStates);
         }
         else {
