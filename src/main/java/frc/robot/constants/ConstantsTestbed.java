@@ -24,8 +24,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final int RIGHT_SERVO_ID = 18;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 144; //change back
-    public static final int SHOOTER_MOTOR_ID_2 = 145;
+    public static final int SHOOTER_MOTOR_ID_1 = 44;
+    public static final int SHOOTER_MOTOR_ID_2 = 45;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
