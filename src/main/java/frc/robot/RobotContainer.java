@@ -14,20 +14,17 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.climber.RaiseArms;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
-import frc.robot.commands.shooter.ShootSpeaker;
-import frc.robot.commands.feeder.StartFeeder;
-import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.RaiseArms;
+import frc.robot.commands.ReportErrorCommand;
+import frc.robot.commands.cannon.Shoot;
+import frc.robot.commands.cannon.ShootTest;
+import frc.robot.commands.cannon.StartFeeder;
+import frc.robot.commands.cannon.StartIntake;
 import frc.robot.commands.climber.StaticClimb;
-import frc.robot.commands.deployer.LowerDeployer;
-import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
@@ -163,8 +160,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
-        joyRightButton1.onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
+        joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
+        joyRightButton1.onTrue(new SetAlignable(drivetrain,Alignable.AMP)).onFalse(new SetAlignable(drivetrain,null));
 //        controller.a().onTrue(new StartFeeder(feeder));
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));

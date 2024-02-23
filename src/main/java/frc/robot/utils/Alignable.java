@@ -1,24 +1,19 @@
 package frc.robot.utils;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 
-import java.util.function.BiFunction;
-
 public enum Alignable {
-    AMP(0,0,0,(x,y)-> new Rotation2d(Math.PI / 2)),
-    SPEAKER(0.46,16.46,5.67,(x2,y2)->new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y2/x2))));
+    AMP(0,0,0),
+    SPEAKER(0.46,16.46,5.67);
 
     private final double blueX;
     private final double redX;
     private final double y;
-    private final BiFunction<Double, Double, Rotation2d> functionFromDist;
 
-    Alignable(double blueX, double redX, double y, BiFunction<Double,Double,Rotation2d> functionFromDist) {
+    Alignable(double blueX, double redX, double y) {
         this.blueX = blueX;
         this.redX = redX;
         this.y = y;
-        this.functionFromDist = functionFromDist;
     }
 
     public double getX() {
@@ -29,7 +24,4 @@ public enum Alignable {
         return y;
     }
 
-    public BiFunction<Double,Double,Rotation2d> getAngleFromDistFunc() {
-        return functionFromDist;
-    }
 }
