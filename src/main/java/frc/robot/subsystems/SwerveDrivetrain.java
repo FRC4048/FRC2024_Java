@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,9 +35,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
     private final AHRS gyro;
+    private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
+
 
 
     private double getGyro() {
@@ -96,6 +99,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
+        alignableTurnPid.enableContinuousInput(-180, 180);
         SmartDashboard.putBoolean("USE VISION",false);
     }
 
@@ -207,8 +211,12 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public void setAlignable(Alignable alignable) {
         this.alignable = alignable;
-        if (Constants.SWERVE_DEBUG) {
+        if (Constants.SWERVE_DEBUG && alignable != null) {
             SmartDashboard.putString("Alignable", alignable.toString());
         }
+    }
+
+    public PIDController getAlignableTurnPid() {
+        return alignableTurnPid;
     }
 }
