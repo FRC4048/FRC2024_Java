@@ -20,7 +20,10 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.LowerArms;
+import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.climber.RaiseArms;
+import frc.robot.commands.climber.ResetClimbEncoders;
+import frc.robot.commands.climber.SetServoAngle;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -146,8 +149,18 @@ public class RobotContainer {
         }
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
-          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
-          SmartShuffleboard.putCommand("Climber", "LowerArms", new LowerArms(climber));
+            SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
+            SmartShuffleboard.putCommand("Climber", "LowerArms", new LowerArms(climber));
+            SmartShuffleboard.putCommand("Climber", "Reset Encoder", new ResetClimbEncoders(climber));
+            ManualControlClimber leftClimbCmd = new ManualControlClimber(
+                climber,
+                () -> controller.y().getAsBoolean(),
+                () -> -controller.getLeftY());
+
+            climber.setDefaultCommand(leftClimbCmd);
+
+            controller.b().onTrue(new SetServoAngle(climber, 0, 0));
+
 //          SmartShuffleboard.put("Climber", "LOWER SWITCH",climber.)
         }
         if (Constants.INTAKE_DEBUG){
@@ -172,8 +185,8 @@ public class RobotContainer {
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        // controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
+        // controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
     }

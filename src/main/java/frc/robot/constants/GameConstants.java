@@ -18,7 +18,7 @@ public class GameConstants {
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
-    public static final boolean CLIMBER_DEBUG = false;
+    public static final boolean CLIMBER_DEBUG = true;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
 
@@ -35,5 +35,7 @@ public class GameConstants {
     public static final double MAX_RAMP_ENC = 25.0000;
 
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
+
+    public static final double MAX_CLIMBER_ENCODER = 80.0;
 
 }
