@@ -93,7 +93,7 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 306.29;
 
     //Feeder
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.7;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.6; //0.7
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
     public static final double FEEDER_MOTOR_EXIT_SPEED = 0.9;
     public static final int FEEDER_MOTOR_ID = 4;
@@ -114,7 +114,7 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
     public static final double CLIMBER_TIMEOUT_S=10;
-    public static final double RAISING_TIMEOUT = 0;
+    public static final double RAISING_TIMEOUT = 3;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 6;

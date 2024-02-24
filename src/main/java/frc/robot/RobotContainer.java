@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.climber.LowerArms;
+import frc.robot.commands.climber.RaiseArms;
+import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.RaiseArms;
 import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.deployer.LowerDeployer;
@@ -28,6 +31,8 @@ import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
+import frc.robot.commands.feeder.StartFeeder;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
@@ -154,6 +159,8 @@ public class RobotContainer {
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
           SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
+          SmartShuffleboard.putCommand("Climber", "LowerArms", new LowerArms(climber));
+//          SmartShuffleboard.put("Climber", "LOWER SWITCH",climber.)
         }
         if (Constants.INTAKE_DEBUG){
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
@@ -179,6 +186,7 @@ public class RobotContainer {
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem));
         controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
     }
@@ -189,6 +197,10 @@ public class RobotContainer {
 
     public Ramp getRamp() {
         return ramp;
+    }
+
+    public Deployer getDeployer() {
+        return deployer;
     }
 
     public Command getAutoCommand() {
