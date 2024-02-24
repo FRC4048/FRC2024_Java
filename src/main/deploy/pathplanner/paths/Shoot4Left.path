@@ -164,13 +164,38 @@
       "name": "StartIntake1",
       "waypointRelativePos": 0.25,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
+              "type": "deadline",
+              "data": {
+                "commands": [
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "StartFeeder"
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "StartIntake"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.2
+              }
+            },
+            {
               "type": "named",
               "data": {
-                "name": "StartIntakeAndFeeder"
+                "name": "FeederBackDrive"
               }
             }
           ]
@@ -362,9 +387,41 @@
               }
             },
             {
-              "type": "named",
+              "type": "sequential",
               "data": {
-                "name": "StartIntakeAndFeeder"
+                "commands": [
+                  {
+                    "type": "deadline",
+                    "data": {
+                      "commands": [
+                        {
+                          "type": "named",
+                          "data": {
+                            "name": "StartFeeder"
+                          }
+                        },
+                        {
+                          "type": "named",
+                          "data": {
+                            "name": "StartIntake"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "wait",
+                    "data": {
+                      "waitTime": 0.2
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "FeederBackDrive"
+                    }
+                  }
+                ]
               }
             }
           ]
