@@ -62,7 +62,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class RobotContainer {
       private final CommandXboxController operaterController = new CommandXboxController(Constants.OPERATER_CONTROLLER_ID);
-      private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_ID);
+      private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_XBOX_CONTROLLER_ID);
       private final Joystick joyleft = new Joystick(Constants.LEFT_JOYSICK_ID);
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
