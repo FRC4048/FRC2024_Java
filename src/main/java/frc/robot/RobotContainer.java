@@ -22,10 +22,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.climber.LowerArms;
-import frc.robot.commands.climber.RaiseArms;
-import frc.robot.commands.climber.StaticClimb;
-import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -184,30 +180,17 @@ public class RobotContainer {
         operaterController.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         operaterController.b().onTrue(new ExitAndShoot(shooter,feeder));
         operaterController.x().onTrue(new LowerDeployer(deployer));
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
-        joyRightButton1.onTrue(new SetAlignable(drivetrain,Alignable.AMP)).onFalse(new SetAlignable(drivetrain,null));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(
                 climber,
-                () -> -controller.getLeftY()); // negative because Y "up" is negative
+                () -> -operaterController.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 
         // Disengage
-        controller.leftBumper().onTrue(new DisengageRatchet(climber));
+        operaterController.leftBumper().onTrue(new DisengageRatchet(climber));
 
         // Engage        
-        controller.rightBumper().onTrue(new EngageRatchet(climber));
-
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-        controller.x().onTrue(new LowerDeployer(deployer));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
+        operaterController.rightBumper().onTrue(new EngageRatchet(climber));
     }
 
     public SwerveDrivetrain getDrivetrain() {
