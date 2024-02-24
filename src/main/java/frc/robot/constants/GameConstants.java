@@ -8,12 +8,11 @@ public class GameConstants {
     public static final int RIGHT_JOYSTICK_ID = 1;
     public static final int DRIVER_CONTROLLER_ID = 3;
     public static final int OPERATER_CONTROLLER_ID = 4;
-    public static final double XBOX_CONTROLLER_JOYSTICK_DEADZONE = 0.5;
+    public static final double XBOX_JOYSTICK_DEADZONE = 0.5;
     public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final boolean DRIVE_WITH_XBOX = true;
-    public static final int XBOX_CONTROLLER_ID = 3;
     public static final double PIECE_THRESHOLD = 0.7;
     public static final double GRAVITY = -9.81;
 

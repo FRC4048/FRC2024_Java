@@ -175,7 +175,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         if (Constants.DRIVE_WITH_XBOX) {
-            drivetrain.setDefaultCommand(new Drive(drivetrain, driverController::getLeftY, driverController::getLeftX, driverController::getRightX, Constants.XBOX_CONTROLLER_JOYSTICK_DEADZONE));
+            drivetrain.setDefaultCommand(new Drive(drivetrain, driverController::getLeftY, driverController::getLeftX, driverController::getRightX, Constants.XBOX_JOYSTICK_DEADZONE));
             driverController.leftTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.SPEAKER))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
             driverController.rightTrigger().onTrue(new InstantCommand(() -> drivetrain.setAlignable(Alignable.AMP))).onFalse(new InstantCommand(()-> drivetrain.setAlignable(null)));
         }
