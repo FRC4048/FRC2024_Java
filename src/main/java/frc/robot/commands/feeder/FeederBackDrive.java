@@ -27,10 +27,16 @@ public class FeederBackDrive extends Command {
     @Override
     public void initialize() {
         time = Timer.getFPGATimestamp();
-        timeoutCounter.increaseTimeoutCount();
     }
     @Override
     public boolean isFinished() {
-        return feeder.getPiece().equals(ColorObject.Piece) || Timer.getFPGATimestamp() - time > 10;
+        if (feeder.getPiece().equals(ColorObject.Piece)) {
+            return true;
+        }
+        else if(Timer.getFPGATimestamp() - time > Constants.FEEDER_BACK_DRIVE_TIMEOUT) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 }

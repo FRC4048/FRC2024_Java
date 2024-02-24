@@ -32,11 +32,14 @@ public class StartIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         intakeSubsystem.stopMotors();
-        timeoutCounter.increaseTimeoutCount();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(motorRunTime);
+        if (timer.hasElapsed(motorRunTime)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 }

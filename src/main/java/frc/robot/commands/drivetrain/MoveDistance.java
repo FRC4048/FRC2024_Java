@@ -68,7 +68,7 @@ public class MoveDistance extends Command {
     if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
       return true;
     }
-    if ((Timer.getFPGATimestamp() - startTime) >= 5) {
+    if ((Timer.getFPGATimestamp() - startTime) >= Constants.MOVE_DISTANCE_TIMEOUT) {
       return true;
     }
     return false;

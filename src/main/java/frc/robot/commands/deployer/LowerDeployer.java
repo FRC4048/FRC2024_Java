@@ -1,5 +1,6 @@
 package frc.robot.commands.deployer;
 
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -29,13 +30,19 @@ public class LowerDeployer extends Command {
     @Override 
     public boolean isFinished() {
         //Check is timer has passed timeout point or the deployer has reached the limit switch
-        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerReverseLimitSwitchClosed());
+        if (deployer.isDeployerReverseLimitSwitchClosed()) {
+            return true;
+        }
+        else if (timer.hasElapsed(MOTOR_RUN_TIME)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
         deployer.setDeployerMotorSpeed(0);
-        timeoutCounter.increaseTimeoutCount();
     }
 
 }

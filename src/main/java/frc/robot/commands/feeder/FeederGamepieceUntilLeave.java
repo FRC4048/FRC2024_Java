@@ -19,7 +19,6 @@ public class FeederGamepieceUntilLeave extends Command{
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
-        timeoutCounter.increaseTimeoutCount();
     }
     @Override
     public void execute() {
@@ -31,7 +30,14 @@ public class FeederGamepieceUntilLeave extends Command{
     }
     @Override
     public boolean isFinished() {
-        return feeder.pieceNotSeen() || Timer.getFPGATimestamp() - time > 5;
+        if (feeder.pieceNotSeen()) {
+            return true;
+        }
+        else if (Timer.getFPGATimestamp() - time > Constants.FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
     
 }

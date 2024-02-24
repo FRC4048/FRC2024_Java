@@ -21,7 +21,6 @@ public class ResetGyro extends Command {
     public void end(boolean interrupted) {
         super.end(interrupted);
         drivetrain.resetGyro();
-        timeoutCounter.increaseTimeoutCount();
     }
 
     @Override
@@ -33,6 +32,7 @@ public class ResetGyro extends Command {
     @Override
     public boolean isFinished() {
         return (Timer.getFPGATimestamp() - startTime) >= delay;
+        //TODO: make it return true after testing
     }
 
     @Override

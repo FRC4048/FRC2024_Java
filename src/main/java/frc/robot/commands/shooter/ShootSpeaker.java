@@ -30,7 +30,11 @@ public class ShootSpeaker extends Command {
 
     @Override 
     public boolean isFinished() {
-        return (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER)) && (activated);
+        if (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER) && (activated)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -42,6 +46,5 @@ public class ShootSpeaker extends Command {
         shooter.stopShooter();
         timer.stop();
         activated = false;
-        timeoutCounter.increaseTimeoutCount();
     }
 }

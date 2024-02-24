@@ -44,13 +44,19 @@ public class ResetRamp extends Command {
   public void end(boolean interrupted) {
     ramp.stopMotor();
     ramp.resetEncoder();
-    timeoutCounter.increaseTimeoutCount();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getReversedSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the top one
+    if (ramp.getReversedSwitchState()) {
+      return true;
+    }
+    else if ((Timer.getFPGATimestamp() - startTime) >= Constants.RESET_RAMP_TIMEOUT) {
+      timeoutCounter.increaseTimeoutCount();
+      return true;
+    }
+    return false;
   }
 
   @Override
