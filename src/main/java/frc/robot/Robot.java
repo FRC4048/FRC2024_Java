@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.climber.EngageRatchet;
+import frc.robot.commands.climber.MoveClimberDown;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
@@ -57,6 +59,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         new ResetRamp(robotContainer.getRamp()).schedule();
+        new MoveClimberDown(robotContainer.getClimber());
+        new EngageRatchet(robotContainer.getClimber());
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

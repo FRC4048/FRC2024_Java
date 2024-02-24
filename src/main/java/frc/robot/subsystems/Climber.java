@@ -85,6 +85,14 @@ public class Climber extends SubsystemBase {
         rightServo.setPosition(0);
     }
 
+    public SparkLimitSwitch getLeftRetractedLimitSwitch() {
+        return leftRetractedLimit;
+    }
+
+    public SparkLimitSwitch getRightRetractedLimitSwitch() {
+        return rightRetractedLimit;
+    }
+
     @Override
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {

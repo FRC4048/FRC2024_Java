@@ -202,6 +202,9 @@ public class RobotContainer {
     public Deployer getDeployer() {
         return deployer;
     }
+    public Climber getClimber() {
+        return climber;
+    }
 
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
