@@ -186,10 +186,10 @@ public class RobotContainer {
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
         climber.setDefaultCommand(new WaitCommand(1));//climber, controller::getLeftY)); TODO: This should be the default command for the climber- need a command first
-        controller.a().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to speaker
+        controller.a().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
         controller.b().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
-        controller.x().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to speaker
-        controller.y().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to amp
+        controller.x().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
+        controller.y().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to amp
         controller.button(XboxController.Button.kLeftBumper.value).onTrue(new LowerDeployer(deployer));
         controller.button(XboxController.Button.kRightBumper.value).onTrue(new RaiseDeployer(deployer));
         controller.povUp().onTrue(new StopIntakeGroup(deployer, intakeSubsystem));
