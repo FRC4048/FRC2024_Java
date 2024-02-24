@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -16,7 +17,7 @@ public class StartIntakeAndFeeder extends SequentialCommandGroup{
                 new StartFeeder(feeder),
                 new StartIntake(intake, 10)
             ),
-            new WaitCommand(0.1),
+            new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
             new FeederBackDrive(feeder)
         );
         addRequirements(feeder,intake);

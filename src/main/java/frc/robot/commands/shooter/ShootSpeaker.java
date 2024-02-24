@@ -10,9 +10,10 @@ public class ShootSpeaker extends Command {
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;
-    private double speed;
-    public ShootSpeaker(Shooter shooter) {
+    private double time;
+    public ShootSpeaker(Shooter shooter, double time) {
         this.shooter = shooter;
+        this.time = time;
         addRequirements(shooter);
     }
 
@@ -28,7 +29,7 @@ public class ShootSpeaker extends Command {
 
     @Override 
     public boolean isFinished() {
-        return (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER)) && (activated);
+        return (timer.hasElapsed(time)) && (activated);
     }
 
     /**

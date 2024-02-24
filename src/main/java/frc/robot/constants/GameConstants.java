@@ -11,6 +11,7 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double GRAVITY = -9.81;
 
+    public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
@@ -28,6 +29,7 @@ public class GameConstants {
     public static final double DEPLOYER_RAISE_SPEED = -0.9;
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
     public static final double SPOOL_TIME = 0.5;//seconds
+    public static final double FEEDER_BACK_DRIVE_DELAY = 0.2;
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 

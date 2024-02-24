@@ -87,13 +87,13 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntake", new StartIntake(intakeSubsystem,5));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter,Constants.AUTO_SPOOL_AND_SHOOT_TIME));
         NamedCommands.registerCommand("StartFeeder", new StartFeeder(feeder));
         NamedCommands.registerCommand("StartFeeder", new StartFeeder(feeder));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("FeederGamepieceUntilLeave", new FeederGamepieceUntilLeave(feeder));
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
-        NamedCommands.registerCommand("Shoot", new ShootSpeaker(shooter));
+        NamedCommands.registerCommand("Shoot", new ShootSpeaker(shooter,Constants.SHOOTER_TIME_AFTER_TRIGGER));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));//this is an example
     }

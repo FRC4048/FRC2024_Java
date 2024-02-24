@@ -238,12 +238,6 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "FeederGamepieceUntilLeave"
               }
             }
@@ -252,7 +246,7 @@
       }
     },
     {
-      "name": "StartIntake3",
+      "name": "StartIntakeAndRestRamp2",
       "waypointRelativePos": 4.85,
       "command": {
         "type": "sequential",
@@ -295,19 +289,25 @@
       "name": "Shoot",
       "waypointRelativePos": 6.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "FeederGamepieceUntilLeave"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.5
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "FeederGamepieceUntilLeave"
+                "name": "ResetRamp"
               }
             }
           ]
@@ -349,7 +349,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "ResetRampAndIntake",
       "waypointRelativePos": 2.1999999999999997,
       "command": {
         "type": "parallel",
