@@ -16,15 +16,15 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.climber.DisengageRatchet;
+import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
-import frc.robot.commands.climber.SetServoAngle;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
@@ -175,10 +175,10 @@ public class RobotContainer {
         climber.setDefaultCommand(leftClimbCmd);
 
         // Disengage
-        controller.leftBumper().onTrue(new SetServoAngle(climber, 180, 0));
+        controller.leftBumper().onTrue(new DisengageRatchet(climber));
 
         // Engage        
-        controller.rightBumper().onTrue(new SetServoAngle(climber, 0, 180));
+        controller.rightBumper().onTrue(new EngageRatchet(climber));
 
 //        controller.a().onTrue(new StartFeeder(feeder));
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));

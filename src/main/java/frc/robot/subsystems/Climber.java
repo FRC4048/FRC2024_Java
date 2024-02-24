@@ -6,7 +6,9 @@ import com.revrobotics.SparkLimitSwitch;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.utils.diag.DiagSparkMaxLimit;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
@@ -30,17 +32,22 @@ public class Climber extends SubsystemBase {
         this.climberLeft.setIdleMode(IdleMode.kBrake);
         this.climberRight.setIdleMode(IdleMode.kBrake);
 
-        rightRetractedLimit = climberRight.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        leftRetractedLimit = climberLeft.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        rightExtendedLimit = climberRight.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        leftExtendedLimit = climberLeft.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 
-        rightExtendedLimit = climberRight.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        leftExtendedLimit = climberLeft.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        rightRetractedLimit = climberRight.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        leftRetractedLimit = climberLeft.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
         
         // 800 - 2200
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.leftServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
         this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
+
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftExtendedLimit, "Climber", "Left Extended"));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(rightExtendedLimit, "Climber", "Right Extended"));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftRetractedLimit, "Climber", "Left Retracted"));
+        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(rightRetractedLimit, "Climber", "Right Retracted"));
     }
 
     /**
@@ -55,7 +62,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Right motor - Positive is up, Negative is up
+     * Right motor - Positive is down, Negative is up
      * Left motor - Positive is up, Negative is down
      */
     public void setSpeed(double spd) {
