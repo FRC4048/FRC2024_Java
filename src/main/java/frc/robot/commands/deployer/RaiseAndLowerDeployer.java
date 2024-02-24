@@ -13,6 +13,7 @@ public class RaiseAndLowerDeployer extends Command{
 
     public RaiseAndLowerDeployer(Deployer deployer) {
         this.deployer = deployer;
+        addRequirements(deployer);
     }
 
    @Override

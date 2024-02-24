@@ -18,6 +18,7 @@ public class StartAndStopFeeder extends Command{
         this.intake = intake;
         this.feeder = feeder;
         this.deployer = deployer;
+        addRequirements(feeder);
     }
 
     @Override

@@ -28,6 +28,6 @@ public class FeederBackDrive extends Command {
     }
     @Override
     public boolean isFinished() {
-        return feeder.getPiece().equals(ColorObject.Piece) || Timer.getFPGATimestamp() - time > 10;
+        return feeder.getPiece().equals(ColorObject.Piece) || Timer.getFPGATimestamp() - time > 1;
     }
 }
