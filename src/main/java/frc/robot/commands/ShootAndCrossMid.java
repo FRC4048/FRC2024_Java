@@ -20,16 +20,11 @@ public class ShootAndCrossMid extends SequentialCommandGroup{
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ResetRamp(ramp),
-      new ParallelRaceGroup(
-        new StartIntake(intakeSubsystem, 6), // adjust later
-        new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -1.346 : 1.346), 0, 0.3)),
+      new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -1.015 : 1.015), 0, 0.3),
       new RampMove(ramp, ()->30), //refine later
       new WaitCommand(0.05), //refine later
-      new ShootSpeaker(shooter)
-      
-      /*new ParallelCommandGroup(
-        new ResetRamp(ramp),
-        new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -1.0282 : 1.0282), 0, 0.3))*/
+      new ShootSpeaker(shooter),
+      new ResetRamp(ramp)
     );
   }
 }

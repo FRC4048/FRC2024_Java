@@ -29,9 +29,7 @@ public class ShootAndCross extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ResetRamp(ramp),
-      new ParallelRaceGroup(
-        new StartIntake(intakeSubsystem, 6), // adjust later
-        new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -2.9718 : 2.9718), 0, 0.3)),
+      new MoveDistance(swerveDrivetrain, (RobotContainer.isRedAlliance() ? -1.933 : 1.933), 0, 0.3),
       new RampMove(ramp, ()->30), //refine later
       new WaitCommand(0.05), //refine later
       new ShootSpeaker(shooter)
