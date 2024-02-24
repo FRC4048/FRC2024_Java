@@ -3,6 +3,10 @@ package frc.robot.constants;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 public class ConstantsTestbed extends GameConstants {
+
+    public static final int AMP_ID = 11;
+    public static final double AMP_MOTOR_SPEED = 0.2;
+    public static final double AMP_TIMEOUT = 2.0;
     //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
@@ -129,5 +133,17 @@ public class ConstantsTestbed extends GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Deployer
-    public static final int DEPLOYER_MOTOR_ID = 11;
+    public static final int DEPLOYER_MOTOR_ID = 11134;
+    
+    //Delete this
+    public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+    public static final int SHOOTER_MOTOR_LEFT = 55; //needs to be changed
+    public static final int SHOOTER_MOTOR_RIGHT = 56;
+    public static final double ALIGNABLE_PID_P = 0.015;
+    public static final double ALIGNABLE_PID_I = 0;
+    public static final double ALIGNABLE_PID_D = 0.0015;
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.6;
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 1;
+    public static final double RAMP_ANGLE = 20.0;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
 }

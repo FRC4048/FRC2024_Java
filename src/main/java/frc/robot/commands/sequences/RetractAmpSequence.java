@@ -16,7 +16,7 @@ public class RetractAmpSequence extends ParallelCommandGroup {
             new RetractAmp(amp),
             new SequentialCommandGroup(
                 new WaitCommand(0.5),
-                new RampMove(ramp, -1*Constants.RAMP_ANGLE)
+                new RampMove(ramp, ()->-1*Constants.RAMP_ANGLE)
             )
 
         );

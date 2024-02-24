@@ -9,7 +9,6 @@ import java.util.function.DoubleSupplier;
 
 public class AmpJoystick extends Command {
     private Amp amp;
-    private double JoystickPose;
     private DoubleSupplier supplier;
 
     public AmpJoystick(Amp amp, DoubleSupplier supplier) {
