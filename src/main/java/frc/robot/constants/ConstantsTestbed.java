@@ -33,8 +33,7 @@ public class ConstantsTestbed extends GameConstants {
     public static final double SHOOTER_MOTOR_LEFT_SPEED = 0.75;
     public static final double SHOOTER_MOTOR_RIGHT_SPEED = 0.75;
     
-    public static final double SHOOTER_MOTOR_RIGHT_AMP_SPEED = 0.25;
-    public static final double SHOOTER_MOTOR_LEFT_AMP_SPEED = 0.25;
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
