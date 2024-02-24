@@ -12,9 +12,9 @@ import frc.robot.subsystems.Ramp;
 public class DeployAmpSequence extends ParallelCommandGroup {
     public DeployAmpSequence(Ramp ramp, Amp amp) {
         addCommands(
-            new RampMove(ramp, Constants.RAMP_ANGLE),
+            new RampMove(ramp, ()->Constants.RAMP_ANGLE),
             new SequentialCommandGroup(
-                new WaitCommand(0.5),
+                new WaitCommand(3.5),
                 new DeployAmp(amp)
             )
 

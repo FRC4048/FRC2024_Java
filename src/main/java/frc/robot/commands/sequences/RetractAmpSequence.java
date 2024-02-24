@@ -13,10 +13,11 @@ import frc.robot.subsystems.Ramp;
 public class RetractAmpSequence extends ParallelCommandGroup {
     public RetractAmpSequence(Ramp ramp, Amp amp) {
         addCommands(
-            new RetractAmp(amp),
             new SequentialCommandGroup(
-                new WaitCommand(0.5),
-                new RampMove(ramp, -1*Constants.RAMP_ANGLE)
+                new RampMove(ramp, ()->Constants.RAMP_ANGLE),
+                new WaitCommand(3.5),
+                new RetractAmp(amp),
+                new RampMove(ramp, ()->0)
             )
 
         );

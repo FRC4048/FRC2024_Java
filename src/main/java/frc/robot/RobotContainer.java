@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -34,7 +35,9 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.DeployAmpSequence;
 import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.RetractAmpSequence;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
@@ -97,7 +100,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
         NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,6));//this is an example
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
     private void setupPathPlaning() {
@@ -135,13 +138,18 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+
+        if (Constants.AMP_DEBUG) {
+            SmartShuffleboard.putCommand("Amp", "Deploy AMP", new DeployAmpSequence(ramp, amp));
+            SmartShuffleboard.putCommand("Amp", "Retarct AMP", new RetractAmpSequence(ramp, amp));
+        }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", new RaiseDeployer(deployer));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new LowerDeployer(deployer));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", new RampMove(ramp, SmartShuffleboard.getDouble("Ramp","myTargetPos",0)));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", new RampMove(ramp, ()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0)));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 15 ));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
