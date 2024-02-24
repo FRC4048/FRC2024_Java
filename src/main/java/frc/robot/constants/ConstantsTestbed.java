@@ -14,6 +14,14 @@ public class ConstantsTestbed extends GameConstants {
     public static final double RAMP_MAX_RPM_VELOCITY = 500;
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
+    
+    //Servo
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ID = 19;
+    public static final int RIGHT_SERVO_ID = 18;
 
     //Shooter
     public static final int SHOOTER_MOTOR_ID_1 = 44;
@@ -22,7 +30,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
 
-    public static final double SHOOTER_MOTOR_SPEED = 0.75;
+    public static final double SHOOTER_MOTOR_LEFT_SPEED = 0.75;
+    public static final double SHOOTER_MOTOR_RIGHT_SPEED = 0.75;
+    
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
@@ -83,8 +94,9 @@ public class ConstantsTestbed extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
     //Feeder
-    public static final double FEEDER_MOTOR_SPEED = 0.5;
-    public static final int FEEDER_MOTOR_ID = 11;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.7;
+    public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 30;
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
@@ -92,18 +104,20 @@ public class ConstantsTestbed extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_MOTOR1_ID = 144;
-    public static final int CLIMBER_MOTOR2_ID = 145;
+    public static final int CLIMBER_LEFT = 144;
+    public static final int CLIMBER_RIGHT = 145;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;
     public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
     public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double CLIMBER_BALANCE_THRESH=30;
-    public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double CLIMBER_TIMEOUT_S= 10;
+    public static final double RAISING_TIMEOUT = 0;
 
     //Intake
-    public static final int INTAKE_MOTOR_1_ID = 111;
+    public static final int INTAKE_MOTOR_1_ID = 211;
     public static final int INTAKE_MOTOR_2_ID = 12;
 
     public static final double INTAKE_MOTOR_1_SPEED = 1.00;
@@ -113,4 +127,7 @@ public class ConstantsTestbed extends GameConstants {
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
+    //Deployer
+    public static final int DEPLOYER_MOTOR_ID = 11;
 }

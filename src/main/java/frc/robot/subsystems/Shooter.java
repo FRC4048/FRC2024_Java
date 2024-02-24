@@ -7,35 +7,36 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Shooter extends SubsystemBase {
   
-  private final CANSparkMax shooterMotor1;
-  private final CANSparkMax shooterMotor2;
-  private final DigitalInput shooterSensor1;
-  private final DigitalInput shooterSensor2;
+  private final CANSparkMax shooterMotorLeft;
+  private final CANSparkMax shooterMotorRight;
+  private final DigitalInput shooterSensorLeft;
+  private final DigitalInput shooterSensorRight;
   private final SparkPIDController shooterMotor1PID;
   private final SparkPIDController shooterMotor2PID;
 
   public Shooter() {
-    this.shooterMotor1 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_1, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterMotor2 = new CANSparkMax(Constants.SHOOTER_MOTOR_ID_2, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterSensor1 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
-    this.shooterSensor2 = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
+    this.shooterMotorLeft = new CANSparkMax(Constants.SHOOTER_MOTOR_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+    this.shooterMotorRight = new CANSparkMax(Constants.SHOOTER_MOTOR_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+    this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
+    this.shooterSensorRight = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
 
-    shooterMotor1.restoreFactoryDefaults();
-    shooterMotor2.restoreFactoryDefaults();
+    shooterMotorLeft.restoreFactoryDefaults();
+    shooterMotorRight.restoreFactoryDefaults();
 
-    shooterMotor1.setInverted(false);
-    shooterMotor2.setInverted(true);
+    shooterMotorLeft.setInverted(false);
+    shooterMotorRight.setInverted(true);
 
-    this.shooterMotor1.setIdleMode(IdleMode.kCoast);
-    this.shooterMotor2.setIdleMode(IdleMode.kCoast);
+    this.shooterMotorLeft.setIdleMode(IdleMode.kCoast);
+    this.shooterMotorRight.setIdleMode(IdleMode.kCoast);
   
-    this.shooterMotor1PID = shooterMotor1.getPIDController();
-    this.shooterMotor2PID = shooterMotor2.getPIDController();
+    this.shooterMotor1PID = shooterMotorLeft.getPIDController();
+    this.shooterMotor2PID = shooterMotorRight.getPIDController();
 
     shooterMotor1PID.setP(Constants.SHOOTER_MOTOR_PID_P);
     shooterMotor1PID.setI(Constants.SHOOTER_MOTOR_PID_I);
@@ -54,29 +55,29 @@ public class Shooter extends SubsystemBase {
   /**
    * @param speed value between -1 and 1 to set shooter motor 1 to
    */
-  public void setShooterMotor1Speed(double speed) {
-    shooterMotor1.set(speed);
+  public void setShooterMotorLeftSpeed(double speed) {
+    shooterMotorLeft.set(speed);
   }
 
   /**
    * @param speed value between -1 and 1 to set shooter motor 2 to
    */
-  public void setShooterMotor2Speed(double speed) {
-    shooterMotor2.set(speed);
+  public void setShooterMotorRightSpeed(double speed) {
+    shooterMotorRight.set(speed);
   }
 
   /**
    * @return shooter motor 1 speed
    */
   public double getShooterMotor1Speed() {
-    return shooterMotor1.get();
+    return shooterMotorLeft.get();
   }
 
   /**
    * @return shooter motor 2 speed
    */
   public double getShooterMotor2Speed() {
-    return shooterMotor2.get();
+    return shooterMotorRight.get();
   }
 
   /**
@@ -99,14 +100,14 @@ public class Shooter extends SubsystemBase {
    * @return motor 1 encoder value
    */
   public RelativeEncoder getMotorEncoder1() {
-    return shooterMotor1.getEncoder();
+    return shooterMotorLeft.getEncoder();
   }
 
   /**
    * @return motor 2 encoder value
    */
   public RelativeEncoder getMotorEncoder2() {
-    return shooterMotor2.getEncoder();
+    return shooterMotorRight.getEncoder();
   }
 
   /**
@@ -128,22 +129,22 @@ public class Shooter extends SubsystemBase {
    * sets speed of motor1 and motor2 to 0
    */
   public void stopShooter() {
-    shooterMotor1.set(0);
-    shooterMotor2.set(0);
+    shooterMotorLeft.set(0);
+    shooterMotorRight.set(0);
   }
 
   /**
    * @return returns true if shooter motor 1 is connected to digital IO
    */
   public boolean getShooterSensor1Activated() {
-    return shooterSensor1.get();
+    return shooterSensorLeft.get();
   }
 
   /**
    * @return returns true if shooter motor 2 is connected to digital IO
    */
   public boolean getShooterSensor2Activated() {
-    return shooterSensor2.get();
+    return shooterSensorRight.get();
   }
 
   @Override

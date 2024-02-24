@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.6493598634390856,
-        "y": 7.041152407332504
+        "x": 2.8846275142214703,
+        "y": 6.969637563436201
       },
       "prevControl": {
-        "x": 2.3051882497671525,
-        "y": 7.181718262588875
+        "x": 2.5404559005495373,
+        "y": 7.110203418692572
       },
       "nextControl": {
-        "x": 3.069155469349295,
-        "y": 6.869700358315228
+        "x": 3.3044231201316796,
+        "y": 6.798185514418925
       },
       "isLocked": false,
       "linkedName": null
@@ -68,40 +68,40 @@
         "y": 4.159196127670605
       },
       "prevControl": {
-        "x": 1.7876747762523224,
-        "y": 4.390220524055955
+        "x": 1.6609758812306699,
+        "y": 4.167335697402526
       },
       "nextControl": {
-        "x": 2.066339957422183,
-        "y": 3.952318096503318
+        "x": 2.346022011631652,
+        "y": 4.146964170217
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9314662695762963,
+        "x": 2.5434964959277,
         "y": 4.159196127670605
       },
       "prevControl": {
-        "x": 2.488257947590949,
-        "y": 4.158328475348146
+        "x": 2.054512058623201,
+        "y": 4.13756062334576
       },
       "nextControl": {
-        "x": 3.1134419174912895,
-        "y": 4.159552374576885
+        "x": 2.790187910971726,
+        "y": 4.170111185021937
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1321647855208656,
+        "x": 1.934690301224818,
         "y": 4.159196127670605
       },
       "prevControl": {
-        "x": 2.7716059727652107,
-        "y": 3.406912377971377
+        "x": 2.2237759023055275,
+        "y": 4.165771263959481
       },
       "nextControl": null,
       "isLocked": false,
@@ -135,8 +135,129 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
-  "eventMarkers": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 1.7,
+      "maxWaypointRelativePos": 2.05,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 3.75,
+      "maxWaypointRelativePos": 4.15,
+      "constraints": {
+        "maxVelocity": 0.25,
+        "maxAcceleration": 0.25,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "StartIntake1",
+      "waypointRelativePos": 0.5499999999999999,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeAndFeeder"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "SpoolShooter1",
+      "waypointRelativePos": 1.6500000000000001,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Shoot1",
+      "waypointRelativePos": 1.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "StartIntake2",
+      "waypointRelativePos": 2.3000000000000003,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "SpoolShooter2",
+      "waypointRelativePos": 3.6499999999999995,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Shoot2",
+      "waypointRelativePos": 3.95,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "StartIntake",
+      "waypointRelativePos": 4.85,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "SpoolShooter",
+      "waypointRelativePos": 5.550000000000001,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 6.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -145,7 +266,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 145.0,
+    "rotation": 140.0,
     "rotateFast": false
   },
   "reversed": false,

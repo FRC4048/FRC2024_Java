@@ -12,7 +12,6 @@ public class SetServoAngle extends Command {
         this.climber = climber;
         this.leftTargetAngle = leftTargetAngle;
         this.rightTargetAngle = rightTargetAngle;
-        addRequirements(climber);
     }
 
     @Override
