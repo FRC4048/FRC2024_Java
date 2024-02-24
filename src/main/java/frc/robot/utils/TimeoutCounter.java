@@ -14,23 +14,19 @@ public class TimeoutCounter {
     public TimeoutCounter(String commandName) {
         this.commandName = commandName;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
-        System.out.println("Constructed");
     }
     public double getTimeoutCount() {
-        System.out.println("Got TimeoutCounter");
         return timeoutCounter;
     }
     public void increaseTimeoutCount() {
         timeoutCounter++;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
-        System.out.println("Logged Increase Timeout");
     }
     public String getCommandName() {
         return commandName;
     }
     public void resetCounter() {
         timeoutCounter = 0;
-        System.out.println("Logged reset Timeout");
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
     }
 }
