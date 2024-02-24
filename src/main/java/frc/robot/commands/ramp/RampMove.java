@@ -8,9 +8,9 @@ import java.util.function.DoubleSupplier;
 public class RampMove extends Command{
     
     private final Ramp ramp;
-    private final DoubleSupplier encoderValue;
+    private final double encoderValue;
 
-    public RampMove(Ramp ramp, DoubleSupplier encoderValue) {
+    public RampMove(Ramp ramp, double encoderValue) {
         this.ramp = ramp;
         this.encoderValue = encoderValue;
         addRequirements(this.ramp);
@@ -18,7 +18,7 @@ public class RampMove extends Command{
 
     @Override
     public void initialize() {
-        ramp.setRampPos(encoderValue.getAsDouble());
+        ramp.setRampPos(encoderValue);
     }
 
 

@@ -60,6 +60,7 @@ public class RobotContainer {
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
       private SwerveDrivetrain drivetrain;
       private final AutoChooser2024 autoChooser;
+      private final Amp amp = new Amp();
       private final Shooter shooter = new Shooter();
       private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
@@ -88,7 +89,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
         NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,6));//this is an example
     }
 
     private void setupPathPlaning() {
@@ -132,7 +133,7 @@ public class RobotContainer {
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", new RampMove(ramp,()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0)));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", new RampMove(ramp, SmartShuffleboard.getDouble("Ramp","myTargetPos",0)));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 15 ));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
