@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -77,6 +78,18 @@ public class Shooter extends SubsystemBase {
    */
   public double getShooterMotor2Speed() {
     return shooterMotorRight.get();
+  }
+
+  public void setShooterSpeeds(SwerveDrivetrain drivetrain) {
+    if (((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
+      setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+      setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
+      
+    }
+    if (((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
+      setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
+      setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+    }
   }
 
   /**
