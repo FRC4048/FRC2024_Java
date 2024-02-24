@@ -19,6 +19,6 @@ public class CrossLine extends ParallelCommandGroup {
   public CrossLine(SwerveDrivetrain drivetrain, Ramp ramp) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveDistance(drivetrain, (RobotContainer.isRedAlliance()?-4:4), 0, 0.3), new ResetRamp(ramp));
+    addCommands(new MoveDistance(drivetrain, (RobotContainer.isRedAlliance()?-1.015:1.015), 0, 0.3), new ResetRamp(ramp));
   }
 }
