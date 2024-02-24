@@ -4,7 +4,14 @@ import frc.robot.swervev2.SwerveModuleProfile;
 
 
 public class Constants2024 extends GameConstants {
+    //AMP 
+    public static final int AMP_ID = 0;
+    public static final double AMP_MOTOR_SPEED = 1.0;
+    public static final double AMP_TIMEOUT = 2.0;
+    
+
     //RAMP
+    public static final double RAMP_ANGLE = 20.0;
     public static final double RAMP_PID_P = 5E-5;
     public static final double RAMP_PID_I = 1e-6;
     public static final double RAMP_PID_D = 0.00;
