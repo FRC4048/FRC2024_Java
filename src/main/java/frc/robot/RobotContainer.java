@@ -175,17 +175,18 @@ public class RobotContainer {
         climber.setDefaultCommand(leftClimbCmd);
 
         // Disengage
-        controller.a().onTrue(new SetServoAngle(climber, 180, 0));
+        controller.leftBumper().onTrue(new SetServoAngle(climber, 180, 0));
 
         // Engage        
-        controller.b().onTrue(new SetServoAngle(climber, 0, 180));
+        controller.rightBumper().onTrue(new SetServoAngle(climber, 0, 180));
 
 //        controller.a().onTrue(new StartFeeder(feeder));
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        // controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        // controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
     }
