@@ -17,6 +17,8 @@ import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.diag.DiagAprilTags;
+import frc.robot.utils.diag.DiagLuxonis;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -100,6 +102,8 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
+        Robot.getDiagnostics().addDiagnosable(new DiagLuxonis("Luxonis", "Piece Seen"));
+        Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("AprilTags", "Apriltag Seen"));
         alignableTurnPid.enableContinuousInput(-180, 180);
         SmartDashboard.putBoolean("USE VISION",false);
     }

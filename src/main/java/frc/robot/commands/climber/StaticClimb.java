@@ -24,7 +24,7 @@ public class  StaticClimb extends Command {
         } else if (-climber.getGyroPitch() > Constants.CLIMBER_BALANCE_THRESH) {
             climber.balanceRight(Constants.CLIMBER_BALANCE_LOW_SPEED);
         } else {
-            climber.raise(false); // reverse raises down the arms
+            climber.lower(); // reverse raises down the arms
         }
         
     }
