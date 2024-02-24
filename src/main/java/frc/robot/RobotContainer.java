@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -83,7 +84,7 @@ public class RobotContainer {
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
-        autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
+        autoChooser.addOnValidationCommand(()->CommandUtil.logged(new SetInitOdom(drivetrain,autoChooser)));
         autoChooser.forceRefresh();
         configureBindings();
         putShuffleboardCommands();
@@ -154,14 +155,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
         if (Constants.INTAKE_DEBUG){
-            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intakeSubsystem,5)));
-        }
-        if (Constants.SWERVE_DEBUG) {
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, -0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
         }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0, 0.4));
@@ -171,7 +165,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
         }
     }
-
+    
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
