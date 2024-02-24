@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.AmpJoystick;
 import frc.robot.commands.climber.LowerArms;
 import frc.robot.commands.climber.RaiseArms;
 import frc.robot.commands.climber.StaticClimb;
@@ -84,6 +85,9 @@ public class RobotContainer {
     /**
      * NamedCommands
      */
+    public CommandXboxController getXboxController() {
+        return controller;
+    }
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
@@ -178,6 +182,8 @@ public class RobotContainer {
         controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
+        AmpJoystick manualAmp = new AmpJoystick(amp, () -> controller.getLeftY());
+        amp.setDefaultCommand(manualAmp);
     }
 
     public SwerveDrivetrain getDrivetrain() {
