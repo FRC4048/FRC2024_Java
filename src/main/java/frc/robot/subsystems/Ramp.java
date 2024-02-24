@@ -27,13 +27,15 @@ public class Ramp extends SubsystemBase {
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF, -1, 1);
+        neoPidMotor.setSmartMotionVelocity(Constants.RAMP_MAX_RPM_VELOCITY, 0.0, 0);
+        neoPidMotor.setSmartMotionMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION, 0);	
+        neoPidMotor.setSmartMotionAllowedClosedLoopError(0.0, 0);
         neoMotor = neoPidMotor.getNeoMotor();
-        neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         resetEncoder();
         forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF);
         if (Constants.RAMP_PID_DEBUG){
 //            SmartShuffleboard.put("Ramp", "PID P", pidP);
 //            SmartShuffleboard.put("Ramp", "PID I", pidI);
@@ -105,7 +107,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void setPID() {
-        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF);
+        neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF, -1, 1);
     }
     public void setSpeed(double spd){
         neoMotor.set(spd);

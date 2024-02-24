@@ -31,17 +31,14 @@ public class Shooter extends SubsystemBase {
     this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
     this.shooterSensorRight = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
 
-    shooterMotorLeft.restoreFactoryDefaults();
-    shooterMotorRight.restoreFactoryDefaults();
-
     shooterMotorLeft.setInverted(false);
     shooterMotorRight.setInverted(true);
 
     this.shooterMotorLeft.setIdleMode(IdleMode.kCoast);
     this.shooterMotorRight.setIdleMode(IdleMode.kCoast);
 
-    neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
-    neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
+    neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
+    neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
     SmartShuffleboard.put("Shooter", "RPM", 0.0);
   }
   public double getRPM() {
