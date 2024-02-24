@@ -86,8 +86,8 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder));
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
@@ -173,7 +173,7 @@ public class RobotContainer {
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder, drivetrain));
         controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
