@@ -24,12 +24,12 @@ public class Shooter extends SubsystemBase {
   private final NeoPidMotor neoPidMotorRight;
 
   public Shooter() {
-    this.shooterMotorLeft = new CANSparkMax(Constants.SHOOTER_MOTOR_LEFT, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterMotorRight = new CANSparkMax(Constants.SHOOTER_MOTOR_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
-    this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
-    this.shooterSensorRight = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
+    this.shooterMotorLeft = neoPidMotorLeft.getNeoMotor();
+    this.shooterMotorRight = neoPidMotorRight.getNeoMotor();
+    this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
+    this.shooterSensorRight = new DigitalInput(Constants.SHOOTER_SENSOR_ID_2);
 
     shooterMotorLeft.restoreFactoryDefaults();
     shooterMotorRight.restoreFactoryDefaults();
@@ -42,6 +42,10 @@ public class Shooter extends SubsystemBase {
 
     neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
     neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF);
+    SmartShuffleboard.put("Shooter", "RPM", 0.0);
+  }
+  public double getRPM() {
+    return SmartShuffleboard.getDouble("Shooter", "RPM", 0.0);
   }
   /**
    * @param speed value between -1 and 1 to set shooter motor 1 to

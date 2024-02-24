@@ -26,13 +26,13 @@ public class Ramp extends SubsystemBase {
     private final SparkLimitSwitch backwardLimitSwitch;
 
     public Ramp() {
-        neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
+        neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+        neoMotor = neoPidMotor.getNeoMotor();
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         resetEncoder();
         forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
         backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
-        neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
         neoPidMotor.setPid(pidP, pidI, pidD, iZoneError, pidFF);
         if (Constants.RAMP_PID_DEBUG){
 //            SmartShuffleboard.put("Ramp", "PID P", pidP);
@@ -100,7 +100,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        this.rampPos = neoPidMotor.getCurrentPosition();
+        this.rampPos = 0;
         encoder.setPosition(0);
     }
 
