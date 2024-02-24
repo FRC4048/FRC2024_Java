@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utils.TimeoutCounter;
 
 public class ShootSpeaker extends Command {
 
@@ -11,6 +12,7 @@ public class ShootSpeaker extends Command {
     private final Timer timer = new Timer();
     private boolean activated = false;
     private double speed;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Shoot Speaker");
     public ShootSpeaker(Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
@@ -40,5 +42,6 @@ public class ShootSpeaker extends Command {
         shooter.stopShooter();
         timer.stop();
         activated = false;
+        timeoutCounter.increaseTimeoutCount();
     }
 }

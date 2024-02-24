@@ -3,12 +3,14 @@ package frc.robot.commands.feeder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.ColorObject;
+import frc.robot.utils.TimeoutCounter;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
 public class FeederBackDrive extends Command {
     private final Feeder feeder;
     private double time;
+    private TimeoutCounter timeoutCounter = new TimeoutCounter("FeedBackDrive");
     public FeederBackDrive(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
@@ -25,6 +27,7 @@ public class FeederBackDrive extends Command {
     @Override
     public void initialize() {
         time = Timer.getFPGATimestamp();
+        timeoutCounter.increaseTimeoutCount();
     }
     @Override
     public boolean isFinished() {

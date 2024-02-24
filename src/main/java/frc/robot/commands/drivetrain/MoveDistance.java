@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.TimeoutCounter;
 
 public class MoveDistance extends Command {
   /** Creates a new MoveDistance. */
@@ -18,6 +19,7 @@ public class MoveDistance extends Command {
   private double desiredPoseX;
   private double desiredPoseY;
   private SwerveDrivetrain drivetrain;
+  private TimeoutCounter timeoutCounter = new TimeoutCounter("Move Distance");
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -54,6 +56,7 @@ public class MoveDistance extends Command {
   @Override
   public void end(boolean interrupted) {
     drivetrain.stopMotor();
+    timeoutCounter.increaseTimeoutCount();
   }
 
   // Returns true when the command should end.
