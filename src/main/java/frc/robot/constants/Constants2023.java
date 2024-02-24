@@ -32,6 +32,9 @@ public class Constants2023 extends GameConstants {
     public static final double SHOOTER_MOTOR_LEFT_SPEED = 0.6;
     public static final double SHOOTER_MOTOR_RIGHT_SPEED = 1;
 
+    public static final double SHOOTER_MOTOR_RIGHT_AMP_SPEED = 0.25;
+    public static final double SHOOTER_MOTOR_LEFT_AMP_SPEED = 0.25;
+
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
