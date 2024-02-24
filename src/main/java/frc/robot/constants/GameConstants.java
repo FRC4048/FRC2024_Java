@@ -25,8 +25,8 @@ public class GameConstants {
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
     public static final double DEPLOYER_RAISE_TIMEOUT = 5;
-    public static final double DEPLOYER_LOWER_SPEED = 0.9;
-    public static final double DEPLOYER_RAISE_SPEED = -0.9;
+    public static final double DEPLOYER_RAISE_SPEED = 0.9;
+    public static final double DEPLOYER_LOWER_SPEED = -0.9;
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
     public static final double SPOOL_TIME = 0.5;//seconds
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//

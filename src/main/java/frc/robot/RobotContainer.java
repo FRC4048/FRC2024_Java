@@ -36,6 +36,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.DependentIntakeAndDeployer;
 import frc.robot.commands.sequences.ExitAndShoot;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.sequences.StopIntakeGroup;
@@ -68,6 +69,7 @@ public class RobotContainer {
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
+      private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
       private SwerveDrivetrain drivetrain;
       private final AutoChooser2024 autoChooser;
       private final Shooter shooter = new Shooter();
@@ -170,30 +172,21 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
         joyRightButton1.onTrue(new SetAlignable(drivetrain,Alignable.AMP)).onFalse(new SetAlignable(drivetrain,null));
+        joyLeftButton2.onTrue(new DependentIntakeAndDeployer(intakeSubsystem, deployer, feeder));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(
                 climber,
                 () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-
+        controller.a().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from speaker
+        controller.b().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from podium
+        controller.x().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from pos yet to determine
+        controller.y().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to amp from amp
         // Disengage
         controller.leftBumper().onTrue(new DisengageRatchet(climber));
 
         // Engage
         controller.rightBumper().onTrue(new EngageRatchet(climber));
-
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-        climber.setDefaultCommand(new WaitCommand(1));//climber, controller::getLeftY)); TODO: This should be the default command for the climber- need a command first
-        controller.a().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
-        controller.b().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
-        controller.x().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker
-        controller.y().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to amp
-        controller.button(XboxController.Button.kLeftBumper.value).onTrue(new LowerDeployer(deployer));
-        controller.button(XboxController.Button.kRightBumper.value).onTrue(new RaiseDeployer(deployer));
-        controller.povUp().onTrue(new StopIntakeGroup(deployer, intakeSubsystem));
-        controller.povDown().onTrue(new StartIntakeAndFeeder(feeder, intakeSubsystem, deployer, ramp));
     }
 
     public SwerveDrivetrain getDrivetrain() {

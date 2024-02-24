@@ -9,7 +9,7 @@ public class RaiseDeployer extends Command {
     
     private Deployer deployer;
     private Timer timer = new Timer();
-    private final double MOTOR_RUN_TIME = Constants.DEPLOYER_LOWER_TIMEOUT;
+    private final double MOTOR_RUN_TIME = Constants.DEPLOYER_RAISE_TIMEOUT;
 
     public RaiseDeployer(Deployer deployer) {
         this.deployer = deployer;
@@ -19,7 +19,7 @@ public class RaiseDeployer extends Command {
     @Override
     public void initialize() {
         //Reset and start timers
-        deployer.setDeployerMotorSpeed(Constants.DEPLOYER_LOWER_SPEED);
+        deployer.setDeployerMotorSpeed(Constants.DEPLOYER_RAISE_SPEED);
         timer.reset();
         timer.start();
     }
