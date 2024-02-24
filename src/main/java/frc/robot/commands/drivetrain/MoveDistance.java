@@ -4,7 +4,6 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -66,6 +65,9 @@ public class MoveDistance extends Command {
     if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
       return true;
     }
-    return ((Timer.getFPGATimestamp() - startTime) >= 5);
+    if ((Timer.getFPGATimestamp() - startTime) >= 5) {
+      return true;
+    }
+    return false;
   }
 }
