@@ -2,10 +2,12 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.logging.Logger;
 
 public class ShootSpeaker extends Command {
 
@@ -34,19 +36,21 @@ public class ShootSpeaker extends Command {
 
     @Override
     public void execute() {
-        if (((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
+        double gyro = ((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360); //Gets the gyro value 0-360
+        if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) || 
+            ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
             shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
             shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
         }
-        if (((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
+        else if (((RobotContainer.isRedAlliance() == false) && (gyro >= 180)) || 
+                ((RobotContainer.isRedAlliance() == true) && (gyro <= 180))) {
             shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
             shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
-            
           }
         else {
-            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_REGULAR_SPEED);
-            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_REGULAR_SPEED);
+            Logger.logDouble("Shooting Condition not working", gyro, true);
         }
+        
     }
 
     /**
