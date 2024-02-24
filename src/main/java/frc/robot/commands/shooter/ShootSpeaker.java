@@ -35,14 +35,18 @@ public class ShootSpeaker extends Command {
     @Override
     public void execute() {
         if (((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
-            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
-            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
         }
         if (((RobotContainer.isRedAlliance() == false) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) > 180)) || ((RobotContainer.isRedAlliance() == true) && (((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360) < 180))) {
-            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
-            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
+            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
             
           }
+        else {
+            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_REGULAR_SPEED);
+            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_REGULAR_SPEED);
+        }
     }
 
     /**
