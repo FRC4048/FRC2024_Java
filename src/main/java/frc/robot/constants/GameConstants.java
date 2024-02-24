@@ -13,6 +13,10 @@ public class GameConstants {
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final boolean DRIVE_WITH_XBOX = false;
+    public static final int XBOX_CONTROLLER_ID = 3;
+    public static final int DIAG_ABS_SPARK_ENCODER = 20;
+    public static final double DIAG_REL_SPARK_ENCODER = 0.1;
+    public static final double PIECE_THRESHOLD = 0.7;
     public static final double GRAVITY = -9.81;
 
     //DEBUGS
