@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.PathPlannerShoot;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
@@ -76,7 +77,7 @@ public class RobotContainer {
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
-        autoChooser = new AutoChooser2024();
+        autoChooser = new AutoChooser2024(intakeSubsystem,shooter,feeder,deployer,ramp);
         autoChooser.addOnValidationCommand(()->new SetInitOdom(drivetrain,autoChooser));
         autoChooser.forceRefresh();
         configureBindings();
@@ -88,15 +89,16 @@ public class RobotContainer {
      */
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
-        NamedCommands.registerCommand("StartIntake", new StartIntake(intakeSubsystem,1));
+        NamedCommands.registerCommand("StartIntake", new StartIntake(intakeSubsystem,10));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter,Constants.AUTO_SPOOL_AND_SHOOT_TIME));
         NamedCommands.registerCommand("StartFeeder", new StartFeeder(feeder));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("FeederGamepieceUntilLeave", new FeederGamepieceUntilLeave(feeder));
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
         NamedCommands.registerCommand("Shoot", new ShootSpeaker(shooter,Constants.SHOOTER_TIME_AFTER_TRIGGER));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()-> 6));//this is an example
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));//this is an example
+        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter,feeder,ramp,intakeSubsystem));
     }
 
     private void setupPathPlaning() {

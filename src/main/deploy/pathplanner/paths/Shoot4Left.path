@@ -16,31 +16,31 @@
     },
     {
       "anchor": {
-        "x": 2.8846275142214703,
-        "y": 6.969637563436201
+        "x": 2.983589345064474,
+        "y": 6.982390635498161
       },
       "prevControl": {
-        "x": 2.5404559005495373,
-        "y": 7.110203418692572
+        "x": 2.639417731392541,
+        "y": 7.122956490754532
       },
       "nextControl": {
-        "x": 3.3044231201316796,
-        "y": 6.798185514418925
+        "x": 3.4033849509746834,
+        "y": 6.810938586480885
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1321647855208656,
+        "x": 1.934690301224818,
         "y": 5.456885595901776
       },
       "prevControl": {
-        "x": 1.697358769856344,
+        "x": 1.4998842855602963,
         "y": 5.456885595901776
       },
       "nextControl": {
-        "x": 2.3578499104306343,
+        "x": 2.1603754261345856,
         "y": 5.456885595901776
       },
       "isLocked": false,
@@ -137,88 +137,40 @@
   ],
   "constraintZones": [
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 1.7,
-      "maxWaypointRelativePos": 2.15,
+      "name": "Intake1",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1.0499999999999998,
       "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
     },
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 3.75,
-      "maxWaypointRelativePos": 4.15,
+      "name": "Shoot1",
+      "minWaypointRelativePos": 1.7,
+      "maxWaypointRelativePos": 2.15,
       "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    },
+    {
+      "name": "Shoot2",
+      "minWaypointRelativePos": 3.8500000000000005,
+      "maxWaypointRelativePos": 5.05,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
       }
     }
   ],
   "eventMarkers": [
-    {
-      "name": "StartIntake1",
-      "waypointRelativePos": 0.25,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "deadline",
-              "data": {
-                "commands": [
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "StartFeeder"
-                    }
-                  },
-                  {
-                    "type": "named",
-                    "data": {
-                      "name": "StartIntake"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 0.2
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "FeederBackDrive"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpoolShooter1",
-      "waypointRelativePos": 1.5500000000000003,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "SpoolShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
     {
       "name": "ShootAndReset",
       "waypointRelativePos": 1.7999999999999998,
@@ -229,7 +181,7 @@
             {
               "type": "named",
               "data": {
-                "name": "FeederGamepieceUntilLeave"
+                "name": "PathPlannerShoot"
               }
             }
           ]
@@ -237,73 +189,16 @@
       }
     },
     {
-      "name": "SpoolShooter2",
-      "waypointRelativePos": 3.55,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "SpoolShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot2",
+      "name": "ShootAndReset2",
       "waypointRelativePos": 3.95,
       "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeederGamepieceUntilLeave"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "StartIntakeAndRestRamp2",
-      "waypointRelativePos": 4.85,
-      "command": {
         "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "ResetRamp"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StartIntakeAndFeeder"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "SpoolShooter",
-      "waypointRelativePos": 5.550000000000001,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "SpoolShooter"
+                "name": "PathPlannerShoot"
               }
             }
           ]
@@ -314,25 +209,32 @@
       "name": "Shoot",
       "waypointRelativePos": 6.0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "FeederGamepieceUntilLeave"
+                "name": "SpoolShooter"
               }
             },
             {
-              "type": "wait",
+              "type": "sequential",
               "data": {
-                "waitTime": 0.5
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "ResetRamp"
+                "commands": [
+                  {
+                    "type": "wait",
+                    "data": {
+                      "waitTime": 0.025
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "StartFeeder"
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -357,68 +259,26 @@
       }
     },
     {
-      "name": "MoveRamp",
-      "waypointRelativePos": 3.4,
+      "name": "Init",
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
           "commands": [
             {
-              "type": "named",
-              "data": {
-                "name": "RampMoveCenter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "ResetRampAndIntake",
-      "waypointRelativePos": 2.1999999999999997,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "ResetRamp"
-              }
-            },
-            {
-              "type": "sequential",
+              "type": "parallel",
               "data": {
                 "commands": [
                   {
-                    "type": "deadline",
+                    "type": "named",
                     "data": {
-                      "commands": [
-                        {
-                          "type": "named",
-                          "data": {
-                            "name": "StartFeeder"
-                          }
-                        },
-                        {
-                          "type": "named",
-                          "data": {
-                            "name": "StartIntake"
-                          }
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type": "wait",
-                    "data": {
-                      "waitTime": 0.2
+                      "name": "StartIntakeAndFeeder"
                     }
                   },
                   {
                     "type": "named",
                     "data": {
-                      "name": "FeederBackDrive"
+                      "name": "LowerDeployer"
                     }
                   }
                 ]
@@ -430,8 +290,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.75,
-    "maxAcceleration": 0.75,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

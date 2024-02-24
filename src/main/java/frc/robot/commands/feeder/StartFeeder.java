@@ -32,6 +32,6 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return feeder.pieceSeen() || Timer.getFPGATimestamp() - startTime > 5.0;
+        return feeder.pieceSeen() || Timer.getFPGATimestamp() - startTime > 7.0;
     }
 }

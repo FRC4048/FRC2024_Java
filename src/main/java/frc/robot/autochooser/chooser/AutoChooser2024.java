@@ -7,13 +7,14 @@ import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
+import frc.robot.subsystems.*;
 
 import java.util.Map;
 
 public class AutoChooser2024 extends Nt4AutoValidationChooser {
     private final Map<AutoEvent, Command> commandMap;
 
-    public AutoChooser2024() {
+    public AutoChooser2024(IntakeSubsystem intakeSubsystem, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp) {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
         commandMap = Map.ofEntries(
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand()),
@@ -26,7 +27,6 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid"))),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Left"))),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
-                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left"))),
                 Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")))
         );
     }
