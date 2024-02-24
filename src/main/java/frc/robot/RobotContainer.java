@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.climber.RaiseArms;
-import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.LowerArms;
 import frc.robot.commands.climber.RaiseArms;
 import frc.robot.commands.climber.StaticClimb;
@@ -29,10 +30,6 @@ import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
-import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
-import frc.robot.commands.feeder.StartFeeder;
-import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
@@ -41,7 +38,13 @@ import frc.robot.commands.sequences.ExitAndShoot;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -49,8 +52,6 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -91,9 +92,9 @@ public class RobotContainer {
      */
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder));
+        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
@@ -145,7 +146,8 @@ public class RobotContainer {
         }
         if (Constants.SHOOTER_DEBUG){
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-
+            SmartShuffleboard.put("Test", "Shooter Left", shooter.getShooterMotor1Speed());
+            SmartShuffleboard.put("Test", "Shooter Right", shooter.getShooterMotor2Speed());
         }
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
@@ -165,8 +167,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0 , 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
-            SmartShuffleboard.put("Test", "Shooter Left", shooter.getShooterMotor1Speed());
-            SmartShuffleboard.put("Test", "Shooter Right", shooter.getShooterMotor2Speed());
+            
         }
 
 
@@ -180,8 +181,8 @@ public class RobotContainer {
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder, drivetrain));
         controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));
