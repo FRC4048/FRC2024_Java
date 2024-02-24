@@ -53,17 +53,21 @@ public class TurnToGamepiece extends Command {
         if (Math.abs(x) >.1) {
             driveStates = new ChassisSpeeds(0, 0, PIDController.calculate(x));
             drivetrain.drive(driveStates);
-        } else if (y > -.4) {
-            driveStates = new ChassisSpeeds(.5, 0, 0);
-            drivetrain.drive(driveStates);
         } else {
-            if (cycle > 30) {
-                driveStates = new ChassisSpeeds(0, 0, 0);
-                drivetrain.drive(driveStates);
-                finished = true;
-            }
-        }        
+            finished = true;
+        }
     }
+    //     } else if (y > -.4) {
+    //         driveStates = new ChassisSpeeds(.5, 0, 0);
+    //         drivetrain.drive(driveStates);
+    //     } else {
+    //         if (cycle > 30) {
+    //             driveStates = new ChassisSpeeds(0, 0, 0);
+    //             drivetrain.drive(driveStates);
+    //             finished = true;
+    //         }
+    //     }        
+    // }
 
     @Override
     public boolean isFinished() {
