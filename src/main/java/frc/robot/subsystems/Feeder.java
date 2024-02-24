@@ -2,29 +2,28 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utils.ColorObject;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.utils.ColorSensor;
+import frc.robot.utils.ColorValue;
+import frc.robot.utils.diag.DiagColorSensor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import java.util.Arrays;
-
-public class Feeder extends SubsystemBase{
+public class Feeder extends SubsystemBase {
 
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
-    private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-    private final ColorMatch colorMatcher = new ColorMatch();
+    private final ColorSensor colorSensor;
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
-        Arrays.stream(ColorObject.values()).forEach(c -> colorMatcher.addColorMatch(c.getColor()));
+
+        colorSensor = new ColorSensor(i2cPort);
+        Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
     }
 
     public void setFeederMotorSpeed(double speed) {
@@ -42,40 +41,29 @@ public class Feeder extends SubsystemBase{
     /**
      * @return returns true if feeder sensor is connected to digital IO
      */
-    public Color getColor() {
+    public ColorValue getColor() {
         return colorSensor.getColor();
     }
+
     public boolean pieceSeen() {
-        return (getPiece() == ColorObject.Piece);
+        return (getColor() == ColorValue.Piece);
     }
 
     public boolean pieceNotSeen() {
-        return (getPiece() == ColorObject.Plastic);
+        return (getColor() == ColorValue.Plastic);
     }
 
     @Override
     public void periodic() {
         if (Constants.FEEDER_DEBUG) {
-            Color detectedColor = colorSensor.getColor();
-            double IR = colorSensor.getIR();
-            double proximity = colorSensor.getProximity();
-            ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);
+            ColorValue detectedColor = colorSensor.getColor();
+            ColorMatchResult rawColor = colorSensor.getRawColor();
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", detectedColor.red);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", detectedColor.green);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", detectedColor.blue);
-            SmartShuffleboard.put("Feeder", "Color Sensor",  "Infrared", IR);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Proximity", proximity);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "ObjectSeen", getPiece() == null ? "null" : getPiece().getName());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Matched", detectedColor.name());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.color.red);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.color.green);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.color.blue);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", rawColor.confidence);
         }
-    }
-
-    public ColorObject getPiece() {
-        Color detectedColor = colorSensor.getColor();
-        double IR = colorSensor.getIR();
-        double proximity = colorSensor.getProximity();
-        ColorMatchResult matchedColor = colorMatcher.matchClosestColor(detectedColor);
-        return ColorObject.getFromColor(matchedColor.color);
     }
 }
