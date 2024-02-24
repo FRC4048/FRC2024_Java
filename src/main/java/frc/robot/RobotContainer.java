@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,11 +23,12 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.AmpJoystick;
-import frc.robot.commands.climber.LowerArms;
-import frc.robot.commands.climber.RaiseArms;
-import frc.robot.commands.climber.StaticClimb;
+import frc.robot.commands.climber.DisengageRatchet;
+import frc.robot.commands.climber.EngageRatchet;
+import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
+import frc.robot.subsystems.Amp;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
@@ -36,7 +40,13 @@ import frc.robot.commands.sequences.ExitAndShoot;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -44,8 +54,6 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -91,9 +99,9 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,6));//this is an example
+        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
     private void setupPathPlaning() {
@@ -126,7 +134,7 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
-        climber = new Climber(navxGyro);
+        climber = new Climber();
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
 
@@ -149,12 +157,6 @@ public class RobotContainer {
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
         }
-        if (Constants.CLIMBER_DEBUG) {
-            SmartShuffleboard.putCommand("Climber", "Climb", new StaticClimb(climber));
-          SmartShuffleboard.putCommand("Climber", "RaiseArms", new RaiseArms(climber));
-          SmartShuffleboard.putCommand("Climber", "LowerArms", new LowerArms(climber));
-//          SmartShuffleboard.put("Climber", "LOWER SWITCH",climber.)
-        }
         if (Constants.INTAKE_DEBUG){
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intakeSubsystem,5));
         }
@@ -165,20 +167,30 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
         }
-
-
     }
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(new SetAlignable(drivetrain,Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain,null));
         joyRightButton1.onTrue(new SetAlignable(drivetrain,Alignable.AMP)).onFalse(new SetAlignable(drivetrain,null));
+        ManualControlClimber leftClimbCmd = new ManualControlClimber(
+                climber,
+                () -> -controller.getLeftY()); // negative because Y "up" is negative
+
+        climber.setDefaultCommand(leftClimbCmd);
+
+        // Disengage
+        controller.leftBumper().onTrue(new DisengageRatchet(climber));
+
+        // Engage        
+        controller.rightBumper().onTrue(new EngageRatchet(climber));
+
 //        controller.a().onTrue(new StartFeeder(feeder));
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
 //        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
+        controller.b().onTrue(new ExitAndShoot(shooter,feeder, drivetrain));
         controller.x().onTrue(new LowerDeployer(deployer));
 //        controller.a().onTrue(new DeployerLower(deployer));
 //        controller.b().onTrue(new DeployerRaise(deployer));

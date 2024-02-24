@@ -5,11 +5,12 @@ import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
 
 public class ExitAndShoot extends ParallelCommandGroup{
-    public ExitAndShoot(Shooter shooter, Feeder feeder) {
+    public ExitAndShoot(Shooter shooter, Feeder feeder, SwerveDrivetrain drivetrain) {
         addCommands(
-                new ShootSpeaker(shooter),
+                new ShootSpeaker(shooter, drivetrain),
                 new FeederGamepieceUntilLeave(feeder)
         );
         addRequirements(shooter,feeder);
