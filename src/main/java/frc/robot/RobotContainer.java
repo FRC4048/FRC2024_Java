@@ -13,7 +13,9 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -33,6 +35,7 @@ import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.ExitAndShoot;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.sequences.StopIntakeGroup;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.*;
@@ -171,12 +174,15 @@ public class RobotContainer {
 //        controller.a().onTrue(new StartFeeder(feeder));
 //        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
 //        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
-        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-        controller.x().onTrue(new LowerDeployer(deployer));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
+        climber.setDefaultCommand(new WaitCommand(1));//climber, controller::getLeftY)); TODO: This should be the default command for the climber- need a command first
+        controller.a().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to speaker
+        controller.b().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to speaker
+        controller.x().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to speaker
+        controller.y().onTrue(new ExitAndShoot(shooter, feeder)); //TODO: Need different shooting commands based on where we are- this should be to amp
+        controller.button(XboxController.Button.kLeftBumper.value).onTrue(new LowerDeployer(deployer));
+        controller.button(XboxController.Button.kRightBumper.value).onTrue(new RaiseDeployer(deployer));
+        controller.povUp().onTrue(new StopIntakeGroup(deployer, intakeSubsystem));
+        controller.povDown().onTrue(new StartIntakeAndFeeder(feeder, intakeSubsystem, deployer, ramp));
     }
 
     public SwerveDrivetrain getDrivetrain() {
