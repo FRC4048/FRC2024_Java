@@ -1,6 +1,7 @@
 package frc.robot.commands.feeder;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
@@ -19,6 +20,7 @@ public class FeederGamepieceUntilLeave extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("Interupted",interrupted);
         feeder.stopFeederMotor();
     }
 

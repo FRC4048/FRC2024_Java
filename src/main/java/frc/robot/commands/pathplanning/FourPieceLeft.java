@@ -14,7 +14,7 @@ public class FourPieceLeft extends SequentialCommandGroup {
     public FourPieceLeft(Shooter shooter, Feeder feeder, Deployer deployer) {
         addCommands(
                 new ParallelCommandGroup(
-                        new BasicShoot(shooter,0.2),
+                        new BasicShoot(shooter,0.3),
                         new FeederGamepieceUntilLeave(feeder),
                         new LowerDeployer(deployer)
                 ),
