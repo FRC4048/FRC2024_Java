@@ -37,4 +37,5 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
 
     public static final double MAX_CLIMBER_ENCODER = 80.0;
+    public static final double MOVE_DISTANCE_TIMEOUT = 10;
 }

@@ -1,19 +1,17 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
+import frc.robot.utils.command.SubsystemCommandBase;
 
-public class EngageRatchet extends Command {
+public class EngageRatchet extends SubsystemCommandBase<Climber> {
 
-    private Climber climber;
-    
     public EngageRatchet(Climber climber) {
-        this.climber = climber;
+        super(climber);
     }
 
     @Override
     public void initialize() {
-        climber.engageRatchet();
+        getSystem().engageRatchet();
     }
 
     @Override

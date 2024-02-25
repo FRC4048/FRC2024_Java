@@ -7,7 +7,7 @@ import frc.robot.utils.command.TimedSubsystemCommand;
 public class StartFeeder extends TimedSubsystemCommand<Feeder> {
 
     public StartFeeder(Feeder feeder) {
-        super(feeder,5);
+        super(feeder,Constants.FEEDER_INTAKE_TIMEOUT);
     }
 
     @Override

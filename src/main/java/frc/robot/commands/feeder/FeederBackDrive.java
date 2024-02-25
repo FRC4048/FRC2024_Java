@@ -6,7 +6,7 @@ import frc.robot.utils.command.TimedSubsystemCommand;
 
 public class FeederBackDrive extends TimedSubsystemCommand<Feeder> {
     public FeederBackDrive(Feeder feeder) {
-        super(feeder,10);
+        super(feeder,Constants.FEEDER_BACK_DRIVE_TIMEOUT);
     }
     @Override
     public void end(boolean interrupted) {

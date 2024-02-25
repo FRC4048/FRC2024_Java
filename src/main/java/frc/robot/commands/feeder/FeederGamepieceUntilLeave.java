@@ -7,7 +7,7 @@ import frc.robot.utils.command.TimedSubsystemCommand;
 
 public class FeederGamepieceUntilLeave extends TimedSubsystemCommand<Feeder> {
     public FeederGamepieceUntilLeave(Feeder feeder) {
-        super(feeder,5);
+        super(feeder,Constants.FEEDER_SHOOT_TIMEOUT);
     }
     @Override
     public void execute() {

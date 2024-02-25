@@ -1,23 +1,22 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
+import frc.robot.utils.command.SubsystemCommandBase;
 
-public class SetServoAngle extends Command {
-    private final Climber climber;
+public class SetServoAngle extends SubsystemCommandBase<Climber> {
     private final double leftTargetAngle;
     private final double rightTargetAngle;
 
     public SetServoAngle(Climber climber, double leftTargetAngle, double rightTargetAngle){
-        this.climber = climber;
+        super(climber);
         this.leftTargetAngle = leftTargetAngle;
         this.rightTargetAngle = rightTargetAngle;
     }
 
     @Override
     public void execute() {
-        climber.setLeftServoAngle(leftTargetAngle);
-        climber.setRightServoAngle(rightTargetAngle);
+        getSystem().setLeftServoAngle(leftTargetAngle);
+        getSystem().setRightServoAngle(rightTargetAngle);
     }
 
     @Override

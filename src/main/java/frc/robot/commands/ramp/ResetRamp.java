@@ -11,7 +11,7 @@ import frc.robot.utils.command.TimedSubsystemCommand;
 public class ResetRamp extends TimedSubsystemCommand<Ramp> {
 
   public ResetRamp(Ramp ramp) {
-    super(ramp,5);
+    super(ramp,Constants.RESET_RAMP_TIMEOUT);
   }
 
   @Override

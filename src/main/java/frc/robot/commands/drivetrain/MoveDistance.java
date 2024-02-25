@@ -16,7 +16,7 @@ public class MoveDistance extends TimedSubsystemCommand<SwerveDrivetrain> {
   private double desiredPoseX;
   private double desiredPoseY;
   public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
-    super(drivetrain,5);
+    super(drivetrain,Constants.MOVE_DISTANCE_TIMEOUT);
     this.changeXMeters = changeXMeters;
     this.changeYMeters = changeYMeters;
     this.maxSpeed = Math.abs(maxSpeed);
