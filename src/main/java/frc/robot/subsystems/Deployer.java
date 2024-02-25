@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.Robot;
+import frc.robot.utils.diag.DiagTalonSrxEncoder;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -36,6 +37,7 @@ public class Deployer extends SubsystemBase{
 
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("Deployer", "Encoder", 0, deployerMotor));//change requiredTravel later
     }
 
     public void resetEncoder() {
@@ -63,9 +65,6 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
             SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
-            SmartShuffleboard.put("Diagnostics","Deployer", "encoder", getEncoder());
-            SmartShuffleboard.put("Diagnostics","Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
-            SmartShuffleboard.put("Diagnostics","Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
         //Another place with logging code in last year's extender class
     }
