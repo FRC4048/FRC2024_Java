@@ -1,23 +1,21 @@
 package frc.robot.commands.feeder;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feeder;
+import frc.robot.utils.command.SubsystemCommandBase;
 
 import java.util.function.DoubleSupplier;
 
-public class ManualFeeder extends Command {
+public class ManualFeeder extends SubsystemCommandBase<Feeder> {
     private final DoubleSupplier spd;
-    private final Feeder feeder;
 
-    protected ManualFeeder(Feeder feeder, DoubleSupplier spd) {
-        this.feeder = feeder;
+    public ManualFeeder(Feeder feeder, DoubleSupplier spd) {
+        super(feeder);
         this.spd = spd;
-        addRequirements(feeder);
     }
 
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(spd.getAsDouble());
+        getSystem().setFeederMotorSpeed(spd.getAsDouble());
     }
 
     @Override

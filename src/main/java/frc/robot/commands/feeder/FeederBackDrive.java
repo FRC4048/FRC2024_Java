@@ -1,32 +1,23 @@
 package frc.robot.commands.feeder;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
+import frc.robot.utils.command.TimedSubsystemCommand;
 
-public class FeederBackDrive extends Command {
-    private final Feeder feeder;
-    private double time;
+public class FeederBackDrive extends TimedSubsystemCommand<Feeder> {
     public FeederBackDrive(Feeder feeder) {
-        this.feeder = feeder;
-        addRequirements(feeder);
-
+        super(feeder,10);
     }
     @Override
     public void end(boolean interrupted) {
-        feeder.stopFeederMotor();
+        getSystem().stopFeederMotor();
     }
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_BACK_DRIVE_SPEED);
-    }
-    @Override
-    public void initialize() {
-        time = Timer.getFPGATimestamp();
+        getSystem().setFeederMotorSpeed(Constants.FEEDER_BACK_DRIVE_SPEED);
     }
     @Override
     public boolean isFinished() {
-        return feeder.pieceSeen() || Timer.getFPGATimestamp() - time > 10;
+        return getSystem().pieceSeen() || super.isFinished();
     }
 }

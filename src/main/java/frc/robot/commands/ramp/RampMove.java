@@ -1,29 +1,28 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Ramp;
+import frc.robot.utils.command.SubsystemCommandBase;
 
 import java.util.function.DoubleSupplier;
 
-public class RampMove extends Command{
-    
-    private final Ramp ramp;
+public class RampMove extends SubsystemCommandBase<Ramp> {
     private final DoubleSupplier encoderValue;
 
     public RampMove(Ramp ramp, DoubleSupplier encoderValue) {
-        this.ramp = ramp;
+        super(ramp);
         this.encoderValue = encoderValue;
-        addRequirements(this.ramp);
     }
 
     @Override
     public void initialize() {
-        ramp.setRampPos(encoderValue.getAsDouble());
+        super.initialize();
+        getSystem().setRampPos(encoderValue.getAsDouble());
     }
 
 
     @Override
     public void execute() {
+        getSystem().setRampPos(encoderValue.getAsDouble());
     }
 
     @Override

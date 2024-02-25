@@ -1,22 +1,21 @@
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.command.SubsystemCommandBase;
 
-public class SetInitOdom extends Command {
-    private final SwerveDrivetrain drivetrain;
+public class SetInitOdom extends SubsystemCommandBase<SwerveDrivetrain> {
     private final AutoChooser chooser;
 
     public SetInitOdom(SwerveDrivetrain drivetrain, AutoChooser chooser) {
-        this.drivetrain = drivetrain;
+        super(drivetrain);
         this.chooser = chooser;
     }
 
     @Override
     public void initialize() {
-        drivetrain.setGyroOffset(chooser.getStartingPosition().getRotation().getDegrees() * -1);
-        drivetrain.resetOdometry(chooser.getStartingPosition());
+        getSystem().setGyroOffset(chooser.getStartingPosition().getRotation().getDegrees() * -1);
+        getSystem().resetOdometry(chooser.getStartingPosition());
     }
     @Override
     public boolean isFinished() {

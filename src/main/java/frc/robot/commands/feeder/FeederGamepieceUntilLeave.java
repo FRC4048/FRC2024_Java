@@ -1,39 +1,26 @@
 package frc.robot.commands.feeder;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
+import frc.robot.utils.command.TimedSubsystemCommand;
 
 
-public class FeederGamepieceUntilLeave extends Command{
-    private Feeder feeder;
-    private double time;
+public class FeederGamepieceUntilLeave extends TimedSubsystemCommand<Feeder> {
     public FeederGamepieceUntilLeave(Feeder feeder) {
-        this.feeder = feeder;
-        addRequirements(feeder);
-        
-    }
-    @Override
-    public void end(boolean interrupted) {
-        feeder.stopFeederMotor();
+        super(feeder,5);
     }
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
+        getSystem().setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
     }
-    @Override
-    public void initialize() {
-        time = Timer.getFPGATimestamp();
-    }
+
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - time > 0.5) {
-            return feeder.pieceNotSeen() || Timer.getFPGATimestamp() - time > 5;
-        }
-        else {
-            return false;
-        }
+        return getSystem().pieceSeen() || super.isFinished();
+    }
+    @Override
+    public void end(boolean interrupted) {
+        getSystem().stopFeederMotor();
     }
     
 }

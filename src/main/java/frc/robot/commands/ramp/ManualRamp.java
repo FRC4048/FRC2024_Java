@@ -1,23 +1,21 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Ramp;
+import frc.robot.utils.command.SubsystemCommandBase;
 
 import java.util.function.DoubleSupplier;
 
-public class ManualRamp extends Command {
-    private final Ramp ramp;
+public class ManualRamp extends SubsystemCommandBase<Ramp> {
     private final DoubleSupplier spd;
 
     public ManualRamp(Ramp ramp, DoubleSupplier spd) {
-        this.ramp = ramp;
+        super(ramp);
         this.spd = spd;
-        addRequirements(ramp);
     }
 
     @Override
     public void execute() {
-        ramp.setSpeed(spd.getAsDouble());
+        getSystem().setSpeed(spd.getAsDouble());
     }
 
     @Override
