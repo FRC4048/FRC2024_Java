@@ -1,6 +1,7 @@
 package frc.robot.commands.feeder;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
@@ -19,6 +20,7 @@ public class FeederGamepieceUntilLeave extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("feed interupted",interrupted);
         feeder.stopFeederMotor();
     }
 
@@ -38,7 +40,8 @@ public class FeederGamepieceUntilLeave extends Command {
         if (feeder.pieceNotSeen()) {
             pieceNotFoundCounter++;
         }
-        return (pieceNotFoundCounter > 35 || Timer.getFPGATimestamp() - time > 5);
+        SmartDashboard.putNumber("FeederPieceCount",pieceNotFoundCounter);
+        return (pieceNotFoundCounter > 25 || Timer.getFPGATimestamp() - time > 5);
     }
 
 }

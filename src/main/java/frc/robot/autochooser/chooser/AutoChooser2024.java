@@ -3,15 +3,11 @@ package frc.robot.autochooser.chooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
-import frc.robot.commands.deployer.LowerDeployer;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
-import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.commands.pathplanning.FourPieceLeft;
 import frc.robot.subsystems.*;
 
 import java.util.Map;
@@ -30,14 +26,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossRight"))),
                 Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft"))),
                 Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid"))),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                                new ShootSpeaker(shooter,1),
-                                new FeederGamepieceUntilLeave(feeder)
-                        ),
-                        new LowerDeployer(deployer),
-                        AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Left")))
-                ),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), new FourPieceLeft(shooter,feeder,deployer)),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
                 Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")))
         );

@@ -9,7 +9,7 @@ import frc.robot.subsystems.Shooter;
 public class ExitAndShoot extends ParallelCommandGroup{
     public ExitAndShoot(Shooter shooter, Feeder feeder) {
         addCommands(
-                new ShootSpeaker(shooter,10),
+                new ShootSpeaker(shooter,1),
                 new FeederGamepieceUntilLeave(feeder)
         );
         addRequirements(shooter,feeder);
