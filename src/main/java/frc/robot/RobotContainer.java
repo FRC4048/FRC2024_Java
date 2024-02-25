@@ -17,12 +17,12 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -35,10 +35,13 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.DeployAmpSequence;
 import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.RetractAmpSequence;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
@@ -69,7 +72,7 @@ public class RobotContainer {
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
       private SwerveDrivetrain drivetrain;
       private final AutoChooser2024 autoChooser;
-
+      private final Amp amp = new Amp();
       private final Shooter shooter = new Shooter();
       private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
@@ -80,7 +83,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        setupDriveTrain(); 
+        setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
@@ -136,13 +139,18 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+
+        if (Constants.AMP_DEBUG) {
+            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
+            SmartShuffleboard.putCommand("Amp", "Retarct AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+        }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp,()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0))));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp, ()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0))));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 15 )));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", CommandUtil.logged(new RampMove(ramp, 500)));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
