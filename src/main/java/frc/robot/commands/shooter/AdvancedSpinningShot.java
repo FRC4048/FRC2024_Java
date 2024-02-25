@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Alignable;
@@ -16,6 +17,8 @@ public class AdvancedSpinningShot extends Command {
     private final Timer timer;
     private final Supplier<Alignable> alignable;
     private ShooterSpeed shooterSpeed;
+    private static ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
+    private static ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
 
     public AdvancedSpinningShot(Shooter shooter , Supplier<Pose2d> curentPoseSupplier, Supplier<Alignable> alignableSupplier) {
         this.shooter = shooter;
@@ -51,8 +54,11 @@ public class AdvancedSpinningShot extends Command {
 
     private ShooterSpeed calcuateShooterSpeed() {
         Pose2d currentPose = pose2dSupplier.get();
-        if (currentPose.getY() > Constants.SPEAKER_TOP_EDGE_Y_POS) return new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
-        else return new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);
+        if (currentPose.getY() > Constants.SPEAKER_TOP_EDGE_Y_POS) {
+            return RobotContainer.isRedAlliance() ? rightShooterSpeed : leftShooterSpeed;
+        } else {
+            return RobotContainer.isRedAlliance() ? leftShooterSpeed : rightShooterSpeed;
+        }
     }
 
 }
