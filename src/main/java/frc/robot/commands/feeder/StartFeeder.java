@@ -30,7 +30,7 @@ public class StartFeeder extends Command {
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
-        timeoutCounter.increaseTimeoutCount();
+        
     }
 
     @Override
@@ -39,6 +39,7 @@ public class StartFeeder extends Command {
             return true;
         }
         else if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {
+            timeoutCounter.increaseTimeoutCount();
             return true;
         }
         return false;

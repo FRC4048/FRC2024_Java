@@ -32,7 +32,6 @@ public class ResetGyro extends Command {
     @Override
     public boolean isFinished() {
         if (Timer.getFPGATimestamp() - startTime >= delay) {
-            timeoutCounter.increaseTimeoutCount();
             return true;
         }
         return false;
