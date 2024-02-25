@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import com.revrobotics.*;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 /**
  * A Wrapper utility to encapsulate the NEO motor with PID capability.
@@ -24,7 +25,7 @@ public class NeoPidMotor {
     // The built-in relative encoder
     private RelativeEncoder encoder;
     // The built-in PID controller
-    private SparkPIDController pidController;
+    private SparkMaxPIDController pidController;
 
     // The desired motor position
     private double setPosition = 0.0;
@@ -39,12 +40,12 @@ public class NeoPidMotor {
     }
 
     public NeoPidMotor(int id, double pidP, double pidI, double pidD, double iZone, double pidFF, double pidMinOutput, double pidMaxOutput) {
-        neoMotor = new CANSparkMax(id, CANSparkLowLevel.MotorType.kBrushless);
+        neoMotor = new CANSparkMax(id, CANSparkMaxLowLevel.MotorType.kBrushless);
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         // This is normally how we want it, but we may need to configure the switches differently
-        neoMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
-        neoMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+        neoMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        neoMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
         pidController = neoMotor.getPIDController();
         pidController.setP(pidP);
@@ -61,17 +62,17 @@ public class NeoPidMotor {
         pidController.setSmartMotionAllowedClosedLoopError(1.0, 0);
     }
 
-    public void setSmartMotionVelocity(double maxVelocity, double minVelocity, int slotID) {
-        pidController.setSmartMotionMaxVelocity(maxVelocity, slotID);
-        pidController.setSmartMotionMinOutputVelocity(minVelocity, slotID);
+    public void setMinMaxVelocity(double maxVelocity, double minVelocity) {
+        pidController.setSmartMotionMaxVelocity(maxVelocity, 0);
+        pidController.setSmartMotionMinOutputVelocity(minVelocity, 0);
     }
 
-    public void setSmartMotionMaxAccel(double maxAcceleration, int slotID) {
+    public void setMaxAccel(double maxAcceleration) {
         pidController.setSmartMotionMaxAccel(maxAcceleration, 0);
     }
 
-    public void setSmartMotionAllowedClosedLoopError(double allowedError, int slotID) {
-        pidController.setSmartMotionAllowedClosedLoopError(allowedError, slotID);
+    public void setSmartMotionAllowedClosedLoopError(double allowedError) {
+        pidController.setSmartMotionAllowedClosedLoopError(allowedError, 0);
     }
 
     /**
@@ -132,7 +133,27 @@ public class NeoPidMotor {
         return encoder;
     }
 
-    public SparkPIDController getPidController() {
+    public SparkMaxPIDController getPidController() {
         return pidController;
+    }
+    
+    public void resetEncoderPosition() {
+        encoder.setPosition(0);
+    }
+
+    public boolean forwardLimitSwitchIsPressed() {
+        return neoMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public boolean reversedLimitSwitchIsPressed() {
+        return neoMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
+    }
+
+    public void setInverted(boolean isInverted) {
+        neoMotor.setInverted(isInverted);
+    }
+
+    public void setIdleMode(IdleMode mode) {
+        neoMotor.setIdleMode(mode);
     }
 }

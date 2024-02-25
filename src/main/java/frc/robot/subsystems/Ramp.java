@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkLimitSwitch.Type;
 
@@ -12,8 +10,6 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class Ramp extends SubsystemBase {
-    private final CANSparkMax neoMotor;
-    private final RelativeEncoder encoder;
     private final NeoPidMotor neoPidMotor;
     // private double pidP = Constants.RAMP_PID_P;
     // private double pidI = Constants.RAMP_PID_I;
@@ -26,13 +22,12 @@ public class Ramp extends SubsystemBase {
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
-        neoPidMotor.setSmartMotionAllowedClosedLoopError(0.0, 0);
-        neoPidMotor.setSmartMotionVelocity(Constants.RAMP_MAX_RPM_VELOCITY, 0.0, 0);
-        neoMotor = neoPidMotor.getNeoMotor();
-        encoder = neoPidMotor.getEncoder();
+        neoPidMotor.setSmartMotionAllowedClosedLoopError(0.0);
+        //neoPidMotor.setSmartMotionVelocity(10000, 0.0);
+        neoPidMotor.setMaxAccel(3000);
         resetEncoder();
-        forwardLimitSwitch = neoMotor.getForwardLimitSwitch(Type.kNormallyOpen);
-        backwardLimitSwitch = neoMotor.getReverseLimitSwitch(Type.kNormallyOpen);
+        forwardLimitSwitch = neoPidMotor.getNeoMotor().getForwardLimitSwitch(Type.kNormallyOpen);
+        backwardLimitSwitch = neoPidMotor.getNeoMotor().getReverseLimitSwitch(Type.kNormallyOpen);
         if (Constants.RAMP_PID_DEBUG){
         //SmartShuffleboard.put("Ramp", "PID P", pidP);
         //SmartShuffleboard.put("Ramp", "PID I", pidI);
@@ -73,38 +68,34 @@ public class Ramp extends SubsystemBase {
      * @param speed the speed (0-1)
      */
     public void setSpeed(double speed) {
-        neoMotor.set(speed);
+        neoPidMotor.getNeoMotor().set(speed);
     }
 
     public void stopMotor() {
-        neoMotor.set(0.0);
+        neoPidMotor.getNeoMotor().set(0.0);
     }
 
     public double getRampPos() {
-        return encoder.getPosition();
-    }
-
-    public void setPIDSpeed(double rpm) {
-        neoPidMotor.setPidSpeed(rpm);
+        return neoPidMotor.getEncoder().getPosition();
     }
 
     /**
      * @return If the Forward Limit Switch is pressed
      */
     public boolean getForwardSwitchState() {
-        return forwardLimitSwitch.isPressed();
+        return neoPidMotor.forwardLimitSwitchIsPressed();
     }
 
     /**
      * @return If the Reversed Limit Switch is pressed
      */
     public boolean getReversedSwitchState() {
-        return backwardLimitSwitch.isPressed();
+        return neoPidMotor.reversedLimitSwitchIsPressed();
     }
 
     public void resetEncoder() {
         this.rampPos = 0;
-        encoder.setPosition(0);
+        neoPidMotor.resetEncoderPosition();
     }
 
     public double encoderToAngle(double encoderValue){
