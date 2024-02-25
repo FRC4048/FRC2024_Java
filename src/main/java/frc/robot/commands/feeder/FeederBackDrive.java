@@ -2,7 +2,6 @@ package frc.robot.commands.feeder;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.utils.ColorObject;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
@@ -28,6 +27,6 @@ public class FeederBackDrive extends Command {
     }
     @Override
     public boolean isFinished() {
-        return feeder.getPiece().equals(ColorObject.Piece) || Timer.getFPGATimestamp() - time > 1;
+        return feeder.pieceSeen() || Timer.getFPGATimestamp() - time > 10;
     }
 }

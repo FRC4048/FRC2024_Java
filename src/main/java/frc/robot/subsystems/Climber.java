@@ -42,7 +42,7 @@ public class Climber extends SubsystemBase {
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.leftServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
-        this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
+        this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 1100);
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftExtendedLimit, "Climber", "Left Extended"));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(rightExtendedLimit, "Climber", "Right Extended"));

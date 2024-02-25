@@ -27,7 +27,7 @@ public class RaiseDeployer extends Command {
     @Override 
     public boolean isFinished() {
         //Check is timer has passed timeout point or if deployer has reached limit switch
-        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerFowardLimitSwitchClosed());
+        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerForwardLimitSwitchClosed());
     }
 
     @Override
