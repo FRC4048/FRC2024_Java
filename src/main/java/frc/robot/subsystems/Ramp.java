@@ -11,48 +11,22 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Ramp extends SubsystemBase {
     private final NeoPidMotor neoPidMotor;
-    // private double pidP = Constants.RAMP_PID_P;
-    // private double pidI = Constants.RAMP_PID_I;
-    // private double pidD = Constants.RAMP_PID_D;
-    // private double pidFF = Constants.RAMP_PID_FF;
     private double rampPos = Constants.RAMP_POS;
-    // private double iZoneError = Constants.RAMP_ERROR_IZONE;
-    private final SparkLimitSwitch forwardLimitSwitch;
-    private final SparkLimitSwitch backwardLimitSwitch;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
         neoPidMotor.setSmartMotionAllowedClosedLoopError(0.0);
-        //neoPidMotor.setSmartMotionVelocity(10000, 0.0);
         neoPidMotor.setMaxAccel(3000);
         resetEncoder();
-        forwardLimitSwitch = neoPidMotor.getNeoMotor().getForwardLimitSwitch(Type.kNormallyOpen);
-        backwardLimitSwitch = neoPidMotor.getNeoMotor().getReverseLimitSwitch(Type.kNormallyOpen);
-        if (Constants.RAMP_PID_DEBUG){
-        //SmartShuffleboard.put("Ramp", "PID P", pidP);
-        //SmartShuffleboard.put("Ramp", "PID I", pidI);
-        //SmartShuffleboard.put("Ramp", "PID D", pidD);
-        }
     }
 
     public void periodic() {
         if (Constants.RAMP_DEBUG){
-            // SmartShuffleboard.put("Ramp", "P Gain", pidP);
-            // SmartShuffleboard.put("Ramp", "I Gain", pidI);
-            // SmartShuffleboard.put("Ramp", "D Gain", pidD);
-            // SmartShuffleboard.put("Ramp", "FF Gain", pidFF);
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
-        // if (Constants.RAMP_PID_DEBUG){
-        //     //pid tuning
-        //     pidP = SmartShuffleboard.getDouble("Ramp", "PID P", pidP);
-        //     pidI = SmartShuffleboard.getDouble("Ramp", "PID I", pidI);
-        //     pidD = SmartShuffleboard.getDouble("Ramp", "PID D", pidD);
-        //     pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", pidFF);
-        // }
 
     }
 

@@ -1,10 +1,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
@@ -31,8 +29,6 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
     neoPidMotorRight.setIdleMode(IdleMode.kBrake);
 
-    // neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
-    // neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
     SmartShuffleboard.put("Shooter", "Desired Left Motor RPM", 0.0);
     SmartShuffleboard.put("Shooter", "Desired Right Motor RPM", 0.0);
   }
@@ -44,20 +40,6 @@ public class Shooter extends SubsystemBase {
   public double getDesiredRightMotorRPM() {
     return SmartShuffleboard.getDouble("Shooter", "Desired Right Motor RPM", 0.0);
   }
-
-  // /**
-  //  * @return shooter motor 1 speed
-  //  */
-  // public double getShooterMotorLeftSpeed() {
-  //   return neoPidMotorLeft.getCurrentSpeed();
-  // }
-
-  // /**
-  //  * @return shooter motor 2 speed
-  //  */
-  // public double getShooterMotorRightSpeed() {
-  //   return neoPidMotorRight.getCurrentSpeed();
-  // }
 
   /**
    * Set shooter motor 1 RPM with PID
