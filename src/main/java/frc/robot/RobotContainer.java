@@ -16,15 +16,12 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -37,12 +34,14 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.DeployAmpSequence;
 import frc.robot.commands.sequences.DependentIntakeAndDeployer;
-import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.DeployAmpSequence;
+import frc.robot.commands.sequences.ExitAndShootFromAmp;
+import frc.robot.commands.sequences.ExitAndShootFromOutsideSpeaker;
+import frc.robot.commands.sequences.ExitAndShootFromPodium;
+import frc.robot.commands.sequences.ExitAndShootFromSpeaker;
 import frc.robot.commands.sequences.RetractAmpSequence;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
-import frc.robot.commands.sequences.StopIntakeGroup;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Amp;
@@ -105,7 +104,7 @@ public class RobotContainer {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShootFromSpeaker(shooter,feeder, drivetrain, ramp));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
@@ -189,15 +188,17 @@ public class RobotContainer {
                 () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-        controller.a().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from speaker
-        controller.b().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from podium
-        controller.x().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from pos yet to determine
-        controller.y().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to amp from amp
+        controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from speaker
+        controller.b().onTrue(new ExitAndShootFromPodium(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from podium
+        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from pos yet to determine
+        controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp)); //TODO: Need different shooting commands based on where we are- this should be to amp from amp
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 
         // Engage
         controller.rightBumper().onTrue(new EngageRatchet(climber));
+        controller.povUp().onTrue(new DeployAmpSequence(ramp, amp));
+        controller.povDown().onTrue(new RetractAmpSequence(ramp, amp));
     }
 
     public SwerveDrivetrain getDrivetrain() {

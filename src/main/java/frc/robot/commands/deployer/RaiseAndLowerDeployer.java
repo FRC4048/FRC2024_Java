@@ -31,7 +31,7 @@ public class RaiseAndLowerDeployer extends Command{
 
     @Override
     public void initialize() {
-        deployerUp = deployer.isDeployerFowardLimitSwitchClosed();
+        deployerUp = deployer.isDeployerForwardLimitSwitchClosed();
         time = Timer.getFPGATimestamp();
     } 
 
@@ -40,7 +40,7 @@ public class RaiseAndLowerDeployer extends Command{
         if (deployerUp == true) {
             return deployer.isDeployerReverseLimitSwitchClosed() || Timer.getFPGATimestamp() - time == 5;
         } else {
-            return deployer.isDeployerFowardLimitSwitchClosed() || Timer.getFPGATimestamp() - time == 5;
+            return deployer.isDeployerForwardLimitSwitchClosed() || Timer.getFPGATimestamp() - time == 5;
         }
     }
 }
