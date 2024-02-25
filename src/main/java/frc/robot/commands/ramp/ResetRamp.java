@@ -11,7 +11,7 @@ import frc.robot.subsystems.Ramp;
 
 public class ResetRamp extends Command {
   /** Creates a new ResetRamp. */
-  private Ramp ramp; 
+  private final Ramp ramp;
   private double startTime;
 
   /*
@@ -35,7 +35,9 @@ public class ResetRamp extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    ramp.setMotor(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
+  }
 
   // Called once the command ends or is interrupted.
   @Override

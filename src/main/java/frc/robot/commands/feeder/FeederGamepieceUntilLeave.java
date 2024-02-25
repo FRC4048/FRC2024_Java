@@ -6,29 +6,39 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
 
-public class FeederGamepieceUntilLeave extends Command{
-    private Feeder feeder;
+public class FeederGamepieceUntilLeave extends Command {
+    private final Feeder feeder;
     private double time;
+    private int pieceNotFoundCounter;
+
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
-        
+
     }
+
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
     }
+
     @Override
     public void execute() {
         feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
     }
+
     @Override
     public void initialize() {
         time = Timer.getFPGATimestamp();
+        this.pieceNotFoundCounter = 0;
     }
+
     @Override
     public boolean isFinished() {
-        return feeder.pieceNotSeen() || Timer.getFPGATimestamp() - time > 5;
+        if (feeder.pieceNotSeen()) {
+            pieceNotFoundCounter++;
+        }
+        return (pieceNotFoundCounter > 35 || Timer.getFPGATimestamp() - time > 5);
     }
-    
+
 }
