@@ -28,6 +28,6 @@ public class RampMove extends Command{
 
     @Override
     public boolean isFinished() {
-            return true;
+        return (Math.abs(ramp.getRampPos() - encoderValue.getAsDouble()) > 0.05);
     }
 }
