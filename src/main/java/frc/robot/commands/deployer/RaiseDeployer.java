@@ -17,7 +17,7 @@ public class RaiseDeployer extends TimedSubsystemCommand<Deployer> {
 
     @Override 
     public boolean isFinished() {
-        return getSystem().isDeployerFowardLimitSwitchClosed() || super.isFinished();
+        return getSystem().isDeployerForwardLimitSwitchClosed() || super.isFinished();
     }
 
     @Override
