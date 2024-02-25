@@ -130,9 +130,9 @@ public class Constants2024 extends GameConstants {
     public static final double INTAKE_MOTOR_1_SPEED = 1;
     public static final double INTAKE_MOTOR_2_SPEED = 1;
 
-    public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 7; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 7; //value has to be tweaked
-    public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 7; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = true; //value has to be tweaked
 
     //Deployer
