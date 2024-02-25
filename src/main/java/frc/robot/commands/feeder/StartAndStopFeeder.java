@@ -28,7 +28,7 @@ public class StartAndStopFeeder extends Command{
 
     @Override
     public void execute() {
-        if (deployer.isDeployerReverseLimitSwitchClosed() && intake.getMotor1Speed() > 0.1) {
+        if (deployer.isDeployerReverseLimitSwitchClosed()) {
             feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
         }
     }
@@ -40,7 +40,11 @@ public class StartAndStopFeeder extends Command{
 
     @Override
     public boolean isFinished() {
-        return (feeder.pieceSeen()) || (Timer.getFPGATimestamp() - time > 5);
+        if (deployer.isDeployerReverseLimitSwitchClosed()) {
+            return (feeder.pieceSeen()) || (Timer.getFPGATimestamp() - time > 5);
+        } else {
+            return true;
+        }
     }
     
 }
