@@ -1,7 +1,7 @@
 package frc.robot.constants;
 
 public class GameConstants {
-    public static final boolean ENABLE_LOGGING = false;
+    public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
