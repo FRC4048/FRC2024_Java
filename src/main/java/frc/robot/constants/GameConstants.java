@@ -39,7 +39,7 @@ public class GameConstants {
 
     public static final double MAX_CLIMBER_ENCODER = 80.0;
 
-    public static final double AMP_MOTOR_SPEED = 1.0;
+    public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
     
 

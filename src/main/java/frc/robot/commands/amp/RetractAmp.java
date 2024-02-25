@@ -16,6 +16,7 @@ public class RetractAmp extends Command {
 
     @Override
     public void initialize() {
+        timeout.reset();
         timeout.start();
     }
 
@@ -32,6 +33,5 @@ public class RetractAmp extends Command {
     @Override
     public void end(boolean interrupted) {
         amp.setAmpMotorSpeed(0);
-        timeout.reset();
     }
 }
