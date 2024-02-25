@@ -42,8 +42,10 @@ public class ResetRamp extends Command {
   @Override
   public void end(boolean interrupted) {
     ramp.stopMotor();
-    new WaitCommand(Constants.RAMP_WIND_DOWN_TIME);
-    ramp.resetEncoder();
+    if(ramp.getReversedSwitchState()) {
+      new WaitCommand(Constants.RAMP_WIND_DOWN_TIME);
+      ramp.resetEncoder();
+    }
   }
 
   // Returns true when the command should end.
