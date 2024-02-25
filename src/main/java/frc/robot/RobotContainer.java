@@ -35,6 +35,7 @@ import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.ResetRampThenEncoder;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
@@ -144,6 +145,7 @@ public class RobotContainer {
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", new RampMove(ramp, 15 ));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", new RampMove(ramp, 500));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
+            SmartShuffleboard.putCommand("Ramp", "ResetRamp+Encoder", new ResetRampThenEncoder(ramp));
         }
         if (Constants.SHOOTER_DEBUG){
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));

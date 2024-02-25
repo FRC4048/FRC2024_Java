@@ -7,6 +7,7 @@ import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -23,6 +24,7 @@ public class Ramp extends SubsystemBase {
     private double iZoneError = Constants.RAMP_ERROR_IZONE;
     private final SparkLimitSwitch forwardLimitSwitch;
     private final SparkLimitSwitch backwardLimitSwitch;
+    private boolean endConditionTriggered = false;
 
     public Ramp() {
         neoMotor = new CANSparkMax(Constants.RAMP_ID, MotorType.kBrushless);
@@ -61,6 +63,7 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+            SmartShuffleboard.put("Ramp","EndConditionTriggered", endConditionTriggered);
         }
         if (Constants.RAMP_PID_DEBUG){
             //            // pid tuning
@@ -75,6 +78,12 @@ public class Ramp extends SubsystemBase {
     public void setRampPos(double targetPosition) {
         pidController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
         this.rampPos = targetPosition;
+    }
+    public boolean getEndConditionTriggered() {
+        return endConditionTriggered;
+    }
+    public void setEndCondtitionTriggered(boolean value) {
+        endConditionTriggered=value;
     }
     
     /**

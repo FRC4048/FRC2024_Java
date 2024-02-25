@@ -6,6 +6,7 @@ package frc.robot.commands.ramp;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 
@@ -13,6 +14,7 @@ public class ResetRamp extends Command {
   /** Creates a new ResetRamp. */
   private Ramp ramp; 
   private double startTime;
+  private boolean endConditionTriggered = false;
 
   /*
    *When we get the robot:
@@ -40,6 +42,7 @@ public class ResetRamp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    ramp.setEndCondtitionTriggered(true);
     ramp.stopMotor();
     ramp.resetEncoder();
   }
@@ -54,4 +57,5 @@ public class ResetRamp extends Command {
   public boolean runsWhenDisabled() {
     return true;
   }
+
 }
