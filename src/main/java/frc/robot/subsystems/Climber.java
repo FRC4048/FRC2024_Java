@@ -85,21 +85,29 @@ public class Climber extends SubsystemBase {
         rightServo.setPosition(0);
     }
 
-    public SparkLimitSwitch getLeftRetractedLimitSwitch() {
-        return leftRetractedLimit;
+    public boolean isLeftFullyRetracted() {
+        return leftRetractedLimit.isPressed();
     }
 
-    public SparkLimitSwitch getRightRetractedLimitSwitch() {
-        return rightRetractedLimit;
+    public boolean isRightFullyRetracted() {
+        return rightRetractedLimit.isPressed();
+    }
+
+    public boolean isLeftFullyExtended() {
+        return leftExtendedLimit.isPressed();
+    }
+
+    public boolean isRightFullyExtended() {
+        return rightExtendedLimit.isPressed();
     }
 
     @Override
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {
-            SmartShuffleboard.put("Climber", "Left Retracted", leftRetractedLimit.isPressed());
-            SmartShuffleboard.put("Climber", "Right Retracted", rightRetractedLimit.isPressed());
-            SmartShuffleboard.put("Climber", "Left Extended", leftExtendedLimit.isPressed());
-            SmartShuffleboard.put("Climber", "Right Extended", rightExtendedLimit.isPressed());
+            SmartShuffleboard.put("Climber", "Left Retracted", isLeftFullyRetracted());
+            SmartShuffleboard.put("Climber", "Right Retracted", isRightFullyRetracted());
+            SmartShuffleboard.put("Climber", "Left Extended", isLeftFullyExtended());
+            SmartShuffleboard.put("Climber", "Right Extended", isRightFullyExtended());
         }
     }
 }

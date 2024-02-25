@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
+import frc.robot.utils.TimeoutCounter;
 
 public class MoveClimberDown extends Command {
   /** Creates a new MoveClimberDown. */
   private final Climber climber;
   private double starttime;
+  private TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
   public MoveClimberDown(Climber climber) {
     this.climber = climber;
     addRequirements(climber);
@@ -39,8 +41,9 @@ public class MoveClimberDown extends Command {
   @Override
   public boolean isFinished() {
     if (Timer.getFPGATimestamp() - starttime > 3) {
+      timeoutCounter.increaseTimeoutCount();
       return true;
     }
-    return (climber.getRightRetractedLimitSwitch().isPressed() && climber.getLeftRetractedLimitSwitch().isPressed());
+    return (climber.isRightFullyRetracted() && climber.isLeftFullyRetracted());
   }
 }
