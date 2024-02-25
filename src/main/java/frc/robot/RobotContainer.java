@@ -182,15 +182,15 @@ public class RobotContainer {
         // Engage        
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(CommandUtil.sequence("Exit And Shoot", new ExitAndShoot(shooter,feeder)));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
+//      controller.a().onTrue(new StartFeeder(feeder));
+//      controller.b().onTrue(CommandUtil.parallel("Exit And Shoot", new ExitAndShoot(shooter,feeder)));
+//      ramp.setDefaultCommand(new RampMove(ramp, 10));
+//      climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
         controller.a().onTrue(CommandUtil.sequence("Start Intake And Feeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp)));
-        controller.b().onTrue(CommandUtil.sequence("Exit And Shoot", new ExitAndShoot(shooter,feeder, drivetrain)));;
+        controller.b().onTrue(CommandUtil.parallel("Exit And Shoot", new ExitAndShoot(shooter,feeder, drivetrain)));
         controller.x().onTrue(CommandUtil.logged(new LowerDeployer(deployer)));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
+//      controller.a().onTrue(new DeployerLower(deployer));
+//      controller.b().onTrue(new DeployerRaise(deployer));
     }
 
     public SwerveDrivetrain getDrivetrain() {
