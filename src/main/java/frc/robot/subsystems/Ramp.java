@@ -1,8 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.SparkLimitSwitch;
-import com.revrobotics.SparkLimitSwitch.Type;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
@@ -15,8 +12,8 @@ public class Ramp extends SubsystemBase {
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
-        neoPidMotor.setSmartMotionAllowedClosedLoopError(0.0);
-        neoPidMotor.setMaxAccel(3000);
+        neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
+        neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         resetEncoder();
     }
 

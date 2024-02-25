@@ -17,8 +17,8 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
 
-    neoPidMotorLeft.setMaxAccel(25000);
-    neoPidMotorRight.setMaxAccel(25000);
+    neoPidMotorLeft.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
+    neoPidMotorRight.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
     
     neoPidMotorLeft.setMinMaxVelocity(30000, 0);
     neoPidMotorRight.setMinMaxVelocity(30000, 0);
