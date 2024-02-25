@@ -1,7 +1,7 @@
 package frc.robot.constants;
 
 public class GameConstants {
-    public static final boolean ENABLE_LOGGING = false;
+    public static final boolean ENABLE_LOGGING = true;
 
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
@@ -20,6 +20,7 @@ public class GameConstants {
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
+    public static final boolean AMP_DEBUG = false;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
@@ -37,5 +38,9 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
 
     public static final double MAX_CLIMBER_ENCODER = 80.0;
+
+    public static final double AMP_MOTOR_SPEED = .8;
+    public static final double AMP_TIMEOUT = 2.0;
+    
 
 }

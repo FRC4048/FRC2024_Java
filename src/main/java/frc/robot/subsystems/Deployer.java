@@ -3,13 +3,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.Robot;
+import frc.robot.utils.diag.DiagTalonSrxSwitch;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 ///This class is meant to manage the motor that "deploys" the intake, by rotating in order to raise and lower the intake area.
@@ -34,12 +34,8 @@ public class Deployer extends SubsystemBase{
         deployerMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         deployerMotor.setSelectedSensorPosition(0);
 
-        //In last years code, there was this following code here involved in "Diagnostics". I'm not sure if it's relevant to what we are doing this year, so I'm leaving it commented out for now
-        /*
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("Extender", "Encoder", Constants.DIAG_TALONSRX_ROT, extenderMotor));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Extender", "Extended Switch", extenderMotor, frc.robot.utils.diag.DiagTalonSrxSwitch.Direction.FORWARD));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Extender", "Retracted Switch", extenderMotor, frc.robot.utils.diag.DiagTalonSrxSwitch.Direction.REVERSE));
-        */
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
     }
 
     public void resetEncoder() {
@@ -65,9 +61,11 @@ public class Deployer extends SubsystemBase{
     public void periodic() {
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
-            SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
+            SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerForwardLimitSwitchClosed());
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
+        SmartShuffleboard.put("Driver", "Deployer Raised", isDeployerForwardLimitSwitchClosed());
+        SmartShuffleboard.put("Driver", "Deployer Down", isDeployerReverseLimitSwitchClosed());
         //Another place with logging code in last year's extender class
     }
 
@@ -81,7 +79,7 @@ public class Deployer extends SubsystemBase{
         return deployerMotor.get();
     }
 
-    public boolean isDeployerFowardLimitSwitchClosed() {
+    public boolean isDeployerForwardLimitSwitchClosed() {
         return deployerMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
 
