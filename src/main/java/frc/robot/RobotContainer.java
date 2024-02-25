@@ -188,10 +188,10 @@ public class RobotContainer {
                 () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-        controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from speaker
-        controller.b().onTrue(new ExitAndShootFromPodium(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from podium
-        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp)); //TODO: Need different shooting commands based on where we are- this should be to speaker from pos yet to determine
-        controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp)); //TODO: Need different shooting commands based on where we are- this should be to amp from amp
+        controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp)); 
+        controller.b().onTrue(new ExitAndShootFromPodium(shooter, feeder, drivetrain, ramp)); //TODO: Podium and Outside Speaker are the same: What can this button do instead?
+        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp)); 
+        controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp)); 
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 
