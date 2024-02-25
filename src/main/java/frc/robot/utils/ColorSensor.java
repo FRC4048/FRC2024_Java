@@ -44,8 +44,7 @@ public class ColorSensor {
         return ColorValue.getFromColor(match.color);
     }
 
-    public ColorMatchResult getRawColor() {
-        Color detectedColor = colorSensor.getColor();
-        return colorMatcher.matchClosestColor(detectedColor);
+    public Color getRawColor() {
+        return colorSensor.getColor();
     }
 }
