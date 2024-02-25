@@ -56,7 +56,6 @@ public class MoveDistance extends Command {
   @Override
   public void end(boolean interrupted) {
     drivetrain.stopMotor();
-    timeoutCounter.increaseTimeoutCount();
   }
 
   // Returns true when the command should end.
@@ -69,6 +68,7 @@ public class MoveDistance extends Command {
       return true;
     }
     if ((Timer.getFPGATimestamp() - startTime) >= Constants.MOVE_DISTANCE_TIMEOUT) {
+      timeoutCounter.increaseTimeoutCount();
       return true;
     }
     return false;

@@ -43,7 +43,6 @@ public class RaiseDeployer extends Command {
     @Override
     public void end(boolean interrupted) {
         deployer.setDeployerMotorSpeed(0);
-        timeoutCounter.increaseTimeoutCount();
     }
 
 }
