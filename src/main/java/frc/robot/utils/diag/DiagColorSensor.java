@@ -43,7 +43,7 @@ public class DiagColorSensor implements Diagnosable {
 
     @Override
     public void refresh() {
-        ColorValue colorValue = colorsensor.getColor();
+        ColorValue colorValue = colorsensor.getColor50();
         colorMap.put(colorValue, true);
         boolean allColors = colorMap.values().stream().allMatch(value -> (value == true));
         if (networkTableEntry != null) {

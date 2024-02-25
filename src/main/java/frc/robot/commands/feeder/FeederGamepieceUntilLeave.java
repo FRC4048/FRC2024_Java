@@ -29,7 +29,7 @@ public class FeederGamepieceUntilLeave extends Command{
     @Override
     public boolean isFinished() {
         if (Timer.getFPGATimestamp() - time > 0.5) {
-            return feeder.pieceNotSeen() || Timer.getFPGATimestamp() - time > 5;
+            return feeder.pieceNotSeen50() || Timer.getFPGATimestamp() - time > 5;
         }
         else {
             return false;
