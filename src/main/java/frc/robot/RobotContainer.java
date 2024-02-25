@@ -178,6 +178,8 @@ public class RobotContainer {
                 () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
+        RampMove manualRampMove = new RampMove(ramp, () -> 13+13*controller.getRightX());
+        ramp.setDefaultCommand(manualRampMove);
         controller.a().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from speaker
         controller.b().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from podium
         controller.x().onTrue(new ExitAndShoot(shooter, feeder, drivetrain)); //TODO: Need different shooting commands based on where we are- this should be to speaker from pos yet to determine
@@ -217,4 +219,5 @@ public class RobotContainer {
     public AutoChooser getAutoChooser() {
         return autoChooser;
     }
+
 }
