@@ -21,7 +21,7 @@ public class Constants2024 extends GameConstants {
     public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
     public static final double RESET_RAMP_SPEED = -0.3; //assuming positive is forward, also needs to be refined do the real robot
     public static final double AMP_RAMP_ENC_VALUE = 5;
-    public static final double SPEAKER_RAMP_ENC_VALUE = 5; //TODO: Find Real Val1
+    public static final double SPEAKER_RAMP_ENC_VALUE = 5; //TODO: Find Real Value
     public static final double PODIUM_RAMP_ENC_VALUE = 5; //TODO: Find Real Value
     public static final double OUTSIDE_SPEAKER_RAMP_ENC_VALUE = 5; //TODO: Find Real Value
 
