@@ -35,7 +35,10 @@ import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
@@ -95,7 +98,7 @@ public class RobotContainer {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter, feeder, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
@@ -146,8 +149,9 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp));
         }
         if (Constants.SHOOTER_DEBUG){
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
+            SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-
         }
         if (Constants.FEEDER_DEBUG){
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder));
@@ -162,6 +166,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0 , -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4));
         }
+
     }
 
     private void configureBindings() {

@@ -28,17 +28,6 @@ public class Shooter extends SubsystemBase {
 
     neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
     neoPidMotorRight.setIdleMode(IdleMode.kBrake);
-
-    SmartShuffleboard.put("Shooter", "Desired Left Motor RPM", 0.0);
-    SmartShuffleboard.put("Shooter", "Desired Right Motor RPM", 0.0);
-  }
-
-  public double getDesiredLeftMotorRPM() {
-    return SmartShuffleboard.getDouble("Shooter", "Desired Left Motor RPM", 0.0);
-  }
-
-  public double getDesiredRightMotorRPM() {
-    return SmartShuffleboard.getDouble("Shooter", "Desired Right Motor RPM", 0.0);
   }
 
   /**
