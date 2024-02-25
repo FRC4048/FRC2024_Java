@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.InteruptCommand;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
@@ -165,14 +164,9 @@ public class RobotContainer {
         Command alignSpeaker = CommandUtil.parallel(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose())
+                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(),()-> drivetrain.getAlignable())
         );
-        Command endAlignSpeaker = CommandUtil.parallel(
-                "EndShoot&AlignSpeaker",
-                new InteruptCommand(alignSpeaker),
-                new SetAlignable(drivetrain,null)
-        );
-        joyLeftButton1.onTrue(alignSpeaker).onFalse(endAlignSpeaker);
+        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
