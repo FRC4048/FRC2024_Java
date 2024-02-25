@@ -34,9 +34,9 @@ public class FeederGamepieceUntilLeave extends Command{
             return feeder.pieceNotSeen();
         }
         else if (Timer.getFPGATimestamp() - time > Constants.FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT) {
+            timeoutCounter.increaseTimeoutCount();
             return true;
         }
-        timeoutCounter.increaseTimeoutCount();
         return false;
     }
     
