@@ -62,9 +62,9 @@ public class Feeder extends SubsystemBase {
             ColorMatchResult matchedColor = colorSensor.getMatchedColor();
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Matched", detectedColor.name());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.color.red);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.color.green);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.color.blue);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.red);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.green);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.blue);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
         }
     }
