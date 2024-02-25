@@ -167,7 +167,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(CommandUtil.logged(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX)));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(
