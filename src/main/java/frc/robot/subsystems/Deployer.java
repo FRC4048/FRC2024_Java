@@ -33,6 +33,10 @@ public class Deployer extends SubsystemBase{
         deployerMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         deployerMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         deployerMotor.setSelectedSensorPosition(0);
+        deployerMotor.configPeakCurrentLimit(Constants.DEPLOYER_MOTOR_PEAK_CURRENT_LIMIT);
+        deployerMotor.configPeakCurrentDuration(Constants.DEPLOYER_MOTOR_PEAK_CURRENT_DURATION);
+        deployerMotor.configContinuousCurrentLimit(Constants.DEPLOYER_MOTOR_CONTINUOUS_CURRENT_LIMIT);
+        deployerMotor.enableCurrentLimit(Constants.DEPLOYER_CURRENT_LIMIT_ENABLED);
 
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
