@@ -9,7 +9,7 @@ public class BasicShoot extends Command {
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;
-    private double time;
+    private final double time;
     public BasicShoot(Shooter shooter, double time) {
         this.shooter = shooter;
         this.time = time;
@@ -20,8 +20,8 @@ public class BasicShoot extends Command {
     public void initialize() {
         timer.reset();
         activated = true;
-        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LEFT_SPEED);
-        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_RIGHT_SPEED);
+        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
         timer.start();
 
     }
