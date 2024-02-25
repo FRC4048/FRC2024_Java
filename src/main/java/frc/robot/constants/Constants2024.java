@@ -21,8 +21,8 @@ public class Constants2024 extends GameConstants {
     public static final int RIGHT_SERVO_DISENGAGED = 180;
     public static final int LEFT_SERVO_ENGAGED = 0;
     public static final int LEFT_SERVO_DISENGAGED = 180;
-    public static final int LEFT_SERVO_ID = 8;
-    public static final int RIGHT_SERVO_ID = 9;
+    public static final int LEFT_SERVO_ID = 9;
+    public static final int RIGHT_SERVO_ID = 8;
 
     //Shooter
     public static final int SHOOTER_MOTOR_LEFT = 55; //needs to be changed
@@ -31,12 +31,14 @@ public class Constants2024 extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
 
-    public static final double SHOOTER_MOTOR_LEFT_SPEED = 0.6;
-    public static final double SHOOTER_MOTOR_RIGHT_SPEED = 1;
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
+
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.6;
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 1;
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 5;
+    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MOTOR_PID_P = 5e-5;
@@ -93,9 +95,9 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 306.29;
 
     //Feeder
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.6; //0.7
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5; //0.7
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.9;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 
@@ -104,8 +106,8 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;
-    public static final int CLIMBER_LEFT = 53;
-    public static final int CLIMBER_RIGHT = 52;
+    public static final int CLIMBER_LEFT = 52;
+    public static final int CLIMBER_RIGHT = 53;
     public static final double CLIMBER_BALANCE_kP = 1;
     public static final double CLIMBER_BALANCE_kTi = 1;
     public static final double CLIMBER_Balance_KTd = 1;

@@ -24,13 +24,16 @@ public class ConstantsTestbed extends GameConstants {
     public static final int RIGHT_SERVO_ID = 18;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_ID_1 = 44;
-    public static final int SHOOTER_MOTOR_ID_2 = 45;
+    public static final int SHOOTER_MOTOR_LEFT = 44;
+    public static final int SHOOTER_MOTOR_RIGHT = 45;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
 
-    public static final double SHOOTER_MOTOR_SPEED = 0.75;
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
+
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.6;
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 1;
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
@@ -92,6 +95,7 @@ public class ConstantsTestbed extends GameConstants {
 
     //Feeder
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
     public static final double FEEDER_MOTOR_EXIT_SPEED = 0.7;
     public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 30;
@@ -126,6 +130,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Deployer
+    public static final double ALIGNABLE_PID_P = 0.015;
+    public static final double ALIGNABLE_PID_I = 0;
+    public static final double ALIGNABLE_PID_D = 0.0015;
+    public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
     public static final int DEPLOYER_MOTOR_ID = 11;
 
     public static final double REQUIRED_RAISE = 400;
