@@ -14,6 +14,7 @@ public class ResetRamp extends Command {
   /** Creates a new ResetRamp. */
   private Ramp ramp; 
   private double startTime;
+  private Double rampStopTime = null;
 
   /*
    *When we get the robot:
@@ -42,16 +43,21 @@ public class ResetRamp extends Command {
   @Override
   public void end(boolean interrupted) {
     ramp.stopMotor();
-    if(ramp.getReversedSwitchState()) {
-      new WaitCommand(Constants.RAMP_WIND_DOWN_TIME);
-      ramp.resetEncoder();
-    }
+    if(ramp.getReversedSwitchState()) ramp.resetEncoder();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getReversedSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the top one
+    if (ramp.getReversedSwitchState()) {
+      ramp.stopMotor();
+    if(rampStopTime.equals(null)) rampStopTime = Timer.getFPGATimestamp();
+    else if ((Timer.getFPGATimestamp() - rampStopTime) >= Constants.RAMP_WIND_DOWN_TIME) return true;
+    }
+    else if ((Timer.getFPGATimestamp() - startTime) >= 5) {
+      return true;
+    }
+    return false;
   }
 
   @Override
