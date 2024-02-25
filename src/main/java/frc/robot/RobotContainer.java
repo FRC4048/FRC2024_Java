@@ -98,7 +98,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
         NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder,drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
