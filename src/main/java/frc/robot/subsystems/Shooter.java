@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
 
-    neoPidMotorLeft.setMaxAccel(60000);
-    neoPidMotorRight.setMaxAccel(60000);
+    neoPidMotorLeft.setMaxAccel(25000);
+    neoPidMotorRight.setMaxAccel(25000);
     
     neoPidMotorLeft.setMinMaxVelocity(30000, 0);
     neoPidMotorRight.setMinMaxVelocity(30000, 0);
@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft.setInverted(false);
     neoPidMotorRight.setInverted(true);
 
-    neoPidMotorLeft.setIdleMode(IdleMode.kCoast);
-    neoPidMotorRight.setIdleMode(IdleMode.kCoast);
+    neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
+    neoPidMotorRight.setIdleMode(IdleMode.kBrake);
 
     // neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
     // neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
