@@ -1,14 +1,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -19,14 +16,16 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax shooterMotorRight;
   private final DigitalInput shooterSensorLeft;
   private final DigitalInput shooterSensorRight;
-  //private final SparkPIDController shooterMotor1PID;
-  //private final SparkPIDController shooterMotor2PID;
   private final NeoPidMotor neoPidMotorLeft;
   private final NeoPidMotor neoPidMotorRight;
 
   public Shooter() {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
+    neoPidMotorLeft.setSmartMotionMaxAccel(22800, 0);
+    neoPidMotorRight.setSmartMotionMaxAccel(22800, 0);
+    neoPidMotorLeft.setSmartMotionVelocity(22800, 0, 0);
+    neoPidMotorRight.setSmartMotionVelocity(22800, 0, 0);
     this.shooterMotorLeft = neoPidMotorLeft.getNeoMotor();
     this.shooterMotorRight = neoPidMotorRight.getNeoMotor();
     this.shooterSensorLeft = new DigitalInput(Constants.SHOOTER_SENSOR_ID_1);
@@ -40,11 +39,8 @@ public class Shooter extends SubsystemBase {
 
     neoPidMotorLeft.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
     neoPidMotorRight.setPid(Constants.SHOOTER_MOTOR_PID_P, Constants.SHOOTER_MOTOR_PID_I, Constants.SHOOTER_MOTOR_PID_D, Constants.SHOOTER_MOTOR_PID_IZ, Constants.SHOOTER_MOTOR_PID_FF, Constants.SHOOTER_MOTOR_MIN_OUTPUT, Constants.SHOOTER_MOTOR_MAX_OUTPUT);
-    SmartShuffleboard.put("Shooter", "RPM", 0.0);
   }
-  public double getRPM() {
-    return SmartShuffleboard.getDouble("Shooter", "RPM", 0.0);
-  }
+
   /**
    * @param speed value between -1 and 1 to set shooter motor 1 to
    */
@@ -62,14 +58,14 @@ public class Shooter extends SubsystemBase {
   /**
    * @return shooter motor 1 speed
    */
-  public double getShooterMotor1Speed() {
+  public double getShooterMotorLeftSpeed() {
     return shooterMotorLeft.get();
   }
 
   /**
    * @return shooter motor 2 speed
    */
-  public double getShooterMotor2Speed() {
+  public double getShooterMotorRightSpeed() {
     return shooterMotorRight.get();
   }
 
@@ -77,44 +73,44 @@ public class Shooter extends SubsystemBase {
    * Set shooter motor 1 RPM with PID
    * @param rpm of motor
    */
-  public void setShooterMotor1RPM(double rpm) {
-    neoPidMotorLeft.setPidPos(rpm);
+  public void setShooterMotorLeftRPM(double rpm) {
+    neoPidMotorLeft.setPidSpeed(rpm * 4);
   }
 
   /**
    * Set shooter motor 2 RPM with PID
    * @param rpm of motor
    */
-  public void setShooterMotor2RPM(double rpm) {
-    neoPidMotorRight.setPidPos(rpm);
+  public void setShooterMotorRightRPM(double rpm) {
+    neoPidMotorRight.setPidSpeed(rpm * 4);
   }
 
   /**
    * @return motor 1 encoder value
    */
-  public RelativeEncoder getMotorEncoder1() {
-    return shooterMotorLeft.getEncoder();
+  public RelativeEncoder getMotorLeftEncoder() {
+    return neoPidMotorLeft.getEncoder();
   }
 
   /**
    * @return motor 2 encoder value
    */
-  public RelativeEncoder getMotorEncoder2() {
-    return shooterMotorRight.getEncoder();
+  public RelativeEncoder getMotorRightEncoder() {
+    return neoPidMotorRight.getEncoder();
   }
 
   /**
    * @return rpm of motor 1
    */
-  public double getShooterMotor1RPM() {
-    return getMotorEncoder1().getVelocity();
+  public double getShooterMotorLeftRPM() {
+    return getMotorLeftEncoder().getVelocity();
   }
 
   /**
    * @return rpm of motor 2
    */
-  public double getShooterMotor2RPM() {
-    return getMotorEncoder2().getVelocity();
+  public double getShooterMotorRightRPM() {
+    return getMotorRightEncoder().getVelocity();
   }
 
 
@@ -122,33 +118,33 @@ public class Shooter extends SubsystemBase {
    * sets speed of motor1 and motor2 to 0
    */
   public void stopShooter() {
-    shooterMotorLeft.set(0);
-    shooterMotorRight.set(0);
+    neoPidMotorLeft.setPidSpeed(0);
+    neoPidMotorRight.setPidSpeed(0);
   }
 
   /**
    * @return returns true if shooter motor 1 is connected to digital IO
    */
-  public boolean getShooterSensor1Activated() {
+  public boolean getShooterSensorLeftActivated() {
     return shooterSensorLeft.get();
   }
 
   /**
    * @return returns true if shooter motor 2 is connected to digital IO
    */
-  public boolean getShooterSensor2Activated() {
+  public boolean getShooterSensorRightActivated() {
     return shooterSensorRight.get();
   }
 
   @Override
   public void periodic() {
     if (Constants.SHOOTER_DEBUG){
-      SmartShuffleboard.put("Shooter", "Shooter Motor 1 Speed", getShooterMotor1Speed());
-      SmartShuffleboard.put("Shooter", "Shooter Motor 2 Speed", getShooterMotor2Speed());
-      SmartShuffleboard.put("Shooter", "Shooter Motor 1 RPM", getShooterMotor1RPM());
-      SmartShuffleboard.put("Shooter", "Shooter Motor 2 RPM", getShooterMotor2RPM());
-      SmartShuffleboard.put("Shooter", "Shooter Sensor 1", getShooterSensor1Activated());
-      SmartShuffleboard.put("Shooter", "Shooter Sensor 2", getShooterSensor2Activated());
+      SmartShuffleboard.put("Shooter", "Left Shooter Motor Speed", getShooterMotorLeftSpeed());
+      SmartShuffleboard.put("Shooter", "Right Shooter Motor Speed", getShooterMotorRightSpeed());
+      SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
+      SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
+      SmartShuffleboard.put("Shooter", "Left Shooter Sensor 1", getShooterSensorLeftActivated());
+      SmartShuffleboard.put("Shooter", "Right Shooter Sensor 2", getShooterSensorRightActivated());
     }
   }
 }
