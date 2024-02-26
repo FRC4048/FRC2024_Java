@@ -11,9 +11,9 @@ public class StartIntake extends Command {
     private final IntakeSubsystem intakeSubsystem;
     private final Timer timer = new Timer();
     private final int motorRunTime; // temporary until  done testing
-    private final TimeoutCounter timeoutCounter;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Start Intake");
 
-    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime) {
+    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime ) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
