@@ -66,9 +66,11 @@ public class Deployer extends SubsystemBase{
     public void periodic() {
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
-            SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerFowardLimitSwitchClosed());
+            SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerForwardLimitSwitchClosed());
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
+        SmartShuffleboard.put("Driver", "Deployer Raised", isDeployerForwardLimitSwitchClosed());
+        SmartShuffleboard.put("Driver", "Deployer Down", isDeployerReverseLimitSwitchClosed());
         //Another place with logging code in last year's extender class
     }
 
@@ -82,7 +84,7 @@ public class Deployer extends SubsystemBase{
         return deployerMotor.get();
     }
 
-    public boolean isDeployerFowardLimitSwitchClosed() {
+    public boolean isDeployerForwardLimitSwitchClosed() {
         return deployerMotor.getSensorCollection().isFwdLimitSwitchClosed();
     }
 
