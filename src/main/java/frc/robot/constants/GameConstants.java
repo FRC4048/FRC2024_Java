@@ -41,6 +41,15 @@ public class GameConstants {
 
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
-    
+
+
+
+    //OTHER TIMEOUTS
+
+    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
+    public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
+    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
+    public static final double START_FEEDER_TIMEOUT = 5.0;
+    public static final double RESET_RAMP_TIMEOUT = 5.0;
 
 }

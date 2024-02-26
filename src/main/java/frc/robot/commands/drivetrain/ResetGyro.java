@@ -29,7 +29,11 @@ public class ResetGyro extends Command {
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) >= delay;
+        if (Timer.getFPGATimestamp() - startTime >= delay) {
+            return true;
+        }
+        return false;
+        //TODO: make it return true after testing
     }
 
     @Override
