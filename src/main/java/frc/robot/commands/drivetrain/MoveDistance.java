@@ -4,11 +4,11 @@
 
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.TimeoutCounter;
 
 public class MoveDistance extends Command {
   /** Creates a new MoveDistance. */
@@ -19,6 +19,7 @@ public class MoveDistance extends Command {
   private double desiredPoseX;
   private double desiredPoseY;
   private SwerveDrivetrain drivetrain;
+  private TimeoutCounter timeoutCounter = new TimeoutCounter("Move Distance");
 
   public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -66,6 +67,10 @@ public class MoveDistance extends Command {
     if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
       return true;
     }
-    return ((Timer.getFPGATimestamp() - startTime) >= 5);
+    if ((Timer.getFPGATimestamp() - startTime) >= Constants.MOVE_DISTANCE_TIMEOUT) {
+      timeoutCounter.increaseTimeoutCount();
+      return true;
+    }
+    return false;
   }
 }
