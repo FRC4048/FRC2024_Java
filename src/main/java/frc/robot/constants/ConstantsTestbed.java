@@ -9,15 +9,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final int AMP_ID = 5;
     
     //RAMP
-    public static final double RAMP_PID_P = 1.00;
-    public static final double RAMP_PID_I = 0.00;
-    public static final double RAMP_PID_D = 0.00;
-    public static final double RAMP_PID_FF = 1.00;
-    public static final double RAMP_ERROR_IZONE = 0.00;
+    public static final double RAMP_ERROR_RANGE = 0.00;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 130;
-    public static final double RAMP_MAX_RPM_VELOCITY = 500;
-    public static final double RAMP_MAX_RPM_ACCELERATION = 1500;
+    public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
     
     //Servo
@@ -35,23 +30,18 @@ public class ConstantsTestbed extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
 
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
 
-    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.6;
-    public static final double SHOOTER_MOTOR_HIGH_SPEED = 1;
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 0.5;
 
     //Shooter motor PID constants
-    public static final double SHOOTER_MOTOR_PID_P = 5e-5;
-    public static final double SHOOTER_MOTOR_PID_I = 0;
-    public static final double SHOOTER_MOTOR_PID_D = 5e-5;
-    public static final double SHOOTER_MOTOR_PID_IZ = 0;
-    public static final double SHOOTER_MOTOR_PID_FF = 0.000015;
-    public static final double SHOOTER_MOTOR_MAX_OUTPUT = 1;
-    public static final double SHOOTER_MOTOR_MIN_OUTPUT = -1;
+    public static final double SHOOTER_MAX_RPM_ACCELERATION = 25000;
+    public static final double SHOOTER_MAX_RPM_VELOCITY = 30000;
 
     public static final boolean FIELD_RELATIVE = true;
 

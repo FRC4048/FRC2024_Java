@@ -39,13 +39,13 @@ public class ShootSpeaker extends Command {
         double gyro = ((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360); //Gets the gyro value 0-360
         if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) ||
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
-            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
-            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
         }
         else if (((RobotContainer.isRedAlliance() == false) && (gyro >= 180)) ||
                 ((RobotContainer.isRedAlliance() == true) && (gyro <= 180))) {
-            shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-            shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
           }
         else {
             Logger.logDouble("Shooting Condition not working", gyro, true);
