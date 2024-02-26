@@ -40,10 +40,8 @@ import frc.robot.commands.sequences.ExitAndShootFromAmp;
 import frc.robot.commands.sequences.ExitAndShootFromOutsideSpeaker;
 import frc.robot.commands.sequences.ExitAndShootFromPodium;
 import frc.robot.commands.sequences.ExitAndShootFromSpeaker;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.sequences.RetractAmpSequence;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
@@ -198,7 +196,7 @@ public class RobotContainer {
         climber.setDefaultCommand(leftClimbCmd);
         controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp));
         controller.b().onTrue(new ExitAndShootFromPodium(shooter, feeder, drivetrain, ramp)); //TODO: Podium and Outside Speaker are the same: What can this button do instead?
-        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp));
+        //controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp));
         controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp));
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));

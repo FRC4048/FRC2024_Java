@@ -29,8 +29,8 @@ public class ShootAmp extends Command{
 
     @Override
     public void execute() {
-        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED);
-        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED);
+        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
+        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
     }
 
     /**
