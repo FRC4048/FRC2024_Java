@@ -4,16 +4,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.utils.TimeoutCounter;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class StartIntake extends Command {
     private final IntakeSubsystem intakeSubsystem;
     private final Timer timer = new Timer();
     private final int motorRunTime; // temporary until  done testing
+    private final TimeoutCounter timeoutCounter;
 
     public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
+        this.timeoutCounter = new TimeoutCounter(getName());
     }
 
     @Override
@@ -34,6 +38,10 @@ public class StartIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(motorRunTime);
+        if (timer.hasElapsed(motorRunTime)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return(SmartShuffleboard.getBoolean("Driver", "Gamepiece Collected", false));
     }
 }
