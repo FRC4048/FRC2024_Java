@@ -87,7 +87,7 @@ public class RobotContainer {
      */
     private void registerPathPlanableCommands() {
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()-> 6));//this is an example
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()-> 1.5));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter,feeder,ramp,intakeSubsystem));
     }
 

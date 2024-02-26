@@ -33,8 +33,8 @@ public class Constants2024 extends GameConstants {
 
     public static final double SHOOTER_MOTOR_AMP_SPEED = 0.25;
 
-    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.5; //0.6
-    public static final double SHOOTER_MOTOR_HIGH_SPEED = 0.5; //1
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 0.9; //0.6
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 0.6; //1
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
