@@ -3,6 +3,11 @@ package frc.robot.constants;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 public class Constants2023 extends GameConstants {
+
+    //Amp 
+
+    public static final int AMP_ID = 5;
+    
     //RAMP
     public static final double RAMP_PID_P = 1.00;
     public static final double RAMP_PID_I = 0.00;
