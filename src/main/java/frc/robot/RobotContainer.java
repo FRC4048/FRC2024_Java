@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -35,15 +34,11 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.DeployAmpSequence;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.sequences.RetractAmpSequence;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.sequences.*;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Deployer;
@@ -197,15 +192,11 @@ public class RobotContainer {
         // Engage        
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(CommandUtil.logged(new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp)));
-        controller.b().onTrue(CommandUtil.logged(new ExitAndShoot(shooter,feeder, drivetrain)));
-        controller.x().onTrue(CommandUtil.logged(new LowerDeployer(deployer)));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
+        // Operator shooting buttons
+        controller.y().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE));
+        controller.x().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY));
+        //controller.a().onTrue(new ShootAmpSetup());
+        controller.b().onTrue(new ShootSpeakerAmpGo(shooter, feeder, amp, ramp));
     }
 
     public SwerveDrivetrain getDrivetrain() {

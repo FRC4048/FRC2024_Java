@@ -32,7 +32,14 @@ public class GameConstants {
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 
+    // Ramp
     public static final double MAX_RAMP_ENC = 25.0000;
+    public static final double RAMP_POS_THRESHOLD = 0.1;
+    public static final double RAMP_POS_TIMEOUT = 3;
+    public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
+    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
+    public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
+    public static final double RAMP_POS_STOW = 0.1;
 
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
@@ -42,7 +49,8 @@ public class GameConstants {
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
 
-
+    // Feeder
+    public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 1.0;
 
     //OTHER TIMEOUTS
 
