@@ -20,8 +20,8 @@ public class BasicShoot extends Command {
     public void initialize() {
         timer.reset();
         activated = true;
-        shooter.setShooterMotorLeftSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-        shooter.setShooterMotorRightSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
+        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
         timer.start();
 
     }
