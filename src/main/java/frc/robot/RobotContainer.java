@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -30,19 +29,13 @@ import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.pathplanning.ComboShot;
 import frc.robot.commands.pathplanning.PathPlannerShoot;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.DeployAmpSequence;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.sequences.RetractAmpSequence;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.sequences.*;
 import frc.robot.commands.shooter.SetShooterSpeed;
-import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
@@ -97,6 +90,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()-> 1.5));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter,feeder,ramp,intakeSubsystem));
+        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter,feeder));
     }
 
     private void setupPathPlaning() {

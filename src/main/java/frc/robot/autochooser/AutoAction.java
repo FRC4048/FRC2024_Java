@@ -2,10 +2,10 @@ package frc.robot.autochooser;
 
 public enum AutoAction {
     DoNothing("Do Nothing"),
-    ShootAndCross("Shoot and Cross"),
+    ShootAndCross("Shoot & Cross"),
     ShootFour("Shoot Four"),
     ShootTwo("Shoot Two"),
-    TEST("Test");
+    ShootTwoDip("Shoot Two & Dip");
     private final String name;
 
     AutoAction(String name) {
