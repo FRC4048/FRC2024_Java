@@ -51,10 +51,14 @@ public class ResetRamp extends Command {
   public boolean isFinished() {
     if (ramp.getReversedSwitchState()) {
       ramp.stopMotor();
-    if(rampStopTime.equals(null)) rampStopTime = Timer.getFPGATimestamp();
-    else if ((Timer.getFPGATimestamp() - rampStopTime) >= Constants.RAMP_WIND_DOWN_TIME) return true;
+      if(rampStopTime.equals(null)) {
+        rampStopTime = Timer.getFPGATimestamp();
+      }
+      else if ((Timer.getFPGATimestamp() - rampStopTime) >= Constants.RAMP_WIND_DOWN_TIME) {
+        return true;
+      }
     }
-    else if ((Timer.getFPGATimestamp() - startTime) >= 5) {
+    else if ((Timer.getFPGATimestamp() - startTime) >= Constants.RESET_RAMP_TIMEOUT) {
       return true;
     }
     return false;
