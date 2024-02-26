@@ -40,8 +40,12 @@ import frc.robot.commands.sequences.ExitAndShootFromAmp;
 import frc.robot.commands.sequences.ExitAndShootFromOutsideSpeaker;
 import frc.robot.commands.sequences.ExitAndShootFromPodium;
 import frc.robot.commands.sequences.ExitAndShootFromSpeaker;
+import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.sequences.RetractAmpSequence;
 import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Amp;
@@ -160,6 +164,9 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG){
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
+            SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
+//            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
 
         }
@@ -176,6 +183,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4)));
         }
+
     }
 
     private void configureBindings() {
@@ -188,10 +196,10 @@ public class RobotContainer {
                 () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-        controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp)); 
+        controller.a().onTrue(new ExitAndShootFromSpeaker(shooter, feeder, drivetrain, ramp));
         controller.b().onTrue(new ExitAndShootFromPodium(shooter, feeder, drivetrain, ramp)); //TODO: Podium and Outside Speaker are the same: What can this button do instead?
-        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp)); 
-        controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp)); 
+        controller.x().onTrue(new ExitAndShootFromOutsideSpeaker(shooter, feeder, drivetrain, ramp));
+        controller.y().onTrue(new ExitAndShootFromAmp(shooter, feeder, ramp));
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 

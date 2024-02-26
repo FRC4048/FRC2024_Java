@@ -31,7 +31,7 @@ public class ResetRamp extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    ramp.setMotor(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
+    ramp.setSpeed(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
   }
 
   // Called every time the scheduler runs while the command is scheduled.
