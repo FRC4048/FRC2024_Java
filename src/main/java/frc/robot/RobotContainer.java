@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.ToggleAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -76,7 +77,7 @@ public class RobotContainer {
       private final Feeder feeder = new Feeder();
       private final Ramp ramp = new Ramp();
       private Climber climber;
-      private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+      private final IntakeSubsystem intake = new IntakeSubsystem();
       private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -96,7 +97,7 @@ public class RobotContainer {
      */
     private void registerPathPlanableCommands() {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
+        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder, intake,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
         NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter, feeder, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
@@ -140,7 +141,8 @@ public class RobotContainer {
 
         if (Constants.AMP_DEBUG) {
             SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
-            SmartShuffleboard.putCommand("Amp", "Retarct AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+            SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
         }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
@@ -164,7 +166,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
         }
         if (Constants.INTAKE_DEBUG){
-            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intakeSubsystem,5)));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake,5)));
         }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
@@ -198,6 +200,15 @@ public class RobotContainer {
         controller.a().onTrue(new ShootAmpSetup(shooter, ramp, amp));
         controller.b().onTrue(new ShootSpeakerAmpGo(shooter, feeder, amp, ramp));
 
+        // amp up and down
+        controller.povLeft().onTrue(new ToggleAmp(amp));
+
+        // intake deploy / retract
+        controller.povDown().onTrue(new StartIntakeAndFeeder(feeder, intake, deployer, ramp));
+        controller.povUp().onTrue(new StopIntakeAndFeeder(feeder, intake, deployer));
+
+        // others
+        //controller.??.onTrue(new cancelAll(...)
 
     }
 

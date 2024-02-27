@@ -1,15 +1,15 @@
 package frc.robot.commands.amp;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.Amp;
+        import edu.wpi.first.wpilibj.Timer;
+        import edu.wpi.first.wpilibj2.command.Command;
+        import frc.robot.constants.Constants;
+        import frc.robot.subsystems.Amp;
 
-public class DeployAmp extends Command {
+public class ToggleAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
 
-    public DeployAmp(Amp amp) {
+    public ToggleAmp(Amp amp) {
         this.amp = amp;
         addRequirements(amp);
     }
@@ -22,7 +22,12 @@ public class DeployAmp extends Command {
 
     @Override
     public void execute() {
-        amp.setAmpMotorSpeed(Constants.AMP_MOTOR_SPEED);
+        if (amp.isAmpDeployed()) {
+            amp.setAmpMotorSpeed(-1 * Constants.AMP_MOTOR_SPEED);
+        }
+        else {
+            amp.setAmpMotorSpeed(Constants.AMP_MOTOR_SPEED);
+        }
     }
 
     @Override
@@ -33,6 +38,6 @@ public class DeployAmp extends Command {
     @Override
     public void end(boolean interrupted) {
         amp.setAmpMotorSpeed(0);
-        amp.setAmpDeployed(true);
+        amp.setAmpDeployed(!amp.isAmpDeployed());
     }
 }
