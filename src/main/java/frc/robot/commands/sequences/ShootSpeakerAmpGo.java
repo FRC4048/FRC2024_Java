@@ -14,7 +14,7 @@ public class ShootSpeakerAmpGo extends SequentialCommandGroup {
         addCommands(
                 new FeederGamepieceUntilLeave(feeder),
                 new StopShooter(shooter),
-                new RetractAmpSequence(ramp, amp)  // this is not needed if shooting speaker, but not sure how to implement it in a different way
+                new RetractAmpSequence(ramp, amp)  //this is ok as long as the amp can be manipulated without moving ramp
         );
     }
 }

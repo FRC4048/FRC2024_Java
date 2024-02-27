@@ -195,8 +195,10 @@ public class RobotContainer {
         // Operator shooting buttons
         controller.y().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE));
         controller.x().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY));
-        //controller.a().onTrue(new ShootAmpSetup());
+        controller.a().onTrue(new ShootAmpSetup(shooter, ramp, amp));
         controller.b().onTrue(new ShootSpeakerAmpGo(shooter, feeder, amp, ramp));
+
+
     }
 
     public SwerveDrivetrain getDrivetrain() {

@@ -30,7 +30,7 @@ public class Constants2024 extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
 
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later

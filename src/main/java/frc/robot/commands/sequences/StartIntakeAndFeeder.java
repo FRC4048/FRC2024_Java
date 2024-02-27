@@ -10,6 +10,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.ramp.RampMoveAndWait;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -24,7 +25,7 @@ public class StartIntakeAndFeeder extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
                 new LowerDeployer(deployer),
-                new RampMoveAndWait(ramp, () -> 0.0)
+                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
             ),
             new ParallelRaceGroup(
                 new StartIntake(intake, 10), //intake stops by ParallelRaceGroup when note in feeder
