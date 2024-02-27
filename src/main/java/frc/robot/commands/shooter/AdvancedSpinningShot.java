@@ -17,8 +17,8 @@ public class AdvancedSpinningShot extends Command {
     private final Timer timer;
     private final Supplier<Alignable> alignable;
     private ShooterSpeed shooterSpeed;
-    private static ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
-    private static ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
+    private static final ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
+    private static final ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
 
     public AdvancedSpinningShot(Shooter shooter , Supplier<Pose2d> curentPoseSupplier, Supplier<Alignable> alignableSupplier) {
         this.shooter = shooter;
@@ -37,8 +37,8 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public void execute() {
-        shooter.setShooterMotorLeftSpeed(shooterSpeed.getLeftMotorSpeed());
-        shooter.setShooterMotorRightSpeed(shooterSpeed.getRightMotorSpeed());
+        shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
+        shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
     }
 
     @Override
