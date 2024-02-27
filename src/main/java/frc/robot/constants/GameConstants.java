@@ -32,6 +32,9 @@ public class GameConstants {
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 
+    // FEEDER
+    public static final double COLOR_CONFIDENCE_RATE = .80;
+
     public static final double MAX_RAMP_ENC = 25.0000;
 
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
