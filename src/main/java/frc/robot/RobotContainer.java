@@ -75,7 +75,7 @@ public class RobotContainer {
     public RobotContainer() {
         setupDriveTrain();
         registerPathPlanableCommands();
-        setupPathPlaning();
+        setupPathPlanning();
         autoChooser = new AutoChooser2024(intakeSubsystem,shooter,feeder,deployer,ramp);
         autoChooser.addOnValidationCommand(()->CommandUtil.logged(new SetInitOdom(drivetrain,autoChooser)));
         autoChooser.forceRefresh();
@@ -93,7 +93,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter,feeder));
     }
 
-    private void setupPathPlaning() {
+    private void setupPathPlanning() {
         AutoBuilder.configureHolonomic(drivetrain::getPose,
                 drivetrain::resetOdometry,
                 drivetrain::speedsFromStates,
