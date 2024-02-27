@@ -15,6 +15,7 @@ public class GameConstants {
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
@@ -38,6 +39,8 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
 
     public static final double MAX_CLIMBER_ENCODER = 80.0;
+    public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+    public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
 
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
