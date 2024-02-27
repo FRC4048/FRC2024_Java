@@ -37,8 +37,8 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public void execute() {
-        shooter.setShooterMotorLeftSpeed(shooterSpeed.getLeftMotorSpeed());
-        shooter.setShooterMotorRightSpeed(shooterSpeed.getRightMotorSpeed());
+        shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
+        shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
     }
 
     @Override

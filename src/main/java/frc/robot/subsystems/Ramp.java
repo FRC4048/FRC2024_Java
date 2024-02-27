@@ -69,8 +69,12 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.resetEncoderPosition();
     }
 
-    public double encoderToAngle(double encoderValue){
+    public static double encoderToAngle(double encoderValue){
         //y=mx+b
         return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
+    }
+    public static double angleToEncoder(double angle){
+        //(y-b)/m=x
+        return (angle - 28.5) / 2.48;//needs be to measured again and put in constants
     }
 }
