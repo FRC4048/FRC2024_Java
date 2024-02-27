@@ -17,12 +17,13 @@ public class PathPlannerShoot extends ParallelCommandGroup {
         addCommands(
                 new BasicShoot(shooter, 1),
                 new SequentialCommandGroup(
+                        new WaitCommand(0.05),
                         new FeederGamepieceUntilLeave(feeder),
                         new WaitCommand(0.15),
                         new ParallelCommandGroup (
                                 new StartIntakeAndFeeder(feeder, intake),
                                 new ResetRamp(ramp)
-                        ), new RampMove(ramp, ()-> 6)
+                        ), new RampMove(ramp, ()-> 1.5)
 
                 )
         );

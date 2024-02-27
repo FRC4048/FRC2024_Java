@@ -99,8 +99,8 @@ public class RobotContainer {
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0.0, 0), // Translation PID constants
-                        new PIDConstants(5, 0.0, 0), // Rotation PID constants
+                        new PIDConstants(5, 0, 0,0), // Translation PID constants
+                        new PIDConstants(4.75, 0.0, 0,0), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
