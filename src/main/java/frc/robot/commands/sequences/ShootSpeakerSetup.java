@@ -11,6 +11,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.logging.CommandUtil;
 
 /**
  * This sequence should be used to set up before a speaker shot. It raises the ramp to the correct
@@ -19,8 +20,8 @@ import frc.robot.subsystems.SwerveDrivetrain;
 public class ShootSpeakerSetup extends ParallelCommandGroup {
     public ShootSpeakerSetup(Shooter shooter, Ramp ramp, SwerveDrivetrain drivetrain, double rampValue) {
         addCommands(
-                new RampMove(ramp, () -> rampValue),
-                new ShootSpeaker(shooter, drivetrain)
+                CommandUtil.logged(new RampMove(ramp, () -> rampValue)),
+                CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))
         );
     }
 }

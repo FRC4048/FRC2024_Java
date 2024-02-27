@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.DeployAmp;
+import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
@@ -38,6 +40,7 @@ import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.*;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
@@ -195,7 +198,10 @@ public class RobotContainer {
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
         // Operator shooting buttons
-        controller.y().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE));
+        controller.y().onTrue(CommandUtil.parallel("ShootSpeakerSetup",
+                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE)),
+                CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))));
+
         controller.x().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY));
         controller.a().onTrue(new ShootAmpSetup(shooter, ramp, amp));
         controller.b().onTrue(new ShootSpeakerAmpGo(shooter, feeder, amp, ramp));
