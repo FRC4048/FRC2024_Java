@@ -4,10 +4,13 @@ package frc.robot.commands.amp;
         import edu.wpi.first.wpilibj2.command.Command;
         import frc.robot.constants.Constants;
         import frc.robot.subsystems.Amp;
+        import frc.robot.utils.TimeoutCounter;
 
 public class ToggleAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
+    private double speed = Constants.AMP_MOTOR_SPEED;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("ToggleAmp");
 
     public ToggleAmp(Amp amp) {
         this.amp = amp;
@@ -18,21 +21,27 @@ public class ToggleAmp extends Command {
     public void initialize() {
         timeout.reset();
         timeout.start();
+        if (amp.isAmpDeployed()) {
+            speed *= -1;
+        }
     }
 
     @Override
     public void execute() {
-        if (amp.isAmpDeployed()) {
-            amp.setAmpMotorSpeed(-1 * Constants.AMP_MOTOR_SPEED);
-        }
-        else {
-            amp.setAmpMotorSpeed(Constants.AMP_MOTOR_SPEED);
-        }
+        amp.setAmpMotorSpeed(speed);
     }
 
     @Override
     public boolean isFinished() {
-        return (timeout.hasElapsed(Constants.AMP_TIMEOUT) || amp.isForwardLimitSwitchPressed());
+        if (timeout.hasElapsed(Constants.AMP_TIMEOUT)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        } else if (!amp.isAmpDeployed() && amp.isForwardLimitSwitchPressed()) {
+            return true;
+        } else if (amp.isAmpDeployed() && amp.isReverseLimitSwitchPressed()) {
+            return true;
+        }
+        return false;
     }
 
     @Override
