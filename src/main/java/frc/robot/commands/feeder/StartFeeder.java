@@ -28,7 +28,6 @@ public class StartFeeder extends Command {
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
-
     }
 
     @Override

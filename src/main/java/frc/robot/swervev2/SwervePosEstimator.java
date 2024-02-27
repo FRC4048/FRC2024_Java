@@ -52,7 +52,9 @@ public class SwervePosEstimator{
                         backLeftMotor.getPosition(),
                         backRightMotor.getPosition(),
                 },
-                new Pose2d());
+                new Pose2d(),
+                stateStdDevs,
+                visionMeasurementStdDevs);
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
         subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1});

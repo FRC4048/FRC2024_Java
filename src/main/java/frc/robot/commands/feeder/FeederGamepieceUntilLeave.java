@@ -14,13 +14,11 @@ public class FeederGamepieceUntilLeave extends Command {
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
-
     }
 
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
-
     }
 
     @Override
@@ -41,5 +39,4 @@ public class FeederGamepieceUntilLeave extends Command {
         }
         return (pieceNotFoundCounter > 30 || Timer.getFPGATimestamp() - time > 10);
     }
-
 }
