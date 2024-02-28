@@ -2,7 +2,7 @@ package frc.robot.utils.command;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.utils.TimeoutCounter;
+import frc.robot.utils.logging.TimeoutCounter;
 
 public class TimedCommand extends Command {
     private final TimeoutCounter counter;
