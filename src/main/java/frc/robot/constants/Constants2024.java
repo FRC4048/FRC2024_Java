@@ -97,7 +97,7 @@ public class Constants2024 extends GameConstants {
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
-    public static final double OUTTAKE_SPEED = 1.00;
+    public static final double OUTTAKE_SPEED = 0.75;
     public static final double CLIMBER_SPEED = 0.10;
     public static final int OUTTAKE_MOTOR1_ID = 6;
     public static final int OUTTAKE_MOTOR2_ID = 7;

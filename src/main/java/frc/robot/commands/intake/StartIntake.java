@@ -13,9 +13,9 @@ public class StartIntake extends Command {
     private final TimeoutCounter timeoutCounter = new TimeoutCounter("Start Intake");
 
     public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime ) {
-        addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
+        addRequirements(intakeSubsystem);
     }
 
     @Override
@@ -32,6 +32,7 @@ public class StartIntake extends Command {
     @Override
     public void end(boolean interrupted) {
         intakeSubsystem.stopMotors();
+        timer.stop();
     }
 
     @Override
