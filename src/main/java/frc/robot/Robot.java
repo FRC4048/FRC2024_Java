@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
         if (Constants.ENABLE_LOGGING) {
             DataLogManager.start();
             DriverStation.startDataLog(DataLogManager.getLog(), true);
+            CommandScheduler.getInstance().onCommandInterrupt(command -> Logger.logInterruption(command.getName(), true));
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
