@@ -4,20 +4,16 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -35,17 +31,12 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.sequences.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
+import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -54,6 +45,8 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,7 +62,7 @@ public class RobotContainer {
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
       private SwerveDrivetrain drivetrain;
       private final AutoChooser2024 autoChooser;
-
+      private final Amp amp = new Amp();
       private final Shooter shooter = new Shooter();
       private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
@@ -80,7 +73,7 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        setupDriveTrain(); 
+        setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlaning();
         autoChooser = new AutoChooser2024();
@@ -97,7 +90,7 @@ public class RobotContainer {
 //        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
         NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder,intakeSubsystem,deployer,ramp));
         NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter,feeder, drivetrain));
+        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter, feeder, drivetrain));
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp,()->6));//this is an example
     }
 
@@ -136,18 +129,26 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+
+        if (Constants.AMP_DEBUG) {
+            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
+            SmartShuffleboard.putCommand("Amp", "Retarct AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+        }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp","myTargetPos",0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp,()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0))));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp, ()->SmartShuffleboard.getDouble("Ramp","myTargetPos",0))));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 15 )));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", CommandUtil.logged(new RampMove(ramp, 500)));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG){
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
+            SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
+//            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
 
         }
@@ -168,11 +169,14 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
+        Command alignSpeaker = CommandUtil.parallel(
+                "Shoot&AlignSpeaker",
+                new SetAlignable(drivetrain, Alignable.SPEAKER),
+                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(),()-> drivetrain.getAlignable())
+        );
+        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
-        ManualControlClimber leftClimbCmd = new ManualControlClimber(
-                climber,
-                () -> -controller.getLeftY()); // negative because Y "up" is negative
+        ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 

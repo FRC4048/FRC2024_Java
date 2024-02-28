@@ -1,6 +1,10 @@
 package frc.robot.utils;
 
 import com.revrobotics.*;
+import com.revrobotics.CANSparkBase.IdleMode;
+
+import frc.robot.Robot;
+import frc.robot.utils.diag.DiagSparkMaxLimit;
 
 /**
  * A Wrapper utility to encapsulate the NEO motor with PID capability.
@@ -16,6 +20,8 @@ public class NeoPidMotor {
     public static final double DEFAULT_D = 0.0;
     public static final double DEFAULT_IZONE = 0.0;
     public static final double DEFAULT_FF = 0.000156;
+    public static final double DEFAULT_MIN_OUTPUT = -1;
+    public static final double DEFAULT_MAX_OUTPUT = 1;
 
     // The neo motor controller
     private CANSparkMax neoMotor;
@@ -28,21 +34,24 @@ public class NeoPidMotor {
     private double setPosition = 0.0;
     private double setSpeed = 0.0;
 
+    private SparkLimitSwitch forwardSwitch = null;
+    private SparkLimitSwitch reverseSwitch = null;
+
     /**
      * Constructor using reasonable default values
      * @param id the CAN ID for the controller
      */
     public NeoPidMotor(int id) {
-        this(id, DEFAULT_P, DEFAULT_I, DEFAULT_D, DEFAULT_IZONE, DEFAULT_FF);
+        this(id, DEFAULT_P, DEFAULT_I, DEFAULT_D, DEFAULT_IZONE, DEFAULT_FF, DEFAULT_MIN_OUTPUT, DEFAULT_MAX_OUTPUT);
     }
 
-    public NeoPidMotor(int id, double pidP, double pidI, double pidD, double iZone, double pidFF) {
+    public NeoPidMotor(int id, double pidP, double pidI, double pidD, double iZone, double pidFF, double pidMinOutput, double pidMaxOutput) {
         neoMotor = new CANSparkMax(id, CANSparkMaxLowLevel.MotorType.kBrushless);
         neoMotor.restoreFactoryDefaults();
         encoder = neoMotor.getEncoder();
         // This is normally how we want it, but we may need to configure the switches differently
-        neoMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-        neoMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        forwardSwitch = neoMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        reverseSwitch = neoMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
 
         pidController = neoMotor.getPIDController();
         pidController.setP(pidP);
@@ -50,13 +59,36 @@ public class NeoPidMotor {
         pidController.setD(pidD);
         pidController.setIZone(iZone);
         pidController.setFF(pidFF);
-        pidController.setOutputRange(-1, 1);
+        pidController.setOutputRange(pidMinOutput, pidMaxOutput);
 
         // TODO: Some of these values may need to be configurable
         pidController.setSmartMotionMaxVelocity(5000.0, 0);
         pidController.setSmartMotionMinOutputVelocity(-5000.0, 0);
         pidController.setSmartMotionMaxAccel(1500.0, 0);
         pidController.setSmartMotionAllowedClosedLoopError(1.0, 0);
+    }
+
+    public void enableDiagnostics (String subSystem, boolean forwardLimit, boolean reverseLimit) {
+        if (forwardLimit) {
+            Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(forwardSwitch, subSystem, "forward"));
+        }
+
+        if (reverseLimit) {
+            Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(reverseSwitch, subSystem, "reverse"));
+        }
+    }
+
+    public void setMinMaxVelocity(double maxVelocity, double minVelocity) {
+        pidController.setSmartMotionMaxVelocity(maxVelocity, 0);
+        pidController.setSmartMotionMinOutputVelocity(minVelocity, 0);
+    }
+
+    public void setMaxAccel(double maxAcceleration) {
+        pidController.setSmartMotionMaxAccel(maxAcceleration, 0);
+    }
+
+    public void setSmartMotionAllowedClosedLoopError(double allowedError) {
+        pidController.setSmartMotionAllowedClosedLoopError(allowedError, 0);
     }
 
     /**
@@ -100,12 +132,13 @@ public class NeoPidMotor {
         pidController.setD(pidD);
     }
 
-    public void setPid(double pidP, double pidI, double pidD, double iZone, double pidFF) {
+    public void setPid(double pidP, double pidI, double pidD, double iZone, double pidFF, double pidMinOutput, double pidMaxOutput) {
         pidController.setP(pidP);
         pidController.setI(pidI);
         pidController.setD(pidD);
         pidController.setIZone(iZone);
         pidController.setFF(pidFF);
+        pidController.setOutputRange(pidMinOutput, pidMaxOutput);
     }
 
     public CANSparkMax getNeoMotor() {
@@ -118,5 +151,33 @@ public class NeoPidMotor {
 
     public SparkMaxPIDController getPidController() {
         return pidController;
+    }
+    
+    public void resetEncoderPosition() {
+        encoder.setPosition(0);
+    }
+
+    /**
+     * Re-using declared limit switch so that implementations don't accidentally change
+     * from normallyOpen to normallyClosed in the constructor but not in limitSwitchPressed
+     */
+    public boolean forwardLimitSwitchIsPressed() {
+        return forwardSwitch.isPressed();
+    }
+
+    /**
+     * Re-using declared limit switch so that implementations don't accidentally change
+     * from normallyOpen to normallyClosed in the constructor but not in limitSwitchPressed
+     */
+    public boolean reversedLimitSwitchIsPressed() {
+        return reverseSwitch.isPressed();
+    }
+
+    public void setInverted(boolean isInverted) {
+        neoMotor.setInverted(isInverted);
+    }
+
+    public void setIdleMode(IdleMode mode) {
+        neoMotor.setIdleMode(mode);
     }
 }
