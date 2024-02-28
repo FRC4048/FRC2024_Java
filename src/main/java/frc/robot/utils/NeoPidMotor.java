@@ -74,7 +74,7 @@ public class NeoPidMotor {
         }
 
         if (reverseLimit) {
-            Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(forwardSwitch, subSystem, "reverse"));
+            Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(reverseSwitch, subSystem, "reverse"));
         }
     }
 
