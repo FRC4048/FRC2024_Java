@@ -11,11 +11,11 @@ import java.util.function.DoubleConsumer;
  * <b>new MotorMoveCommand<>(feeder, 0, feeder::setFeederMotorSpeed, 0.5, feeder::pieceSeen)</b>
  *
  */
-public class MotorMoveCommand<T extends SubsystemBase> extends TimedSubsystemCommand<T>{
+public class TimedMotorMoveCommand<T extends SubsystemBase> extends TimedSubsystemCommand<T>{
     private final DoubleConsumer setMotorSpeed;
     private final double speed;
     private final BooleanSupplier finishedCondition;
-    public MotorMoveCommand(T subsystem, double timeout, DoubleConsumer setMotorSpeed, double speed, BooleanSupplier finishedCondition) {
+    public TimedMotorMoveCommand(T subsystem, double timeout, DoubleConsumer setMotorSpeed, double speed, BooleanSupplier finishedCondition) {
         super(subsystem, timeout);
         this.setMotorSpeed = setMotorSpeed;
         this.speed = speed;
