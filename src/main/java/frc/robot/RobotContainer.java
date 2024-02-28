@@ -215,46 +215,46 @@ public class RobotContainer {
 
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
-                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE)),
-                CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))));
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
+                new ShootSpeaker(shooter, drivetrain)));
 
         // Set up to shoot Speaker AWAY - X
         controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
-                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY)),
-                CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))));
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new ShootSpeaker(shooter, drivetrain)));
 
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
-                CommandUtil.logged(new DeployAmp(amp)),
-                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP)),
-                CommandUtil.logged(new ShootAmp(shooter))));
+                new DeployAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
+                new ShootAmp(shooter)));
 
         // Shoot the note - B
         controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
-                CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)),
-                CommandUtil.logged(new StopShooter(shooter)),
-                CommandUtil.logged(new RetractAmpSequence(ramp, amp))));
+                new FeederGamepieceUntilLeave(feeder),
+                new StopShooter(shooter),
+                new RetractAmpSequence(ramp, amp)));
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)),
-                CommandUtil.logged(new StopShooter(shooter)),
-                CommandUtil.logged(new RetractAmpSequence(ramp, amp))));
+                new FeederGamepieceUntilLeave(feeder),
+                new StopShooter(shooter),
+                new RetractAmpSequence(ramp, amp)));
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
-                CommandUtil.logged(new LowerDeployer(deployer)),
-                CommandUtil.logged(new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)));
+                new LowerDeployer(deployer),
+                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW));
         Command startSpinning = CommandUtil.race("startSpinning",
-                CommandUtil.logged(new StartIntake(intake, 10)),
-                CommandUtil.logged(new StartFeeder(feeder)));
+                new StartIntake(intake, 10),
+                new StartFeeder(feeder));
         Command backDrive = CommandUtil.sequence("backDrive",
-                CommandUtil.logged(new WaitCommand(0.5)),
-                CommandUtil.logged(new FeederBackDrive(feeder)));
+                new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
+                new FeederBackDrive(feeder));
         Command endIntake = CommandUtil.parallel("endIntake",
-                CommandUtil.logged(new RaiseDeployer(deployer)),
+                new RaiseDeployer(deployer),
                 backDrive);
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
                 lowerIntake, startSpinning, endIntake));

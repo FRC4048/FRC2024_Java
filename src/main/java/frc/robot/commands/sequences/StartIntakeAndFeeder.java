@@ -34,7 +34,7 @@ public class StartIntakeAndFeeder extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new RaiseDeployer(deployer),
                 new SequentialCommandGroup(
-                        new WaitCommand(0.5),
+                        new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
                         new FeederBackDrive(feeder)
                 )
             )

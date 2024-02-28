@@ -53,6 +53,7 @@ public class GameConstants {
 
     // Feeder
     public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 3.0;
+    public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
 
     //OTHER TIMEOUTS
 

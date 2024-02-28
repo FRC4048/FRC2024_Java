@@ -11,19 +11,19 @@ import java.util.function.DoubleSupplier;
 public class RampMoveAndWait extends Command{
 
     private final Ramp ramp;
-    private final double encoderValue;
+    private final double targetValue;
     private final Timer timer = new Timer();
     private final TimeoutCounter timeoutCounter = new TimeoutCounter("Wait Ramp");
 
     public RampMoveAndWait(Ramp ramp, DoubleSupplier encoderValueSupplier) {
         this.ramp = ramp;
-        this.encoderValue = encoderValueSupplier.getAsDouble();
+        this.targetValue = encoderValueSupplier.getAsDouble();
         addRequirements(this.ramp);
     }
 
     @Override
     public void initialize() {
-        ramp.setRampPos(encoderValue);
+        ramp.setRampPos(targetValue);
         timer.reset();
         timer.start();
     }
@@ -35,7 +35,7 @@ public class RampMoveAndWait extends Command{
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(ramp.getRampPos() - encoderValue) < GameConstants.RAMP_POS_THRESHOLD) {
+        if (Math.abs(ramp.getRampPos() - targetValue) < GameConstants.RAMP_POS_THRESHOLD) {
             return true;
         }
         if (timer.hasElapsed(GameConstants.RAMP_POS_TIMEOUT)) {

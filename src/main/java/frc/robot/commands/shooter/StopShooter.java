@@ -21,8 +21,7 @@ public class StopShooter extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setShooterMotorLeftRPM(0.0);
-        shooter.setShooterMotorRightRPM(0.0);
+        shooter.stopShooter();
     }
 
     @Override

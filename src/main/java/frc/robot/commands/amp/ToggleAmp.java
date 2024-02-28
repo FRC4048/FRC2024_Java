@@ -39,9 +39,12 @@ public class ToggleAmp extends Command {
         } else if (amp.isAmpDeployed() && amp.isReverseLimitSwitchPressed()) {
             return true;
         }
-        else {
+        else if (timeout.hasElapsed(Constants.AMP_TIMEOUT)) {
             timeoutCounter.increaseTimeoutCount();
-            return(timeout.hasElapsed((Constants.AMP_TIMEOUT)));
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
