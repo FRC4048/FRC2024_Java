@@ -7,7 +7,7 @@ public class ConstantsTestbed extends GameConstants {
     //AMP
 
     public static final int AMP_ID = 5;
-    
+
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
     public static final double RAMP_POS = 0.0;
