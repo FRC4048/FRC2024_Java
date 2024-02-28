@@ -65,5 +65,6 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.color.blue);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", rawColor.confidence);
         }
+        SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen());
     }
 }
