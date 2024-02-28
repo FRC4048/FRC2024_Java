@@ -79,6 +79,7 @@ public class RobotContainer {
       private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
       private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft,1);
       private final JoystickButton joyRightButton1 = new JoystickButton(joyright,1);
+      private final JoystickButton joyRightButton2 = new JoystickButton(joyright,2);
       private SwerveDrivetrain drivetrain;
       private final AutoChooser2024 autoChooser;
       private final Amp amp = new Amp();
@@ -150,8 +151,8 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
 
         if (Constants.AMP_DEBUG) {
-            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
-            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+//            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
+//            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
             SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
         }
         if (Constants.DEPLOYER_DEBUG) {
@@ -221,11 +222,15 @@ public class RobotContainer {
                 CommandUtil.logged(new ShootAmp(shooter))));
 
         // Shoot the note - B
-        controller.b().onTrue(CommandUtil.sequence("Shoot",
+        controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
                 CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)),
                 CommandUtil.logged(new StopShooter(shooter)),
                 CommandUtil.logged(new RetractAmpSequence(ramp, amp))));
 
+        joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
+                CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)),
+                CommandUtil.logged(new StopShooter(shooter)),
+                CommandUtil.logged(new RetractAmpSequence(ramp, amp))));
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
