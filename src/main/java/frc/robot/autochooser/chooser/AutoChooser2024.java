@@ -20,7 +20,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
         commandMap = Map.ofEntries(
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand()),
-                Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand()),
+                Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootPieceFromCenter"))),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.ZERO), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.ShootTwoDip, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2AndDip")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer))),
@@ -30,6 +30,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), new FourPieceLeft(shooter,feeder,deployer)),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
                 Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")))
+                
         );
     }
 

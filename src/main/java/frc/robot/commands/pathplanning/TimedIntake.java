@@ -14,6 +14,7 @@ public class TimedIntake extends Command {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
+        addRequirements(intakeSubsystem);
     }
 
     @Override
