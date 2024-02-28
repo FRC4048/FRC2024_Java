@@ -44,11 +44,14 @@ import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.*;
+import frc.robot.commands.sequences.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.*;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
@@ -66,6 +69,8 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -191,11 +196,14 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
+        Command alignSpeaker = CommandUtil.parallel(
+                "Shoot&AlignSpeaker",
+                new SetAlignable(drivetrain, Alignable.SPEAKER),
+                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(),()-> drivetrain.getAlignable())
+        );
+        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
-        ManualControlClimber leftClimbCmd = new ManualControlClimber(
-                climber,
-                () -> -controller.getLeftY()); // negative because Y "up" is negative
+        ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 
