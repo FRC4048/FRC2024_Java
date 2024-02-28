@@ -27,6 +27,6 @@ public class FeederBackDrive extends Command {
     }
     @Override
     public boolean isFinished() {
-        return feeder.pieceSeen() || Timer.getFPGATimestamp() - time > 10;
+        return feeder.pieceSeen(false) || Timer.getFPGATimestamp() - time > 10;
     }
 }

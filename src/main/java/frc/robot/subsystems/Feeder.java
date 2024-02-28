@@ -46,9 +46,10 @@ public class Feeder extends SubsystemBase {
         return colorSensor.getColor();
     }
 
-    public boolean pieceSeen() {
+    public boolean pieceSeen(boolean incoming) {
         ColorMatchResult latestResult = colorSensor.getMatchedColor();
-        return latestResult.confidence > Constants.COLOR_CONFIDENCE_RATE;
+        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+        return latestResult.confidence > confidence;
     }
 
     @Override
@@ -63,7 +64,8 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.green);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.blue);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
-            SmartShuffleboard.put("Feeder", "Piece Seen", pieceSeen());
+            SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
+            SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
     }
 }
