@@ -22,6 +22,7 @@ public class ResetRamp extends TimedSubsystemCommand<Ramp> {
 
   @Override
   public void end(boolean interrupted) {
+    super.end(interrupted);
     getSystem().stopMotor();
     getSystem().resetEncoder();
   }

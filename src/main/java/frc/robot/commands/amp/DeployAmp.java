@@ -21,6 +21,7 @@ public class DeployAmp extends TimedSubsystemCommand<Amp> {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().setAmpMotorSpeed(0);
     }
 }

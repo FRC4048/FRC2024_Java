@@ -17,6 +17,7 @@ public class StartIntake extends TimedSubsystemCommand<IntakeSubsystem> {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().stopMotors();
     }
 }

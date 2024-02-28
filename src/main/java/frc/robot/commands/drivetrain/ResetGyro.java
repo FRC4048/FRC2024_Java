@@ -10,6 +10,7 @@ public class ResetGyro extends TimedSubsystemCommand<SwerveDrivetrain> {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().resetGyro();
     }
 

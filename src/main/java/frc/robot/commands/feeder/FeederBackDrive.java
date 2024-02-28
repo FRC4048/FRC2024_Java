@@ -10,6 +10,7 @@ public class FeederBackDrive extends TimedSubsystemCommand<Feeder> {
     }
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().stopFeederMotor();
     }
     @Override

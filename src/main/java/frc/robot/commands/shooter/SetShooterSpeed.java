@@ -34,6 +34,7 @@ public class SetShooterSpeed extends TimedSubsystemCommand<Shooter> {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    super.end(interrupted);
     getSystem().setShooterMotorLeftRPM(0.0);
     getSystem().setShooterMotorRightRPM(0.0);
   }

@@ -22,6 +22,7 @@ public class RetractAmp extends TimedSubsystemCommand<Amp> {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().setAmpMotorSpeed(0);
     }
 }

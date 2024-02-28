@@ -38,6 +38,7 @@ public class ShootSpeaker extends TimedCommand {
     }
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         shooter.stopShooter();
     }
 }

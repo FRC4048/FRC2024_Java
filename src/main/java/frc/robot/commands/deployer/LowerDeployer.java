@@ -23,6 +23,7 @@ public class LowerDeployer extends TimedSubsystemCommand<Deployer> {
 
     @Override
     public void end(boolean interrupted) {
+        super.end(interrupted);
         getSystem().setDeployerMotorSpeed(0);
     }
 

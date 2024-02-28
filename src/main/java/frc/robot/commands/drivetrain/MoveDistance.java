@@ -44,6 +44,7 @@ public class MoveDistance extends TimedSubsystemCommand<SwerveDrivetrain> {
 
   @Override
   public void end(boolean interrupted) {
+    super.end(interrupted);
     getSystem().stopMotor();
   }
 
