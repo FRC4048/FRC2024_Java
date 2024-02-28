@@ -1,9 +1,10 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Ramp;
-
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.Ramp;
 
 public class RampMove extends Command{
     
@@ -28,6 +29,6 @@ public class RampMove extends Command{
 
     @Override
     public boolean isFinished() {
-        return (Math.abs(ramp.getRampPos() - encoderValue.getAsDouble()) < 0.05);
+        return (Math.abs(ramp.getRampPos() - encoderValue.getAsDouble()) < Constants.RAMP_MOVE_TRESHOLD);
     }
 }
