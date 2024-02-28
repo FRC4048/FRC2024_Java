@@ -67,6 +67,6 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
-        SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen());
+        SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen(false));
     }
 }
