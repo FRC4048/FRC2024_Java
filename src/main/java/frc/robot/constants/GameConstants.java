@@ -40,7 +40,7 @@ public class GameConstants {
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
     public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
-    public static final double RAMP_POS_STOW = 0.0;
+    public static final double RAMP_POS_STOW = 0.15; // if this is 0, it tents to timeout
     public static final double RAMP_POS_SHOOT_AMP = 11.0;
 
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
@@ -54,10 +54,11 @@ public class GameConstants {
     // Feeder
     public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 3.0;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
+    public static final int FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
 
     //OTHER TIMEOUTS
 
-    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
+    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 4.0;
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;

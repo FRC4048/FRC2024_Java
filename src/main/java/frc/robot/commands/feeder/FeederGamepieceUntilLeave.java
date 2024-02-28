@@ -11,11 +11,12 @@ import frc.robot.utils.TimeoutCounter;
 public class FeederGamepieceUntilLeave extends Command{
     private Feeder feeder;
     private double time;
+    private int pieceNotFoundCounter;
     private final TimeoutCounter timeoutCounter = new TimeoutCounter("Feeder gamepiece until leave");
+
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
-        
     }
     @Override
     public void end(boolean interrupted) {
@@ -28,17 +29,23 @@ public class FeederGamepieceUntilLeave extends Command{
     @Override
     public void initialize() {
         time = Timer.getFPGATimestamp();
+        this.pieceNotFoundCounter = 0;
     }
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - time > GameConstants.FEEDER_MIN_TIME_FOR_SHOOTING) {
-            return feeder.pieceNotSeen();
+        if (feeder.pieceNotSeen()) {
+            pieceNotFoundCounter++;
+        }
+        if (pieceNotFoundCounter > GameConstants.FEEDER_PIECE_NOT_SEEN_COUNTER) {
+            return true;
         }
         else if (Timer.getFPGATimestamp() - time > Constants.FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT) {
             timeoutCounter.increaseTimeoutCount();
             return true;
         }
-        return false;
+        else {
+            return false;
+        }
     }
     
 }

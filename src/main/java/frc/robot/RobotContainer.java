@@ -233,12 +233,13 @@ public class RobotContainer {
         controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
                 new FeederGamepieceUntilLeave(feeder),
                 new StopShooter(shooter),
-                new RetractAmpSequence(ramp, amp)));
+                new RetractAmp(amp)));
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW);
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder),
                 new StopShooter(shooter),
-                new RetractAmpSequence(ramp, amp)));
+                new RetractAmp(amp)));
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
