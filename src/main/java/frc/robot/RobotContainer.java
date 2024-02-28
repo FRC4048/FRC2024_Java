@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -22,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -35,23 +31,12 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.DeployAmpSequence;
-import frc.robot.commands.sequences.ExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShoot;
-import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.sequences.RetractAmpSequence;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.sequences.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Amp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -60,6 +45,8 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -178,16 +165,18 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4)));
         }
-
     }
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
+        Command alignSpeaker = CommandUtil.parallel(
+                "Shoot&AlignSpeaker",
+                new SetAlignable(drivetrain, Alignable.SPEAKER),
+                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(),()-> drivetrain.getAlignable())
+        );
+        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain,Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain,null)));
-        ManualControlClimber leftClimbCmd = new ManualControlClimber(
-                climber,
-                () -> -controller.getLeftY()); // negative because Y "up" is negative
+        ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 
