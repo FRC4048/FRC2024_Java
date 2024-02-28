@@ -8,7 +8,6 @@ import frc.robot.subsystems.Shooter;
 public class ShootAmp extends Command{
     private final Shooter shooter;
     private final Timer timer = new Timer();
-    private boolean activated = false;
     public ShootAmp(Shooter shooter) {
         this.shooter = shooter;
         addRequirements(shooter);
@@ -17,14 +16,13 @@ public class ShootAmp extends Command{
     @Override
     public void initialize() {
         timer.reset();
-        activated = true;
         timer.start();
 
     }
 
     @Override 
     public boolean isFinished() {
-        return (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER)) && (activated);
+        return (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER));
     }
 
     @Override
@@ -41,7 +39,6 @@ public class ShootAmp extends Command{
     public void end(boolean interrupted) {
         shooter.stopShooter();
         timer.stop();
-        activated = false;
     }
     
 }

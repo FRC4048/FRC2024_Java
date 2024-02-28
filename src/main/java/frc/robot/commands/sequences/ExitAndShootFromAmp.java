@@ -20,7 +20,7 @@ public class ExitAndShootFromAmp extends SequentialCommandGroup{
                 new ShootAmp(shooter),
                 new RampMoveWithoutSupplier(ramp, Constants.AMP_RAMP_ENC_VALUE) 
             ),
-                new WaitCommand(.1),
+                new WaitCommand(Constants.SHOOTING_WAIT),
                 new FeederGamepieceUntilLeave(feeder)
         );
     }  

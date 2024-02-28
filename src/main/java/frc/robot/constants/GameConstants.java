@@ -31,6 +31,7 @@ public class GameConstants {
     public static final double SPOOL_TIME = 0.5;//seconds
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
+    public static final double SHOOTING_WAIT = .1;
 
     public static final double MAX_RAMP_ENC = 25.0000;
 
@@ -41,6 +42,8 @@ public class GameConstants {
 
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
+
+    public static final double FEEDER_TIMEOUT = 1;
     
 
 }

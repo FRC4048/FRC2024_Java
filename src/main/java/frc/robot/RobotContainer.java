@@ -37,7 +37,6 @@ import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.DependentIntakeAndDeployer;
 import frc.robot.commands.sequences.DeployAmpSequence;
 import frc.robot.commands.sequences.ExitAndShootFromAmp;
-import frc.robot.commands.sequences.ExitAndShootFromOutsideSpeaker;
 import frc.robot.commands.sequences.ExitAndShootFromPodium;
 import frc.robot.commands.sequences.ExitAndShootFromSpeaker;
 import frc.robot.commands.sequences.RetractAmpSequence;

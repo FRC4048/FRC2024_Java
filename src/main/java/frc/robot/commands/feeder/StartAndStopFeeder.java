@@ -28,9 +28,7 @@ public class StartAndStopFeeder extends Command{
 
     @Override
     public void execute() {
-        if (deployer.isDeployerReverseLimitSwitchClosed()) {
-            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
-        }
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
     }
 
     @Override

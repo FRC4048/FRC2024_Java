@@ -21,7 +21,7 @@ public class ExitAndShootFromSpeaker extends SequentialCommandGroup{
                 new ShootSpeaker(shooter, drivetrain),
                 new RampMoveWithoutSupplier(ramp, Constants.SPEAKER_RAMP_ENC_VALUE) 
             ),
-                new WaitCommand(.1),
+                new WaitCommand(Constants.SHOOTING_WAIT),
                 new FeederGamepieceUntilLeave(feeder)
         );
     }  

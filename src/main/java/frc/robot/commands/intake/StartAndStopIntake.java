@@ -25,12 +25,7 @@ public class StartAndStopIntake extends Command{
 
     @Override
     public void execute() {
-        if (deployer.isDeployerReverseLimitSwitchClosed()) {
-            intake.setMotorSpeed(Constants.INTAKE_MOTOR_1_SPEED, Constants.INTAKE_MOTOR_2_SPEED);
-
-        } else {
-            intake.stopMotors();
-        }
+        intake.setMotorSpeed(Constants.INTAKE_MOTOR_1_SPEED, Constants.INTAKE_MOTOR_2_SPEED);
     }
 
     @Override
@@ -40,6 +35,6 @@ public class StartAndStopIntake extends Command{
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - time > 5);
+        return deployer.isDeployerReverseLimitSwitchClosed() == false || (Timer.getFPGATimestamp() - time > 5);
     }
 }

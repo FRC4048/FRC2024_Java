@@ -35,7 +35,7 @@ public class DependentFeederBackDrive extends Command {
     @Override
     public boolean isFinished() {
         if (deployer.isDeployerReverseLimitSwitchClosed()) {
-            return feeder.pieceSeen() || Timer.getFPGATimestamp() - time > 1;
+            return feeder.pieceSeen() || Timer.getFPGATimestamp() - time > Constants.FEEDER_TIMEOUT;
         } else {
             return true;
         }
