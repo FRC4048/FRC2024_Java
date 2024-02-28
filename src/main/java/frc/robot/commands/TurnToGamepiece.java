@@ -32,12 +32,13 @@ public class TurnToGamepiece extends Command {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("Luxonis");
-        xSub = table.getDoubleTopic("x").subscribe(-1);
-        ySub = table.getDoubleTopic("y").subscribe(-1);
+        NetworkTable table = inst.getTable("limelight");
+        xSub = table.getDoubleTopic("tx").subscribe(-1);
+        ySub = table.getDoubleTopic("ty").subscribe(-1);
 
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150, 2 * Math.PI * 150);
-        PIDController = new ProfiledPIDController(.0001, 0, .00, constraints);
+        PIDController = new ProfiledPIDController(.008, 0, 0.0000, constraints);
+        
 
     }
 
@@ -50,24 +51,23 @@ public class TurnToGamepiece extends Command {
     public void execute() {
         x = xSub.get();
         y = ySub.get();
-        if (Math.abs(x) >.1) {
+        if (Math.abs(x) > 6) {
             driveStates = new ChassisSpeeds(0, 0, PIDController.calculate(x));
+            SmartShuffleboard.put("Test", "Speed", PIDController.calculate(x));
             drivetrain.drive(driveStates);
         } else {
-            finished = true;
-        }
+            if (y > 5) {
+            driveStates = new ChassisSpeeds(.3, 0, PIDController.calculate(x));
+            drivetrain.drive(driveStates);
+        } else {
+            if (cycle > 30) {
+                driveStates = new ChassisSpeeds(0, 0, 0);
+                drivetrain.drive(driveStates);
+                finished = true;
+            }
+        } 
+        }        
     }
-    //     } else if (y > -.4) {
-    //         driveStates = new ChassisSpeeds(.5, 0, 0);
-    //         drivetrain.drive(driveStates);
-    //     } else {
-    //         if (cycle > 30) {
-    //             driveStates = new ChassisSpeeds(0, 0, 0);
-    //             drivetrain.drive(driveStates);
-    //             finished = true;
-    //         }
-    //     }        
-    // }
 
     @Override
     public boolean isFinished() {
@@ -76,7 +76,7 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        
+        drivetrain.drive(new ChassisSpeeds(0, 0, 0));
     }
         
     }
