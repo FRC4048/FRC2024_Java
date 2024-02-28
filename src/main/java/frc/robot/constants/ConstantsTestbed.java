@@ -130,7 +130,4 @@ public class ConstantsTestbed extends GameConstants {
     public static final double ALIGNABLE_PID_D = 0.0015;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
     public static final int DEPLOYER_MOTOR_ID = 11;
-
-    public static final double REQUIRED_RAISE = 400;
-    public static final double REQUIRED_LOWER = 50;
 }
