@@ -6,7 +6,7 @@ public class GameConstants {
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
-    public static final int XBOX_CONTROLLER_ID = 3;
+    public static final int XBOX_CONTROLLER_ID = 2;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double PIECE_THRESHOLD = 0.7;
@@ -51,13 +51,13 @@ public class GameConstants {
     public static final double AMP_TIMEOUT = 2.0;
 
     // Feeder
-    public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 1.0;
+    public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 3.0;
 
     //OTHER TIMEOUTS
 
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
-    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
+    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
     public static final double RESET_RAMP_TIMEOUT = 5.0;
 

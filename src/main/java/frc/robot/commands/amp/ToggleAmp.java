@@ -9,7 +9,7 @@ package frc.robot.commands.amp;
 public class ToggleAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
-    private double speed = Constants.AMP_MOTOR_SPEED;
+    private double speed;
     private final TimeoutCounter timeoutCounter = new TimeoutCounter("ToggleAmp");
 
     public ToggleAmp(Amp amp) {
@@ -21,6 +21,7 @@ public class ToggleAmp extends Command {
     public void initialize() {
         timeout.reset();
         timeout.start();
+        speed = Constants.AMP_MOTOR_SPEED;
         if (amp.isAmpDeployed()) {
             speed *= -1;
         }
@@ -33,15 +34,15 @@ public class ToggleAmp extends Command {
 
     @Override
     public boolean isFinished() {
-        if (timeout.hasElapsed(Constants.AMP_TIMEOUT)) {
-            timeoutCounter.increaseTimeoutCount();
-            return true;
-        } else if (!amp.isAmpDeployed() && amp.isForwardLimitSwitchPressed()) {
+        if (!amp.isAmpDeployed() && amp.isForwardLimitSwitchPressed()) {
             return true;
         } else if (amp.isAmpDeployed() && amp.isReverseLimitSwitchPressed()) {
             return true;
         }
-        return false;
+        else {
+            timeoutCounter.increaseTimeoutCount();
+            return(timeout.hasElapsed((Constants.AMP_TIMEOUT)));
+        }
     }
 
     @Override

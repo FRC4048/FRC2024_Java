@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -33,12 +34,18 @@ import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.feeder.FeederBackDrive;
+import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
+import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.ramp.RampMove;
+import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.*;
 import frc.robot.commands.shooter.SetShooterSpeed;
+import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
@@ -197,25 +204,59 @@ public class RobotContainer {
         // Engage        
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
-        // Operator shooting buttons
-        controller.y().onTrue(CommandUtil.parallel("ShootSpeakerSetup",
+        // Set up to shoot Speaker CLOSE - Y
+        controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
                 CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE)),
                 CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))));
 
-        controller.x().onTrue(new ShootSpeakerSetup(shooter, ramp, drivetrain, GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY));
-        controller.a().onTrue(new ShootAmpSetup(shooter, ramp, amp));
-        controller.b().onTrue(new ShootSpeakerAmpGo(shooter, feeder, amp, ramp));
+        // Set up to shoot Speaker AWAY - X
+        controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
+                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY)),
+                CommandUtil.logged(new ShootSpeaker(shooter, drivetrain))));
+
+        // Set up to shoot AMP - A
+        controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
+                CommandUtil.logged(new DeployAmp(amp)),
+                CommandUtil.logged(new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP)),
+                CommandUtil.logged(new ShootAmp(shooter))));
+
+        // Shoot the note - B
+        controller.b().onTrue(CommandUtil.sequence("Shoot",
+                CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)),
+                CommandUtil.logged(new StopShooter(shooter)),
+                CommandUtil.logged(new RetractAmpSequence(ramp, amp))));
+
 
         // amp up and down
-        controller.povLeft().onTrue(new ToggleAmp(amp));
+        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
 
-        // intake deploy / retract
-        controller.povDown().onTrue(new StartIntakeAndFeeder(feeder, intake, deployer, ramp));
-        controller.povUp().onTrue(new StopIntakeAndFeeder(feeder, intake, deployer));
+        // start intaking a note
+        Command lowerIntake = CommandUtil.parallel("lowerIntake",
+                CommandUtil.logged(new LowerDeployer(deployer)),
+                CommandUtil.logged(new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)));
+        Command startSpinning = CommandUtil.race("startSpinning",
+                CommandUtil.logged(new StartIntake(intake, 10)),
+                CommandUtil.logged(new StartFeeder(feeder)));
+        Command backDrive = CommandUtil.sequence("backDrive",
+                CommandUtil.logged(new WaitCommand(0.5)),
+                CommandUtil.logged(new FeederBackDrive(feeder)));
+        Command endIntake = CommandUtil.parallel("endIntake",
+                CommandUtil.logged(new RaiseDeployer(deployer)),
+                backDrive);
+        controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
+                lowerIntake, startSpinning, endIntake));
+
+        // stop intake
+        controller.povUp().onTrue(CommandUtil.parallel("stop intake",
+                CommandUtil.logged(new RaiseDeployer(deployer)),
+                CommandUtil.logged(new StopIntake(intake)),
+                CommandUtil.logged(new StopFeeder(feeder))));
+
+        // Toggle AMP
+        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
 
         // others
         //controller.??.onTrue(new cancelAll(...)
-
     }
 
     public SwerveDrivetrain getDrivetrain() {
