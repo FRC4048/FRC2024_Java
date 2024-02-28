@@ -17,7 +17,7 @@ public class ResetRamp extends TimedSubsystemCommand<Ramp> {
   @Override
   public void initialize() {
     super.initialize();
-    getSystem().setMotor(Constants.RESET_RAMP_SPEED);
+    getSystem().setSpeed(Constants.RESET_RAMP_SPEED);
   }
 
   @Override

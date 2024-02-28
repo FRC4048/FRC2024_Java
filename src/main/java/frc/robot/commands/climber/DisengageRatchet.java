@@ -5,7 +5,6 @@ import frc.robot.utils.command.SubsystemCommandBase;
 
 public class DisengageRatchet extends SubsystemCommandBase<Climber> {
 
-
     public DisengageRatchet(Climber climber) {
         super(climber);
     }

@@ -1,37 +1,27 @@
 package frc.robot.commands.amp;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Amp;
+import frc.robot.utils.command.TimedSubsystemCommand;
 
-public class RetractAmp extends Command {
-    private Amp amp;
-    private Timer timeout = new Timer();
+public class RetractAmp extends TimedSubsystemCommand<Amp> {
 
     public RetractAmp(Amp amp) {
-        this.amp = amp;
-        addRequirements(amp);
-    }
-
-    @Override
-    public void initialize() {
-        timeout.reset();
-        timeout.start();
+        super(amp,Constants.AMP_TIMEOUT);
     }
 
     @Override
     public void execute() {
-        amp.setAmpMotorSpeed(-1*Constants.AMP_MOTOR_SPEED);
+        getSystem().setAmpMotorSpeed(-1 * Constants.AMP_MOTOR_SPEED);
     }
 
     @Override
     public boolean isFinished() {
-        return (timeout.hasElapsed(Constants.AMP_TIMEOUT) || amp.isReverseLimitSwitchPressed());
+        return getSystem().isReverseLimitSwitchPressed() || super.isFinished();
     }
 
     @Override
     public void end(boolean interrupted) {
-        amp.setAmpMotorSpeed(0);
+        getSystem().setAmpMotorSpeed(0);
     }
 }
