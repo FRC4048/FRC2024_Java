@@ -126,10 +126,10 @@ public class Constants2024 extends GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Deployer
+    public static final int DEPLOYER_MOTOR_ID = 10;
 
     public static final double ALIGNABLE_PID_P = 0.015;
     public static final double ALIGNABLE_PID_I = 0;
     public static final double ALIGNABLE_PID_D = 0.0015;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
-    public static final int DEPLOYER_MOTOR_ID = 10; //For testbed, I don't know the id for the motor on the robot
 }
