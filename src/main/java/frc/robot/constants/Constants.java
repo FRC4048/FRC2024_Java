@@ -6,9 +6,4 @@ package frc.robot.constants;
 
 public final class Constants extends Constants2024{
 
-    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10;
-    public static final double FEEDER_SHOOT_TIMEOUT = 5;
-    public static final double FEEDER_INTAKE_TIMEOUT = 5;
-    public static final double RESET_RAMP_TIMEOUT = 5;
-    public static final double SHOOTER_TIMEOUT = 5;
 }

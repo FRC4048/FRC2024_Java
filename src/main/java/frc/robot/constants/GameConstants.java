@@ -15,6 +15,7 @@ public class GameConstants {
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
@@ -46,10 +47,14 @@ public class GameConstants {
 
     //OTHER TIMEOUTS
 
-    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
-    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
-    public static final double START_FEEDER_TIMEOUT = 5.0;
-    public static final double RESET_RAMP_TIMEOUT = 5.0;
+    public static final double FEEDER_SHOOT_TIMEOUT = 5;
+    public static final double FEEDER_INTAKE_TIMEOUT = 5;
+    public static final double RESET_RAMP_TIMEOUT = 5;
+    public static final double SHOOTER_TIMEOUT = 5;
+
+    public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+    public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
+    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10;
 
 }
