@@ -50,7 +50,7 @@ public class GameConstants {
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
-    public static final double FEEDER_BACK_EJECT_SPEED = 0.75;
+    public static final double FEEDER_BACK_EJECT_SPEED = -0.75;
 
     public static final double RESET_RAMP_TIMEOUT = 5.0;
 
