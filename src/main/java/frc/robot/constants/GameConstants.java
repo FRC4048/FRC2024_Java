@@ -6,7 +6,7 @@ public class GameConstants {
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
-    public static final int XBOX_CONTROLLER_ID = 3;
+    public static final int XBOX_CONTROLLER_ID = 2;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double PIECE_THRESHOLD = 0.7;
@@ -32,6 +32,10 @@ public class GameConstants {
     public static final double SPOOL_TIME = 0.5;//seconds
     public static final double AMP_RAMP_ENC_VALUE = 5.75;//
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
+
+    // FEEDER
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
     public static final double MAX_RAMP_ENC = 25.0000;
 
