@@ -33,7 +33,7 @@ public class FeederGamepieceUntilLeave extends Command{
     }
     @Override
     public boolean isFinished() {
-        if (feeder.pieceNotSeen()) {
+        if (!feeder.pieceSeen(true)) {
             pieceNotFoundCounter++;
         }
         if (pieceNotFoundCounter > GameConstants.FEEDER_PIECE_NOT_SEEN_COUNTER) {
