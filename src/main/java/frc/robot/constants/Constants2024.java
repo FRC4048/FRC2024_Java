@@ -10,7 +10,6 @@ public class Constants2024 extends GameConstants {
 
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
-    public static final double RAMP_ANGLE = 15.0;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
@@ -31,14 +30,13 @@ public class Constants2024 extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
 
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MAX_RPM_ACCELERATION = 25000;
