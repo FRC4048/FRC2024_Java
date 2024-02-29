@@ -54,15 +54,20 @@ public class GameConstants {
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
 
+    // Shooter
+    public static final double SHOOTER_PID_P = 0.000058;
+    public static final double SHOOTER_PID_I = 0.0;
+    public static final double SHOOTER_PID_D = 0.00001;
+    public static final double SHOOTER_PID_FF = 0.00017;
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
+
+
     // Feeder
     public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 3.0;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
     public static final int FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 4.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
-
-    // Shooter
-    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
 
     //OTHER TIMEOUTS
 
