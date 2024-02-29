@@ -232,6 +232,7 @@ public class RobotContainer {
         // Shoot the note - B
         controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
                 new FeederGamepieceUntilLeave(feeder),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp)));
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW);

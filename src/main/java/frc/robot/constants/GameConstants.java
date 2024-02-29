@@ -55,15 +55,17 @@ public class GameConstants {
     public static final double FEEDER_MIN_TIME_FOR_SHOOTING = 3.0;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
     public static final int FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
+    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 4.0;
+    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
+
+    // Shooter
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
 
     //OTHER TIMEOUTS
 
-    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 4.0;
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
-    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
     public static final double RESET_RAMP_TIMEOUT = 5.0;
-
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
 }

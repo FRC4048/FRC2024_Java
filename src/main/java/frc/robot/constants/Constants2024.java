@@ -37,7 +37,6 @@ public class Constants2024 extends GameConstants {
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MAX_RPM_ACCELERATION = 25000;
