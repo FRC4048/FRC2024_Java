@@ -22,15 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.RaiseArms;
-import frc.robot.commands.ReportErrorCommand;
-import frc.robot.commands.TurnToGamepiece;
-import frc.robot.commands.cannon.Shoot;
-import frc.robot.commands.cannon.ShootTest;
-import frc.robot.commands.cannon.StartFeeder;
-import frc.robot.commands.cannon.StartIntake;
-import frc.robot.commands.climber.StaticClimb;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.TurnToGamepiece;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -51,15 +44,15 @@ import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.*;
-import frc.robot.commands.sequences.*;
+import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
+import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
@@ -77,8 +70,6 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
