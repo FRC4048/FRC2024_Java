@@ -1,8 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -24,9 +21,10 @@ public class TurnToGamepiece extends Command {
     private double y;
     ChassisSpeeds driveStates;
     private boolean finished = false;
-    private final ProfiledPIDController PIDController;
-    private double cycle;
+    private final ProfiledPIDController TurningPIDController;
+    private final ProfiledPIDController MovingPIDController;
 
+    private double cycle;
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
@@ -36,14 +34,18 @@ public class TurnToGamepiece extends Command {
         xSub = table.getDoubleTopic("tx").subscribe(-1);
         ySub = table.getDoubleTopic("ty").subscribe(-1);
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150, 2 * Math.PI * 150);
-        PIDController = new ProfiledPIDController(.008, 0, 0.0000, constraints);
-        
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MAX_ANGULAR_SPEED * 150,
+                2 * Math.PI * 150);
+        double tP = 0.04;
+        double mP = 0.05;
+        TurningPIDController = new ProfiledPIDController(tP, 0, 0, constraints);
+        MovingPIDController = new ProfiledPIDController(mP, 0, 0, constraints);
 
     }
 
     @Override
     public void initialize() {
+        cycle = 0;
         finished = false;
     }
 
@@ -51,22 +53,19 @@ public class TurnToGamepiece extends Command {
     public void execute() {
         x = xSub.get();
         y = ySub.get();
-        if (Math.abs(x) > 6) {
-            driveStates = new ChassisSpeeds(0, 0, PIDController.calculate(x));
-            SmartShuffleboard.put("Test", "Speed", PIDController.calculate(x));
+        if (y != 0) {
+            driveStates = new ChassisSpeeds(-MovingPIDController.calculate(y + 18), 0,
+                    TurningPIDController.calculate(x));
+            SmartShuffleboard.put("Test", "Speed", TurningPIDController.calculate(x));
             drivetrain.drive(driveStates);
+            cycle = 0;
         } else {
-            if (y > 5) {
-            driveStates = new ChassisSpeeds(.3, 0, PIDController.calculate(x));
-            drivetrain.drive(driveStates);
-        } else {
-            if (cycle > 30) {
-                driveStates = new ChassisSpeeds(0, 0, 0);
-                drivetrain.drive(driveStates);
-                finished = true;
-            }
-        } 
-        }        
+            cycle++;
+        }
+
+        if (y < -17 || cycle > 10) {
+            finished = true;
+        }
     }
 
     @Override
@@ -78,5 +77,5 @@ public class TurnToGamepiece extends Command {
     public void end(boolean interrupted) {
         drivetrain.drive(new ChassisSpeeds(0, 0, 0));
     }
-        
-    }
+
+}
