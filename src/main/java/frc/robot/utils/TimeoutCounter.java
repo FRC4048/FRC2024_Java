@@ -10,6 +10,7 @@ import frc.robot.utils.logging.Logger;
 /** Counts how many timeouts each command had during a match. */
 public class TimeoutCounter {
     private int timeoutCounter = 0;
+    private static int totalTimeouts = 0;
     private final String commandName;
     public TimeoutCounter(String commandName) {
         this.commandName = commandName;
@@ -20,6 +21,7 @@ public class TimeoutCounter {
     }
     public void increaseTimeoutCount() {
         timeoutCounter++;
+        totalTimeouts++;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
     }
     public String getCommandName() {
@@ -28,5 +30,8 @@ public class TimeoutCounter {
     public void resetCounter() {
         timeoutCounter = 0;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
+    }
+    public static int getTotalTimeouts(){
+        return totalTimeouts;
     }
 }
