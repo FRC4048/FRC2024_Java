@@ -17,10 +17,12 @@ import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagAprilTags;
 import frc.robot.utils.diag.DiagLuxonis;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -50,6 +52,9 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.PATHPLANNER_DEBUG){
+            SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createBasicPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
+        }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());

@@ -21,7 +21,7 @@ public class PathPlannerUtils {
         path.preventFlipping = true;
         return path;
     }
-    public static Command AutoFromPath(PathPlannerPath path){
+    public static Command autoFromPath(PathPlannerPath path){
         return AutoBuilder.followPath(path);
     }
 }
