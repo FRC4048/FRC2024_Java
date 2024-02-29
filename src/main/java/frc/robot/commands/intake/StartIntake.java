@@ -1,16 +1,18 @@
-package frc.robot.commands.cannon;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.utils.TimeoutCounter;
 
 public class StartIntake extends Command {
     private final IntakeSubsystem intakeSubsystem;
     private final Timer timer = new Timer();
     private final int motorRunTime; // temporary until  done testing
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Start Intake");
 
-    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime) {
+    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime ) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
@@ -34,6 +36,10 @@ public class StartIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(motorRunTime);
+        if (timer.hasElapsed(motorRunTime)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 }

@@ -1,18 +1,20 @@
 package frc.robot.commands.deployer;
 
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.utils.TimeoutCounter;
 
-public class DeployerRaise extends Command {
+public class LowerDeployer extends Command {
     
     private Deployer deployer;
     private Timer timer = new Timer();
     private final double MOTOR_RUN_TIME = Constants.DEPLOYER_RAISE_TIMEOUT;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Lower Deployer");
 
-    public DeployerRaise(Deployer deployer) {
+    public LowerDeployer(Deployer deployer) {
         this.deployer = deployer;
         addRequirements(deployer);
     }
@@ -28,7 +30,14 @@ public class DeployerRaise extends Command {
     @Override 
     public boolean isFinished() {
         //Check is timer has passed timeout point or the deployer has reached the limit switch
-        return (timer.hasElapsed(MOTOR_RUN_TIME) || deployer.isDeployerReverseLimitSwitchClosed());
+        if (deployer.isDeployerReverseLimitSwitchClosed()) {
+            return true;
+        }
+        else if (timer.hasElapsed(MOTOR_RUN_TIME)) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        return false;
     }
 
     @Override

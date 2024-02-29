@@ -8,11 +8,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
+import frc.robot.utils.TimeoutCounter;
 
 public class ResetRamp extends Command {
   /** Creates a new ResetRamp. */
   private Ramp ramp; 
   private double startTime;
+  private final TimeoutCounter timeoutCounter = new TimeoutCounter("Reset Ramp");
 
   /*
    *When we get the robot:
@@ -30,7 +32,7 @@ public class ResetRamp extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    ramp.setMotor(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
+    ramp.setSpeed(Constants.RESET_RAMP_SPEED); //assuming positive is forward with a random speed
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,7 +49,14 @@ public class ResetRamp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((ramp.getForwardSwitchState()) || ((Timer.getFPGATimestamp() - startTime) >= 5)); //Assuming that Forward Switch is the top one
+    if (ramp.getReversedSwitchState()) {
+      return true;
+    }
+    else if ((Timer.getFPGATimestamp() - startTime) >= Constants.RESET_RAMP_TIMEOUT) {
+      timeoutCounter.increaseTimeoutCount();
+      return true;
+    }
+    return false;
   }
 
   @Override
