@@ -234,8 +234,8 @@ public class RobotContainer {
                 new FeederGamepieceUntilLeave(feeder),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RetractAmp(amp)));
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW);
+                new RetractAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder),
@@ -266,9 +266,6 @@ public class RobotContainer {
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
-
-        // Toggle AMP
-        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
 
         // others
         //controller.??.onTrue(new cancelAll(...)
