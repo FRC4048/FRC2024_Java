@@ -11,7 +11,6 @@ public class ComboShot extends ParallelCommandGroup {
                 new BasicShoot(shooter,1),
                 new FeederGamepieceUntilLeave(feeder)
         );
-        addRequirements(shooter,feeder);
     }
 
 
