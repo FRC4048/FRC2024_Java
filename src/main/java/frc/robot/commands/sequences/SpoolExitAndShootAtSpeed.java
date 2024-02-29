@@ -18,7 +18,5 @@ public class SpoolExitAndShootAtSpeed extends ParallelCommandGroup {
                         new FeederGamepieceUntilLeave(feeder)
                 )
         );
-        addRequirements(shooter, feeder);
-
     }
 }

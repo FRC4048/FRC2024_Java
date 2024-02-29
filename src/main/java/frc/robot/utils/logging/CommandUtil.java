@@ -97,6 +97,11 @@ public class CommandUtil {
         return new ParallelLoggingCommand(sequenceName, loggingCommands);
     }
 
+    public static Command race(String sequenceName, Command... commands) {
+        LoggingCommand[] loggingCommands = wrapForLogging(sequenceName, commands);
+        return new RaceLoggingCommand(sequenceName, loggingCommands);
+    }
+
     private static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
         // Do not use streams due to efficiency
         LoggingCommand[] newCommands = new LoggingCommand[commands.length];

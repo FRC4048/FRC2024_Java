@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
@@ -45,26 +46,27 @@ public class Feeder extends SubsystemBase {
         return colorSensor.getColor();
     }
 
-    public boolean pieceSeen() {
-        return (getColor() == ColorValue.Piece);
-    }
-
-    public boolean pieceNotSeen() {
-        return (getColor() == ColorValue.Plastic);
+    public boolean pieceSeen(boolean incoming) {
+        ColorMatchResult latestResult = colorSensor.getMatchedColor();
+        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+        return latestResult.confidence > confidence;
     }
 
     @Override
     public void periodic() {
         if (Constants.FEEDER_DEBUG) {
             ColorValue detectedColor = colorSensor.getColor();
-            ColorMatchResult rawColor = colorSensor.getRawColor();
+            Color rawColor = colorSensor.getRawColor();
+            ColorMatchResult matchedColor = colorSensor.getMatchedColor();
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Matched", detectedColor.name());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.color.red);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.color.green);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.color.blue);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", rawColor.confidence);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.red);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.green);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.blue);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
+            SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
+            SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
-        SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen());
+        SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen(false));
     }
 }

@@ -1,26 +1,43 @@
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.feeder.FeederBackDrive;
+import frc.robot.commands.deployer.LowerDeployer;
+import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.feeder.StartFeeder;
-import frc.robot.commands.pathplanning.TimedIntake;
-import frc.robot.constants.Constants;
+import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.feeder.FeederBackDrive;
+import frc.robot.commands.ramp.RampMoveAndWait;
+import frc.robot.constants.GameConstants;
+import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
 
+/**
+ * Sequence to start intaking, this takes care of the lowering/raising the deployer,
+ * as well as starting/stopping the intake and feeder.
+ */
 public class StartIntakeAndFeeder extends SequentialCommandGroup{
-    public StartIntakeAndFeeder(Feeder feeder, IntakeSubsystem intake) {
+    public StartIntakeAndFeeder(Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp) {
         addCommands(
-            new ParallelDeadlineGroup(
-                new StartFeeder(feeder),
-                new TimedIntake(intake, 10)
+            new ParallelCommandGroup(
+                new LowerDeployer(deployer),
+                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
             ),
-            new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
-            new FeederBackDrive(feeder)
+            new ParallelRaceGroup(
+                new StartIntake(intake, 10), //intake stops by ParallelRaceGroup when note in feeder
+                new StartFeeder(feeder)
+            ),
+            new ParallelCommandGroup(
+                new RaiseDeployer(deployer),
+                new SequentialCommandGroup(
+                        new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
+                        new FeederBackDrive(feeder)
+                )
+            )
         );
-        addRequirements(feeder,intake);
-
     }
 }

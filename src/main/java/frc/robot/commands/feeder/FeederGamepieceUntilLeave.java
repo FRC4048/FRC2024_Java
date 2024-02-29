@@ -3,6 +3,7 @@ package frc.robot.commands.feeder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Feeder;
 
 
@@ -10,7 +11,7 @@ public class FeederGamepieceUntilLeave extends Command {
     private final Feeder feeder;
     private double time;
     private int pieceNotFoundCounter;
-
+    private int pieceNotFoundCounter;
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
@@ -34,9 +35,18 @@ public class FeederGamepieceUntilLeave extends Command {
 
     @Override
     public boolean isFinished() {
-        if (feeder.pieceNotSeen()) {
+        if (!feeder.pieceSeen(true)) {
             pieceNotFoundCounter++;
         }
-        return (pieceNotFoundCounter > 30 || Timer.getFPGATimestamp() - time > 10);
+        if (pieceNotFoundCounter > GameConstants.FEEDER_PIECE_NOT_SEEN_COUNTER) {
+            return true;
+        }
+        else if (Timer.getFPGATimestamp() - time > Constants.FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

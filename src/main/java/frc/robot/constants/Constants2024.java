@@ -4,13 +4,12 @@ import frc.robot.swervev2.SwerveModuleProfile;
 
 
 public class Constants2024 extends GameConstants {
-    //AMP
+    //AMP 
     public static final int AMP_ID = 5;
+
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
     public static final double RAMP_ANGLE = 15.0;
-
-    public static final double RAMP_ERROR_IZONE = 0.00;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
@@ -31,14 +30,13 @@ public class Constants2024 extends GameConstants {
     public static final int SHOOTER_SENSOR_ID_1 = 2; //needs to be changed
     public static final int SHOOTER_SENSOR_ID_2 = 1; //needs to be changed
 
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MAX_RPM_ACCELERATION = 25000;
@@ -79,7 +77,8 @@ public class Constants2024 extends GameConstants {
     public static final double ROBOT_RADIUS =  0.381;
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
-    public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
+    // theoretical maximum angular velocity (radians/second)
+    public static final double MAX_ANGULAR_SPEED = MAX_VELOCITY / (2 * ROBOT_RADIUS);
     public static final double ROBOT_WIDTH = 0.8636;
     public static final double ROBOT_LENGTH = 0.8636;
     public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees
@@ -90,9 +89,9 @@ public class Constants2024 extends GameConstants {
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 306.29;
 
     //Feeder
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.4; //0.7
-    public static final double FEEDER_BACK_DRIVE_SPEED = -0.3;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.95;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5; //0.7
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor
 

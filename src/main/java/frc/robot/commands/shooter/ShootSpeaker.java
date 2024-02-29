@@ -12,8 +12,6 @@ import frc.robot.utils.logging.Logger;
 public class ShootSpeaker extends Command {
 
     private final Shooter shooter;
-    private final Timer timer = new Timer();
-    private boolean activated = false;
     private SwerveDrivetrain drivetrain;
     public ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain) {
         this.shooter = shooter;
@@ -23,15 +21,11 @@ public class ShootSpeaker extends Command {
 
     @Override
     public void initialize() {
-        timer.reset();
-        activated = true;
-        timer.start();
-
     }
 
     @Override 
     public boolean isFinished() {
-        return (timer.hasElapsed(Constants.SHOOTER_TIME_AFTER_TRIGGER)) && (activated);
+        return true;
     }
 
     @Override
@@ -42,25 +36,16 @@ public class ShootSpeaker extends Command {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
         }
-        else if (((RobotContainer.isRedAlliance() == false) && (gyro >= 180)) ||
-                ((RobotContainer.isRedAlliance() == true) && (gyro <= 180))) {
+        else {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
-          }
-        else {
-            Logger.logDouble("Shooting Condition not working", gyro, true);
         }
-
     }
 
     /**
      * @param interrupted if command was interrupted
-     *  stop shooter and timer. Set activated to false
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.stopShooter();
-        timer.stop();
-        activated = false;
     }
 }
