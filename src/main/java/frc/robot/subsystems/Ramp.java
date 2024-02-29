@@ -24,7 +24,6 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
-
     }
 
     public void setRampPos(double targetPosition) {

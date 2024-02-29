@@ -6,22 +6,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
 
 public class CancelAll extends Command {
   /** Creates a new CancelAll. */
-  SwerveDrivetrain drivetrian;
-  public CancelAll(SwerveDrivetrain drivetrian) {
-    this.drivetrian = drivetrian;
-    addRequirements(drivetrian);
-    // Use addRequirements() here to declare subsystem dependencies.
+  Ramp ramp;
+  Shooter shooter;
+  public CancelAll(Ramp ramp, Shooter shooter) {
+    this.ramp = ramp;
+    this.shooter = shooter;
+    addRequirements(ramp, shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrian.stopMotor();
+    ramp.setRampPos(0);
+    shooter.setShooterMotorLeftRPM(0);
+    shooter.setShooterMotorRightRPM(0);
+
     CommandScheduler.getInstance().cancelAll();
   }
 
