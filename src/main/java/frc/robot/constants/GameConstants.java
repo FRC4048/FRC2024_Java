@@ -47,7 +47,11 @@ public class GameConstants {
     public static final double AMP_MOTOR_SPEED = .8;
     public static final double AMP_TIMEOUT = 2.0;
 
-
+    // Shooter
+    public static final double SHOOTER_PID_P = 0.000058;
+    public static final double SHOOTER_PID_I = 0.0;
+    public static final double SHOOTER_PID_D = 0.00001;
+    public static final double SHOOTER_PID_FF = 0.00017;
 
     //OTHER TIMEOUTS
 
