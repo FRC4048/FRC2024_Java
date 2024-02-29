@@ -12,6 +12,8 @@ public class Shooter extends SubsystemBase {
   
   private final NeoPidMotor neoPidMotorLeft;
   private final NeoPidMotor neoPidMotorRight;
+  private double lastMotorLeftSpeed;
+  private double lastMotorRightSpeed;
 
   public Shooter() {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
@@ -82,6 +84,22 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft.setPidSpeed(0);
     neoPidMotorRight.setPidSpeed(0);
   }
+
+  public void setLastMotorLeftSpeed(double lastMotorLeftSpeed) {
+    this.lastMotorLeftSpeed = lastMotorLeftSpeed;
+  }
+
+  public void setLastMotorRightSpeed(double lastMotorRightSpeed) {
+    this.lastMotorRightSpeed = lastMotorRightSpeed;
+  }
+
+  public double getLastMotorLeftSpeed() {
+    return lastMotorLeftSpeed;
+  } 
+
+  public double getLastMotorRightSpeed() {
+    return lastMotorRightSpeed;
+  } 
 
   @Override
   public void periodic() {

@@ -43,15 +43,15 @@ import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.*;
-import frc.robot.commands.sequences.*;
+import frc.robot.commands.sequences.ExitAndShoot;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
+import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
@@ -69,8 +69,6 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -230,12 +228,16 @@ public class RobotContainer {
                 new ShootAmp(shooter)));
 
         // Shoot the note - B
-        controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
+        controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
                 new FeederGamepieceUntilLeave(feeder),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+
+        controller.leftTrigger(0.5).onTrue(new FeederBackDrive(feeder));
+
+        controller.b().onTrue(leftClimbCmd);
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder),
