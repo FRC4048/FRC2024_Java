@@ -73,4 +73,11 @@ public class GameConstants {
     public static final double RESET_RAMP_TIMEOUT = 5.0;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
+    public static final double PATH_PLANNER_TRANSLATION_PID_P = 5;
+    public static final double PATH_PLANNER_TRANSLATION_PID_I = 0;
+    public static final double PATH_PLANNER_TRANSLATION_PID_D = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_P = 4.75;
+    public static final double PATH_PLANNER_ROTATION_PID_I = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_D = 0;
+
 }
