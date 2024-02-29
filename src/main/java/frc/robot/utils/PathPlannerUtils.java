@@ -13,7 +13,12 @@ import java.util.List;
 
 public class PathPlannerUtils {
     private static final PathConstraints defualtPathConstraints =  new PathConstraints(Constants.MAX_VELOCITY,Constants.MAX_VELOCITY,Math.toRadians(1000),Math.toRadians(1000));
-    public static PathPlannerPath createBasicPath(Pose2d startPose, Pose2d targetPos, double endVelocity){
+
+    /**
+     * @deprecated see {@link #pathToPose(Pose2d, double)}
+     */
+    @Deprecated
+    public static PathPlannerPath createManualPath(Pose2d startPose, Pose2d targetPos, double endVelocity){
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
                 startPose, targetPos
         );
@@ -23,5 +28,8 @@ public class PathPlannerUtils {
     }
     public static Command autoFromPath(PathPlannerPath path){
         return AutoBuilder.followPath(path);
+    }
+    public static Command pathToPose(Pose2d targetPos, double endVelocity){
+        return AutoBuilder.pathfindToPose(targetPos, defualtPathConstraints,endVelocity);
     }
 }
