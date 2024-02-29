@@ -12,7 +12,7 @@ public class FeederGamepieceUntilLeave extends Command {
     private final Feeder feeder;
     private double time;
     private int pieceNotFoundCounter;
-    private TimeoutCounter timeoutCounter;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Feeder gamepiece until leave");
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);

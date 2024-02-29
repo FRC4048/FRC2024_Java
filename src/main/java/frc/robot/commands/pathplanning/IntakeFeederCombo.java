@@ -19,7 +19,6 @@ public class IntakeFeederCombo extends SequentialCommandGroup {
                 new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
                 new FeederBackDrive(feeder)
         );
-        addRequirements(feeder,intake);
 
     }
 }

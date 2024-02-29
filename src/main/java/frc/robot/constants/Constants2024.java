@@ -9,7 +9,6 @@ public class Constants2024 extends GameConstants {
 
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
-    public static final double RAMP_ANGLE = 15.0;
     public static final double RAMP_POS = 0.0;
     public static final int RAMP_ID = 47;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
