@@ -57,9 +57,9 @@ public class GameConstants {
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
 
     //FEEDER
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.7;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.9;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
@@ -73,10 +73,11 @@ public class GameConstants {
     public static final double CLIMBER_TIMEOUT_S=10;
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double MAX_CLIMBER_ENCODER = 80.0;
+    public static final double RAISING_TIMEOUT = 3;
 
     //INTAKE
-    public static final double INTAKE_MOTOR_1_SPEED = 0.4;
-    public static final double INTAKE_MOTOR_2_SPEED = 0.4;
+    public static final double INTAKE_MOTOR_1_SPEED = 1;
+    public static final double INTAKE_MOTOR_2_SPEED = 1;
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
