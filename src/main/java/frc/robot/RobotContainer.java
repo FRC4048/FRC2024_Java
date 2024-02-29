@@ -40,6 +40,7 @@ import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.ComboShot;
 import frc.robot.commands.pathplanning.IntakeFeederCombo;
 import frc.robot.commands.pathplanning.PathPlannerShoot;
+import frc.robot.commands.pathplanning.ShootAndDrop;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -106,6 +107,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 1.5));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
+        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
     }
 
     private void setupPathPlanning() {

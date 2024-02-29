@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7004013091645886,
+      "y": 4.41026348261173
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAndDrop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DipRight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pick5fth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartIntakeAndFeeder"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "EnterRightShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DipRight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pick4th"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartIntakeAndFeeder"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "EnterRightShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
