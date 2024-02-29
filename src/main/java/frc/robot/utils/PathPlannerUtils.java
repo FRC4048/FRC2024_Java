@@ -12,7 +12,7 @@ import frc.robot.constants.Constants;
 import java.util.List;
 
 public class PathPlannerUtils {
-    private static final PathConstraints defualtPathConstraints =  new PathConstraints(Constants.MAX_VELOCITY,Constants.MAX_VELOCITY,1000,1000);
+    private static final PathConstraints defualtPathConstraints =  new PathConstraints(Constants.MAX_VELOCITY,Constants.MAX_VELOCITY,Math.toRadians(1000),Math.toRadians(1000));
     public static PathPlannerPath createBasicPath(Pose2d startPose, Pose2d targetPos, double endVelocity){
         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
                 startPose, targetPos
