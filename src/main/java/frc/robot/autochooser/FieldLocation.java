@@ -5,9 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 
 public enum FieldLocation {
-     SpeakerLeft(0.66,6.60,Math.toRadians(-120),"Speaker Left","Speaker Right"),
-     SpeakFront(1.25,5.50,Math.PI,"Speaker Front","Speaker Front"),
-     SpeakerRight(0.66,4.50,Math.toRadians(120),"Speaker Right","Speaker Left"),
+     SpeakerLeft(0.70,6.69,Math.toRadians(-120),"Speaker Left","Speaker Right"),
+     SpeakFront(1.34,5.55,Math.PI,"Speaker Front","Speaker Front"),
+     SpeakerRight(0.70,4.42,Math.toRadians(120),"Speaker Right","Speaker Left"),
      ZERO(0, 0,0,"Zero", "Zero");
      private static final double RED_X_POS = 16.5; //meters
      private final double yPos;
