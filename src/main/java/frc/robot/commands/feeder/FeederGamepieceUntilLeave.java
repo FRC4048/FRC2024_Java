@@ -5,13 +5,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Feeder;
+import frc.robot.utils.TimeoutCounter;
 
 
 public class FeederGamepieceUntilLeave extends Command {
     private final Feeder feeder;
     private double time;
     private int pieceNotFoundCounter;
-    private int pieceNotFoundCounter;
+    private TimeoutCounter timeoutCounter;
     public FeederGamepieceUntilLeave(Feeder feeder) {
         this.feeder = feeder;
         addRequirements(feeder);
