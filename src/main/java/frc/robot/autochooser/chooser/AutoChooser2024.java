@@ -7,6 +7,9 @@ import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
+import frc.robot.commands.pathplanning.FourPieceLeft;
+import frc.robot.commands.pathplanning.ShootAndDrop;
+import frc.robot.subsystems.*;
 import frc.robot.commands.pathplanning.ShootAndDrop;
 import frc.robot.subsystems.*;
 
