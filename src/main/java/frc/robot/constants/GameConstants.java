@@ -1,16 +1,10 @@
 package frc.robot.constants;
 
 public class GameConstants {
-    public static final boolean ENABLE_LOGGING = true;
-
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
     public static final int XBOX_CONTROLLER_ID = 3;
-    public static final int DIAG_ABS_SPARK_ENCODER = 20;
-    public static final double DIAG_REL_SPARK_ENCODER = 0.1;
-    public static final double PIECE_THRESHOLD = 0.7;
-    public static final double GRAVITY = -9.81;
 
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
@@ -22,37 +16,82 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
+    public static final boolean ENABLE_LOGGING = true;
+
+    //AMP
+    public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
+    public static final double AMP_MOTOR_SPEED = .8;
+    public static final double AMP_TIMEOUT = 2.0;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
     public static final double DEPLOYER_RAISE_TIMEOUT = 5;
     public static final double DEPLOYER_LOWER_SPEED = 0.9;
     public static final double DEPLOYER_RAISE_SPEED = -0.9;
-    public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
     public static final double SPOOL_TIME = 0.5;//seconds
-    public static final double AMP_RAMP_ENC_VALUE = 5.75;//
-    public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 
+    //RAMP
+    public static final double RAMP_POS = 0.0;
+    public static final double AMP_RAMP_ENC_VALUE = 5.75;
     public static final double MAX_RAMP_ENC = 25.0000;
-
-    public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
-    public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
-
-    public static final double MAX_CLIMBER_ENCODER = 80.0;
-
-    public static final double AMP_MOTOR_SPEED = .8;
-    public static final double AMP_TIMEOUT = 2.0;
-
-
-
-    //OTHER TIMEOUTS
-
-    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
-    public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
-    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
-    public static final double START_FEEDER_TIMEOUT = 5.0;
+    public static final double RESET_RAMP_SPEED = -0.3;
+    public static final double RAMP_ANGLE = 15.0;
+    public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
     public static final double RESET_RAMP_TIMEOUT = 5.0;
 
-    public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+    //SERVO
+    public static final int RIGHT_SERVO_ENGAGED = 0;
+    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int LEFT_SERVO_ENGAGED = 0;
+    public static final int LEFT_SERVO_DISENGAGED = 180;
+
+    //SHOOTER
+    public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_1_RPM = 12000;
+    public static final double SHOOTER_MOTOR_2_RPM = 12000;
+    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
+    public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
+
+    //FEEDER
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.7;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 0.9;
+    public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
+    public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
+    public static final double START_FEEDER_TIMEOUT = 5.0;
+
+    //CLIMBER 
+    public static final double OUTTAKE_SPEED = 1.00;
+    public static final double CLIMBER_SPEED = 0.10;
+    public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
+    public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
+    public static final double CLIMBER_BALANCE_THRESH=30;
+    public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double CLIMBER_RAISING_SPEED = 0.2;
+    public static final double MAX_CLIMBER_ENCODER = 80.0;
+
+    //INTAKE
+    public static final double INTAKE_MOTOR_1_SPEED = 0.4;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.4;
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
+    public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
+    //DRIVETRAIN
+    public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
+    public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
+    public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+
+    //Miscellaneous
+    public static final boolean FIELD_RELATIVE = true;
+    public static final double PIECE_THRESHOLD = 0.7;
+    public static final double GRAVITY = -9.81;
+    public static final int DIAG_ABS_SPARK_ENCODER = 20;
+    public static final double DIAG_REL_SPARK_ENCODER = 0.1;
+    public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
 }
