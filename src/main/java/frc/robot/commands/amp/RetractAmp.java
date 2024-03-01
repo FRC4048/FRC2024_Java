@@ -33,5 +33,6 @@ public class RetractAmp extends Command {
     @Override
     public void end(boolean interrupted) {
         amp.setAmpMotorSpeed(0);
+        amp.setAmpDeployed(false);
     }
 }

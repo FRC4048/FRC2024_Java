@@ -15,6 +15,8 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         resetEncoder();
+
+        neoPidMotor.enableDiagnostics("Ramp", true, true);
     }
 
     public void periodic() {
@@ -24,7 +26,6 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
-
     }
 
     public void setRampPos(double targetPosition) {
