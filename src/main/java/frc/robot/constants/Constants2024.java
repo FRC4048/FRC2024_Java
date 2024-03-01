@@ -131,4 +131,8 @@ public class Constants2024 extends GameConstants {
     public static final double ALIGNABLE_PID_I = 0;
     public static final double ALIGNABLE_PID_D = 0.0015;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+
+    //Gamepiece turner
+    public static final double GAMEPIECE_MAX_VELOCITY = MAX_ANGULAR_SPEED * 150;
+    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
 }

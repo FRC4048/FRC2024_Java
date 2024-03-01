@@ -71,4 +71,9 @@ public class GameConstants {
     public static final double RESET_RAMP_TIMEOUT = 5.0;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
+
+    //Game piece
+    public static final double MAX_Y_ANGLE = -17;
+    public static final double MAX_EXECUTE_CYCLE = 10; 
+    public static final double TURNTOGAMEPIECE_TIMEOUT = 5;
 }
