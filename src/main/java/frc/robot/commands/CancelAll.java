@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 
@@ -22,7 +23,7 @@ public class CancelAll extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ramp.setRampPos(0);
+    ramp.setRampPos(Constants.RAMP_POS_STOW);
     shooter.setShooterMotorLeftRPM(0);
     shooter.setShooterMotorRightRPM(0);
 
