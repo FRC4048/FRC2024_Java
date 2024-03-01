@@ -27,10 +27,11 @@ public class ShootCross extends SequentialCommandGroup{
         }
         addCommands(
             new ResetRamp(ramp),
-            new MoveDistance(drivetrain, direction, 0.0, 0.3),
             new RampMove(ramp, ()->10), //change later
             new WaitCommand(0.5), //change later
-            new SpoolExitAndShoot(shooter, feeder, drivetrain)
+            new SpoolExitAndShoot(shooter, feeder, drivetrain),
+            new WaitCommand(0.5),
+            new MoveDistance(drivetrain, direction, 0.0, 0.3)
         );
     }
 }
