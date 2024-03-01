@@ -1,19 +1,16 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.utils.logging.Logger;
 
 public class ShootSpeaker extends Command {
 
     private final Shooter shooter;
     private SwerveDrivetrain drivetrain;
-    public ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain) {
+    public   ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain) {
         this.shooter = shooter;
         this.drivetrain = drivetrain;
         addRequirements(shooter);
@@ -35,10 +32,14 @@ public class ShootSpeaker extends Command {
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setLastMotorRightSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setLastMotorLeftSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
         }
         else {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            shooter.setLastMotorRightSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            shooter.setLastMotorLeftSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED);
         }
     }
 

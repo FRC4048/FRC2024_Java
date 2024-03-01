@@ -51,6 +51,7 @@ import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
+import frc.robot.commands.shooter.ToggleShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Amp;
@@ -237,7 +238,7 @@ public class RobotContainer {
 
         controller.leftTrigger(0.5).onTrue(new FeederBackDrive(feeder));
 
-        controller.b().onTrue(leftClimbCmd);
+        controller.b().onTrue(new ToggleShooter(shooter));
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder),
