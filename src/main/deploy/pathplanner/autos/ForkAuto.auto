@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootRightCenter"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ShootAndDrop"
@@ -31,37 +43,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "Pick5fth"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "StartIntakeAndFeeder"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "EnterRightShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DipRight"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Pick4th"
                 }
               },
               {
