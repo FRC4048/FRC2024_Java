@@ -22,6 +22,7 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
+    public static final boolean VISION_DEBUG = false;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
@@ -63,6 +64,10 @@ public class GameConstants {
 
     // Shooter
     public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
+
+    //Limelight
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = 18;
+    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
 
     //OTHER TIMEOUTS
 

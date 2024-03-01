@@ -34,7 +34,6 @@ import java.util.List;
 
 public class SwerveDrivetrain extends SubsystemBase {
     
-    private List<Translation2d> bezierPoints;
     private PathPlannerPath path;
 
     private final GenericSwerveModule frontLeft;
@@ -137,15 +136,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagLuxonis("Luxonis", "Piece Seen"));
         Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("AprilTags", "Apriltag Seen"));
         alignableTurnPid.enableContinuousInput(-180, 180);
-        SmartDashboard.putBoolean("USE VISION",false);
-         NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("limelight");
-    xSub = table.getDoubleTopic("tx").subscribe(-1);
-    ySub = table.getDoubleTopic("ty").subscribe(-1);
-        bezierPoints = PathPlannerPath.bezierFromPoses(new Pose2d(x, y, Rotation2d.fromDegrees(0)), new Pose2d(x, y, Rotation2d.fromDegrees(0)));
-        path = new PathPlannerPath(bezierPoints, new PathConstraints(.25, .25, 2 * Math.PI, 4 * Math.PI),  new GoalEndState(0.0, Rotation2d.fromDegrees(0)));
-        path.preventFlipping = true;
-        
     }
 
 

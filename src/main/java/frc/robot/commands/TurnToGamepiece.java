@@ -9,35 +9,28 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class TurnToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
-    // private DoubleSupplier x_position;
-    // private DoubleSupplier y_position;
     private double startTime;
     private DoubleSubscriber xSub;
     private DoubleSubscriber ySub;
     private DoubleSubscriber det;
-    private double x;
-    private double y;
-    private boolean valid;
     ChassisSpeeds driveStates;
-    private boolean finished = false;
     private final ProfiledPIDController TurningPIDController;
     private final ProfiledPIDController MovingPIDController;
 
-    private double cycle;
+    private double timeOfLastPieceLoss;
 
     public TurnToGamepiece(SwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("limelight");
-        xSub = table.getDoubleTopic("tx").subscribe(-1);
-        ySub = table.getDoubleTopic("ty").subscribe(-1);
+        xSub = table.getDoubleTopic("tx").subscribe(-1000);
+        ySub = table.getDoubleTopic("ty").subscribe(-1000);
         det = table.getDoubleTopic("tv").subscribe(-1);
 
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.GAMEPIECE_MAX_VELOCITY,
@@ -51,31 +44,26 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public void initialize() {
-        cycle = 0;
+        timeOfLastPieceLoss = 0;
         startTime = Timer.getFPGATimestamp();
-        finished = false;
     }
 
     @Override
     public void execute() {
-        valid = det.get()  > 0;
-        x = xSub.get();
-        y = ySub.get();
-        if (y != 0 && (valid || Timer.getFPGATimestamp() - startTime < GameConstants.TURNTOGAMEPIECE_TIMEOUT)) {
-            driveStates = new ChassisSpeeds(-MovingPIDController.calculate(y + 18), 0,
-                    TurningPIDController.calculate(x));
-            SmartShuffleboard.put("Test", "Speed", TurningPIDController.calculate(x));
+        if (ySub.get() != 0 && det.get() == 1) {
+            driveStates = new ChassisSpeeds(-MovingPIDController.calculate(ySub.get() + Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y), 0, TurningPIDController.calculate(xSub.get()));
+            if (Constants.VISION_DEBUG) SmartShuffleboard.put("Test", "Speed", TurningPIDController.calculate(xSub.get()));
             drivetrain.drive(driveStates);
-            cycle = 0;
+            timeOfLastPieceLoss = 0;
         } else {
-            cycle++;
+            if (timeOfLastPieceLoss == 0) timeOfLastPieceLoss = Timer.getFPGATimestamp();
         }
 
     }
 
     @Override
     public boolean isFinished() {
-        return (y < GameConstants.MAX_Y_ANGLE || cycle > GameConstants.MAX_EXECUTE_CYCLE);
+        return (ySub.get() < Constants.MAX_Y_ANGLE || (Timer.getFPGATimestamp() - timeOfLastPieceLoss) == Constants.PIECE_LOST_TIME_THRESHOLD || (Timer.getFPGATimestamp() - startTime > Constants.TURNTOGAMEPIECE_TIMEOUT));
     }
 
     @Override
