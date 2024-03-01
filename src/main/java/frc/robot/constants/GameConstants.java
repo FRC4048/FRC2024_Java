@@ -39,6 +39,13 @@ public class GameConstants {
     public static final double RAMP_ANGLE = 15.0;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
     public static final double RESET_RAMP_TIMEOUT = 5.0;
+    public static final double RAMP_POS_THRESHOLD = 0.1;
+    public static final double RAMP_POS_TIMEOUT = 3;
+    public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
+    public static final double RAMP_POS_STOW = 0.15;
+    public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
+    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
+    public static final double RAMP_POS_SHOOT_AMP = 11.0;
 
     //SERVO
     public static final int RIGHT_SERVO_ENGAGED = 0;
@@ -56,6 +63,11 @@ public class GameConstants {
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
+    public static final double SHOOTER_PID_P = 0.000058;
+    public static final double SHOOTER_PID_I = 0.0;
+    public static final double SHOOTER_PID_D = 0.00001;
+    public static final double SHOOTER_PID_FF = 0.00017;
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
@@ -64,6 +76,11 @@ public class GameConstants {
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
+    public static final double FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
+    public static final double FEEDER_BACK_DRIVE_DELAY = 0.4;
+    public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
     //CLIMBER 
     public static final double OUTTAKE_SPEED = 1.00;
