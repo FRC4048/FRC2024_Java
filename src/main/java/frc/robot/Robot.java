@@ -82,6 +82,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
         new RaiseDeployer(robotContainer.getDeployer()).schedule();
+        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override

@@ -73,7 +73,7 @@ public class Constants2024 extends GameConstants {
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
-    public static final double ROBOT_RADIUS =  0.381;
+    public static final double ROBOT_RADIUS =  0.43;
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
     // theoretical maximum angular velocity (radians/second)

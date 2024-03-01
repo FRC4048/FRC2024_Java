@@ -23,7 +23,7 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean PATHPLANNER_DEBUG = false;
+    public static final boolean PATHPLANNER_DEBUG = true;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
