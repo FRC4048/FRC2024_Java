@@ -13,10 +13,10 @@ public class CrossTheLine extends ParallelCommandGroup {
     double direction;
     public CrossTheLine(SwerveDrivetrain drivetrain, Ramp ramp) {
         if (RobotContainer.isRedAlliance() == true) {
-            direction = 1.015;
+            direction = -1.715;
         }
         else if (RobotContainer.isRedAlliance() == false) {
-            direction = -1.015;
+            direction = 1.715;
         }
         addCommands(
             new MoveDistance(drivetrain, direction, 0.0, 0.3), 

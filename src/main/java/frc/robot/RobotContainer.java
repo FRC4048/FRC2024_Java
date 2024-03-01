@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.CrossTheLine;
+import frc.robot.autochooser.ShootCross;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.SetAlignable;
@@ -145,6 +146,7 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         if (Constants.AUTO_DEBUG) {
             SmartShuffleboard.putCommand("Autonomous", "Cross the line", CommandUtil.logged(new CrossTheLine(drivetrain, ramp)));
+            SmartShuffleboard.putCommand("Autonomous", "ShootCross", CommandUtil.logged(new ShootCross(drivetrain, shooter, ramp, intakeSubsystem, feeder)));
         }
 
         if (Constants.AMP_DEBUG) {
