@@ -15,6 +15,8 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         resetEncoder();
+
+        neoPidMotor.enableDiagnostics("Ramp", true, true);
     }
 
     public void periodic() {
