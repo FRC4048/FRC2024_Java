@@ -18,6 +18,7 @@ import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
+import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
 
 public class Robot extends TimedRobot {
@@ -38,8 +39,8 @@ public class Robot extends TimedRobot {
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
-        new WheelAlign(robotContainer.getDrivetrain()).schedule();
-        new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
+        CommandUtil.logged(new WheelAlign(robotContainer.getDrivetrain())).schedule();
+        CommandUtil.logged(new ResetGyro(robotContainer.getDrivetrain(), 2)).schedule();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        new ResetRamp(robotContainer.getRamp()).schedule();
+        CommandUtil.logged(new ResetRamp(robotContainer.getRamp())).schedule();
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -81,8 +82,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        new RaiseDeployer(robotContainer.getDeployer()).schedule();
-        CommandScheduler.getInstance().cancelAll();
+        CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer())).schedule();
+        CommandUtil.logged(new ResetRamp(robotContainer.getRamp())).schedule();
     }
 
     @Override

@@ -26,8 +26,8 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = true;
 
     //DEPLOYER
-    public static final int DEPLOYER_LOWER_TIMEOUT = 5;
-    public static final double DEPLOYER_RAISE_TIMEOUT = 5;
+    public static final int DEPLOYER_LOWER_TIMEOUT = 1;
+    public static final double DEPLOYER_RAISE_TIMEOUT = 1;
     public static final double DEPLOYER_LOWER_SPEED = 0.9;
     public static final double DEPLOYER_RAISE_SPEED = -0.9;
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -42,11 +42,12 @@ public class GameConstants {
 
     public static final double MAX_RAMP_ENC = 25.0000;
     public static final double RAMP_POS_THRESHOLD = 0.1;
+
     public static final double RAMP_POS_TIMEOUT = 3;
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
-    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
+    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.0; //when about 44" away from the speaker
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
-    public static final double RAMP_POS_STOW = 0.15; // if this is 0, it tents to timeout
+    public static final double RAMP_POS_STOW = 0.5; // if this is 0, it tents to timeout
     public static final double RAMP_POS_SHOOT_AMP = 11.0;
 
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number

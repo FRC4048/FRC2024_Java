@@ -45,7 +45,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     private Alignable alignable = null;
 
 
-
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
     }
@@ -67,6 +66,10 @@ public class SwerveDrivetrain extends SubsystemBase {
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
+        }
+
+        if (Constants.SWERVE_DEBUG) {
+            SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }
     }
 
