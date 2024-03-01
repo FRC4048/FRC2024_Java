@@ -6,7 +6,6 @@ import frc.robot.swervev2.SwerveModuleProfile;
 public class Constants2024 extends GameConstants {
     //AMP 
     public static final int AMP_ID = 5;
-    
 
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
@@ -25,7 +24,6 @@ public class Constants2024 extends GameConstants {
 
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
-    public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
 
     //Shooter motor PID constants
     public static final double SHOOTER_MAX_RPM_ACCELERATION = 25000;
@@ -64,7 +62,8 @@ public class Constants2024 extends GameConstants {
     public static final double ROBOT_RADIUS =  0.381;
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
-    public static final double MAX_ANGULAR_SPEED = Math.PI * 6; // 1 rotation per second
+    // theoretical maximum angular velocity (radians/second)
+    public static final double MAX_ANGULAR_SPEED = MAX_VELOCITY / (2 * ROBOT_RADIUS);
     public static final double ROBOT_WIDTH = 0.8636;
     public static final double ROBOT_LENGTH = 0.8636;
     public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees

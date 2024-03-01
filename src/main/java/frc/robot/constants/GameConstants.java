@@ -6,6 +6,7 @@ public class GameConstants {
     public static final int RIGHT_JOYSTICK_ID = 1;
     public static final int XBOX_CONTROLLER_ID = 3;
 
+    public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;

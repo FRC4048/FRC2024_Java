@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.GameConstants;
 import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -16,6 +17,9 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
+
+    neoPidMotorLeft.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
+    neoPidMotorRight.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
 
     neoPidMotorLeft.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
     neoPidMotorRight.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);

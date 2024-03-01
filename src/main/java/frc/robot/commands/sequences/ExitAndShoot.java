@@ -19,7 +19,5 @@ public class ExitAndShoot extends ParallelCommandGroup{
                 new FeederGamepieceUntilLeave(feeder)
             )
         );
-        addRequirements(shooter,feeder);
-
     }  
 }
