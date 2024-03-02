@@ -19,12 +19,10 @@ import java.util.Arrays;
  * Add your docs here.
  */
 public class ColorSensor {
-    private I2C.Port sensorPort;
     private ColorSensorV3 colorSensor;
     private ColorMatch colorMatcher;
 
     public ColorSensor(I2C.Port sensorPort){
-        this.sensorPort = sensorPort;
         colorSensor = new ColorSensorV3(sensorPort);
 
         colorMatcher = new ColorMatch();
@@ -44,8 +42,12 @@ public class ColorSensor {
         return ColorValue.getFromColor(match.color);
     }
 
-    public ColorMatchResult getRawColor() {
+    public ColorMatchResult getMatchedColor() {
         Color detectedColor = colorSensor.getColor();
         return colorMatcher.matchClosestColor(detectedColor);
+    }
+
+    public Color getRawColor() {
+        return colorSensor.getColor();
     }
 }
