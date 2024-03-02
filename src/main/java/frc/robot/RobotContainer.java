@@ -22,6 +22,7 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -84,6 +85,7 @@ public class RobotContainer {
     private final Feeder feeder = new Feeder();
     private final Ramp ramp = new Ramp();
     private Climber climber;
+    private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
@@ -160,6 +162,7 @@ public class RobotContainer {
 //            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
             SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
         }
+            SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
@@ -209,7 +212,7 @@ public class RobotContainer {
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 
-        // Engage        
+        // Engage
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
         // Set up to shoot Speaker CLOSE - Y
