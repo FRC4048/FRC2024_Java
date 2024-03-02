@@ -77,6 +77,12 @@ public class Climber extends SubsystemBase {
         rightServo.setPosition(0);
         ratchetEngaged = false;
     }
+    public double getEncoderPosition() {
+        return climberLeft.getEncoder().getPosition();
+    }
+    public boolean isExtendedLimitSwitchNotPressed() {
+        return !(leftExtendedLimit.isPressed() || rightExtendedLimit.isPressed());
+    }
 
     @Override
     public void periodic() {
