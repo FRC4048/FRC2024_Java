@@ -55,7 +55,7 @@ public class Climber extends SubsystemBase {
      * @return true if setting speed was successful
      */
     public boolean setSpeed(double spd) {
-        if (spd > 0 && ratchetEngaged) return false;
+        if (spd > 0 && (ratchetEngaged || climberRight.getEncoder().getPosition() > 80 || climberLeft.getEncoder().getPosition() > 80)) return false;
         climberRight.set(-spd);
         climberLeft.set(spd);
         return true;

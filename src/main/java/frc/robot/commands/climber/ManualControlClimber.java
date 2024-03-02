@@ -24,7 +24,7 @@ public class ManualControlClimber extends Command {
     @Override
     public void execute() {
         double value = supplier.getAsDouble();
-        if (Math.abs(value) > .2 && climber.getEncoderPosition() < 80 && climber.isExtendedLimitSwitchNotPressed()) {
+        if (Math.abs(value) > .2) {
             climber.setSpeed(supplier.getAsDouble());
         } else {
             climber.setSpeed(0);
