@@ -73,6 +73,16 @@ public class GameConstants {
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 4.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 10.0;
 
+    //Limelight
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -18;
+    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
+    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
+    public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
+    public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
+    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
+    public static final double TURN_TO_GAME_PIECE_THRESHOLD = 1;
+    public static final double TURN_TO_GAMEPIECE_TIMEOUT = 5;
+
     //OTHER TIMEOUTS
 
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
