@@ -45,7 +45,7 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURN_TO_GAMEPIECE_TIMEOUT));
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURN_TO_GAMEPIECE_TIMEOUT || !vision.isPieceSeen()));
     }
 
     @Override
