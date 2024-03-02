@@ -17,7 +17,7 @@ public class CancelAll extends Command {
   Ramp ramp;
   Shooter shooter;
   Amp amp;
-  public CancelAll(Ramp ramp, Shooter shooter, Amp amp) {
+  public CancelAll(Ramp ramp, Shooter shooter) {
     this.ramp = ramp;
     this.shooter = shooter;
     addRequirements(ramp, shooter);
@@ -29,7 +29,6 @@ public class CancelAll extends Command {
     ramp.setRampPos(Constants.RAMP_POS_STOW);
     shooter.setShooterMotorLeftRPM(0);
     shooter.setShooterMotorRightRPM(0);
-    new RetractAmp(amp);
 
     CommandScheduler.getInstance().cancelAll();
   }
