@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -20,7 +19,7 @@ public class Climber extends SubsystemBase {
     private final SparkLimitSwitch leftRetractedLimit;
     private final SparkLimitSwitch rightExtendedLimit;
     private final SparkLimitSwitch leftExtendedLimit;
-
+    private boolean ratchetEngaged = true;
 
     public Climber() {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
@@ -42,7 +41,7 @@ public class Climber extends SubsystemBase {
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.leftServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
-        this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
+        this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 1100);
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftExtendedLimit, "Climber", "Left Extended"));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(rightExtendedLimit, "Climber", "Right Extended"));
@@ -51,23 +50,15 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * @param angle in degrees
-     */
-    public void setLeftServoAngle(double angle){
-        this.leftServo.setAngle(angle);
-    }
-    public void setRightServoAngle(double angle){
-        // this.rightServo.setAngle(angle);
-        this.rightServo.setPosition(angle);
-    }
-
-    /**
      * Right motor - Positive is down, Negative is up
      * Left motor - Positive is up, Negative is down
+     * @return true if setting speed was successful
      */
-    public void setSpeed(double spd) {
+    public boolean setSpeed(double spd) {
+        if (spd > 0 && ratchetEngaged) return false;
         climberRight.set(-spd);
         climberLeft.set(spd);
+        return true;
     }
 
     public void resetEncoders() {
@@ -78,11 +69,13 @@ public class Climber extends SubsystemBase {
     public void engageRatchet() {
         leftServo.setPosition(0);
         rightServo.setPosition(180);
+        ratchetEngaged = true;
     }
 
     public void disengageRatchet() {
         leftServo.setPosition(180);
         rightServo.setPosition(0);
+        ratchetEngaged = false;
     }
 
     @Override
