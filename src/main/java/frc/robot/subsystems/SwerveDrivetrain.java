@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,45 +11,30 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
-import frc.robot.swervev2.*;
+import frc.robot.swervev2.EncodedSwerveMotorBuilder;
+import frc.robot.swervev2.KinematicsConversionConfig;
+import frc.robot.swervev2.SwerveIdConfig;
+import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev2.SwervePosEstimator;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.diag.DiagAprilTags;
-import frc.robot.utils.diag.DiagLuxonis;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboardTab;
-import java.util.List;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
-    
+        
     private PathPlannerPath path;
 
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
     private final GenericSwerveModule backRight;
-
-    private DoubleSubscriber xSub;
-    private DoubleSubscriber ySub;
-    private DoubleSubscriber zSub;
-    private DoubleSubscriber fpsSub;
-    private DoubleSubscriber probSub;
-    private double x;
-    private double y;
-    private double z;
-    private double fps;
-    private double prob;
 
     private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
@@ -81,10 +65,6 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
-            x = xSub.get();
-            y = ySub.get();
-            SmartShuffleboard.put("Test", "x", x);
-            SmartShuffleboard.put("Test", "y", y);
             
 
         
@@ -133,8 +113,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
-        Robot.getDiagnostics().addDiagnosable(new DiagLuxonis("Luxonis", "Piece Seen"));
-        Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("AprilTags", "Apriltag Seen"));
         alignableTurnPid.enableContinuousInput(-180, 180);
     }
 

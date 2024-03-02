@@ -3,67 +3,49 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class TurnToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
+    private Vision vision;
     private double startTime;
-    private DoubleSubscriber xSub;
-    private DoubleSubscriber ySub;
-    private DoubleSubscriber det;
-    ChassisSpeeds driveStates;
-    private final ProfiledPIDController TurningPIDController;
-    private final ProfiledPIDController MovingPIDController;
+    private double timeSincePieceLoss;
+    private final ProfiledPIDController turningPIDController;
+    private final ProfiledPIDController movingPIDController;
 
-    private double timeOfLastPieceLoss;
-
-    public TurnToGamepiece(SwerveDrivetrain drivetrain) {
+    public TurnToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
         this.drivetrain = drivetrain;
+        this.vision = vision;
         addRequirements(drivetrain);
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("limelight");
-        xSub = table.getDoubleTopic("tx").subscribe(-1000);
-        ySub = table.getDoubleTopic("ty").subscribe(-1000);
-        det = table.getDoubleTopic("tv").subscribe(-1);
-
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.GAMEPIECE_MAX_VELOCITY,
-                Constants.GAMEPIECE_MAX_ACCELERATION);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.GAMEPIECE_MAX_VELOCITY, Constants.GAMEPIECE_MAX_ACCELERATION);
         double tP = 0.04;
         double mP = 0.05;
-        TurningPIDController = new ProfiledPIDController(tP, 0, 0, constraints);
-        MovingPIDController = new ProfiledPIDController(mP, 0, 0, constraints);
+        turningPIDController = new ProfiledPIDController(tP, 0, 0, constraints);
+        movingPIDController = new ProfiledPIDController(mP, 0, 0, constraints);
 
     }
 
     @Override
     public void initialize() {
-        timeOfLastPieceLoss = 0;
         startTime = Timer.getFPGATimestamp();
     }
 
     @Override
     public void execute() {
-        if (ySub.get() != 0 && det.get() == 1) {
-            driveStates = new ChassisSpeeds(-MovingPIDController.calculate(ySub.get() + Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y), 0, TurningPIDController.calculate(xSub.get()));
-            if (Constants.VISION_DEBUG) SmartShuffleboard.put("Test", "Speed", TurningPIDController.calculate(xSub.get()));
-            drivetrain.drive(driveStates);
-            timeOfLastPieceLoss = 0;
-        } else {
-            if (timeOfLastPieceLoss == 0) timeOfLastPieceLoss = Timer.getFPGATimestamp();
-        }
-
+        timeSincePieceLoss = (vision.isPieceSeen() && (Math.abs(vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y) > Constants.TURN_TO_GAME_PIECE_THRESHOLD)) ? Timer.getFPGATimestamp() : timeSincePieceLoss;
+        ChassisSpeeds driveStates;
+        driveStates = (vision.isPieceSeen() && (Math.abs(vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y) > Constants.TURN_TO_GAME_PIECE_THRESHOLD)) ? new ChassisSpeeds(-movingPIDController.calculate(vision.getPieceOffestAngleY() + Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y), 0, turningPIDController.calculate(vision.getPieceOffestAngleX())) : drivetrain.createChassisSpeeds(0.6, 0.0, 0.0, false);
+        drivetrain.drive(driveStates);
     }
 
     @Override
     public boolean isFinished() {
-        return (ySub.get() < Constants.MAX_Y_ANGLE || (Timer.getFPGATimestamp() - timeOfLastPieceLoss) == Constants.PIECE_LOST_TIME_THRESHOLD || (Timer.getFPGATimestamp() - startTime > Constants.TURNTOGAMEPIECE_TIMEOUT));
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURNTOGAMEPIECE_TIMEOUT));
     }
 
     @Override

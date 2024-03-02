@@ -62,6 +62,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -91,6 +92,7 @@ public class RobotContainer {
       private final Deployer deployer = new Deployer();
       private final Feeder feeder = new Feeder();
       private final Ramp ramp = new Ramp();
+      private final Vision vision = new Vision();
       private Climber climber;
       private final IntakeSubsystem intake = new IntakeSubsystem();
       private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
@@ -159,7 +161,7 @@ public class RobotContainer {
 //            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
             SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
         }
-            SmartShuffleboard.putCommand("Test", "Gamepiece", new TurnToGamepiece(drivetrain));
+            SmartShuffleboard.putCommand("Test", "Gamepiece", new TurnToGamepiece(drivetrain, vision));
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
