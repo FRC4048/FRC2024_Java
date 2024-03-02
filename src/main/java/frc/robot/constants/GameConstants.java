@@ -25,8 +25,8 @@ public class GameConstants {
     public static final double AMP_TIMEOUT = 2.0;
 
     //DEPLOYER
-    public static final int DEPLOYER_LOWER_TIMEOUT = 5;
-    public static final double DEPLOYER_RAISE_TIMEOUT = 5;
+    public static final int DEPLOYER_LOWER_TIMEOUT = 1;
+    public static final double DEPLOYER_RAISE_TIMEOUT = 1;
     public static final double DEPLOYER_LOWER_SPEED = 0.9;
     public static final double DEPLOYER_RAISE_SPEED = -0.9;
     public static final double SPOOL_TIME = 0.5;//seconds
@@ -40,6 +40,7 @@ public class GameConstants {
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
     public static final double RESET_RAMP_TIMEOUT = 5.0;
     public static final double RAMP_POS_THRESHOLD = 0.1;
+
     public static final double RAMP_POS_TIMEOUT = 3;
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
     public static final double RAMP_POS_STOW = 0.15;
