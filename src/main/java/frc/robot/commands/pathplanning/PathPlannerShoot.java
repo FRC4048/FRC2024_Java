@@ -17,7 +17,7 @@ public class PathPlannerShoot extends ParallelCommandGroup {
                 new BasicShoot(shooter, 1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.05),
-                        new FeederGamepieceUntilLeave(feeder),
+                        new FeederGamepieceUntilLeave(feeder, ramp),
                         new WaitCommand(0.15),
                         new ParallelCommandGroup (
                                 new IntakeFeederCombo(feeder, intake),
