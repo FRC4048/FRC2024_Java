@@ -12,7 +12,7 @@ public class GameConstants {
     public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
-    public static final boolean FEEDER_DEBUG = false;
+    public static final boolean FEEDER_DEBUG = true;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
@@ -81,7 +81,7 @@ public class GameConstants {
     public static final double FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
     public static final double FEEDER_BACK_DRIVE_DELAY = 0.4;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
-    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
     //CLIMBER
