@@ -52,6 +52,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        robotContainer.getRamp().stopMotor();
+        robotContainer.getDeployer().stop();
+        robotContainer.getFeeder().stopFeederMotor();
+        robotContainer.getIntake().stopMotors();
+        robotContainer.getRamp().stopMotor();
+        robotContainer.unregesterDefaultCommands();
         aliveTics = 0;
         SmartDashboard.putNumber("TotalTimeouts", TimeoutCounter.getTotalTimeouts());
     }
@@ -78,6 +84,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        robotContainer.regesterDefaultCommands();
         diagnostics.reset();
         if (autonomousCommand != null) {
             autonomousCommand.cancel();

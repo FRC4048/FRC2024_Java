@@ -184,7 +184,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
         Command alignSpeaker = CommandUtil.parallel(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
@@ -192,9 +191,6 @@ public class RobotContainer {
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
-        ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
-
-        climber.setDefaultCommand(leftClimbCmd);
 
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
@@ -287,5 +283,25 @@ public class RobotContainer {
 
     public AutoChooser getAutoChooser() {
         return autoChooser;
+    }
+
+    public void regesterDefaultCommands() {
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        climber.setDefaultCommand(new ManualControlClimber(climber, () -> -controller.getLeftY()));
+    }
+    public void unregesterDefaultCommands() {
+        drivetrain.removeDefaultCommand();
+        climber.removeDefaultCommand();
+        intake.removeDefaultCommand();
+        feeder.removeDefaultCommand();
+        deployer.removeDefaultCommand();
+    }
+
+    public IntakeSubsystem getIntake() {
+        return intake;
+    }
+
+    public Feeder getFeeder() {
+        return feeder;
     }
 }
