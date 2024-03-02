@@ -132,6 +132,13 @@ public class NeoPidMotor {
         pidController.setD(pidD);
     }
 
+    public void setPid(double pidP, double pidI, double pidD, double pidFF) {
+        pidController.setP(pidP);
+        pidController.setI(pidI);
+        pidController.setD(pidD);
+        pidController.setFF(pidFF);
+    }
+
     public void setPid(double pidP, double pidI, double pidD, double iZone, double pidFF, double pidMinOutput, double pidMaxOutput) {
         pidController.setP(pidP);
         pidController.setI(pidI);

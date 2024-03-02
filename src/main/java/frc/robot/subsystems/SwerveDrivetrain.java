@@ -25,6 +25,7 @@ import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -52,7 +53,6 @@ public class SwerveDrivetrain extends SubsystemBase {
     
 
 
-
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
     }
@@ -73,6 +73,10 @@ public class SwerveDrivetrain extends SubsystemBase {
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
+        }
+
+        if (Constants.SWERVE_DEBUG) {
+            SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }
     }
 
