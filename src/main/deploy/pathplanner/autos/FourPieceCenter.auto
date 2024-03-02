@@ -105,7 +105,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampMoveCenter"
+                  "name": "RampMoveRight"
                 }
               }
             ]
@@ -155,7 +155,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RampMoveCenter"
+                  "name": "RampMoveRight"
                 }
               }
             ]

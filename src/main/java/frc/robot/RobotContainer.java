@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.SetAlignable;
 import frc.robot.commands.MoveToGamepiece;
+import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -114,6 +114,7 @@ public class RobotContainer {
                 new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
                 new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 2.5)));//this is an example
+        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 4.5)));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
