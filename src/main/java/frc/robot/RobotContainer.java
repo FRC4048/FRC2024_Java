@@ -14,11 +14,16 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.CancelAll;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.amp.DeployAmp;
+import frc.robot.commands.amp.RetractAmp;
+import frc.robot.commands.amp.ToggleAmp;
 import frc.robot.commands.climber.DisengageRatchet;
 import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
@@ -27,15 +32,28 @@ import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.feeder.FeederBackDrive;
+import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
+import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.pathplanning.ComboShot;
+import frc.robot.commands.pathplanning.IntakeFeederCombo;
+import frc.robot.commands.pathplanning.PathPlannerShoot;
 import frc.robot.commands.ramp.RampMove;
+import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.*;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.*;
+import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
+import frc.robot.commands.shooter.*;
+import frc.robot.constants.Constants;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
@@ -49,6 +67,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -61,6 +80,7 @@ public class RobotContainer {
     private final Joystick joyright = new Joystick(Constants.RIGHT_JOYSTICK_ID);
     private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft, 1);
     private final JoystickButton joyRightButton1 = new JoystickButton(joyright, 1);
+    private final JoystickButton joyRightButton2 = new JoystickButton(joyright, 2);
     private SwerveDrivetrain drivetrain;
     private final AutoChooser2024 autoChooser;
     private final Amp amp = new Amp();
@@ -69,7 +89,7 @@ public class RobotContainer {
     private final Feeder feeder = new Feeder();
     private final Ramp ramp = new Ramp();
     private Climber climber;
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    private final IntakeSubsystem intake = new IntakeSubsystem();
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
 
     /**
@@ -78,8 +98,8 @@ public class RobotContainer {
     public RobotContainer() {
         setupDriveTrain();
         registerPathPlanableCommands();
-        setupPathPlaning();
-        autoChooser = new AutoChooser2024();
+        setupPathPlanning();
+        autoChooser = new AutoChooser2024(intake, shooter, feeder, deployer, ramp);
         autoChooser.addOnValidationCommand(() -> CommandUtil.logged(new SetInitOdom(drivetrain, autoChooser)));
         autoChooser.forceRefresh();
         configureBindings();
@@ -90,21 +110,20 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-//        NamedCommands.registerCommand(ReportErrorCommand.class.getName(), new ReportErrorCommand()); //place holder
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new StartIntakeAndFeeder(feeder, intakeSubsystem, deployer, ramp));
-        NamedCommands.registerCommand("SpoolShooter", new ShootSpeaker(shooter, drivetrain));
-        NamedCommands.registerCommand("Shoot", new ExitAndShoot(shooter, feeder, drivetrain));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 6));//this is an example
+        NamedCommands.registerCommand("StartIntakeAndFeeder", new IntakeFeederCombo(feeder, intake));
+        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 1.5));//this is an example
+        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
+        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
     }
 
-    private void setupPathPlaning() {
+    private void setupPathPlanning() {
         AutoBuilder.configureHolonomic(drivetrain::getPose,
                 drivetrain::resetOdometry,
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0.0, 0), // Translation PID constants
-                        new PIDConstants(5, 0.0, 0), // Rotation PID constants
+                        new PIDConstants(5, 0, 0, 0), // Translation PID constants
+                        new PIDConstants(4.75, 0.0, 0, 0), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
@@ -134,8 +153,9 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
 
         if (Constants.AMP_DEBUG) {
-            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
-            SmartShuffleboard.putCommand("Amp", "Retarct AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+//            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
+//            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
+            SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
         }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
@@ -159,7 +179,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
         }
         if (Constants.INTAKE_DEBUG) {
-            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intakeSubsystem, 5)));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake, 5)));
         }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
@@ -168,7 +188,6 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4)));
         }
-
     }
 
     private void configureBindings() {
@@ -195,15 +214,60 @@ public class RobotContainer {
         // Engage        
         controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
-//        controller.a().onTrue(new StartFeeder(feeder));
-//        controller.b().onTrue(new ExitAndShoot(shooter,feeder));
-//        ramp.setDefaultCommand(new RampMove(ramp, 10));
-//        climber.setDefaultCommand(new ManualClimb(climber, controller::getLeftX));
-        controller.a().onTrue(CommandUtil.logged(new StartIntakeAndFeeder(feeder, intakeSubsystem, deployer, ramp)));
-        controller.b().onTrue(CommandUtil.logged(new ExitAndShoot(shooter, feeder, drivetrain)));
-        controller.x().onTrue(CommandUtil.logged(new LowerDeployer(deployer)));
-//        controller.a().onTrue(new DeployerLower(deployer));
-//        controller.b().onTrue(new DeployerRaise(deployer));
+        // Set up to shoot Speaker CLOSE - Y
+        controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
+                new ShootSpeaker(shooter, drivetrain)));
+
+        // Set up to shoot Speaker AWAY - X
+        controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new ShootSpeaker(shooter, drivetrain)));
+
+        // Set up to shoot AMP - A
+        controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
+                new DeployAmp(amp),
+                new RampMove( ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
+                new ShootAmp(shooter)));
+
+        // Shoot the note - B
+        controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
+                new FeederGamepieceUntilLeave(feeder),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new StopShooter(shooter), new RetractAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+
+        joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
+                new FeederGamepieceUntilLeave(feeder),
+                new StopShooter(shooter),
+                new RetractAmp(amp)));
+
+        // amp up and down
+        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
+
+        // start intaking a note
+        Command lowerIntake = CommandUtil.parallel("lowerIntake",
+                new LowerDeployer(deployer),
+                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW));
+        Command startSpinning = CommandUtil.race("startSpinning",
+                new StartIntake(intake, 10),
+                new StartFeeder(feeder));
+        Command backDrive = CommandUtil.sequence("backDrive",
+                new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
+                new FeederBackDrive(feeder));
+        Command endIntake = CommandUtil.parallel("endIntake",
+                new RaiseDeployer(deployer),
+                backDrive);
+        controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
+                lowerIntake, startSpinning, endIntake));
+
+        // stop intake
+        controller.povUp().onTrue(CommandUtil.parallel("stop intake",
+                CommandUtil.logged(new RaiseDeployer(deployer)),
+                CommandUtil.logged(new StopIntake(intake)),
+                CommandUtil.logged(new StopFeeder(feeder))));
+
+        controller.povRight().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter)));
     }
 
     public SwerveDrivetrain getDrivetrain() {

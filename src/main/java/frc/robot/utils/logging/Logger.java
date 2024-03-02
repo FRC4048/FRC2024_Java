@@ -80,6 +80,10 @@ public class Logger {
     public static void logTimeout(String commandName, boolean logThis) {
         logString("/robot/timeouts", commandName + " Timed out.", logThis);
     }
+    public static void logInterruption(String commandName, boolean logThis) {
+        logString("/robot/interruption", commandName + " Was interrupted.", logThis);
+    }
+
 
     private static DataLogEntry getEntry(String name, Function<String, ? extends DataLogEntry> func) {
         return entryMap.computeIfAbsent(name, func);

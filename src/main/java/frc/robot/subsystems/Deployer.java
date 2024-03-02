@@ -11,6 +11,11 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.constants.Constants;
+import frc.robot.utils.diag.DiagTalonSrxSwitch;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 ///This class is meant to manage the motor that "deploys" the intake, by rotating in order to raise and lower the intake area.
 public class Deployer extends SubsystemBase{

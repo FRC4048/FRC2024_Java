@@ -12,6 +12,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Amp extends SubsystemBase {
     private final WPI_TalonSRX ampMotor;
+    private boolean ampDeployed = false;
 
     public Amp() {
         ampMotor = new WPI_TalonSRX(Constants.AMP_ID);
@@ -46,4 +47,11 @@ public class Amp extends SubsystemBase {
         ampMotor.get();
     }
 
+    public boolean isAmpDeployed() {
+        return ampDeployed;
+    }
+
+    public void setAmpDeployed(boolean ampDeployed) {
+        this.ampDeployed = ampDeployed;
+    }
 }

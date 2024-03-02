@@ -29,7 +29,7 @@ public class FeederBackDrive extends Command {
     }
     @Override
     public boolean isFinished() {
-        if (feeder.pieceSeen()) {
+        if (feeder.pieceSeen(false)) {
             return true;
         }
         else if(Timer.getFPGATimestamp() - time > Constants.FEEDER_BACK_DRIVE_TIMEOUT) {
