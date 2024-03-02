@@ -56,9 +56,9 @@ public class GameConstants {
 
     //SHOOTER
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
-    public static final double SHOOTER_MOTOR_LOW_SPEED = 3000; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_LOW_SPEED = 3500; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1250; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1050; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
@@ -86,17 +86,17 @@ public class GameConstants {
     //CLIMBER 
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
-    public static final double CLIMBER_BALANCE_LOW_SPEED=0.10;
-    public static final double CLIMBER_BALANCE_HIGH_SPEED=0.50;
-    public static final double CLIMBER_BALANCE_THRESH=30;
-    public static final double CLIMBER_TIMEOUT_S=10;
+    public static final double CLIMBER_BALANCE_LOW_SPEED = 0.10;
+    public static final double CLIMBER_BALANCE_HIGH_SPEED = 0.50;
+    public static final double CLIMBER_BALANCE_THRESH = 30;
+    public static final double CLIMBER_TIMEOUT_S = 10;
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double MAX_CLIMBER_ENCODER = 80.0;
     public static final double RAISING_TIMEOUT = 3;
 
     //INTAKE
-    public static final double INTAKE_MOTOR_1_SPEED = 1;
-    public static final double INTAKE_MOTOR_2_SPEED = 1;
+    public static final double INTAKE_MOTOR_1_SPEED = 0.8;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.8;
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
