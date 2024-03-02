@@ -109,6 +109,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 1.5));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
+        NamedCommands.registerCommand("MoveToGamePiece", new TurnToGamepiece(drivetrain, vision));
     }
 
     private void setupPathPlanning() {
