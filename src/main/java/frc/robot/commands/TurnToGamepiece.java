@@ -41,9 +41,9 @@ public class TurnToGamepiece extends Command {
         double ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
         if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.TURN_TO_GAME_PIECE_THRESHOLD)) {
             timeSincePieceLoss = Timer.getFPGATimestamp();
-            driveStates = new ChassisSpeeds(-movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX()));
+            driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX()));
         }
-        else driveStates = drivetrain.createChassisSpeeds(0.6, 0.0, 0.0, false);
+        else driveStates = drivetrain.createChassisSpeeds(-0.6, 0.0, 0.0, false);
         drivetrain.drive(driveStates);
     }
 
