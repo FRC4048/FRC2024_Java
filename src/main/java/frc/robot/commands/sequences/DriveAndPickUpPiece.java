@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.TurnToGamepiece;
 import frc.robot.commands.deployer.LowerDeployer;
+import frc.robot.commands.deployer.RaiseDeployer;
+import frc.robot.commands.feeder.StopFeeder;
+import frc.robot.commands.intake.StopIntake;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -18,7 +21,10 @@ public class DriveAndPickUpPiece extends SequentialCommandGroup {
                 new LowerDeployer(deployer),
                 new StartIntakeAndFeeder(feeder, intake, deployer, ramp)
             ),
-            new TurnToGamepiece(drivetrain, vision)
+            new TurnToGamepiece(drivetrain, vision),
+            new StopFeeder(feeder),
+            new StopIntake(intake),
+            new RaiseDeployer(deployer)
         );
     }
 }
