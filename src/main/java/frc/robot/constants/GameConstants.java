@@ -80,8 +80,8 @@ public class GameConstants {
     public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
     public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
     public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
-    public static final double TURN_TO_GAME_PIECE_THRESHOLD = 1;
-    public static final double TURN_TO_GAMEPIECE_TIMEOUT = 5;
+    public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
+    public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
 
     //OTHER TIMEOUTS
 

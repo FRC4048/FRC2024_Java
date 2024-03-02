@@ -9,7 +9,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
 
-public class TurnToGamepiece extends Command {
+public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
     private Vision vision;
     private double startTime;
@@ -17,7 +17,7 @@ public class TurnToGamepiece extends Command {
     private final ProfiledPIDController turningPIDController;
     private final ProfiledPIDController movingPIDController;
 
-    public TurnToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
+    public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
@@ -39,7 +39,7 @@ public class TurnToGamepiece extends Command {
     public void execute() {
         ChassisSpeeds driveStates;
         double ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
-        if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.TURN_TO_GAME_PIECE_THRESHOLD)) {
+        if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
             timeSincePieceLoss = Timer.getFPGATimestamp();
             driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX()));
         }
@@ -49,7 +49,7 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURN_TO_GAMEPIECE_TIMEOUT));
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT));
     }
 
     @Override
