@@ -5,23 +5,21 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 
 public enum FieldLocation {
-     SpeakerLeft(0.66,6.60,Math.toRadians(-120),"Speaker Left","Speaker Right"),
-     SpeakFront(1.25,5.50,Math.PI,"Speaker Front","Speaker Front"),
-     SpeakerRight(0.66,4.50,Math.toRadians(120),"Speaker Right","Speaker Left"),
-     ZERO(0, 0,0,"Zero", "Zero");
+     AmpSide(0.66,6.60,Math.toRadians(-120),"Amp Side"),
+     SpeakFront(1.25,5.50,Math.PI,"Speaker Front"),
+     FeederSide(0.66,4.50,Math.toRadians(120),"Feed Side"),
+     ZERO(0, 0,0,"Zero");
      private static final double RED_X_POS = 16.5; //meters
      private final double yPos;
      private final double xPose;
      private final double angle;
-     private final String blueName;
-     private final String redName;
+     private final String name;
 
-     FieldLocation(double xPos, double yPos,double angle, String blueName, String redName) {
+     FieldLocation(double xPos, double yPos,double angle, String name) {
           this.xPose = xPos;
           this.yPos = yPos;
           this.angle = angle;
-          this.blueName = blueName;
-          this.redName = redName;
+          this.name = name;
      }
      public Pose2d getLocation(){
           double x = RobotContainer.isRedAlliance() ? RED_X_POS - xPose: xPose;
@@ -30,7 +28,7 @@ public enum FieldLocation {
      }
 
      public String getShuffleboardName(){
-          return RobotContainer.isRedAlliance() ? redName : blueName;
+          return name;
      }
 
 }
