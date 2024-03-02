@@ -4,7 +4,7 @@ public class GameConstants {
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;
-    public static final int XBOX_CONTROLLER_ID = 3;
+    public static final int XBOX_CONTROLLER_ID = 2;
 
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
