@@ -115,7 +115,6 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
-    public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
     public static final double PATH_PLANNER_TRANSLATION_PID_P = 5;
     public static final double PATH_PLANNER_TRANSLATION_PID_I = 0;
     public static final double PATH_PLANNER_TRANSLATION_PID_D = 0;
