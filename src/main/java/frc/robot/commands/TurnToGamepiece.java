@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class TurnToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -33,6 +32,7 @@ public class TurnToGamepiece extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
+        timeSincePieceLoss = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TurnToGamepiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURNTOGAMEPIECE_TIMEOUT));
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.TURN_TO_GAMEPIECE_TIMEOUT));
     }
 
     @Override

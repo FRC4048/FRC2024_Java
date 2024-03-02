@@ -22,7 +22,7 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = true;
+    public static final boolean VISION_DEBUG = false;
 
     //DEPLOYER
     public static final int DEPLOYER_LOWER_TIMEOUT = 5;
@@ -68,11 +68,12 @@ public class GameConstants {
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -18;
     public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
-    public static final double MAX_PIECE_NOT_SEEN_COUNT = 30;
+    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
     public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
     public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
     public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
     public static final double TURN_TO_GAME_PIECE_THRESHOLD = 1;
+    public static final double TURN_TO_GAMEPIECE_TIMEOUT = 5;
 
     //OTHER TIMEOUTS
 
@@ -81,9 +82,4 @@ public class GameConstants {
     public static final double RESET_RAMP_TIMEOUT = 5.0;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
-
-    //Game piece
-    public static final double MAX_Y_ANGLE = -17;
-    public static final double MAX_EXECUTE_CYCLE = 10; 
-    public static final double TURNTOGAMEPIECE_TIMEOUT = 5;
 }

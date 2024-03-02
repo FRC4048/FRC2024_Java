@@ -31,9 +31,6 @@ public class Vision extends SubsystemBase {
     tv = table.getEntry("tv");
     tx = table.getEntry("tx");
     ty = table.getEntry("ty");
-    x = tx.getDouble(0.0);
-    y = ty.getDouble(0.0);
-    pieceSeen = (tv.getDouble(-1) == 1);
     Robot.getDiagnostics().addDiagnosable(new DiagLimelight("Vision", "Piece Seen"));
     Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("Vision", "Apriltag Seen"));
   }
@@ -74,7 +71,7 @@ public class Vision extends SubsystemBase {
       noPieceSeenCounter = 0;
       x = tx.getDouble(0.0);
       y = ty.getDouble(0.0);
-      pieceSeen = (tv.getDouble(-1) == 1);
+      pieceSeen = true;
     }
 
     if(Constants.VISION_DEBUG) {
