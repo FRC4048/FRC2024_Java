@@ -18,6 +18,7 @@ public class GameConstants {
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
     public static final boolean VISION_DEBUG = false;
+    public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
 
     //AMP
@@ -81,10 +82,10 @@ public class GameConstants {
     public static final double FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
     public static final double FEEDER_BACK_DRIVE_DELAY = 0.4;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
-    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
-    //CLIMBER 
+    //CLIMBER
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
     public static final double CLIMBER_BALANCE_LOW_SPEED = 0.10;
@@ -125,4 +126,11 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+    public static final double PATH_PLANNER_TRANSLATION_PID_P = 5;
+    public static final double PATH_PLANNER_TRANSLATION_PID_I = 0;
+    public static final double PATH_PLANNER_TRANSLATION_PID_D = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_P = 4.75;
+    public static final double PATH_PLANNER_ROTATION_PID_I = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_D = 0;
+
 }

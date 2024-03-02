@@ -14,14 +14,15 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.SetAlignable;
 import frc.robot.commands.MoveToGamepiece;
+import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -40,8 +41,9 @@ import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.ComboShot;
-import frc.robot.commands.pathplanning.IntakeFeederCombo;
 import frc.robot.commands.pathplanning.PathPlannerShoot;
+import frc.robot.commands.pathplanning.ShootAndDrop;
+import frc.robot.commands.pathplanning.TimedIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -105,11 +107,19 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new IntakeFeederCombo(feeder, intake));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 1.5));//this is an example
+        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.sequence("StartIntakeAndFeeder", new ParallelDeadlineGroup(
+                        new StartFeeder(feeder),
+                        new TimedIntake(intake, 10)
+                ),
+                new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
+                new FeederBackDrive(feeder)));
+        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 2.5)));//this is an example
+        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 4.5)));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
-        NamedCommands.registerCommand("MoveToGamePiece", new MoveToGamepiece(drivetrain, vision));
+        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
+        NamedCommands.registerCommand("RampMove3", new RampMove(ramp, () -> 3));
     }
 
     private void setupPathPlanning() {
@@ -118,8 +128,8 @@ public class RobotContainer {
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0, 0, 0), // Translation PID constants
-                        new PIDConstants(4.75, 0.0, 0, 0), // Rotation PID constants
+                        new PIDConstants(Constants.PATH_PLANNER_TRANSLATION_PID_P, Constants.PATH_PLANNER_TRANSLATION_PID_I, Constants.PATH_PLANNER_TRANSLATION_PID_D), // Translation PID constants
+                        new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I,Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
