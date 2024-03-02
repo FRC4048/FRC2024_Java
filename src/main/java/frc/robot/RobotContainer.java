@@ -71,6 +71,7 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.commands.sequences.DriveAndPickUpPiece;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -192,6 +193,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , 0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0 , -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048 , 0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Drive To + Pick Up", CommandUtil.logged(new DriveAndPickUpPiece(drivetrain, intake , ramp, deployer, feeder, vision)));
         }
 
     }
