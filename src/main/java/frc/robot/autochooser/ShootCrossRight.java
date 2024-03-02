@@ -16,13 +16,10 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
 
 public class ShootCrossRight extends SequentialCommandGroup{
-    double direction; 
     public ShootCrossRight(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
+        double direction = 1.0; 
         if (RobotContainer.isRedAlliance() == true) {
             direction = -1.0;
-        }
-        else if (RobotContainer.isRedAlliance() == false) {
-            direction = 1.0;
         }
         addCommands(
             new ResetRamp(ramp),
@@ -30,9 +27,9 @@ public class ShootCrossRight extends SequentialCommandGroup{
             new WaitCommand(0.5), //change later
             new SpoolExitAndShoot(shooter, feeder, drivetrain),
             new WaitCommand(0.5),
-            new MoveDistance(drivetrain, 0.0,  direction * 2.74, 0.3, true),
+            new MoveDistance(drivetrain, 0.0,  -2.74, 0.5, true),
             new WaitCommand(0.5),
-            new MoveDistance(drivetrain, direction * 1.9, 0.0, 0.3, true)
+            new MoveDistance(drivetrain, direction * 2.2, 0.0, 0.5, true)
         );
     }
 }
