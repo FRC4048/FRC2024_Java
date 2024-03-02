@@ -10,6 +10,7 @@ import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.SpoolExitAndShoot;
 import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
@@ -20,18 +21,20 @@ public class ShootCross extends SequentialCommandGroup{
     double direction; 
     public ShootCross(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
         if (RobotContainer.isRedAlliance() == true) {
-            direction = -1.9;
+            direction = -1.0;
         }
         else if (RobotContainer.isRedAlliance() == false) {
-            direction = 1.9;
+            direction = 1.0;
         }
         addCommands(
             new ResetRamp(ramp),
-            new RampMove(ramp, ()->10), //change later
+            new RampMove(ramp, ()->GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE), //change later
             new WaitCommand(0.5), //change later
             new SpoolExitAndShoot(shooter, feeder, drivetrain),
             new WaitCommand(0.5),
-            new MoveDistance(drivetrain, direction, 0.0, 0.3)
+            new MoveDistance(drivetrain, 0.0,  direction * 2.74, 0.3, true),
+            new WaitCommand(0.5),
+            new MoveDistance(drivetrain, direction * 1.9, 0.0, 0.3, true)
         );
     }
 }

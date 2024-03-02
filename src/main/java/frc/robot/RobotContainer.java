@@ -148,7 +148,7 @@ public class RobotContainer {
     public void putShuffleboardCommands() {
         if (Constants.AUTO_DEBUG) {
             SmartShuffleboard.putCommand("Autonomous", "Cross the line", CommandUtil.logged(new CrossTheLine(drivetrain, ramp)));
-            SmartShuffleboard.putCommand("Autonomous", "ShootCross", CommandUtil.logged(new ShootCross(drivetrain, shooter, ramp, intakeSubsystem, feeder)));
+            SmartShuffleboard.putCommand("Autonomous", "ShootCross", CommandUtil.logged(new ShootCross(drivetrain, shooter, ramp, intake, feeder)));
         }
 
         if (Constants.AMP_DEBUG) {
@@ -182,11 +182,11 @@ public class RobotContainer {
         }
         if (Constants.SWERVE_DEBUG) {
             
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, -0.3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, 0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, -0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4, false)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, -0.3048, 0, 0.4, false)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, 0.3048, 0.4, false)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, -0.3048, 0.4, false)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4, false)));
         }
     }
 

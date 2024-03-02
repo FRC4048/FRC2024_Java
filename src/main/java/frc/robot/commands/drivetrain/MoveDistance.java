@@ -18,15 +18,17 @@ public class MoveDistance extends Command {
   private double maxSpeed;
   private double desiredPoseX;
   private double desiredPoseY;
+  private boolean fieldCentric;
   private SwerveDrivetrain drivetrain;
   private TimeoutCounter timeoutCounter = new TimeoutCounter("Move Distance");
 
-  public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
+  public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed, boolean fieldCentric) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
     this.changeXMeters = changeXMeters;
     this.changeYMeters = changeYMeters;
     this.maxSpeed = Math.abs(maxSpeed);
+    this.fieldCentric = fieldCentric;
     addRequirements(drivetrain);
   }
 
@@ -41,15 +43,15 @@ public class MoveDistance extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speedY = 0;
-    double speedX = 0;
-    double neededChangeX = desiredPoseX - drivetrain.getPose().getX();
-    double neededChangeY = desiredPoseY - drivetrain.getPose().getY();
-    if ((neededChangeX != 0) || (neededChangeY != 0)) {
-      speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
-      speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
-    }
-    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
+      double speedY = 0;
+      double speedX = 0;
+      double neededChangeX = desiredPoseX - drivetrain.getPose().getX();
+      double neededChangeY = desiredPoseY - drivetrain.getPose().getY();
+      if ((neededChangeX != 0) || (neededChangeY != 0)) {
+        speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
+        speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
+      }
+      drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
   }
 
   // Called once the command ends or is interrupted.

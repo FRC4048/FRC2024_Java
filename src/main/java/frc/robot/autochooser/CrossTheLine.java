@@ -19,7 +19,7 @@ public class CrossTheLine extends ParallelCommandGroup {
             direction = 1.715;
         }
         addCommands(
-            new MoveDistance(drivetrain, direction, 0.0, 0.3), 
+            new MoveDistance(drivetrain, direction, 0.0, 0.3, false), 
             new ResetRamp(ramp));
   }
     }
