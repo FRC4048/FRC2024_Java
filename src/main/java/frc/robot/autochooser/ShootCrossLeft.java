@@ -1,7 +1,5 @@
 package frc.robot.autochooser;
 
-
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
@@ -17,9 +15,9 @@ import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
 
-public class ShootCross extends SequentialCommandGroup{
+public class ShootCrossLeft extends SequentialCommandGroup{
     double direction; 
-    public ShootCross(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
+    public ShootCrossLeft(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
         if (RobotContainer.isRedAlliance() == true) {
             direction = -1.0;
         }
@@ -32,7 +30,7 @@ public class ShootCross extends SequentialCommandGroup{
             new WaitCommand(0.5), //change later
             new SpoolExitAndShoot(shooter, feeder, drivetrain),
             new WaitCommand(0.5),
-            new MoveDistance(drivetrain, 0.0,  direction * 2.74, 0.3, true),
+            new MoveDistance(drivetrain, 0.0,  1.2, 0.3, true),
             new WaitCommand(0.5),
             new MoveDistance(drivetrain, direction * 1.9, 0.0, 0.3, true)
         );

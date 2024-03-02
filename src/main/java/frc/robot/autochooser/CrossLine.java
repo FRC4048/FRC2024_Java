@@ -9,9 +9,9 @@ import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
 
-public class CrossTheLine extends ParallelCommandGroup {
+public class CrossLine extends ParallelCommandGroup {
     double direction;
-    public CrossTheLine(SwerveDrivetrain drivetrain, Ramp ramp) {
+    public CrossLine(SwerveDrivetrain drivetrain, Ramp ramp) {
         if (RobotContainer.isRedAlliance() == true) {
             direction = -1.715;
         }
