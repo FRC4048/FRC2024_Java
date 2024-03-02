@@ -2,6 +2,7 @@ package frc.robot.constants;
 
 public class GameConstants {
     public static final boolean ENABLE_LOGGING = true;
+    public static final double COLORMATCH_CERTAINTY_NEEDED = 0.8;
 
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;

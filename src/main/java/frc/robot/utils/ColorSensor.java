@@ -12,6 +12,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.constants.Constants;
 
 import java.util.Arrays;
 
@@ -22,32 +23,37 @@ public class ColorSensor {
     private I2C.Port sensorPort;
     private ColorSensorV3 colorSensor;
     private ColorMatch colorMatcher50;
-    private ColorMatch colorMatcher25;
-    private ColorMatch colorMatcher10;
-    private ColorMatch colorMatcher5;
+    private ColorMatch colorMatcherPointPoint1;
+    private ColorMatch colorMatcherConcoction;
+    private ColorMatch colorMatcherConfidence;
 
     public ColorSensor(I2C.Port sensorPort){
         this.sensorPort = sensorPort;
         colorSensor = new ColorSensorV3(sensorPort);
 
         colorMatcher50 = new ColorMatch();
-        colorMatcher25 = new ColorMatch();
-        colorMatcher10 = new ColorMatch();
-        colorMatcher5 = new ColorMatch();
+        colorMatcherPointPoint1 = new ColorMatch();
+        colorMatcherConcoction = new ColorMatch();
+        colorMatcherConfidence = new ColorMatch();
 
         colorMatcher50.addColorMatch(ColorValue.Piece50.getColor());
-        colorMatcher25.addColorMatch(ColorValue.Piece25.getColor());
-        colorMatcher10.addColorMatch(ColorValue.Piece10.getColor());
-        colorMatcher5.addColorMatch(ColorValue.Piece5.getColor());
+        colorMatcherPointPoint1.addColorMatch(ColorValue.PiecePointPoint1.getColor());
+        colorMatcherConcoction.addColorMatch(ColorValue.PlasticPieceConcoction.getColor());
         colorMatcher50.addColorMatch(ColorValue.Plastic.getColor());
-        colorMatcher25.addColorMatch(ColorValue.Plastic.getColor());
-        colorMatcher10.addColorMatch(ColorValue.Plastic.getColor());
-        colorMatcher5.addColorMatch(ColorValue.Plastic.getColor());
+        colorMatcherPointPoint1.addColorMatch(ColorValue.Plastic.getColor());
+        colorMatcherConcoction.addColorMatch(ColorValue.Plastic.getColor());
+        colorMatcherConfidence.addColorMatch(ColorValue.Piece50.getColor());
+        colorMatcherConfidence.setConfidenceThreshold(Constants.COLORMATCH_CERTAINTY_NEEDED);
     }
 
-    /**
-     * @return the matched color from the sensor or null if none found
-     */
+    public ColorValue getColorConfidence() {
+        Color detectedColor = colorSensor.getColor();
+        ColorMatchResult match = colorMatcherConfidence.matchColor(detectedColor);
+        if (match == null){
+            return ColorValue.getFromColor(ColorValue.Plastic.getColor());
+        }
+        return ColorValue.getFromColor(match.color);
+    }
     public ColorValue getColor50() {
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match50 = colorMatcher50.matchClosestColor(detectedColor);
@@ -57,50 +63,40 @@ public class ColorSensor {
         }
         return ColorValue.getFromColor(match50.color);
     }
-    public ColorValue getColor25() {
+    
+    public ColorValue getColorPointPoint1() {
         Color detectedColor = colorSensor.getColor();
-        ColorMatchResult match25 = colorMatcher25.matchClosestColor(detectedColor);
-        if (match25 == null){
+        ColorMatchResult matchPointPoint1 = colorMatcherPointPoint1.matchClosestColor(detectedColor);
+        if (matchPointPoint1 == null) {
             return null;
         }
-        return ColorValue.getFromColor(match25.color);
+        return ColorValue.getFromColor(matchPointPoint1.color);
     }
-    public ColorValue getColor10() {
+    public ColorValue getColorConcoction() {
         Color detectedColor = colorSensor.getColor();
-        ColorMatchResult match10 = colorMatcher10.matchClosestColor(detectedColor);
-        if (match10 == null){
+        ColorMatchResult matchConcoction = colorMatcherConcoction.matchClosestColor(detectedColor);
+        if (matchConcoction == null){
             return null;
         }
-        return ColorValue.getFromColor(match10.color);
-    }
-    public ColorValue getColor5() {
-        Color detectedColor = colorSensor.getColor();
-        ColorMatchResult match5 = colorMatcher5.matchClosestColor(detectedColor);
-        if (match5 == null){
-            return null;
-        }
-        return ColorValue.getFromColor(match5.color);
+        return ColorValue.getFromColor(matchConcoction.color);
     }
 
     public Color getRawColor() {
         Color detectedColor = colorSensor.getColor();
         return detectedColor;
     }
-    public double getMatchCertainity50() {
+    public double getMatchCertainty50() {
         ColorMatchResult match50 = colorMatcher50.matchClosestColor(colorSensor.getColor());
         return match50.confidence;
     }
-    public double getMatchCertainity25() {
-        ColorMatchResult match25 = colorMatcher25.matchClosestColor(colorSensor.getColor());
-        return match25.confidence;
+    
+    public double getMatchCertaintyPointPoint1() {
+        ColorMatchResult matchPointPoint1 = colorMatcherPointPoint1.matchClosestColor(colorSensor.getColor());
+        return matchPointPoint1.confidence;
     }
-    public double getMatchCertainity10() {
-        ColorMatchResult match10 = colorMatcher10.matchClosestColor(colorSensor.getColor());
-        return match10.confidence;
-    }
-    public double getMatchCertainity5() {
-        ColorMatchResult match5 = colorMatcher5.matchClosestColor(colorSensor.getColor());
-        return match5.confidence;
+    public double getMatchCertaintyConcoction() {
+        ColorMatchResult matchConcoction = colorMatcherConcoction.matchClosestColor(colorSensor.getColor());
+        return matchConcoction.confidence; 
     }
 
 }

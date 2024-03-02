@@ -16,7 +16,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 public class Feeder extends SubsystemBase {
 
     private final WPI_TalonSRX feederMotor;
-    private final I2C.Port i2cPort = I2C.Port.kMXP;
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
     private final ColorSensor colorSensor;
 
     public Feeder() {
@@ -45,66 +45,39 @@ public class Feeder extends SubsystemBase {
     public ColorValue getColor50() {
         return colorSensor.getColor50();
     }
-    public ColorValue getColor25() {
-        return colorSensor.getColor25();
-    }
-    public ColorValue getColor10() {
-        return colorSensor.getColor10();
-    }
-    public ColorValue getColor5() {
-        return colorSensor.getColor5();
-    }
+
 
     public boolean pieceSeen50() {
         return (getColor50() == ColorValue.Piece50);
-    }
-    public boolean pieceSeen25() {
-        return (getColor25() == ColorValue.Piece25);
-    }
-    public boolean pieceSeen10() {
-        return (getColor10() == ColorValue.Piece10);
-    }
-    public boolean pieceSeen5() {
-        return (getColor5() == ColorValue.Piece5);
     }
 
     public boolean pieceNotSeen50() {
         return (getColor50() == ColorValue.Plastic);
     }
-    public boolean pieceNotSeen25() {
-        return (getColor25() == ColorValue.Plastic);
-    }
-    public boolean pieceNotSeen10() {
-        return (getColor10() == ColorValue.Plastic);
-    }
-    public boolean pieceNotSeen5() {
-        return (getColor5() == ColorValue.Plastic);
-    }
+
 
     @Override
     public void periodic() {
         if (Constants.FEEDER_DEBUG) {
             ColorValue detectedColor50 = colorSensor.getColor50();
-            ColorValue detectedColor25 = colorSensor.getColor25();
-            ColorValue detectedColor10 = colorSensor.getColor10();
-            ColorValue detectedColor5 = colorSensor.getColor5();
-            double certainty50 = colorSensor.getMatchCertainity50();
-            double certainty25 = colorSensor.getMatchCertainity25();
-            double certainty10 = colorSensor.getMatchCertainity10();
-            double certainty5 = colorSensor.getMatchCertainity5();
+            ColorValue detectedColorPointPoint1 = colorSensor.getColorPointPoint1();
+            ColorValue detectedColorConcoction = colorSensor.getColorConcoction();
+            ColorValue detectedColorConfidence = colorSensor.getColorConfidence();
+            double certainty50 = colorSensor.getMatchCertainty50();
+            double certaintyPointPoint1 = colorSensor.getMatchCertaintyPointPoint1();
+            double certaintyConcoction = colorSensor.getMatchCertaintyConcoction();
             Color rawColor = colorSensor.getRawColor();
             SmartShuffleboard.put("Feeder", "Feeder Motor Speed", getFeederMotorSpeed());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Matched50", detectedColor50.name());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Matched25", detectedColor25.name());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Matched10", detectedColor10.name());
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Matched5", detectedColor5.name());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "MatchedPointPoint1", detectedColorPointPoint1.name());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "MatchedConcoction", detectedColorConcoction.name());
+            SmartShuffleboard.put("Feeder", "Color Sensor", "MatchedConfidence", detectedColorConfidence.name());
             SmartShuffleboard.put("Feeder", "Color Sensor", "Red", rawColor.red);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Green", rawColor.green);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Blue", rawColor.blue);
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty50", certainty50);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty25", certainty25);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty10", certainty10);
-            SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty5", certainty5);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "CertaintyPointPoint1", certaintyPointPoint1);
+            SmartShuffleboard.put("Feeder", "Color Sensor", "CertaintyConcoction", certaintyConcoction);
         }
     }
 }
