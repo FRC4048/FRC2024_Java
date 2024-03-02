@@ -218,14 +218,18 @@ public class RobotContainer {
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
                 new ShootAmp(shooter)));
 
-        // Shoot the note - B
-        controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
-                new FeederGamepieceUntilLeave(feeder),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RetractAmp(amp),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+        // Cancell all - B
+        controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter)));
 
+        // Shoot - Right Trigger
+        controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
+            new FeederGamepieceUntilLeave(feeder),
+            new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+            new StopShooter(shooter),
+            new RetractAmp(amp),
+            new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+            
+        //Driver Shoot 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder),
                 new StopShooter(shooter),
