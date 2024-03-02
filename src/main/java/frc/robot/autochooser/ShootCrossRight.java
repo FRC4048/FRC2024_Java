@@ -16,9 +16,9 @@ import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
 
-public class ShootCross extends SequentialCommandGroup{
+public class ShootCrossRight extends SequentialCommandGroup{
     double direction; 
-    public ShootCross(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
+    public ShootCrossRight(SwerveDrivetrain drivetrain, Shooter shooter, Ramp ramp, IntakeSubsystem intake, Feeder feeder) {
         if (RobotContainer.isRedAlliance() == true) {
             direction = -1.0;
         }
