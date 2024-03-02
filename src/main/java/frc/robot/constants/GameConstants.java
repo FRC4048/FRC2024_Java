@@ -37,7 +37,7 @@ public class GameConstants {
     public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
 
     // FEEDER
-    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
     public static final double MAX_RAMP_ENC = 25.0000;
