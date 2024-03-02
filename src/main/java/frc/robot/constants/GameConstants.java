@@ -57,7 +57,7 @@ public class GameConstants {
     //SHOOTER
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3500; //multiplied power by 5000, need to refine later
-    public static final double SHOOTER_MOTOR_HIGH_SPEED = 5000; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_HIGH_SPEED = 5500; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_AMP_SPEED = 1050; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
