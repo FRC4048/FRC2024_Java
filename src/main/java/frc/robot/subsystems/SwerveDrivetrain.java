@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
@@ -57,7 +58,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
         gyroValue = getGyro();
-        if (SmartDashboard.getBoolean("USE VISION",false)){
+        if (GameConstants.VISION_ENABLE_APRILTAG){
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
@@ -108,7 +109,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagLuxonis("Luxonis", "Piece Seen"));
         Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("AprilTags", "Apriltag Seen"));
         alignableTurnPid.enableContinuousInput(-180, 180);
-        SmartDashboard.putBoolean("USE VISION",false);
     }
 
 

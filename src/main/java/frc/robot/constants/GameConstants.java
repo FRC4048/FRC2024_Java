@@ -114,4 +114,8 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+
+    // Vision
+    public static final boolean VISION_ENABLE_APRILTAG = true;
+    public static final double VISION_APRILTAG_LATENCY_SEC = 0.05;
 }

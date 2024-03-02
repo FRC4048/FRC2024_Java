@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 
 /**
@@ -84,7 +85,7 @@ public class SwervePosEstimator{
             Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])).rotateBy(new Rotation2d(Math.PI)));
             if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
                 SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().getDegrees()});
-                poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+                poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp() - GameConstants.VISION_APRILTAG_LATENCY_SEC);
             }
         }
         updatePosition(gyroValueDeg);
