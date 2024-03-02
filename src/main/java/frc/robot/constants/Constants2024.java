@@ -112,6 +112,11 @@ public class Constants2024 extends GameConstants {
     public static final double CLIMBER_TIMEOUT_S=10;
     public static final double RAISING_TIMEOUT = 3;
 
+    public static final int FEEDER_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int FEEDER_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
+    public static final int FEEDER_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final boolean FEEDER_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 6;
     public static final int INTAKE_MOTOR_2_ID = 7;
@@ -131,6 +136,11 @@ public class Constants2024 extends GameConstants {
     public static final double ALIGNABLE_PID_I = 0;
     public static final double ALIGNABLE_PID_D = 0.0015;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+
+    public static final int DEPLOYER_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
+    public static final int DEPLOYER_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
+    public static final int DEPLOYER_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
+    public static final boolean DEPLOYER_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
 
     //Gamepiece turner
     public static final double GAMEPIECE_MAX_VELOCITY = MAX_ANGULAR_SPEED * 150;

@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -22,6 +23,12 @@ public class Feeder extends SubsystemBase {
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
+
+        feederMotor.configPeakCurrentLimit(Constants.FEEDER_MOTOR_PEAK_CURRENT_LIMIT);
+        feederMotor.configPeakCurrentDuration(Constants.FEEDER_MOTOR_PEAK_CURRENT_DURATION);
+        feederMotor.configContinuousCurrentLimit(Constants.FEEDER_MOTOR_CONTINUOUS_CURRENT_LIMIT);
+        feederMotor.enableCurrentLimit(Constants.FEEDER_CURRENT_LIMIT_ENABLED);
+
 
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
@@ -66,6 +73,7 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Color Sensor", "Certainty", matchedColor.confidence);
             SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
+            SmartShuffleboard.put("Intake", "Feeder Motor Current", feederMotor.getStatorCurrent());
         }
         SmartShuffleboard.put("Driver", "Gamepiece Collected", pieceSeen(false));
     }
