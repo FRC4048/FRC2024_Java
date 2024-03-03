@@ -6,4 +6,6 @@ package frc.robot.constants;
 
 public final class Constants extends Constants2024{
 
+    public static final double RAMP_CENTER_AUTO_SHOOT = 6;
+    public static final double RAMP_SIDE_AUTO_SHOOT = 5;
 }

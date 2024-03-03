@@ -107,15 +107,13 @@ public class RobotContainer {
                 new StartFeeder(feeder),
                 new TimedIntake(intake, 10))
         );
-//        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 8.5)));//this is an example
-//        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 2)));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> 6));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> 5)); // first and third
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
     }
 
     private void setupPathPlanning() {
