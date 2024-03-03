@@ -134,5 +134,8 @@ public class GameConstants {
     public static final double PATH_PLANNER_ROTATION_PID_D = 0;
     public static final double RAMP_CENTER_AUTO_SHOOT = 6;
     public static final double RAMP_SIDE_AUTO_SHOOT = 5;
+    public static final double RAMP_DIP_AUTO_SHOOT = 7;
+    public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
+
 
 }

@@ -105,7 +105,7 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
         NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
                 new StartFeeder(feeder),
-                new TimedIntake(intake, 2))
+                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT))
         );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
@@ -114,7 +114,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
         NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp,shooter,7)); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT)); // first and third
     }
 
     private void setupPathPlanning() {
