@@ -16,7 +16,6 @@ public class CancelAll extends Command {
   /** Creates a new CancelAll. */
   Ramp ramp;
   Shooter shooter;
-  Amp amp;
   public CancelAll(Ramp ramp, Shooter shooter) {
     this.ramp = ramp;
     this.shooter = shooter;
