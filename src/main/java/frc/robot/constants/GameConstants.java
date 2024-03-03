@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = true;
+    public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = true;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
@@ -17,7 +17,7 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = true;
+    public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
 
@@ -108,6 +108,9 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.015;
+    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.0015;
+    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.05;
 
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;

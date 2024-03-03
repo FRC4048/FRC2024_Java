@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.utils.TimeoutCounter;
 
 public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -17,6 +18,8 @@ public class MoveToGamepiece extends Command {
     private final ProfiledPIDController movingPIDController;
     private ChassisSpeeds driveStates;
     private double ychange;
+    private final TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
+
 
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
@@ -24,11 +27,8 @@ public class MoveToGamepiece extends Command {
         this.vision = vision;
         addRequirements(drivetrain);
         TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.GAMEPIECE_MAX_VELOCITY, Constants.GAMEPIECE_MAX_ACCELERATION);
-        double tP = 0.015;
-        double tD = 0.0015;
-        double mP = 0.05;
-        turningPIDController = new ProfiledPIDController(tP, 0, tD, constraints);
-        movingPIDController = new ProfiledPIDController(mP, 0, 0, constraints);
+        turningPIDController = new ProfiledPIDController(Constants.TURN_TO_GAMEPIECE_TURNING_P, 0, Constants.TURN_TO_GAMEPIECE_TURNING_D, constraints);
+        movingPIDController = new ProfiledPIDController(Constants.TURN_TO_GAMEPIECE_MOVING_P, 0, 0, constraints);
 
     }
 
@@ -48,7 +48,12 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (!vision.isPieceSeen() || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD));
+        if ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (!vision.isPieceSeen() || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD))) {
+            timeoutCounter.increaseTimeoutCount();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
