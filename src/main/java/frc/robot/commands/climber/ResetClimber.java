@@ -10,16 +10,7 @@ public class ResetClimber extends Command {
   /** Creates a new ResetRamp. */
   private final Climber climber;
   private double startTime;
-  private boolean leftRetracted;
-  private boolean rightRetracted;
   private final TimeoutCounter timeoutCounter = new TimeoutCounter("Reset Climber");
-
-  /*
-   *When we get the robot:
-   *TODO: Check if the forward limit switch is the top limit switch otherwise, swap getForwardSwitchState() with getReversedSwitchState()
-   *TODO: Check if the motor pulls the cannon up otherwise multiply the value by negative one
-   *TODO: Check if the motor is at a reasonable speed
-   */
 
   public ResetClimber(Climber climber) {
     this.climber = climber;
@@ -44,7 +35,6 @@ public class ResetClimber extends Command {
   public void end(boolean interrupted) {
     climber.setSpeed(0);
     climber.resetEncoders();
-    climber.engageRatchet();
   }
 
   // Returns true when the command should end.
@@ -58,10 +48,5 @@ public class ResetClimber extends Command {
       return true;
     }
     return false;
-  }
-
-  @Override
-  public boolean runsWhenDisabled() {
-    return true;
   }
 }
