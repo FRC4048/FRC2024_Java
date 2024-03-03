@@ -52,6 +52,8 @@ public class CommandUtil {
     /**
      * Make a logging command from the given command, with a custom name hierarchy.
      * The logging command will be placed within the given name prefix naming hierarchy instead of at the root.
+     * @param namePrefix the nesting hierarchy prefix for the command. If null the command is going to log at the
+     *                   root level. If not null it will be nested in this namespace.
      * @param command the command to wrap
      * @return a {@link LoggingCommand} that wraps the given command
      */
@@ -76,30 +78,27 @@ public class CommandUtil {
     /**
      * Return a loggable {@link SequentialCommandGroup} that executes the given commands sequentially. The given commands
      * can be any command or command group - they will be converted to loggable commands implicitly.
-     * @param sequenceName the name of the resaulting command group
+     * @param sequenceName the name of the resulting command group
      * @param commands the commands to put in the group
      * @return the created loggable command group
      */
     public static Command sequence(String sequenceName, Command... commands) {
-        LoggingCommand[] loggingCommands = wrapForLogging(sequenceName, commands);
-        return new SequentialLoggingCommand(sequenceName, loggingCommands);
+        return new SequentialLoggingCommand(sequenceName, commands);
     }
 
     /**
      * Return a loggable {@link ParallelCommandGroup} that executes the given commands in parallel. The given commands
      * can be any command or command group - they will be converted to loggable commands implicitly.
-     * @param sequenceName the name of the resaulting command group
+     * @param sequenceName the name of the resulting command group
      * @param commands the commands to put in the group
      * @return the created loggable command group
      */
     public static Command parallel(String sequenceName, Command... commands) {
-        LoggingCommand[] loggingCommands = wrapForLogging(sequenceName, commands);
-        return new ParallelLoggingCommand(sequenceName, loggingCommands);
+        return new ParallelLoggingCommand(sequenceName, commands);
     }
 
     public static Command race(String sequenceName, Command... commands) {
-        LoggingCommand[] loggingCommands = wrapForLogging(sequenceName, commands);
-        return new RaceLoggingCommand(sequenceName, loggingCommands);
+        return new RaceLoggingCommand(sequenceName, commands);
     }
 
     public static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
