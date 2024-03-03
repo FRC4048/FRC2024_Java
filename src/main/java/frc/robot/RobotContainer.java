@@ -40,10 +40,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.ComboShot;
-import frc.robot.commands.pathplanning.PathPlannerShoot;
-import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.commands.pathplanning.TimedIntake;
+import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -113,13 +110,15 @@ public class RobotContainer {
                 ),
                 new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
                 new FeederBackDrive(feeder)));
-        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 2.5)));//this is an example
-        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 4.5)));//this is an example
+//        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 8.5)));//this is an example
+//        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 2)));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampMove3", new RampMove(ramp, () -> 3));
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> 6));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> 5)); // first and third
     }
 
     private void setupPathPlanning() {
