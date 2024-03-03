@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -48,10 +51,22 @@ import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.shooter.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
+import frc.robot.commands.shooter.SetShooterSpeed;
+import frc.robot.commands.shooter.ShootAmp;
+import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -60,8 +75,6 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 
 /**
@@ -120,6 +133,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampMove3", new RampMove(ramp, () -> 3));
+        NamedCommands.registerCommand("MoveToPiece", new MoveToGamepiece(drivetrain, vision));
     }
 
     private void setupPathPlanning() {

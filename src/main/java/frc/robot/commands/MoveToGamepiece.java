@@ -16,6 +16,7 @@ public class MoveToGamepiece extends Command {
     private double timeSincePieceLoss;
     private final ProfiledPIDController turningPIDController;
     private final ProfiledPIDController movingPIDController;
+    private boolean shouldMove;
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
         this.drivetrain = drivetrain;
@@ -33,23 +34,26 @@ public class MoveToGamepiece extends Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         timeSincePieceLoss = Timer.getFPGATimestamp();
+        shouldMove = !(vision.isPieceSeen());
     }
 
     @Override
     public void execute() {
-        ChassisSpeeds driveStates;
-        double ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
-        if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-            timeSincePieceLoss = Timer.getFPGATimestamp();
-            driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX()));
+        if (shouldMove) {
+            ChassisSpeeds driveStates;
+            double ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
+            if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
+                timeSincePieceLoss = Timer.getFPGATimestamp();
+                driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX()));
+            }
+            else driveStates = drivetrain.createChassisSpeeds(-0.6, 0.0, 0.0, false);
+            drivetrain.drive(driveStates);
         }
-        else driveStates = drivetrain.createChassisSpeeds(-0.6, 0.0, 0.0, false);
-        drivetrain.drive(driveStates);
     }
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT));
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT || shouldMove));
     }
 
     @Override

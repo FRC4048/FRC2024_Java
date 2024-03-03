@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.297793465731218,
-        "y": 2.4340747460629215
+        "x": 0.7618549310350565,
+        "y": 4.370838486405053
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8395706696559957,
-        "y": -0.1677923928565425
+        "x": 1.4778149867065553,
+        "y": 1.580430064300751
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.6149913298716719,
-        "y": 4.214795910168958
+        "x": 6.379387675534508,
+        "y": 2.039378817936327
       },
       "prevControl": {
-        "x": 0.7985708313259023,
-        "y": 2.938918375062056
+        "x": 5.626711719572162,
+        "y": 0.7910382080475591
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,33 +32,22 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
+      "name": "PieceFind",
+      "waypointRelativePos": 1.0,
       "command": {
-        "type": "parallel",
+        "type": "deadline",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "RampMoveAway"
+                "name": "StartIntakeAndFeeder"
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.95,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
               "type": "named",
               "data": {
-                "name": "PathPlannerShoot"
+                "name": "MoveToPiece"
               }
             }
           ]
@@ -74,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.17352002964438,
-    "rotateFast": true
+    "rotation": 2.544804379812926,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 122.94921511659041,
     "velocity": 0
   },
   "useDefaultConstraints": true
