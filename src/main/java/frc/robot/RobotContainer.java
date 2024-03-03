@@ -276,6 +276,9 @@ public class RobotContainer {
     public Ramp getRamp() {
         return ramp;
     }
+    public Climber getClimber() {
+        return climber;
+    }
 
     public Deployer getDeployer() {
         return deployer;
