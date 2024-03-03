@@ -114,6 +114,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
         NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp,shooter,() -> 7)); // first and third
     }
 
     private void setupPathPlanning() {

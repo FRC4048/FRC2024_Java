@@ -20,12 +20,12 @@
         "y": 2.126377036259227
       },
       "prevControl": {
-        "x": 4.774727463316047,
-        "y": 1.8478038483947627
+        "x": 5.711565393995001,
+        "y": 1.3637732021069002
       },
       "nextControl": {
-        "x": 3.0230773863609586,
-        "y": 2.5013434677499364
+        "x": 2.5152858553139787,
+        "y": 2.811660514500869
       },
       "isLocked": false,
       "linkedName": null
@@ -44,18 +44,12 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 140.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.45,
+      "waypointRelativePos": 0.7,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +57,7 @@
             {
               "type": "named",
               "data": {
-                "name": "RampMove3"
+                "name": "RampShootComboSide2"
               }
             }
           ]
@@ -72,7 +66,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.8,
+      "waypointRelativePos": 1.95,
       "command": {
         "type": "parallel",
         "data": {
@@ -89,8 +83,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
