@@ -32,6 +32,18 @@ import edu.wpi.first.wpilibj2.command.*;
  *     Command pickUp = CommandUtil.sequence("ArmSequence", new OpenGripper(), new RaiseArm(), new CloseGripper());
  *     Command pickupAndDrive = CommandUtil.parallel("WalkWhileChewingGum", pickup, new Drive());
  * </pre>
+ *
+ * and also for nesting command groups that are custom-created:
+ * (Note the "extends SequentialLoggingCommandGroup" - DO NOT extend regular SequentialCommandGroup or this will not work)
+ * <pre>
+ *     class PickupGroup extends SequentialLoggingCommandGroup {
+ *         public PickupGroup() {
+ *             super("Pickup", new OpenGripper(), new RaiseArm(), new CloseGripper());
+ *         }
+ *     }
+ *     Command pickUp = new PickupGroup();
+ *     Command pickupAndDrive = CommandUtil.parallel("WalkWhileChewingGum", pickup, new Drive());
+ * </pre>
  */
 public class CommandUtil {
     public static final String COMMAND_PREFIX = "Commands";
