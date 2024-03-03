@@ -31,7 +31,7 @@ public class FeederGamepieceUntilLeave extends Command {
         if (ramp.getRampPos()<Constants.RAMP_POS_SHOOT_AMP) {
             feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
         } else {
-            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED*0.7);
+            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_AMP_SPEED);
         }
     }
 
