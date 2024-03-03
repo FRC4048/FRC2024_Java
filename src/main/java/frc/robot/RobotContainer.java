@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -55,7 +54,6 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
@@ -202,11 +200,7 @@ public class RobotContainer {
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
                 new ParallelCommandGroup(
                         new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable()),
-                        new RampFollow(ramp, () -> Ramp.angleToEncoder(
-                                new Rotation2d(Math.PI/2).minus(AutoAlignment.getYaw(
-                                        drivetrain.getAlignable(),
-                                        drivetrain.getPose().getTranslation(),0.5)).getDegrees()
-                        ))
+                        new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
                 )
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));

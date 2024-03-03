@@ -1,7 +1,6 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
@@ -14,7 +13,6 @@ import java.util.function.Supplier;
 public class AdvancedSpinningShot extends Command {
     private final Shooter shooter;
     private final Supplier<Pose2d> pose2dSupplier;
-    private final Timer timer;
     private final Supplier<Alignable> alignable;
     private ShooterSpeed shooterSpeed;
     private static final ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
@@ -24,15 +22,12 @@ public class AdvancedSpinningShot extends Command {
         this.shooter = shooter;
         this.pose2dSupplier = curentPoseSupplier;
         this.alignable = alignableSupplier;
-        this.timer = new Timer();
         addRequirements(shooter);
     }
 
     @Override
     public void initialize() {
-        timer.reset();
         this.shooterSpeed = calcuateShooterSpeed();
-        timer.start();
     }
 
     @Override
@@ -44,12 +39,11 @@ public class AdvancedSpinningShot extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.stopShooter();
-        timer.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(Constants.ADVANCED_SPINNING_SHOT_TIMEOUT) || alignable.get() == null;
+        return alignable.get() == null;
     }
 
     private ShooterSpeed calcuateShooterSpeed() {
