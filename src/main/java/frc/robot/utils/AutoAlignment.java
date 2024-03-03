@@ -12,6 +12,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 import frc.robot.utils.math.VectorUtils;
 import frc.robot.utils.math.VelocityVector;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,9 @@ public class AutoAlignment {
         return function.apply(x - alignable.getX(),y - alignable.getY());
     }
     public static Rotation2d getYaw(Alignable alignable, Translation2d pose){
-        return getYaw(alignable,pose.getX(),pose.getY());
+        Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY());
+        SmartShuffleboard.put("Angle","Angle",yaw);
+        return yaw;
     }
     private static boolean isInvalidFunction(BiFunction<Double, Double, Rotation2d> function){
         if (function == null){
