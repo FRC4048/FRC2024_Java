@@ -107,14 +107,14 @@ public class RobotContainer {
                 new StartFeeder(feeder),
                 new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT))
         );
-        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
-        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
-        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
-        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
-        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT)); // first and third
+        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
+        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder)));
+        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter,feeder,deployer)));
+        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
+        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
+        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
     }
 
     private void setupPathPlanning() {
