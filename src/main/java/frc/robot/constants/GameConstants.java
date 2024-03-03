@@ -111,7 +111,7 @@ public class GameConstants {
 
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
-    public static final double LIMELIGHT_TURN_TO_PIECE_X = 8; //Put Gampeiece in middle to get offset
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
     public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
     public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
