@@ -105,7 +105,7 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
         NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
                 new StartFeeder(feeder),
-                new TimedIntake(intake, 10))
+                new TimedIntake(intake, 2))
         );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
