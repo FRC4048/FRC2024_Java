@@ -96,6 +96,7 @@ public class GameConstants {
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double MAX_CLIMBER_ENCODER = 80.0;
     public static final double RAISING_TIMEOUT = 3;
+    public static final double RESET_CLIMBER_TIMEOUT = 1;
 
     //INTAKE
     public static final double INTAKE_MOTOR_1_SPEED = 0.8;
