@@ -258,6 +258,8 @@ public class RobotContainer {
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
                 lowerIntake, startSpinning, endIntake));
 
+        controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
+
         // stop intake
         controller.povUp().onTrue(CommandUtil.parallel("stop intake",
                 CommandUtil.logged(new RaiseDeployer(deployer)),
