@@ -170,8 +170,8 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG) {
-            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
-            SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", CommandUtil.logged(new SpoolExitAndShootAtSpeed(shooter, feeder)));
+            SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", CommandUtil.logged(new SetShooterSpeed(shooter)));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
 
@@ -192,7 +192,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        drivetrain.setDefaultCommand(CommandUtil.logged(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX)));
         Command alignSpeaker = CommandUtil.parallel(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
@@ -200,7 +200,7 @@ public class RobotContainer {
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
-        ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
+        Command leftClimbCmd = CommandUtil.logged(new ManualControlClimber(climber, () -> -controller.getLeftY())); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 
@@ -256,15 +256,17 @@ public class RobotContainer {
                 new RaiseDeployer(deployer),
                 backDrive);
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
-                lowerIntake, startSpinning, endIntake));
+                lowerIntake, startSpinning, endIntake
+        ));
 
-        controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
+        controller.leftTrigger(.5).onTrue(CommandUtil.logged(new FeederBackDrive(feeder)));
 
         // stop intake
         controller.povUp().onTrue(CommandUtil.parallel("stop intake",
-                CommandUtil.logged(new RaiseDeployer(deployer)),
-                CommandUtil.logged(new StopIntake(intake)),
-                CommandUtil.logged(new StopFeeder(feeder))));
+                new RaiseDeployer(deployer),
+                new StopIntake(intake),
+                new StopFeeder(feeder)
+        ));
 
         controller.povRight().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter)));
     }
