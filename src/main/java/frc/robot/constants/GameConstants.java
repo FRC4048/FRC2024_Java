@@ -45,10 +45,10 @@ public class GameConstants {
 
     public static final double RAMP_POS_TIMEOUT = 3;
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
-    public static final double RAMP_POS_STOW = 0.15;
+    public static final double RAMP_POS_STOW = 0.5;
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
     public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
-    public static final double RAMP_POS_SHOOT_AMP = 11.0;
+    public static final double RAMP_POS_SHOOT_AMP = 7.0;
 
     //SERVO
     public static final int RIGHT_SERVO_ENGAGED = 0;
@@ -60,7 +60,7 @@ public class GameConstants {
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3500; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5500; //multiplied power by 5000, need to refine later
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1050; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1100; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
@@ -75,7 +75,7 @@ public class GameConstants {
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.3;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
+    public static final double FEEDER_MOTOR_EXIT_SPEED = 1.0;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
