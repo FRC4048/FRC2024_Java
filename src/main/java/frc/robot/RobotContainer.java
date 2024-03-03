@@ -266,7 +266,7 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        controller.povRight().onTrue(CommandUtil.sequence("cancel all",new CancelAllSequence(ramp, shooter,amp)));
+        controller.povRight().onTrue(CommandUtil.sequence("Cancel All",new CancelAllSequence(ramp, shooter,amp)));
     }
 
     public SwerveDrivetrain getDrivetrain() {
