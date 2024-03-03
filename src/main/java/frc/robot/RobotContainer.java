@@ -14,7 +14,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -40,10 +39,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.ComboShot;
-import frc.robot.commands.pathplanning.PathPlannerShoot;
-import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.commands.pathplanning.TimedIntake;
+import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -107,19 +103,17 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.sequence("StartIntakeAndFeeder", new ParallelDeadlineGroup(
-                        new StartFeeder(feeder),
-                        new TimedIntake(intake, 10)
-                ),
-                new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
-                new FeederBackDrive(feeder)));
-        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 2.5)));//this is an example
-        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 4.5)));//this is an example
+        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
+                new StartFeeder(feeder),
+                new TimedIntake(intake, 2))
+        );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampMove3", new RampMove(ramp, () -> 3));
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
     }
 
     private void setupPathPlanning() {

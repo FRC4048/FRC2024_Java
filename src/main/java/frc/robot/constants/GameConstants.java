@@ -74,7 +74,7 @@ public class GameConstants {
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
-    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.3;
     public static final double FEEDER_MOTOR_EXIT_SPEED = 1.0;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
@@ -132,5 +132,7 @@ public class GameConstants {
     public static final double PATH_PLANNER_ROTATION_PID_P = 4.75;
     public static final double PATH_PLANNER_ROTATION_PID_I = 0;
     public static final double PATH_PLANNER_ROTATION_PID_D = 0;
+    public static final double RAMP_CENTER_AUTO_SHOOT = 6;
+    public static final double RAMP_SIDE_AUTO_SHOOT = 5;
 
 }
