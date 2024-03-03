@@ -64,8 +64,7 @@ public class Climber extends SubsystemBase {
     public void resetEncoders() {
         this.climberLeft.getEncoder().setPosition(0);
         this.climberRight.getEncoder().setPosition(0);
-    }    
-
+    }  
     public void engageRatchet() {
         leftServo.setPosition(0);
         rightServo.setPosition(180);
@@ -76,6 +75,12 @@ public class Climber extends SubsystemBase {
         leftServo.setPosition(180);
         rightServo.setPosition(0);
         ratchetEngaged = false;
+    }
+    public boolean isLeftReverseLimitSwitchPressed() {
+        return leftRetractedLimit.isPressed();
+    }
+    public boolean isRightReverseLimitSwitchPressed() {
+        return rightRetractedLimit.isPressed();
     }
 
     @Override
