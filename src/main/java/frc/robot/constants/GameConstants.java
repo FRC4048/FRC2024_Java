@@ -9,15 +9,15 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
-    public static final boolean RAMP_PID_DEBUG = false;
+    public static final boolean RAMP_DEBUG = true;
+    public static final boolean RAMP_PID_DEBUG = true;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = false;
+    public static final boolean VISION_DEBUG = true;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
 
@@ -110,7 +110,8 @@ public class GameConstants {
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
 
     //Limelight
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -18;
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = 8;
     public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
     public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
