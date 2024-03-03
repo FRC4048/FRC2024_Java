@@ -55,14 +55,15 @@ public class Climber extends SubsystemBase {
      * Left motor - Positive is up, Negative is down
      * @return true if setting speed was successful
      */
-    public void setSpeed(double spd) {
+    public boolean setSpeed(double spd) {
+        if (spd > 0 && ratchetEngaged) return false;
         if (spd > 0) {
-            if (climberRight.getEncoder().getPosition() < -80) {
+            if (climberRight.getEncoder().getPosition() < -78) {
                 climberRight.set(0);
             } else {
                 climberRight.set(-spd);
             }
-            if (climberLeft.getEncoder().getPosition() > 80) {
+            if (climberLeft.getEncoder().getPosition() > 78) {
                 climberLeft.set(0);
             } else {
                 climberLeft.set(spd);
@@ -71,6 +72,7 @@ public class Climber extends SubsystemBase {
             climberRight.set(-spd);
             climberLeft.set(spd);
         }
+        return true;
     }
 
     public void resetEncoders() {
@@ -103,6 +105,9 @@ public class Climber extends SubsystemBase {
             SmartShuffleboard.put("Climber", "Right Retracted", rightRetractedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Left Extended", leftExtendedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Right Extended", rightExtendedLimit.isPressed());
+
+            SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
+            SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
         }
     }
 }
