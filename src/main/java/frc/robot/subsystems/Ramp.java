@@ -9,6 +9,9 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 public class Ramp extends SubsystemBase {
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
+    private boolean shootClosePos;
+    private boolean shootAwayPos;
+    private boolean shootAmp;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
@@ -73,5 +76,35 @@ public class Ramp extends SubsystemBase {
     public double encoderToAngle(double encoderValue){
         //y=mx+b
         return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
+    }
+
+    public boolean isShootCloseAngle(){
+        if (getRampPos() == Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE){
+            return true;
+        }
+
+        else {
+            return false;
+        }
+    }
+
+    public boolean isShootAwayAngle(){
+        if (getRampPos() == Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE){
+            return true;
+        }
+
+        else {
+            return false;
+        }
+    }
+
+    public boolean isShootAmpAngle(){
+        if (getRampPos() == Constants.RAMP_POS_SHOOT_AMP){
+            return true;
+        }
+
+        else {
+            return false;
+        }
     }
 }
