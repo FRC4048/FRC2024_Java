@@ -108,8 +108,8 @@ public class RobotContainer {
                 new TimedIntake(intake, 2))
         );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
-        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
-        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder,ramp));
+        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer,ramp));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
@@ -170,7 +170,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG) {
-            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder, ramp));
             SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
@@ -228,14 +228,14 @@ public class RobotContainer {
 
         // Shoot the note - B
         controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
-                new FeederGamepieceUntilLeave(feeder),
+                new FeederGamepieceUntilLeave(feeder,ramp),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder),
+                new FeederGamepieceUntilLeave(feeder,ramp),
                 new StopShooter(shooter),
                 new RetractAmp(amp)));
 
