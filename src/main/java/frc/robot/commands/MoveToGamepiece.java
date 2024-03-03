@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.utils.TimeoutCounter;
 
 public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -17,8 +18,10 @@ public class MoveToGamepiece extends Command {
     private final ProfiledPIDController turningPIDController;
     private final ProfiledPIDController movingPIDController;
     private boolean shouldMove;
+    private final TimeoutCounter timeoutcounter;
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
+        timeoutcounter = new TimeoutCounter(getName());
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
@@ -53,7 +56,11 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || (Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT || shouldMove));
+        if ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT)) {
+            timeoutcounter.increaseTimeoutCount();
+            return true;
+        }
+        return ((Timer.getFPGATimestamp() - timeSincePieceLoss >= Constants.TIMEOUT_AFTER_PIECE_NOT_SEEN) || shouldMove);
     }
 
     @Override
