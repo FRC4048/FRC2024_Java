@@ -10,10 +10,12 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -40,15 +42,10 @@ import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
+import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.*;
-import frc.robot.commands.shooter.AdvancedSpinningShot;
-import frc.robot.commands.shooter.SetShooterSpeed;
-import frc.robot.commands.shooter.ShootSpeaker;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
@@ -200,15 +197,16 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        Command alignSpeaker = CommandUtil.parallel(
+        Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable()),
-                new RampMove(ramp, () -> Ramp.angleToEncoder(
-                        AutoAlignment.getYaw(
-                                drivetrain.getAlignable(),
-                                drivetrain.getPose().getTranslation()
-                        ).getDegrees())
+                new ParallelCommandGroup(
+                        new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable()),
+                        new RampFollow(ramp, () -> Ramp.angleToEncoder(
+                                new Rotation2d(Math.PI/2).minus(AutoAlignment.getYaw(
+                                        drivetrain.getAlignable(),
+                                        drivetrain.getPose().getTranslation(),0.5)).getDegrees()
+                        ))
                 )
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));

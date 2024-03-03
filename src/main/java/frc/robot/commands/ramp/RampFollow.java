@@ -9,7 +9,7 @@ public class RampFollow extends Command {
     private final Ramp ramp;
     private final DoubleSupplier targetValue;
 
-    protected RampFollow(Ramp ramp, DoubleSupplier targetValue) {
+    public RampFollow(Ramp ramp, DoubleSupplier targetValue) {
         this.ramp = ramp;
         this.targetValue = targetValue;
         addRequirements(ramp);
