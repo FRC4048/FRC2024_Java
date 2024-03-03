@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
+
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -54,11 +55,22 @@ public class Climber extends SubsystemBase {
      * Left motor - Positive is up, Negative is down
      * @return true if setting speed was successful
      */
-    public boolean setSpeed(double spd) {
-        if (spd > 0 && (ratchetEngaged || climberRight.getEncoder().getPosition() > 80 || climberLeft.getEncoder().getPosition() > 80)) return false;
-        climberRight.set(-spd);
-        climberLeft.set(spd);
-        return true;
+    public void setSpeed(double spd) {
+        if (spd > 0) {
+            if (climberRight.getEncoder().getPosition() < -80) {
+                climberRight.set(0);
+            } else {
+                climberRight.set(-spd);
+            }
+            if (climberLeft.getEncoder().getPosition() > 80) {
+                climberLeft.set(0);
+            } else {
+                climberLeft.set(spd);
+            }
+        } else {
+            climberRight.set(-spd);
+            climberLeft.set(spd);
+        }    
     }
 
     public void resetEncoders() {
