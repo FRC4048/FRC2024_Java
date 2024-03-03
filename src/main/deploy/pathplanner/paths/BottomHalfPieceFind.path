@@ -35,7 +35,7 @@
       "name": "PieceFind",
       "waypointRelativePos": 1.0,
       "command": {
-        "type": "deadline",
+        "type": "race",
         "data": {
           "commands": [
             {
