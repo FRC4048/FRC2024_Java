@@ -1,6 +1,6 @@
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.MoveToGamepiece;
@@ -16,7 +16,7 @@ public class TurnToGampieceGroup extends SequentialCommandGroup{
     public TurnToGampieceGroup(Vision vision, SwerveDrivetrain drivetrain, Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp) {
         addCommands(
             new MoveToGamepiece(drivetrain, vision),
-            new ParallelDeadlineGroup(
+            new ParallelRaceGroup(
                 new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
                 new SequentialCommandGroup(
                     new WaitCommand(.5),
