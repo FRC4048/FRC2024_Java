@@ -102,7 +102,7 @@ public class CommandUtil {
         return new RaceLoggingCommand(sequenceName, loggingCommands);
     }
 
-    private static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
+    public static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
         // Do not use streams due to efficiency
         LoggingCommand[] newCommands = new LoggingCommand[commands.length];
         for (int i = 0; i < commands.length; i++) {

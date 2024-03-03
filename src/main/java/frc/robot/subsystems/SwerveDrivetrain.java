@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,21 +14,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
-import frc.robot.swervev2.EncodedSwerveMotorBuilder;
-import frc.robot.swervev2.KinematicsConversionConfig;
-import frc.robot.swervev2.SwerveIdConfig;
-import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.swervev2.SwervePosEstimator;
+import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
-        
+
     private PathPlannerPath path;
 
     private final GenericSwerveModule frontLeft;
@@ -48,9 +44,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
-    
-   
-    
+
+
+
 
 
     private double getGyro() {
@@ -59,15 +55,19 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.PATHPLANNER_DEBUG){
+            SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
+            SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
+        }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
-            
 
-        
+
+
         gyroValue = getGyro();
         if (SmartDashboard.getBoolean("USE VISION",false)){
             poseEstimator.updatePositionWithVis(gyroValue);
@@ -132,7 +132,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
     }
-    
+
 
     public ChassisSpeeds speedsFromStates() {
         return kinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
