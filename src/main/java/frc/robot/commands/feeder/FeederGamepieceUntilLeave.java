@@ -28,10 +28,10 @@ public class FeederGamepieceUntilLeave extends Command {
 
     @Override
     public void execute() {
-        if (ramp.getRampPos()<Constants.RAMP_POS_SHOOT_AMP) {
-            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_EXIT_SPEED);
-        } else {
+        if (ramp.getDesiredPosition() == Constants.RAMP_POS_SHOOT_AMP) {
             feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_AMP_SPEED);
+        } else {
+            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEAKER_SPEED);
         }
     }
 
