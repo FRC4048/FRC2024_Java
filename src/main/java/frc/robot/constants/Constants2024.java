@@ -59,11 +59,11 @@ public class Constants2024 extends GameConstants {
     public static final double STEER_PID_FF_S = 0;//0.2;
     public static final double STEER_PID_FF_V = 0;//0.8;
     public static final double WHEEL_RADIUS = 0.0508;
-    public static final double ROBOT_RADIUS =  0.381;
+    public static final double ROBOT_RADIUS =  0.43;
 
     public static final double MAX_VELOCITY = 4.8; // 4 meters per second
     // theoretical maximum angular velocity (radians/second)
-    public static final double MAX_ANGULAR_SPEED = MAX_VELOCITY / (2 * ROBOT_RADIUS);
+    public static final double MAX_ANGULAR_SPEED = Math.PI * 6;
     public static final double ROBOT_WIDTH = 0.8636;
     public static final double ROBOT_LENGTH = 0.8636;
     public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees

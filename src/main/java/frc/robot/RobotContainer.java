@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.SetAlignable;
 import frc.robot.commands.MoveToGamepiece;
+import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -39,9 +39,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.ComboShot;
-import frc.robot.commands.pathplanning.IntakeFeederCombo;
-import frc.robot.commands.pathplanning.PathPlannerShoot;
+import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -105,11 +103,17 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", new IntakeFeederCombo(feeder, intake));
-        NamedCommands.registerCommand("RampMoveCenter", new RampMove(ramp, () -> 1.5));//this is an example
+        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
+                new StartFeeder(feeder),
+                new TimedIntake(intake, 2))
+        );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
-        NamedCommands.registerCommand("MoveToGamePiece", new MoveToGamepiece(drivetrain, vision));
+        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
+        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
     }
 
     private void setupPathPlanning() {
@@ -118,8 +122,8 @@ public class RobotContainer {
                 drivetrain::speedsFromStates,
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
-                        new PIDConstants(5, 0, 0, 0), // Translation PID constants
-                        new PIDConstants(4.75, 0.0, 0, 0), // Rotation PID constants
+                        new PIDConstants(Constants.PATH_PLANNER_TRANSLATION_PID_P, Constants.PATH_PLANNER_TRANSLATION_PID_I, Constants.PATH_PLANNER_TRANSLATION_PID_D), // Translation PID constants
+                        new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I,Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
@@ -253,6 +257,8 @@ public class RobotContainer {
                 backDrive);
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
                 lowerIntake, startSpinning, endIntake));
+
+        controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
 
         // stop intake
         controller.povUp().onTrue(CommandUtil.parallel("stop intake",
