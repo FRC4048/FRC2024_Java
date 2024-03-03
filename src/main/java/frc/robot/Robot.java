@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
         CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer())).schedule();
-        CommandUtil.logged(new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber())).schedule();
+        CommandUtil.parallel("Reset Climber and Ramp",new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber())).schedule();
     }
 
     @Override
