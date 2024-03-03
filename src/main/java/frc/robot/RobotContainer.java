@@ -14,7 +14,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -104,19 +103,17 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.sequence("StartIntakeAndFeeder", new ParallelDeadlineGroup(
-                        new StartFeeder(feeder),
-                        new TimedIntake(intake, 10)
-                ),
-                new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
-                new FeederBackDrive(feeder)));
+        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
+                new StartFeeder(feeder),
+                new TimedIntake(intake, 10))
+        );
 //        NamedCommands.registerCommand("RampMoveCenter", CommandUtil.logged(new RampMove(ramp, () -> 8.5)));//this is an example
 //        NamedCommands.registerCommand("RampMoveRight", CommandUtil.logged(new RampMove(ramp, () -> 2)));//this is an example
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
+        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampMove3", new RampMove(ramp, () -> 3));
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> 6));// second piece
         NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> 5)); // first and third
     }

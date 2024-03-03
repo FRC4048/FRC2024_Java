@@ -57,6 +57,25 @@
                 "data": {
                   "name": "RampShootComboSide"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeederBackDrive"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -107,6 +126,25 @@
                 "data": {
                   "name": "RampShootComboCenter"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeederBackDrive"
+                      }
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -156,6 +194,25 @@
                 "type": "named",
                 "data": {
                   "name": "RampShootComboSide"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeederBackDrive"
+                      }
+                    }
+                  ]
                 }
               }
             ]

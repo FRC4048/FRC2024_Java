@@ -74,7 +74,7 @@ public class GameConstants {
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
-    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.3;
     public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
