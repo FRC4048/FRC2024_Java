@@ -19,6 +19,7 @@ public class MoveToGamepiece extends Command {
     private ChassisSpeeds driveStates;
     private double ychange;
     private final TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
+    private double cycle;
 
 
 
@@ -35,6 +36,7 @@ public class MoveToGamepiece extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
+        cycle = 0;
     }
 
     @Override
@@ -44,12 +46,17 @@ public class MoveToGamepiece extends Command {
         driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
         drivetrain.drive(driveStates);
         }
+        if (!vision.isPieceSeen()) {
+            ++cycle;
+        }
     }
 
     @Override
     public boolean isFinished() {
-        if ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (!vision.isPieceSeen() || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD))) {
+        if ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
             timeoutCounter.increaseTimeoutCount();
+            return true;
+        } if (cycle > 5) {
             return true;
         } else {
             return false;
