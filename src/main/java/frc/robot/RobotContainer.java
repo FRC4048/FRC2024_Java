@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -39,15 +42,31 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.*;
+import frc.robot.commands.pathplanning.ComboShot;
+import frc.robot.commands.pathplanning.PathPlannerShoot;
+import frc.robot.commands.pathplanning.RampShootCombo;
+import frc.robot.commands.pathplanning.ShootAndDrop;
+import frc.robot.commands.pathplanning.TimedIntake;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.shooter.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
+import frc.robot.commands.shooter.SetShooterSpeed;
+import frc.robot.commands.shooter.ShootAmp;
+import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -56,8 +75,6 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
-import java.util.Optional;
 
 
 /**
@@ -105,7 +122,7 @@ public class RobotContainer {
     private void registerPathPlanableCommands() {
         NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
                 new StartFeeder(feeder),
-                new TimedIntake(intake, 2))
+                new TimedIntake(intake, 3))
         );
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
@@ -114,7 +131,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
         NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp,shooter,() -> 7)); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", new RampMove(ramp,() -> 5)); // first and third
     }
 
     private void setupPathPlanning() {
