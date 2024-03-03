@@ -70,13 +70,13 @@ public class Climber extends SubsystemBase {
         } else {
             climberRight.set(-spd);
             climberLeft.set(spd);
-        }    
+        }
     }
 
     public void resetEncoders() {
         this.climberLeft.getEncoder().setPosition(0);
         this.climberRight.getEncoder().setPosition(0);
-    }    
+    }
 
     public void engageRatchet() {
         leftServo.setPosition(0);
@@ -89,11 +89,11 @@ public class Climber extends SubsystemBase {
         rightServo.setPosition(0);
         ratchetEngaged = false;
     }
-    public double getEncoderPosition() {
-        return climberLeft.getEncoder().getPosition();
+    public boolean isLeftReverseLimitSwitchPressed() {
+        return leftRetractedLimit.isPressed();
     }
-    public boolean isExtendedLimitSwitchNotPressed() {
-        return !(leftExtendedLimit.isPressed() || rightExtendedLimit.isPressed());
+    public boolean isRightReverseLimitSwitchPressed() {
+        return rightRetractedLimit.isPressed();
     }
 
     @Override
