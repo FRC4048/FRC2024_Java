@@ -20,6 +20,7 @@ import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
@@ -48,6 +49,13 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
+
+        // Shuffleboard commands
+        SmartShuffleboard.put("Driver", "Has Game Piece?", robotContainer.getFeeder().pieceSeen(false)).withPosition(0, 0).withSize(2, 2);
+        SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", robotContainer.getDeployer().isDeployerForwardLimitSwitchClosed()).withPosition(0, 2).withSize(2, 2);
+        SmartShuffleboard.put("Driver", "Speaker Close", robotContainer.getRamp().isShootCloseAngle()).withPosition(7, 1).withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Speaker Away", robotContainer.getRamp().isShootAwayAngle()).withPosition(7, 2).withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Amp", robotContainer.getRamp().isShootAmpAngle()).withPosition(8, 2).withSize(1, 1);
     }
 
     @Override
