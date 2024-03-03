@@ -109,6 +109,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder)));
         NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter,feeder,deployer)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));

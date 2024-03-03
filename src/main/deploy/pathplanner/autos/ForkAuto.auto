@@ -34,9 +34,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "StartIntakeAndFeeder"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StartIntakeAndFeeder"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -59,6 +72,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DipRight"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pick4th"
           }
         }
       ]
