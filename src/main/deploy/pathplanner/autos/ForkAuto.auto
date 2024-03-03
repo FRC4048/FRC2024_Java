@@ -43,9 +43,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "EnterRightShoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RampShootComboSide2"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "EnterRightShoot"
+                }
+              }
+            ]
           }
         }
       ]
