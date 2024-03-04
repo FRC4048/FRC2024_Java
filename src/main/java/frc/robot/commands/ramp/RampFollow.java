@@ -27,15 +27,15 @@ public class RampFollow extends Command {
     public void execute() {
         Alignable alignableNow = alignableSupplier.get();
         if (alignableNow != null){
-            double encoderValue = Ramp.angleToEncoder(
-                    new Rotation2d(Math.PI / 2)
-                            .minus(AutoAlignment.getYaw(alignableNow,
-                                    pose2dSupplier.get().getTranslation(),
-                                    0.5)
-                            ).getDegrees()
-            );
-            if (Constants.RAMP_DEBUG) SmartDashboard.putNumber("RAMP_TARGET_AUTO",encoderValue);
-            ramp.setRampPos(encoderValue);
+            Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
+                    .minus(AutoAlignment.getYaw(alignableNow,
+                            pose2dSupplier.get().getTranslation(),
+                            Constants.HIGHT_OF_RAMP)
+                    );
+            if (Constants.RAMP_DEBUG) {
+                SmartDashboard.putNumber("RAMP_TARGET_Angle",targetAngle.getDegrees());
+            }
+            ramp.setAngle(targetAngle);
         }
     }
 

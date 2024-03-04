@@ -14,13 +14,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.sequences.CancelAllSequence;
+import frc.robot.commands.AlignableMonitor;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -45,6 +45,7 @@ import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
@@ -198,7 +199,8 @@ public class RobotContainer {
         Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new ParallelCommandGroup(
+                new ParallelDeadlineGroup(
+                        new AlignableMonitor(() -> drivetrain.getAlignable()),
                         new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable()),
                         new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
                 )
@@ -234,7 +236,8 @@ public class RobotContainer {
         controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
                 new FeederGamepieceUntilLeave(feeder,ramp),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter), new RetractAmp(amp),
+                new StopShooter(shooter),
+                new RetractAmp(amp),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
 
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",

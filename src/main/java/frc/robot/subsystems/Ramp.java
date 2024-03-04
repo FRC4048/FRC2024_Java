@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
@@ -81,5 +82,9 @@ public class Ramp extends SubsystemBase {
     public static double angleToEncoder(double angle){
         //(y-b)/m=x
         return (angle - 28.5) / 2.48;//needs be to measured again and put in constants
+    }
+
+    public void setAngle(Rotation2d angleFromGround) {
+
     }
 }
