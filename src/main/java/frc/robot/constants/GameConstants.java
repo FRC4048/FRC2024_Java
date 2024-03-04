@@ -75,7 +75,8 @@ public class GameConstants {
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.3;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 1.0;
+    public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
+    public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
@@ -95,6 +96,7 @@ public class GameConstants {
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double MAX_CLIMBER_ENCODER = 80.0;
     public static final double RAISING_TIMEOUT = 3;
+    public static final double RESET_CLIMBER_TIMEOUT = 1;
 
     //INTAKE
     public static final double INTAKE_MOTOR_1_SPEED = 0.8;
