@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
@@ -33,7 +34,7 @@ public class RampFollow extends Command {
                                     0.5)
                             ).getDegrees()
             );
-            SmartDashboard.putNumber("RAMP_TARGET_AUTO",encoderValue);
+            if (Constants.RAMP_DEBUG) SmartDashboard.putNumber("RAMP_TARGET_AUTO",encoderValue);
             ramp.setRampPos(encoderValue);
         }
     }
