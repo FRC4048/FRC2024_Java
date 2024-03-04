@@ -136,8 +136,9 @@ public class GameConstants {
     public static final double PATH_PLANNER_ROTATION_PID_D = 0;
     public static final double RAMP_CENTER_AUTO_SHOOT = 6;
     public static final double RAMP_SIDE_AUTO_SHOOT = 5;
-    public static final double HIGHT_OF_RAMP = 0.5; // needs to be measured
+    public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 32.5; //degrees
     public static final double RAMP_MAX_ANGLE = 90; //degrees
+    public static final double RAMP_X_OFFSET = 0.4; //meters, tip of ramp offset from center of robot
 
 }

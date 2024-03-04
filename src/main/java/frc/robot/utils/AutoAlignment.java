@@ -65,7 +65,8 @@ public class AutoAlignment {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         BiFunction<Double, Double, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidFunction(function)) return new Rotation2d();
-        double deltaX = x - alignable.getX();
+        double xNorm = x + (RobotContainer.isRedAlliance() ? -Constants.RAMP_X_OFFSET : Constants.RAMP_X_OFFSET);
+        double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
         return function.apply(dist, alignable.getZ() - z);
