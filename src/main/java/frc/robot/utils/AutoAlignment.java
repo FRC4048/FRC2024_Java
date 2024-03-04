@@ -20,12 +20,12 @@ import java.util.function.BiFunction;
 public class AutoAlignment {
     private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionAngleMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
-            Alignable.SPEAKER, (x, y) -> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x))
-            )));
+            Alignable.SPEAKER, (x, y) -> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)))
+    ));
     private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
             Alignable.SPEAKER, (x, z) -> {
-                VelocityVector velocityVector = VectorUtils.fromVelAndDist(8.9, x, z, true);
+                VelocityVector velocityVector = VectorUtils.fromVelAndDist(Constants.SHOOTER_VELOCITY, x, z, true);
                 return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
             })
     );
@@ -36,7 +36,9 @@ public class AutoAlignment {
             return 0;
         }
         double clamp = MathUtil.clamp(controller.calculate(currentAngle.getDegrees(), targetAngle), -1 * Constants.MAX_AUTO_ALIGN_SPEED, Constants.MAX_AUTO_ALIGN_SPEED);
-        if (Constants.SWERVE_DEBUG) SmartDashboard.putNumber("TURN_PID", clamp);
+        if (Constants.SWERVE_DEBUG) {
+            SmartDashboard.putNumber("TURN_PID", clamp);
+        }
         return clamp;
     }
 
@@ -71,7 +73,7 @@ public class AutoAlignment {
 
     public static Rotation2d getYaw(Alignable alignable, Translation2d pose, double z) {
         Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY(), z);
-        double clamp = MathUtil.clamp(yaw.getDegrees(), 32.5, 90);
+        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
         return Rotation2d.fromDegrees(clamp);
     }
 

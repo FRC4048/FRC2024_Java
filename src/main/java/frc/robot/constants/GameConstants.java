@@ -64,7 +64,7 @@ public class GameConstants {
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
-    public static final double SHOOTER_VELOCITY = 6.096;//m/s @ 90%,50%
+    public static final double SHOOTER_VELOCITY = 8.9;//m/s @ 5500rpm, 3500rpm
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
     public static final double SHOOTER_PID_P = 0.000058;
     public static final double SHOOTER_PID_I = 0.0;
@@ -137,5 +137,7 @@ public class GameConstants {
     public static final double RAMP_CENTER_AUTO_SHOOT = 6;
     public static final double RAMP_SIDE_AUTO_SHOOT = 5;
     public static final double HIGHT_OF_RAMP = 0.5; // needs to be measured
+    public static final double RAMP_MIN_ANGLE = 32.5; //degrees
+    public static final double RAMP_MAX_ANGLE = 90; //degrees
 
 }
