@@ -41,6 +41,6 @@ public class RampFollow extends Command {
 
     @Override
     public boolean isFinished() {
-        return alignableSupplier.get() == null;
+        return false;
     }
 }
