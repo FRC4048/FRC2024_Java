@@ -30,13 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "StartIntakeAndFeeder"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ResetRamp"
+                  "name": "SlurpWithRamp"
                 }
               }
             ]
@@ -91,12 +85,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "StartIntakeAndFeeder"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "RightShotPick"
@@ -105,7 +93,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ResetRamp"
+                  "name": "SlurpWithRamp"
                 }
               }
             ]
@@ -168,13 +156,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "StartIntakeAndFeeder"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ResetRamp"
+                  "name": "SlurpWithRamp"
                 }
               }
             ]

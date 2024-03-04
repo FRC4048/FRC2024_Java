@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootRightCenter"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ShootAndDrop"
@@ -34,41 +46,9 @@
                 }
               },
               {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StartIntakeAndFeeder"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
                 "type": "named",
                 "data": {
-                  "name": "RampShootComboSide2"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "EnterRightShoot"
+                  "name": "SlurpWithRamp"
                 }
               }
             ]
@@ -77,13 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DipRight"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Pick4th"
+            "pathName": "EnterRightShoot"
           }
         }
       ]
