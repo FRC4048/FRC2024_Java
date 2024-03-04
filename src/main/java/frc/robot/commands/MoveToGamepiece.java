@@ -43,22 +43,17 @@ public class MoveToGamepiece extends Command {
         if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
         driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
         drivetrain.drive(driveStates);
-        cycle = 0;
         }
-        if (!vision.isPieceSeen()) {
-            ++cycle;
+        if (vision.isPieceSeen()) {
+            cycle = 0;
+        } else {
+            cycle++;
         }
     }
 
     @Override
     public boolean isFinished() {
-        if ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-            return true;
-        } if (cycle > 5) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || (cycle > 5));
     }
 
     @Override
