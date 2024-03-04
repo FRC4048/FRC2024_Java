@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
+
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -56,15 +57,28 @@ public class Climber extends SubsystemBase {
      */
     public boolean setSpeed(double spd) {
         if (spd > 0 && ratchetEngaged) return false;
-        climberRight.set(-spd);
-        climberLeft.set(spd);
+        if (spd > 0) {
+            if (climberRight.getEncoder().getPosition() < -78) {
+                climberRight.set(0);
+            } else {
+                climberRight.set(-spd);
+            }
+            if (climberLeft.getEncoder().getPosition() > 78) {
+                climberLeft.set(0);
+            } else {
+                climberLeft.set(spd);
+            }
+        } else {
+            climberRight.set(-spd);
+            climberLeft.set(spd);
+        }
         return true;
     }
 
     public void resetEncoders() {
         this.climberLeft.getEncoder().setPosition(0);
         this.climberRight.getEncoder().setPosition(0);
-    }    
+    }
 
     public void engageRatchet() {
         leftServo.setPosition(0);
@@ -77,6 +91,12 @@ public class Climber extends SubsystemBase {
         rightServo.setPosition(0);
         ratchetEngaged = false;
     }
+    public boolean isLeftReverseLimitSwitchPressed() {
+        return leftRetractedLimit.isPressed();
+    }
+    public boolean isRightReverseLimitSwitchPressed() {
+        return rightRetractedLimit.isPressed();
+    }
 
     @Override
     public void periodic() {
@@ -85,6 +105,9 @@ public class Climber extends SubsystemBase {
             SmartShuffleboard.put("Climber", "Right Retracted", rightRetractedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Left Extended", leftExtendedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Right Extended", rightExtendedLimit.isPressed());
+
+            SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
+            SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
         }
     }
 }
