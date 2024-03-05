@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_DEBUG = true;
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
@@ -147,6 +147,6 @@ public class GameConstants {
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 32.5; //degrees
     public static final double RAMP_MAX_ANGLE = 90; //degrees
-    public static final double RAMP_X_OFFSET = 0.43 - 0.3; //meters, tip of ramp offset from center of robot (take robot radians and subtract dist from edge (with bumpers)
+//    public static final double RAMP_X_OFFSET = 0.43 - 0.3; //meters, tip of ramp offset from center of robot (take robot radians and subtract dist from edge (with bumpers)
 
 }

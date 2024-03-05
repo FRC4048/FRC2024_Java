@@ -95,6 +95,8 @@ public class AutoAlignment {
         double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
+        SmartDashboard.putNumber("DISTANCE_XY", dist);
+        SmartDashboard.putNumber("DISTANCE_Z", alignable.getZ() -  z);
         return function.apply(dist, alignable.getZ() - z);
     }
 
@@ -104,9 +106,10 @@ public class AutoAlignment {
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
     public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d) {
-        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),Constants.RAMP_X_OFFSET);
-        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
-        return Rotation2d.fromDegrees(clamp);
+        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),0);
+//        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
+//        return Rotation2d.fromDegrees(clamp);
+        return yaw;
     }
 
     private static boolean isInvalidFunction(BiFunction<Double, Double, Rotation2d> function) {

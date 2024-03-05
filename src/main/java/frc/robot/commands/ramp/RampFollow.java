@@ -32,13 +32,14 @@ public class RampFollow extends Command {
 
     @Override
     public void execute() {
-        Alignable alignableNow = alignableSupplier.get();
-        if (alignableNow != null){
+        SmartDashboard.putString("Alignable", alignable.toString());
+        Pose2d pose = pose2dSupplier.get();
+        if (alignable != null){
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
-                    .minus(AutoAlignment.getYaw(alignableNow,
-                            new Translation3d(alignableNow.getX(),
-                                    alignableNow.getY(),
-                                    Constants.HIGHT_OF_RAMP)
+                    .minus(AutoAlignment.getYaw(alignable,
+                            new Translation3d(pose.getX(),
+                                    pose.getY(),
+                                    Constants.HIGHT_OF_RAMP/2)
                             )
                     );
             if (Constants.RAMP_DEBUG) {
@@ -50,6 +51,8 @@ public class RampFollow extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        boolean isFinished = alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
+        SmartDashboard.putBoolean("RampDone", isFinished);
+        return isFinished;
     }
 }
