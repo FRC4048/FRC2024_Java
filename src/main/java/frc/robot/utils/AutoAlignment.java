@@ -20,15 +20,34 @@ import java.util.function.BiFunction;
 public class AutoAlignment {
     private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionAngleMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
-            Alignable.SPEAKER, (x, y) -> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)))
+            Alignable.SPEAKER, AutoAlignment::calcRobotRotationFaceSpeaker
     ));
     private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
-            Alignable.SPEAKER, (x, z) -> {
-                VelocityVector velocityVector = VectorUtils.fromVelAndDist(Constants.SHOOTER_VELOCITY, x, z, true);
-                return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
-            })
-    );
+            Alignable.SPEAKER, AutoAlignment::calcRampAngle
+    ));
+
+    /**
+     * Calculates the desired ramp angle given a constant speed {@link Constants#SHOOTER_VELOCITY},
+     * and the delta distance in the xy plane and z plane
+     * @param x the distance (unsigned) from the speaker on the xy plane
+     * @param z the height between the top of the ramp and the middle of the speaker opening
+     * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
+     */
+    private static Rotation2d calcRampAngle(double x, double z){
+        VelocityVector velocityVector = VectorUtils.fromVelAndDist(Constants.SHOOTER_VELOCITY, x, z, true);
+        return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
+    }
+
+    /**
+     * Uses basic trig to calculate the desired angle to face the speaker given distance in both x and y directions
+     * @param x distance of speaker from robot (robot x - speaker x)
+     * @param y distance of speaker from robot (robot y - speaker y)
+     * @return the desired rotation of the robot, so it can score in the speaker.
+     */
+    private static Rotation2d calcRobotRotationFaceSpeaker(double x, double y){
+        return new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)));
+    }
 
     public static double calcTurnSpeed(Alignable alignable, Rotation2d currentAngle, double x, double y, PIDController controller) {
         double targetAngle = getAngle(alignable, x, y).getDegrees();
