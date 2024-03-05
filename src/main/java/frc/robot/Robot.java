@@ -21,6 +21,7 @@ import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
@@ -71,7 +72,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        CommandUtil.logged(new ResetRamp(robotContainer.getRamp())).schedule();
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
