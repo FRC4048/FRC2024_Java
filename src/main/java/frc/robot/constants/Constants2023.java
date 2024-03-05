@@ -11,12 +11,9 @@ public class Constants2023 extends GameConstants {
     //RAMP
     public static final double RAMP_ERROR_RANGE = 0.00;
     public static final int RAMP_ID = 45;
-<<<<<<< HEAD
     public static final double RAMP_ANGLE = 15.0;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
     public static final double RESET_RAMP_SPEED = 0.3; //assuming positive is forward, also needs to be refined do the real robot
-=======
->>>>>>> main
 
     //Servo
     public static final int RIGHT_SERVO_ENGAGED = 0;
