@@ -85,6 +85,6 @@ public class Ramp extends SubsystemBase {
     }
 
     public void setAngle(Rotation2d angleFromGround) {
-
+        setRampPos(angleToEncoder(angleFromGround.getDegrees()));
     }
 }

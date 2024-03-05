@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -201,7 +202,6 @@ public class RobotContainer {
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
                 new ParallelDeadlineGroup(
                         new AlignableMonitor(() -> drivetrain.getAlignable()),
-                        new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable()),
                         new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
                 )
         );
@@ -273,6 +273,15 @@ public class RobotContainer {
                 CommandUtil.logged(new StopFeeder(feeder))));
 
         controller.povRight().onTrue(CommandUtil.sequence("Cancel All",new CancelAllSequence(ramp, shooter,amp)));
+        controller.rightTrigger().onTrue(new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                        new WaitCommand(0.5),
+                        new FeederGamepieceUntilLeave(feeder,ramp),
+                        new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                        new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+                ),
+                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), ()-> drivetrain.getAlignable())
+        ));
     }
 
     public SwerveDrivetrain getDrivetrain() {

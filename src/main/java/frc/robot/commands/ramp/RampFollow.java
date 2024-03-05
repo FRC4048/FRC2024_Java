@@ -15,12 +15,18 @@ public class RampFollow extends Command {
     private final Ramp ramp;
     private final Supplier<Alignable> alignableSupplier;
     private final Supplier<Pose2d> pose2dSupplier;
+    private Alignable alignable;
 
     public RampFollow(Ramp ramp, Supplier<Alignable> alignableSupplier, Supplier<Pose2d> pose2dSupplier) {
         this.ramp = ramp;
         this.alignableSupplier = alignableSupplier;
         this.pose2dSupplier = pose2dSupplier;
         addRequirements(ramp);
+    }
+
+    @Override
+    public void initialize() {
+        alignable = alignableSupplier.get();
     }
 
     @Override
