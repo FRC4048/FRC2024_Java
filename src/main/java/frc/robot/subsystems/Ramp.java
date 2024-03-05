@@ -29,6 +29,16 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
+
+        SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
+            .withPosition(6, 0)
+            .withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Speaker Away", isShootAwayAngle())
+            .withPosition(7, 0)
+            .withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
+            .withPosition(8, 0)
+            .withSize(1, 1);
     }
 
     public void setRampPos(double targetPosition) {
