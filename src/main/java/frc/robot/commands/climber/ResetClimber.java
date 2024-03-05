@@ -21,7 +21,7 @@ public class ResetClimber extends Command {
   @Override
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
-    climber.disengageRatchet();
+    climber.engageRatchet();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
