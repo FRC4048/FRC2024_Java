@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
@@ -87,7 +88,7 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.resetEncoderPosition();
     }
 
-    public double encoderToAngle(double encoderValue){
+    public static double encoderToAngle(double encoderValue){
         //y=mx+b
         return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
     }
@@ -102,5 +103,13 @@ public class Ramp extends SubsystemBase {
 
     public boolean isShootAmpAngle(){
         return (Math.abs(Constants.RAMP_POS_SHOOT_AMP - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
+    }
+    public static double angleToEncoder(double angle){
+        //(y-b)/m=x
+        return (angle - 28.5) / 2.48;//needs be to measured again and put in constants
+    }
+
+    public void setAngle(Rotation2d angleFromGround) {
+        setRampPos(angleToEncoder(angleFromGround.getDegrees()));
     }
 }

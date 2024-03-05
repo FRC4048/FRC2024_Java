@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -40,6 +41,7 @@ import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
+import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -197,17 +199,16 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        Command alignSpeaker = CommandUtil.parallel(
+        Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 
@@ -227,7 +228,7 @@ public class RobotContainer {
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
                 new DeployAmp(amp),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
+                new RampMove( ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
                 new ShootAmp(shooter)));
 
         // Cancell all - B
@@ -240,8 +241,8 @@ public class RobotContainer {
             new StopShooter(shooter),
             new RetractAmp(amp),
             new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
-            
-        //Driver Shoot 
+
+        //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder,ramp),
                 new StopShooter(shooter),
@@ -274,7 +275,15 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        
+        controller.rightTrigger().onTrue(new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                        new WaitCommand(0.5),
+                        new FeederGamepieceUntilLeave(feeder,ramp),
+                        new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                        new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+                ),
+                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), ()-> drivetrain.getAlignable())
+        ));
     }
 
     public SwerveDrivetrain getDrivetrain() {
