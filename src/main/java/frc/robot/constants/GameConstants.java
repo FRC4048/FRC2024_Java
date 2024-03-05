@@ -40,7 +40,7 @@ public class GameConstants {
     public static final double RESET_RAMP_SPEED = -0.3;
     public static final double RAMP_ANGLE = 15.0;
     public static final double RAMP_MAX_RPM_ACCELERATION = 3000;
-    public static final double RESET_RAMP_TIMEOUT = 5.0;
+    public static final double RESET_RAMP_TIMEOUT = 1.5;
     public static final double RAMP_POS_THRESHOLD = 0.1;
 
     public static final double RAMP_POS_TIMEOUT = 3;
