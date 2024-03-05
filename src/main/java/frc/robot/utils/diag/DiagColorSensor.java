@@ -7,52 +7,24 @@
 
 package frc.robot.utils.diag;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
-import frc.robot.utils.ColorValue;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Add your docs here.
  */
-public class DiagColorSensor implements Diagnosable {
+public class DiagColorSensor extends DiagBoolean {
 
-    private ColorSensor colorsensor;
-    private String title;
-    private String name;
-    private GenericEntry networkTableEntry;
-    private Map<ColorValue, Boolean> colorMap;
+    private final ColorSensor colorsensor;
 
     public DiagColorSensor(String title, String name, ColorSensor colorsensor) {
-        this.title = title;
-        this.name = name;
+        super(title,name);
         this.colorsensor = colorsensor;
-        colorMap = new HashMap<ColorValue, Boolean>();
         reset();
     }
 
     @Override
-    public void setShuffleBoardTab(ShuffleboardTab shuffleBoardTab, int width, int height) {
-        networkTableEntry = shuffleBoardTab.getLayout(title, BuiltInLayouts.kList).withSize(width, height).add(name, false).getEntry();
-    }
-
-    @Override
-    public void refresh() {
-        ColorValue colorValue = colorsensor.getColor();
-        colorMap.put(colorValue, true);
-        boolean allColors = colorMap.values().stream().allMatch(value -> (value == true));
-        if (networkTableEntry != null) {
-            networkTableEntry.setBoolean(allColors);
-        }
-    }
-
-    @Override
-    public void reset() {
-        Arrays.stream(ColorValue.values()).forEach(color -> colorMap.put(color, false));
+    protected boolean getValue() {
+        return colorsensor.getMatchedColor().confidence > Constants.COLOR_CONFIDENCE_RATE_INCOMING;
     }
 }
