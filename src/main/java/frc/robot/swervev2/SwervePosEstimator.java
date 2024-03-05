@@ -83,7 +83,7 @@ public class SwervePosEstimator{
             double[] visionArray = subscriber.get();
             Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])).rotateBy(new Rotation2d(Math.PI)));
             if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
-                SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().getDegrees()});
+                SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().minus(new Rotation2d(Math.PI)).getDegrees()});
                 poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
             }
         }
