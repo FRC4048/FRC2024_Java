@@ -5,7 +5,8 @@ public enum AutoAction {
     ShootAndCross("Shoot & Cross"),
     ShootFour("Shoot Four"),
     ShootTwo("Shoot Two"),
-    ShootTwoDip("Shoot Two & Dip");
+    ShootTwoDip("Shoot Two & Dip"),
+    Fork("Fork");
     private final String name;
 
     AutoAction(String name) {

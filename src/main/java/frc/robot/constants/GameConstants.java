@@ -17,6 +17,8 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
+    public static final boolean VISION_DEBUG = false;
+    public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
 
     //AMP
@@ -43,10 +45,10 @@ public class GameConstants {
 
     public static final double RAMP_POS_TIMEOUT = 3;
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
-    public static final double RAMP_POS_STOW = 0.15;
+    public static final double RAMP_POS_STOW = 0.5;
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
     public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
-    public static final double RAMP_POS_SHOOT_AMP = 11.0;
+    public static final double RAMP_POS_SHOOT_AMP = 7.0;
 
     //SERVO
     public static final int RIGHT_SERVO_ENGAGED = 0;
@@ -58,7 +60,7 @@ public class GameConstants {
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number
     public static final double SHOOTER_MOTOR_LOW_SPEED = 3500; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_HIGH_SPEED = 5500; //multiplied power by 5000, need to refine later
-    public static final double SHOOTER_MOTOR_AMP_SPEED = 1050; //multiplied power by 5000, need to refine later
+    public static final double SHOOTER_MOTOR_AMP_SPEED = 1100; //multiplied power by 5000, need to refine later
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
@@ -72,18 +74,19 @@ public class GameConstants {
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
-    public static final double FEEDER_BACK_DRIVE_SPEED = -0.2;
-    public static final double FEEDER_MOTOR_EXIT_SPEED = 1;
+    public static final double FEEDER_BACK_DRIVE_SPEED = -0.25;
+    public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
+    public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;
     public static final double FEEDER_BACK_DRIVE_TIMEOUT = 10.0;
     public static final double FEEDER_GAMEPIECE_UNTIL_LEAVE_TIMEOUT = 5.0;
     public static final double START_FEEDER_TIMEOUT = 5.0;
     public static final double FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
     public static final double FEEDER_BACK_DRIVE_DELAY = 0.4;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
-    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .80;
+    public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
 
-    //CLIMBER 
+    //CLIMBER
     public static final double OUTTAKE_SPEED = 1.00;
     public static final double CLIMBER_SPEED = 0.10;
     public static final double CLIMBER_BALANCE_LOW_SPEED = 0.10;
@@ -93,6 +96,7 @@ public class GameConstants {
     public static final double CLIMBER_RAISING_SPEED = 0.2;
     public static final double MAX_CLIMBER_ENCODER = 80.0;
     public static final double RAISING_TIMEOUT = 3;
+    public static final double RESET_CLIMBER_TIMEOUT = 1;
 
     //INTAKE
     public static final double INTAKE_MOTOR_1_SPEED = 0.8;
@@ -106,6 +110,20 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
+    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.015;
+    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.0015;
+    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.05;
+
+    //Limelight
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
+    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
+    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
+    public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
+    public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
+    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
+    public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
+    public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
 
     //Miscellaneous
     public static final boolean FIELD_RELATIVE = true;
@@ -114,4 +132,16 @@ public class GameConstants {
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
+    public static final double PATH_PLANNER_TRANSLATION_PID_P = 5;
+    public static final double PATH_PLANNER_TRANSLATION_PID_I = 0;
+    public static final double PATH_PLANNER_TRANSLATION_PID_D = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_P = 4.75;
+    public static final double PATH_PLANNER_ROTATION_PID_I = 0;
+    public static final double PATH_PLANNER_ROTATION_PID_D = 0;
+    public static final double RAMP_CENTER_AUTO_SHOOT = 6;
+    public static final double RAMP_SIDE_AUTO_SHOOT = 5;
+    public static final double RAMP_DIP_AUTO_SHOOT = 5;
+    public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
+
+
 }

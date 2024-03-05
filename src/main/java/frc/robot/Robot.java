@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
         CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer())).schedule();
-        CommandUtil.logged(new ResetRamp(robotContainer.getRamp())).schedule();
+        CommandUtil.parallel("Reset Climber and Ramp",new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber())).schedule();
     }
 
     @Override
