@@ -275,7 +275,7 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        controller.rightTrigger().onTrue(new ParallelDeadlineGroup(
+        controller.rightBumper().onTrue(new ParallelDeadlineGroup(
                 new SequentialCommandGroup(
                         new WaitCommand(0.5),
                         new FeederGamepieceUntilLeave(feeder,ramp),
