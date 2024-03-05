@@ -113,6 +113,10 @@ public class CommandUtil {
         return new RaceLoggingCommand(sequenceName, commands);
     }
 
+    public static Command deadline(String sequenceName, Command deadline, Command... commands) {
+        return new ParallelDeadlineLoggingCommand(sequenceName, deadline, commands);
+    }
+
     public static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
         // Do not use streams due to efficiency
         LoggingCommand[] newCommands = new LoggingCommand[commands.length];
