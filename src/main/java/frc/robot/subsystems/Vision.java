@@ -4,9 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
@@ -33,6 +38,10 @@ public class Vision extends SubsystemBase {
     ty = table.getEntry("ty");
     Robot.getDiagnostics().addDiagnosable(new DiagLimelight("Vision", "Piece Seen"));
     Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("Vision", "Apriltag Seen"));
+
+    HttpCamera limelightFeed = new HttpCamera("limelight", "http://" + Constants.LIMELIGHT_IP_ADDRESS + ":5800/stream.mjpg");
+    ShuffleboardTab dashboardTab = Shuffleboard.getTab("Driver");
+    dashboardTab.add("Limelight feed", limelightFeed).withProperties(Map.of("Show Crosshair", false, "Show Controls", false));
   }
 
   /**
