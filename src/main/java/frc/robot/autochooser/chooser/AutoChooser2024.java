@@ -10,7 +10,6 @@ import frc.robot.autochooser.ShootCrossLeft;
 import frc.robot.autochooser.ShootCrossMid;
 import frc.robot.autochooser.ShootCrossRight;
 import frc.robot.autochooser.event.AutoEvent;
-import frc.robot.commands.pathplanning.FourPieceLeft;
 import frc.robot.commands.pathplanning.ShootAndDrop;
 import frc.robot.subsystems.*;
 
@@ -26,15 +25,16 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.ZERO), new PlaceHolderCommand()),
-                Map.entry(new AutoEvent(AutoAction.ShootTwoDip, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2AndDip")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer))),
-    
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), new FourPieceLeft(shooter,feeder,deployer)),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
-                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left"))),
+                Map.entry(new AutoEvent(AutoAction.ShootTwoDip, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2AndDip")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,ramp))),
                 Map.entry(new AutoEvent(AutoAction.ShootCross, FieldLocation.SpeakFront), new ShootCrossMid(drivetrain, shooter, ramp, intakeSubsystem, feeder)),
                 Map.entry(new AutoEvent(AutoAction.ShootCross, FieldLocation.SpeakerRight), new ShootCrossRight(drivetrain, shooter, ramp, intakeSubsystem, feeder)),
-                Map.entry(new AutoEvent(AutoAction.ShootCross, FieldLocation.SpeakerLeft), new ShootCrossLeft(drivetrain, shooter, ramp, intakeSubsystem, feeder))
-        ); 
+                Map.entry(new AutoEvent(AutoAction.ShootCross, FieldLocation.SpeakerLeft), new ShootCrossLeft(drivetrain, shooter, ramp, intakeSubsystem, feeder)),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), AutoBuilder.buildAuto("FourPieceLeft")),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), AutoBuilder.buildAuto("FourPieceCenter")),
+                Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("ForkAuto")),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
+                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,ramp)))
+        );
     }
 
 

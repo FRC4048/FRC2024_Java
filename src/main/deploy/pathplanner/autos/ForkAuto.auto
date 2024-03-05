@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7004013091645886,
+      "y": 4.42
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootRightCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootAndDrop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DipRight"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pick5fth"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SlurpWithRamp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "EnterRightShoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

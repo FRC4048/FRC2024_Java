@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.916145791054469,
+        "y": 1.608006514982102
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.89115918208927,
+        "y": 1.5891994212396208
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.028081458224772,
+        "y": 2.126377036259227
+      },
+      "prevControl": {
+        "x": 5.711565393995001,
+        "y": 1.3637732021069002
+      },
+      "nextControl": {
+        "x": 2.5152858553139787,
+        "y": 2.811660514500869
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0263014180094796,
+        "y": 4.466684763839173
+      },
+      "prevControl": {
+        "x": 1.8758446680696341,
+        "y": 3.9682967796634334
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "FeederGamepieceUntilLeave"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 140.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
