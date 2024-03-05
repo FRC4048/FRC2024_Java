@@ -83,32 +83,14 @@ public class Ramp extends SubsystemBase {
     }
 
     public boolean isShootCloseAngle(){
-        if (getRampPos() == Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE){
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return (Math.abs(Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
     }
 
     public boolean isShootAwayAngle(){
-        if (getRampPos() == Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE){
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return (Math.abs(Constants.RAMP_POS_SHOOT_SPEAKER_AWAY - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
     }
 
     public boolean isShootAmpAngle(){
-        if (getRampPos() == Constants.RAMP_POS_SHOOT_AMP){
-            return true;
-        }
-
-        else {
-            return false;
-        }
+        return (Math.abs(Constants.RAMP_POS_SHOOT_AMP - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
     }
 }
