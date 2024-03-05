@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
-import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -17,12 +16,12 @@ public class PathPlannerShoot extends ParallelCommandGroup {
                 new BasicShoot(shooter, 1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.05),
-                        new FeederGamepieceUntilLeave(feeder),
+                        new FeederGamepieceUntilLeave(feeder, ramp),
                         new WaitCommand(0.15),
                         new ParallelCommandGroup (
                                 new IntakeFeederCombo(feeder, intake),
                                 new ResetRamp(ramp)
-                        ), new RampMove(ramp, ()-> 1.5)
+                        ), new MoveRamp(ramp,1.5)
 
                 )
         );

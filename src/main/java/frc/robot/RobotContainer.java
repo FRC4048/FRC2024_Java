@@ -14,12 +14,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -40,9 +41,11 @@ import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
+import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
@@ -103,17 +106,20 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
+        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
                 new StartFeeder(feeder),
-                new TimedIntake(intake, 2))
+                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
+                new ResetRamp(ramp))
         );
-        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
-        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder));
-        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer));
-        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
-        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
+        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
+        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder,ramp)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder,ramp)));
+        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter,feeder,deployer,ramp)));
+        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
+        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
+        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
     }
 
     private void setupPathPlanning() {
@@ -170,7 +176,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
         }
         if (Constants.SHOOTER_DEBUG) {
-            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder));
+            SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder, ramp));
             SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
@@ -193,17 +199,16 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        Command alignSpeaker = CommandUtil.parallel(
+        Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 
@@ -223,19 +228,23 @@ public class RobotContainer {
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
                 new DeployAmp(amp),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
+                new RampMove( ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
                 new ShootAmp(shooter)));
 
-        // Shoot the note - B
-        controller.b().onTrue(CommandUtil.sequence("Operator Shoot",
-                new FeederGamepieceUntilLeave(feeder),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RetractAmp(amp),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+        // Cancell all - B
+        controller.b().onTrue(CommandUtil.logged(new CancelAllSequence(ramp, shooter, amp)));
 
+        // Shoot - Right Trigger
+        controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
+            new FeederGamepieceUntilLeave(feeder, ramp),
+            new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+            new StopShooter(shooter),
+            new RetractAmp(amp),
+            new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+
+        //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder),
+                new FeederGamepieceUntilLeave(feeder,ramp),
                 new StopShooter(shooter),
                 new RetractAmp(amp)));
 
@@ -266,7 +275,15 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        controller.povRight().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter)));
+        controller.rightTrigger().onTrue(new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                        new WaitCommand(0.5),
+                        new FeederGamepieceUntilLeave(feeder,ramp),
+                        new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                        new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+                ),
+                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), ()-> drivetrain.getAlignable())
+        ));
     }
 
     public SwerveDrivetrain getDrivetrain() {
@@ -275,6 +292,9 @@ public class RobotContainer {
 
     public Ramp getRamp() {
         return ramp;
+    }
+    public Climber getClimber() {
+        return climber;
     }
 
     public Deployer getDeployer() {
@@ -297,5 +317,9 @@ public class RobotContainer {
 
     public AutoChooser getAutoChooser() {
         return autoChooser;
+    }
+
+    public Feeder getFeeder() {
+        return feeder;
     }
 }
