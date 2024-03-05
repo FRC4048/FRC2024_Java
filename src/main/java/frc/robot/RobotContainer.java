@@ -309,4 +309,8 @@ public class RobotContainer {
     public AutoChooser getAutoChooser() {
         return autoChooser;
     }
+
+    public Feeder getFeeder() {
+        return feeder;
+    }
 }
