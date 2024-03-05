@@ -12,18 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootRightCenter"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ShootAndDrop"
