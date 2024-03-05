@@ -14,12 +14,12 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -43,6 +43,7 @@ import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
@@ -103,17 +104,20 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("StartIntakeAndFeeder", CommandUtil.race("StartIntakeAndFeeder",
+        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
                 new StartFeeder(feeder),
-                new TimedIntake(intake, 2))
+                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
+                new ResetRamp(ramp))
         );
-        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake));
-        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder,ramp));
-        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter,feeder,deployer,ramp));
-        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder));
-        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp));
-        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp,shooter,() -> Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
+        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
+        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder,ramp)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder,ramp)));
+        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter,feeder,deployer,ramp)));
+        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
+        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
+        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
     }
 
     private void setupPathPlanning() {
