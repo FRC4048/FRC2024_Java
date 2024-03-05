@@ -41,7 +41,7 @@ public class Vision extends SubsystemBase {
 
     HttpCamera limelightFeed = new HttpCamera("limelight", "http://" + Constants.LIMELIGHT_IP_ADDRESS + ":5800/stream.mjpg");
     ShuffleboardTab dashboardTab = Shuffleboard.getTab("Driver");
-    dashboardTab.add("Limelight feed", limelightFeed).withProperties(Map.of("Show Crosshair", false, "Show Controls", false));
+    dashboardTab.add("Limelight feed", limelightFeed).withSize(6,4).withPosition(2, 0).withProperties(Map.of("Show Crosshair", false, "Show Controls", false));
   }
 
   /**

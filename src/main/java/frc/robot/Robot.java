@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         aliveTics = 0;
-        SmartDashboard.putNumber("TotalTimeouts", TimeoutCounter.getTotalTimeouts());
+        SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
     }
 
     @Override
