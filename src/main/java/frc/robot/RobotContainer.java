@@ -248,9 +248,12 @@ public class RobotContainer {
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder,ramp),
+                new FeederGamepieceUntilLeave(feeder, ramp),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RetractAmp(amp)));
+                new RetractAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
+        );
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
