@@ -107,9 +107,8 @@ public class AutoAlignment {
      */
     public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d) {
         Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),0);
-//        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
-//        return Rotation2d.fromDegrees(clamp);
-        return yaw;
+        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
+        return Rotation2d.fromDegrees(clamp);
     }
 
     private static boolean isInvalidFunction(BiFunction<Double, Double, Rotation2d> function) {
