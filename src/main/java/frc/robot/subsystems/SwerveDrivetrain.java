@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,15 +18,16 @@ import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.diag.DiagAprilTags;
-import frc.robot.utils.diag.DiagLuxonis;
+import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
-    
+
+    private PathPlannerPath path;
+
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
     private final GenericSwerveModule backLeft;
@@ -44,18 +46,28 @@ public class SwerveDrivetrain extends SubsystemBase {
     private Alignable alignable = null;
 
 
+
+
+
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
     }
 
     @Override
     public void periodic() {
+        if (Constants.PATHPLANNER_DEBUG){
+            SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
+            SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
+        }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
         }
+
+
+
         gyroValue = getGyro();
         if (SmartDashboard.getBoolean("USE VISION",false)){
             poseEstimator.updatePositionWithVis(gyroValue);
@@ -105,10 +117,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
-        Robot.getDiagnostics().addDiagnosable(new DiagLuxonis("Luxonis", "Piece Seen"));
-        Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("AprilTags", "Apriltag Seen"));
         alignableTurnPid.enableContinuousInput(-180, 180);
-        SmartDashboard.putBoolean("USE VISION",false);
     }
 
 
@@ -123,6 +132,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         setModuleStates(swerveModuleStates);
     }
+
 
     public ChassisSpeeds speedsFromStates() {
         return kinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());

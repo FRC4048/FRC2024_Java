@@ -68,6 +68,10 @@ public class Ramp extends SubsystemBase {
         return neoPidMotor.reversedLimitSwitchIsPressed();
     }
 
+    public double getDesiredPosition() {
+        return rampPos;
+    }
+
     public void resetEncoder() {
         this.rampPos = 0;
         neoPidMotor.resetEncoderPosition();
