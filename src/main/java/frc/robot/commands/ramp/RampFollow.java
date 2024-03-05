@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 public class RampFollow extends Command {
     private final Ramp ramp;
     private final Supplier<Alignable> alignableSupplier;
+    private Alignable alignable;
     private final Supplier<Pose2d> pose2dSupplier;
 
     public RampFollow(Ramp ramp, Supplier<Alignable> alignableSupplier, Supplier<Pose2d> pose2dSupplier) {
@@ -21,6 +22,11 @@ public class RampFollow extends Command {
         this.alignableSupplier = alignableSupplier;
         this.pose2dSupplier = pose2dSupplier;
         addRequirements(ramp);
+    }
+
+    @Override
+    public void initialize() {
+        alignable = alignableSupplier.get();
     }
 
     @Override
@@ -41,6 +47,6 @@ public class RampFollow extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
     }
 }
