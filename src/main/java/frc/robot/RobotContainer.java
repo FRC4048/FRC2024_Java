@@ -14,7 +14,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -23,11 +22,8 @@ import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.MoveDistance;
-import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.intake.StartIntake;
-import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
@@ -91,20 +87,16 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
-                new StartFeeder(feeder),
-                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
-                new ResetRamp(ramp))
-        );
-        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
-        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp)));
-        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
-        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
-        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
-        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("SlurpWithRamp", commands.getSlurpWithRamp());
+        NamedCommands.registerCommand("PathPlannerShoot", commands.getPathplannerShoot());
+        NamedCommands.registerCommand("ComboShot", commands.getComboShot());
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", commands.getFeederUntilLeave());
+        NamedCommands.registerCommand("ShootAndDrop", commands.getShootAndDrop());
+        NamedCommands.registerCommand("FeederBackDrive", commands.getFeederBackDrive());
+        NamedCommands.registerCommand("ResetRamp", commands.getResetRamp());
+        NamedCommands.registerCommand("RampShootComboCenter", commands.getRampComboShootCenter());// second piece
+        NamedCommands.registerCommand("RampShootComboSide", commands.getRampComboShootSide()); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", commands.getRampComboShootSide2()); // first and third
     }
 
     private void setupPathPlanning() {
@@ -122,7 +114,6 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
-
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -142,7 +133,6 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
-
         if (Constants.AMP_DEBUG) {
 //            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
 //            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));

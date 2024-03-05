@@ -24,14 +24,17 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
+import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
+import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.ShootAmp;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
+import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.*;
 import frc.robot.utils.Alignable;
@@ -61,8 +64,15 @@ public class Commands {
     private final Command feederBackDrive;
     private final Command stopIntake;
     private final Command advancedShot;
-
-
+    private final Command pathplannerShoot;
+    private final Command slurpWithRamp;
+    private final Command comboShot;
+    private final Command feederUntilLeave;
+    private final Command shootAndDrop;
+    private final Command resetRamp;
+    private final Command rampComboShootSide;
+    private final Command rampComboShootSide2;
+    private final Command rampComboShootCenter;
 
     public Commands(SwerveDrivetrain drivetrain, IntakeSubsystem intake, Ramp ramp, Feeder feeder, Deployer deployer, Climber climber,Shooter shooter ,Amp amp,Joystick joyLeft, Joystick joyRight, CommandXboxController controller, AutoChooser autoChooser) {
         this.drive = CommandUtil.logged(new Drive(drivetrain, joyLeft::getY, joyLeft::getX, joyRight::getX));
@@ -75,6 +85,14 @@ public class Commands {
         this.calnsellAll = CommandUtil.logged(new CancelAllSequence(ramp, shooter, amp));
         this.toggleAmp = CommandUtil.logged(new ToggleAmp(amp));
         this.feederBackDrive = CommandUtil.logged("Manual Feeder Back Drive",new FeederBackDrive(feeder));
+        this.pathplannerShoot = CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake));
+        this.comboShot = CommandUtil.logged(new ComboShot(shooter, feeder, ramp));
+        this.feederUntilLeave = CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp));
+        this.shootAndDrop = CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp));
+        this.resetRamp = CommandUtil.logged(new ResetRamp(ramp));
+        this.rampComboShootSide = CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT));
+        this.rampComboShootSide2 = CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT));
+        this.rampComboShootCenter = CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT));
         this.alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
@@ -135,6 +153,11 @@ public class Commands {
                         new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
                 ),
                 new AdvancedSpinningShot(shooter, drivetrain::getPose, drivetrain::getAlignable)
+        );
+        this.slurpWithRamp = new ParallelDeadlineGroup(
+                new StartFeeder(feeder),
+                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
+                new ResetRamp(ramp)
         );
     }
 
@@ -228,5 +251,41 @@ public class Commands {
 
     public Command getAdvancedShot() {
         return advancedShot;
+    }
+
+    public Command getPathplannerShoot() {
+        return pathplannerShoot;
+    }
+
+    public Command getSlurpWithRamp() {
+        return slurpWithRamp;
+    }
+
+    public Command getComboShot() {
+        return comboShot;
+    }
+
+    public Command getFeederUntilLeave() {
+        return feederUntilLeave;
+    }
+
+    public Command getShootAndDrop() {
+        return shootAndDrop;
+    }
+
+    public Command getResetRamp() {
+        return resetRamp;
+    }
+
+    public Command getRampComboShootSide() {
+        return rampComboShootSide;
+    }
+
+    public Command getRampComboShootSide2() {
+        return rampComboShootSide2;
+    }
+
+    public Command getRampComboShootCenter() {
+        return rampComboShootCenter;
     }
 }
