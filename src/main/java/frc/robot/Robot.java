@@ -65,7 +65,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        CommandUtil.logged(new ResetRamp(robotContainer.getRamp())).schedule();
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
