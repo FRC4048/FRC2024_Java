@@ -4,7 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
@@ -80,19 +80,31 @@ public class AutoAlignment {
         return function.apply(x - alignable.getX(), y - alignable.getY());
     }
 
-    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z) {
+    /**
+     * @param alignable what we are aligning to
+     * @param x position of robot on the x-axis
+     * @param y position of robot on the y-axis
+     * @param z position of the robot on y z-axis
+     * @return the desired {@link Rotation2d} of the ramp from the ground
+     */
+    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double rampXOffset) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         BiFunction<Double, Double, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidFunction(function)) return new Rotation2d();
-        double xNorm = x + (RobotContainer.isRedAlliance() ? Constants.RAMP_X_OFFSET : -Constants.RAMP_X_OFFSET);
+        double xNorm = x + (RobotContainer.isRedAlliance() ? rampXOffset: -rampXOffset);
         double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
         return function.apply(dist, alignable.getZ() - z);
     }
 
-    public static Rotation2d getYaw(Alignable alignable, Translation2d pose, double z) {
-        Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY(), z);
+    /**
+     * @param alignable what we are aligning to
+     * @param pose3d ramp position in 3d space (use robot position plus height of ramp, DO NOT manually account for RAMP_X_OFFSET)
+     * @return the desired {@link Rotation2d} of the ramp from the ground
+     */
+    public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d) {
+        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),Constants.RAMP_X_OFFSET);
         double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
         return Rotation2d.fromDegrees(clamp);
     }
