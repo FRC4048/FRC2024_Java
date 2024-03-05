@@ -124,6 +124,7 @@ public class GameConstants {
     public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
+    public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";
 
     //Miscellaneous
     public static final boolean FIELD_RELATIVE = true;

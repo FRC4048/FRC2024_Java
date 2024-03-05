@@ -10,6 +10,9 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 public class Ramp extends SubsystemBase {
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
+    private boolean shootClosePos;
+    private boolean shootAwayPos;
+    private boolean shootAmp;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
@@ -27,6 +30,16 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
+
+        SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
+            .withPosition(10, 0)
+            .withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Speaker Away", isShootAwayAngle())
+            .withPosition(10, 1)
+            .withSize(1, 1);
+        SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
+            .withPosition(9, 1)
+            .withSize(1, 1);
     }
 
     public void setRampPos(double targetPosition) {
@@ -78,6 +91,18 @@ public class Ramp extends SubsystemBase {
     public static double encoderToAngle(double encoderValue){
         //y=mx+b
         return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
+    }
+
+    public boolean isShootCloseAngle(){
+        return (Math.abs(Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
+    }
+
+    public boolean isShootAwayAngle(){
+        return (Math.abs(Constants.RAMP_POS_SHOOT_SPEAKER_AWAY - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
+    }
+
+    public boolean isShootAmpAngle(){
+        return (Math.abs(Constants.RAMP_POS_SHOOT_AMP - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
     }
     public static double angleToEncoder(double angle){
         //(y-b)/m=x
