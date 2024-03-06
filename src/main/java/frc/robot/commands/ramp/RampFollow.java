@@ -36,7 +36,7 @@ public class RampFollow extends Command {
                         + (drivetrain.getFieldChassisSpeeds().vxMetersPerSecond
                         * (RobotContainer.isRedAlliance() ? 1 : -1));
             } else {
-                shootingSpeed = Constants.SHOOT_AMP_MOTOR_SPEED;
+                shootingSpeed = Constants.SHOOTER_VELOCITY;
             }
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
                     .minus(AutoAlignment.getYaw(alignableNow,
