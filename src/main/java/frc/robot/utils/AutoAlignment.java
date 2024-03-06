@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,10 +23,10 @@ public class AutoAlignment {
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
             Alignable.SPEAKER, (x, y) -> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)))
     ));
-    private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
-            Alignable.AMP, (x, y) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
-            Alignable.SPEAKER, (x, z) -> {
-                VelocityVector velocityVector = VectorUtils.fromVelAndDist(Constants.SHOOTER_VELOCITY, x, z, true);
+    private final static HashMap<Alignable, AutoBuilder.TriFunction<Double, Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
+            Alignable.AMP, (x, y, vel) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
+            Alignable.SPEAKER, (x, z, vel) -> {
+                VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
                 return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
             })
     );
@@ -57,30 +58,37 @@ public class AutoAlignment {
     public static Rotation2d getAngle(Alignable alignable, double x, double y) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         BiFunction<Double, Double, Rotation2d> function = positionAngleMap.get(alignable);
-        if (isInvalidFunction(function)) return new Rotation2d();
+        if (isInvalidAngleFunction(function)) return new Rotation2d();
         return function.apply(x - alignable.getX(), y - alignable.getY());
     }
 
-    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z) {
+    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
-        BiFunction<Double, Double, Rotation2d> function = positionYawMap.get(alignable);
-        if (isInvalidFunction(function)) return new Rotation2d();
+        AutoBuilder.TriFunction<Double, Double, Double, Rotation2d> function = positionYawMap.get(alignable);
+        if (isInvalidYawFunction(function)) return new Rotation2d();
         double xNorm = x + (RobotContainer.isRedAlliance() ? -Constants.RAMP_X_OFFSET : Constants.RAMP_X_OFFSET);
         double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
-        return function.apply(dist, alignable.getZ() - z);
+        return function.apply(dist, alignable.getZ() - z, vel);
     }
 
-    public static Rotation2d getYaw(Alignable alignable, Translation2d pose, double z) {
-        Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY(), z);
+    public static Rotation2d getYaw(Alignable alignable, Translation2d pose, double z, double vel) {
+        Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY(), z, vel);
         double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
         return Rotation2d.fromDegrees(clamp);
     }
 
-    private static boolean isInvalidFunction(BiFunction<Double, Double, Rotation2d> function) {
+    private static boolean isInvalidYawFunction(AutoBuilder.TriFunction<Double, Double, Double, Rotation2d> function) {
         if (function == null) {
             DriverStation.reportError("Alignable Not in PositionYawMap", true);
+            return true;
+        }
+        return false;
+    }
+    private static boolean isInvalidAngleFunction(BiFunction<Double, Double, Rotation2d> function) {
+        if (function == null) {
+            DriverStation.reportError("Alignable Not in PositionAngleMap", true);
             return true;
         }
         return false;

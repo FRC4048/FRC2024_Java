@@ -148,5 +148,6 @@ public class GameConstants {
     public static final double RAMP_MIN_ANGLE = 32.5; //degrees
     public static final double RAMP_MAX_ANGLE = 90; //degrees
     public static final double RAMP_X_OFFSET = 0.3; //meters, tip of ramp offset from center of robot
+    public static final boolean SHOOT_WHILE_MOVING = true;
 
 }
