@@ -35,7 +35,7 @@ public class AutoAlignment {
      * @param z the height between the top of the ramp and the middle of the speaker opening
      * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
      */
-    private static Rotation2d calcRampAngle(double x, double z, vel){
+    private static Rotation2d calcRampAngle(double x, double z, double vel){
         VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
     }

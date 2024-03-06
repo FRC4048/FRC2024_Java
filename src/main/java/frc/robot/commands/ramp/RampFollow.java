@@ -41,14 +41,8 @@ public class RampFollow extends Command {
                 shootingSpeed = Constants.SHOOTER_VELOCITY;
             }
             Pose2d pose = drivetrain.getPose();
-            Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
-                    .minus(AutoAlignment.getYaw(alignable,
-                            new Translation3d(pose.getX(),
-                                    pose.getY(),
-                                    Constants.HIGHT_OF_RAMP/2
-                            ), shootingSpeed
-                        )
-                    );
+            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.HIGHT_OF_RAMP/2);
+            Rotation2d targetAngle = new Rotation2d(Math.PI / 2).minus(AutoAlignment.getYaw(alignable, rampPose, shootingSpeed));
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_Angle", targetAngle.getDegrees());
             }
