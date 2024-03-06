@@ -70,7 +70,7 @@ public class GameConstants {
     public static final double SHOOTER_PID_I = 0.0;
     public static final double SHOOTER_PID_D = 0.00001;
     public static final double SHOOTER_PID_FF = 0.00017;
-    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
