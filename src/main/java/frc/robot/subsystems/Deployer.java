@@ -71,7 +71,7 @@ public class Deployer extends SubsystemBase{
         }
         
         SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", isDeployerForwardLimitSwitchClosed())
-            .withPosition(2, 0)
+            .withPosition(0, 2)
             .withSize(2, 2);
     }
 

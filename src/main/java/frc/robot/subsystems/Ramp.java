@@ -32,13 +32,13 @@ public class Ramp extends SubsystemBase {
         }
 
         SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
-            .withPosition(10, 0)
+            .withPosition(9, 0)
             .withSize(1, 1);
         SmartShuffleboard.put("Driver", "Speaker Away", isShootAwayAngle())
-            .withPosition(10, 1)
+            .withPosition(9, 1)
             .withSize(1, 1);
         SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
-            .withPosition(9, 1)
+            .withPosition(8, 1)
             .withSize(1, 1);
     }
 
