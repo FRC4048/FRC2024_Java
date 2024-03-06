@@ -50,8 +50,6 @@ public class RampFollow extends Command {
 
     @Override
     public boolean isFinished() {
-        boolean isFinished = alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
-        SmartDashboard.putBoolean("RampDone", isFinished);
-        return isFinished;
+        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
     }
 }

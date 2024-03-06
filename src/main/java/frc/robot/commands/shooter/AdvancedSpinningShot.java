@@ -45,7 +45,7 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
     }
 
     private ShooterSpeed calcuateShooterSpeed() {

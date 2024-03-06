@@ -95,8 +95,10 @@ public class AutoAlignment {
         double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
-        SmartDashboard.putNumber("DISTANCE_XY", dist);
-        SmartDashboard.putNumber("DISTANCE_Z", alignable.getZ() -  z);
+        if (Constants.SWERVE_DEBUG || Constants.RAMP_DEBUG){
+            SmartDashboard.putNumber("DISTANCE_XY", dist);
+            SmartDashboard.putNumber("DISTANCE_Z", alignable.getZ() -  z);
+        }
         return function.apply(dist, alignable.getZ() - z);
     }
 
