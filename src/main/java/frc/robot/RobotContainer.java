@@ -76,7 +76,8 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft, 1);
     private final JoystickButton joyRightButton1 = new JoystickButton(joyright, 1);
     private final JoystickButton joyRightButton2 = new JoystickButton(joyright, 2);
-    private final JoystickButton joyRightButton5 = new JoystickButton(joyright, 3);
+    private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
+    private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
     private final Amp amp = new Amp();
     private final Shooter shooter = new Shooter();
     private final Deployer deployer = new Deployer();
@@ -203,12 +204,13 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
-        Command alignSpeaker = CommandUtil.sequence(
-                "Shoot&AlignSpeaker",
-                new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
+        Command rampMoveAndSpin = CommandUtil.race(
+                "SpoolAndRamp",
+                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose()),
+                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
-        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton3.onTrue(rampMoveAndSpin);
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
@@ -282,17 +284,13 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        ParallelDeadlineGroup advancedShoot = new ParallelDeadlineGroup(
-                new SequentialCommandGroup(
-                        new WaitCommand(0.5),
-                        new FeederGamepieceUntilLeave(feeder, ramp),
-                        new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                        new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-                ),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+        SequentialCommandGroup advancedShoot = new SequentialCommandGroup(
+                new FeederGamepieceUntilLeave(feeder, ramp),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
         );
         controller.povRight().onTrue(advancedShoot);
-        joyRightButton5.onTrue(advancedShoot);
+        joyRightButton3.onTrue(advancedShoot);
     }
 
     public SwerveDrivetrain getDrivetrain() {

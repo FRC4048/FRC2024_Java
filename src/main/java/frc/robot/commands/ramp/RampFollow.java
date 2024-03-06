@@ -32,7 +32,6 @@ public class RampFollow extends Command {
 
     @Override
     public void execute() {
-        SmartDashboard.putString("Alignable", alignable.toString());
         Pose2d pose = pose2dSupplier.get();
         if (alignable != null){
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
