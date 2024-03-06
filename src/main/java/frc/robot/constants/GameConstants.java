@@ -147,6 +147,5 @@ public class GameConstants {
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
-//    public static final double RAMP_X_OFFSET = 0.43 - 0.3; //meters, tip of ramp offset from center of robot (take robot radians and subtract dist from edge (with bumpers)
 
 }
