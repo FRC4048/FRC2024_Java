@@ -77,17 +77,19 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft, 1);
     private final JoystickButton joyRightButton1 = new JoystickButton(joyright, 1);
     private final JoystickButton joyRightButton2 = new JoystickButton(joyright, 2);
-    private SwerveDrivetrain drivetrain;
-    private final AutoChooser2024 autoChooser;
+    private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
+    private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
     private final Amp amp = new Amp();
     private final Shooter shooter = new Shooter();
     private final Deployer deployer = new Deployer();
     private final Feeder feeder = new Feeder();
     private final Ramp ramp = new Ramp();
-    private Climber climber;
+    private final Climber climber = new Climber();
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
+    private SwerveDrivetrain drivetrain;
+    private AutoChooser2024 autoChooser;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -96,11 +98,15 @@ public class RobotContainer {
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlanning();
+        setupAutoChooser();
+        configureBindings();
+        putShuffleboardCommands();
+    }
+
+    private void setupAutoChooser() {
         autoChooser = new AutoChooser2024(intake, shooter, feeder, deployer, ramp);
         autoChooser.addOnValidationCommand(() -> CommandUtil.logged(new SetInitOdom(drivetrain, autoChooser)));
         autoChooser.forceRefresh();
-        configureBindings();
-        putShuffleboardCommands();
     }
 
     /**
@@ -153,7 +159,6 @@ public class RobotContainer {
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
         AHRS navxGyro = new AHRS();
-        climber = new Climber();
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
 
@@ -201,12 +206,13 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, Constants.FIELD_RELATIVE));
-        Command alignSpeaker = CommandUtil.sequence(
-                "Shoot&AlignSpeaker",
-                new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new RampFollow(ramp, drivetrain)
+        Command rampMoveAndSpin = CommandUtil.race(
+                "SpoolAndRamp",
+                new RampFollow(ramp, drivetrain),
+                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
-        joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton3.onTrue(rampMoveAndSpin);
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
@@ -246,9 +252,12 @@ public class RobotContainer {
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder,ramp),
+                new FeederGamepieceUntilLeave(feeder, ramp),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RetractAmp(amp)));
+                new RetractAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
+        );
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp)));
@@ -277,15 +286,12 @@ public class RobotContainer {
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
 
-        controller.rightTrigger().onTrue(new ParallelDeadlineGroup(
-                new SequentialCommandGroup(
-                        new WaitCommand(0.5),
-                        new FeederGamepieceUntilLeave(feeder,ramp),
-                        new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                        new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-                ),
-                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), ()-> drivetrain.getAlignable())
-        ));
+        SequentialCommandGroup advancedShoot = new SequentialCommandGroup(
+                new FeederGamepieceUntilLeave(feeder, ramp),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+        );
+        joyRightButton3.onTrue(advancedShoot);
     }
 
     public SwerveDrivetrain getDrivetrain() {

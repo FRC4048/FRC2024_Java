@@ -5,7 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
@@ -21,15 +21,34 @@ import java.util.function.BiFunction;
 public class AutoAlignment {
     private final static HashMap<Alignable, BiFunction<Double, Double, Rotation2d>> positionAngleMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
-            Alignable.SPEAKER, (x, y) -> new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)))
+            Alignable.SPEAKER, AutoAlignment::calcRobotRotationFaceSpeaker
     ));
     private final static HashMap<Alignable, AutoBuilder.TriFunction<Double, Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y, vel) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
-            Alignable.SPEAKER, (x, z, vel) -> {
-                VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
-                return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
-            })
-    );
+            Alignable.SPEAKER, AutoAlignment::calcRampAngle
+    ));
+
+    /**
+     * Calculates the desired ramp angle given a constant speed {@link Constants#SHOOTER_VELOCITY},
+     * and the delta distance in the xy plane and z plane
+     * @param x the distance (unsigned) from the speaker on the xy plane
+     * @param z the height between the top of the ramp and the middle of the speaker opening
+     * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
+     */
+    private static Rotation2d calcRampAngle(double x, double z, vel){
+        VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
+        return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
+    }
+
+    /**
+     * Uses basic trig to calculate the desired angle to face the speaker given distance in both x and y directions
+     * @param x distance of speaker from robot (robot x - speaker x)
+     * @param y distance of speaker from robot (robot y - speaker y)
+     * @return the desired rotation of the robot, so it can score in the speaker.
+     */
+    private static Rotation2d calcRobotRotationFaceSpeaker(double x, double y){
+        return new Rotation2d(RobotContainer.isRedAlliance() ? 0 : Math.PI).plus(new Rotation2d(Math.atan(y / x)));
+    }
 
     public static double calcTurnSpeed(Alignable alignable, Rotation2d currentAngle, double x, double y, PIDController controller) {
         double targetAngle = getAngle(alignable, x, y).getDegrees();
@@ -62,19 +81,35 @@ public class AutoAlignment {
         return function.apply(x - alignable.getX(), y - alignable.getY());
     }
 
-    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel) {
+    /**
+     * @param alignable what we are aligning to
+     * @param x position of robot on the x-axis
+     * @param y position of robot on the y-axis
+     * @param z position of the robot on y z-axis
+     * @return the desired {@link Rotation2d} of the ramp from the ground
+     */
+    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel, double rampXOffset) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         AutoBuilder.TriFunction<Double, Double, Double, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidYawFunction(function)) return new Rotation2d();
-        double xNorm = x + (RobotContainer.isRedAlliance() ? -Constants.RAMP_X_OFFSET : Constants.RAMP_X_OFFSET);
+        double xNorm = x + (RobotContainer.isRedAlliance() ? rampXOffset: -rampXOffset);
         double deltaX = xNorm - alignable.getX();
         double deltaY = y - alignable.getY();
         double dist = Math.hypot(deltaX, deltaY);
+        if (Constants.SWERVE_DEBUG || Constants.RAMP_DEBUG){
+            SmartDashboard.putNumber("DISTANCE_XY", dist);
+            SmartDashboard.putNumber("DISTANCE_Z", alignable.getZ() -  z);
+        }
         return function.apply(dist, alignable.getZ() - z, vel);
     }
 
-    public static Rotation2d getYaw(Alignable alignable, Translation2d pose, double z, double vel) {
-        Rotation2d yaw = getYaw(alignable, pose.getX(), pose.getY(), z, vel);
+    /**
+     * @param alignable what we are aligning to
+     * @param pose3d ramp position in 3d space (use robot position plus height of ramp, DO NOT manually account for RAMP_X_OFFSET)
+     * @return the desired {@link Rotation2d} of the ramp from the ground
+     */
+    public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double vel) {
+        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),vel,0);
         double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
         return Rotation2d.fromDegrees(clamp);
     }
