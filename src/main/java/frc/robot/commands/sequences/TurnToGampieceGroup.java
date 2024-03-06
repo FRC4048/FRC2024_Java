@@ -1,5 +1,6 @@
 package frc.robot.commands.sequences;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -12,21 +13,17 @@ import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
 
-public class TurnToGampieceGroup extends SequentialCommandGroup{
+public class TurnToGampieceGroup extends ParallelRaceGroup {
     public TurnToGampieceGroup(Vision vision, SwerveDrivetrain drivetrain, Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp) {
         addCommands(
-            new MoveToGamepiece(drivetrain, vision),
-            new ParallelRaceGroup(
-                new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
-                new SequentialCommandGroup(
-                    new WaitCommand(.5),
-                    new Drive(drivetrain, ()-> -0.2, ()->0, ()->0, false)
-                )
-               
+            new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
+            new SequentialCommandGroup(
+                new MoveToGamepiece(drivetrain, vision),
+                new Drive(drivetrain, () -> -0.15, () -> 0, () -> 0, false)
             )
-           
+
         );
-        
+
     }
-    
+
 }
