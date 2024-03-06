@@ -123,7 +123,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
         return fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(getPose().getRotation().getRadians()))
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
 
@@ -236,5 +236,11 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public PIDController getAlignableTurnPid() {
         return alignableTurnPid;
+    }
+    public ChassisSpeeds getChassisSpeeds(){
+        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
+    }
+    public ChassisSpeeds getFieldChassisSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());
     }
 }

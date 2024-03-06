@@ -204,7 +204,7 @@ public class RobotContainer {
         Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
-                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose())
+                new RampFollow(ramp, drivetrain)
         );
         joyLeftButton1.onTrue(alignSpeaker).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
