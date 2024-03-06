@@ -20,7 +20,7 @@ public class TurnToGampieceGroup extends SequentialCommandGroup{
                 new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
                 new SequentialCommandGroup(
                     new WaitCommand(.5),
-                    new Drive(drivetrain, ()-> 0.1, ()->0, ()->0)
+                    new Drive(drivetrain, ()-> -0.2, ()->0, ()->0, false)
                 )
                
             )

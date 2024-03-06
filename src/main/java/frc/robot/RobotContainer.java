@@ -200,7 +200,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, Constants.FIELD_RELATIVE));
         Command alignSpeaker = CommandUtil.sequence(
                 "Shoot&AlignSpeaker",
                 new SetAlignable(drivetrain, Alignable.SPEAKER),
