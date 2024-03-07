@@ -123,7 +123,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
         return fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(getPose().getRotation().getRadians()))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(gyroValue))
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
 
