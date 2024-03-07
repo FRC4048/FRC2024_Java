@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,7 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
-import frc.robot.swervev2.*;
+import frc.robot.swervev2.EncodedSwerveMotorBuilder;
+import frc.robot.swervev2.KinematicsConversionConfig;
+import frc.robot.swervev2.SwerveIdConfig;
+import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev2.SwervePosEstimator;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
@@ -44,10 +50,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
-
-
-
-
+    private SlewRateLimiter xSpeedRateLimiter;
+    private SlewRateLimiter ySpeedRateLimiter;
+    private double previousYSpeed = 0;
+    private double previousXSpeed = 0;
 
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
@@ -103,6 +109,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
 
+        xSpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
+        ySpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
+
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
@@ -128,8 +137,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds speeds) {
+        speeds.vxMetersPerSecond = ((Math.abs(speeds.vxMetersPerSecond) > Math.abs(previousXSpeed)) && (Math.signum(speeds.vxMetersPerSecond) != -Math.signum(previousXSpeed))) ? xSpeedRateLimiter.calculate(speeds.vxMetersPerSecond) : speeds.vxMetersPerSecond;
+        speeds.vyMetersPerSecond = ((Math.abs(speeds.vyMetersPerSecond) > Math.abs(previousYSpeed)) && (Math.signum(speeds.vyMetersPerSecond) != -Math.signum(previousYSpeed))) ? ySpeedRateLimiter.calculate(speeds.vyMetersPerSecond) : speeds.vyMetersPerSecond;
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
+        previousXSpeed = speeds.vxMetersPerSecond;
+        previousYSpeed = speeds.vyMetersPerSecond;
+        xSpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT, -Constants.DRIVETRAIN_SPEED_RATE_LIMIT, speeds.vxMetersPerSecond);
+        ySpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT, -Constants.DRIVETRAIN_SPEED_RATE_LIMIT, speeds.vyMetersPerSecond);
         setModuleStates(swerveModuleStates);
     }
 
@@ -154,6 +169,8 @@ public class SwerveDrivetrain extends SubsystemBase {
         backLeft.getSwerveMotor().getDriveMotor().set(0.0);
         backRight.getSwerveMotor().getSteerMotor().set(0.0);
         backRight.getSwerveMotor().getDriveMotor().set(0.0);
+        xSpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
+        ySpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
     }
 
     public void zeroRelativeEncoders() {
@@ -236,5 +253,10 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public PIDController getAlignableTurnPid() {
         return alignableTurnPid;
+    }
+
+    public void resetRateLimiters() {
+        xSpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
+        ySpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
     }
 }

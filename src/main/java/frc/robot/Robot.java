@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
+import frc.robot.commands.drivetrain.ResetDrivetrainRateLimiters;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.ramp.ResetRamp;
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         SmartDashboard.putNumber("Alive",aliveTics);
         aliveTics = (aliveTics + 1) % 1000;
+        new ResetDrivetrainRateLimiters(robotContainer.getDrivetrain());
     }
 
     @Override
