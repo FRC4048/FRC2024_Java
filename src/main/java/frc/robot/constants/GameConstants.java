@@ -20,6 +20,7 @@ public class GameConstants {
     public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
+    public static final boolean ENABLE_VISION = true;
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -70,7 +71,7 @@ public class GameConstants {
     public static final double SHOOTER_PID_I = 0.0;
     public static final double SHOOTER_PID_D = 0.00001;
     public static final double SHOOTER_PID_FF = 0.00017;
-    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
@@ -145,8 +146,7 @@ public class GameConstants {
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
-    public static final double RAMP_MIN_ANGLE = 32.5; //degrees
-    public static final double RAMP_MAX_ANGLE = 90; //degrees
-    public static final double RAMP_X_OFFSET = 0.3; //meters, tip of ramp offset from center of robot
+    public static final double RAMP_MIN_ANGLE = 31; //degrees
+    public static final double RAMP_MAX_ANGLE = 52; //degrees
 
 }

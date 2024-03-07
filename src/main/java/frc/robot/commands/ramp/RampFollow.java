@@ -2,6 +2,7 @@ package frc.robot.commands.ramp;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -31,12 +32,14 @@ public class RampFollow extends Command {
 
     @Override
     public void execute() {
-        Alignable alignableNow = alignableSupplier.get();
-        if (alignableNow != null){
+        Pose2d pose = pose2dSupplier.get();
+        if (alignable != null){
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
-                    .minus(AutoAlignment.getYaw(alignableNow,
-                            pose2dSupplier.get().getTranslation(),
-                            Constants.HIGHT_OF_RAMP)
+                    .minus(AutoAlignment.getYaw(alignable,
+                            new Translation3d(pose.getX(),
+                                    pose.getY(),
+                                    Constants.HIGHT_OF_RAMP/2)
+                            )
                     );
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_Angle",targetAngle.getDegrees());
