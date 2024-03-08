@@ -11,13 +11,13 @@ public class GameConstants {
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = false;
-    public static final boolean SWERVE_DEBUG = true;
+    public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = true;
+    public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
@@ -143,7 +143,7 @@ public class GameConstants {
     public static final double PATH_PLANNER_ROTATION_PID_D = 0;
     public static final double RAMP_CENTER_AUTO_SHOOT = 6;
     public static final double RAMP_SIDE_AUTO_SHOOT = 5;
-    public static final double RAMP_DIP_AUTO_SHOOT = 4;
+    public static final double RAMP_DIP_AUTO_SHOOT = 6;
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
