@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7004013091645886,
+      "x": 0.7,
       "y": 4.42
     },
     "rotation": 120.0
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DipRight"
+            "pathName": "DipRightSlow"
           }
         },
         {
@@ -96,7 +96,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DipRight"
+            "pathName": "DipRightSlow"
           }
         },
         {
