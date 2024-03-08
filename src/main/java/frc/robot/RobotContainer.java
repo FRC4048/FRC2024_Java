@@ -211,7 +211,7 @@ public class RobotContainer {
         Command rampMoveAndSpin = CommandUtil.sequence(
                 "AdvancedAutoShoot",
                 new ParallelRaceGroup(
-                        new RampFollow(ramp, () -> drivetrain.getAlignable(), () -> drivetrain.getPose()),
+                        new RampFollow(ramp,  drivetrain),
                         new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
                 ),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),

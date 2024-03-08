@@ -21,6 +21,8 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
+    public static final boolean SHOOT_WHILE_MOVING = true;
+
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -147,6 +149,7 @@ public class GameConstants {
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
+    public static final double RAMP_X_OFFSET = 0.3; //meters, tip of ramp offset from center of robot
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
 

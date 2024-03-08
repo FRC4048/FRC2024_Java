@@ -7,42 +7,40 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 
-import java.util.function.Supplier;
-
 public class RampFollow extends Command {
     private final Ramp ramp;
-    private final Supplier<Alignable> alignableSupplier;
+    private final SwerveDrivetrain drivetrain;
     private Alignable alignable;
-    private final Supplier<Pose2d> pose2dSupplier;
 
-    public RampFollow(Ramp ramp, Supplier<Alignable> alignableSupplier, Supplier<Pose2d> pose2dSupplier) {
+    public RampFollow(Ramp ramp, SwerveDrivetrain drivetrain) {
         this.ramp = ramp;
-        this.alignableSupplier = alignableSupplier;
-        this.pose2dSupplier = pose2dSupplier;
+        this.drivetrain = drivetrain;
         addRequirements(ramp);
     }
 
     @Override
     public void initialize() {
-        alignable = alignableSupplier.get();
+        alignable = drivetrain.getAlignable();
     }
 
     @Override
     public void execute() {
-        Pose2d pose = pose2dSupplier.get();
-        if (alignable != null){
-            Rotation2d targetAngle = new Rotation2d(Math.PI / 2) //complementarity angle
-                    .minus(AutoAlignment.getYaw(alignable,
-                            new Translation3d(pose.getX(),
-                                    pose.getY(),
-                                    Constants.HIGHT_OF_RAMP/2)
-                            )
-                    );
+        Alignable alignableNow = drivetrain.getAlignable();
+        if (alignableNow != null) {
+            double shootingSpeed = Constants.SHOOTER_VELOCITY;
+            if (Constants.SHOOT_WHILE_MOVING) {
+                shootingSpeed += Math.abs(drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
+            }
+            Pose2d pose = drivetrain.getPose();
+            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.HIGHT_OF_RAMP/2);
+            Rotation2d targetAngle = new Rotation2d(Math.PI / 2).minus(AutoAlignment.getYaw(alignable, rampPose, shootingSpeed));
             if (Constants.RAMP_DEBUG) {
-                SmartDashboard.putNumber("RAMP_TARGET_Angle",targetAngle.getDegrees());
+                SmartDashboard.putNumber("RAMP_TARGET_ANGLE", targetAngle.getDegrees());
+                SmartDashboard.putBoolean("CAN_AUTO_SHOOT", targetAngle.getDegrees() != 90);
             }
             ramp.setAngle(targetAngle);
         }
@@ -50,6 +48,6 @@ public class RampFollow extends Command {
 
     @Override
     public boolean isFinished() {
-        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
+        return alignable == null || drivetrain.getAlignable() == null || !alignable.equals(drivetrain.getAlignable());
     }
 }
