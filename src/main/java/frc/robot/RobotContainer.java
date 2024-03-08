@@ -129,6 +129,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder)));
     }
 
+    /**
+     * <a href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib-Changelog>Change log</a>
+     */
     private void setupPathPlanning() {
         AutoBuilder.configureHolonomic(drivetrain::getPose,
                 drivetrain::resetOdometry,
