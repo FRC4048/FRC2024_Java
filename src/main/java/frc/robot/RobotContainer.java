@@ -287,9 +287,7 @@ public class RobotContainer {
                 CommandUtil.logged(new StopFeeder(feeder))));
 
         SequentialCommandGroup advancedShoot = new SequentialCommandGroup(
-                new FeederGamepieceUntilLeave(feeder, ramp),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+                new FeederGamepieceUntilLeave(feeder, ramp)
         );
         joyRightButton3.onTrue(advancedShoot);
     }
