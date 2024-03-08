@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -208,14 +207,10 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, Constants.FIELD_RELATIVE));
-        Command rampMoveAndSpin = CommandUtil.sequence(
+        Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
-                new ParallelRaceGroup(
-                        new RampFollow(ramp,  drivetrain),
-                        new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
-                ),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
+                new RampFollow(ramp, drivetrain),
+                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyLeftButton3.onTrue(rampMoveAndSpin);
