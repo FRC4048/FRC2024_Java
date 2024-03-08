@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -32,19 +31,16 @@ public class RampFollow extends Command {
     public void execute() {
         Alignable alignableNow = drivetrain.getAlignable();
         if (alignableNow != null) {
-            double shootingSpeed;
+            double shootingSpeed = Constants.SHOOTER_VELOCITY;
             if (Constants.SHOOT_WHILE_MOVING) {
-                shootingSpeed = Constants.SHOOTER_VELOCITY
-                        + (drivetrain.getFieldChassisSpeeds().vxMetersPerSecond
-                        * (RobotContainer.isRedAlliance() ? 1 : -1));
-            } else {
-                shootingSpeed = Constants.SHOOTER_VELOCITY;
+                shootingSpeed += Math.abs(drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
             }
             Pose2d pose = drivetrain.getPose();
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.HIGHT_OF_RAMP/2);
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2).minus(AutoAlignment.getYaw(alignable, rampPose, shootingSpeed));
             if (Constants.RAMP_DEBUG) {
-                SmartDashboard.putNumber("RAMP_TARGET_Angle", targetAngle.getDegrees());
+                SmartDashboard.putNumber("RAMP_TARGET_ANGLE", targetAngle.getDegrees());
+                SmartDashboard.putBoolean("CAN_AUTO_SHOOT", targetAngle.getDegrees() != 90);
             }
             ramp.setAngle(targetAngle);
         }
