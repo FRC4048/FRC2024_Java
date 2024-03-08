@@ -7,6 +7,25 @@ import frc.robot.constants.Constants;
  * Utility class for vectors used in projectile motion
  */
 public class VectorUtils {
+    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double arcRadius, double destX, double destY, double degreeThreshold, int maxIterations, boolean direct){
+        VelocityVector lastVel = null;
+        VelocityVector currVel = null;
+        int i = 0;
+        do {
+            i++;
+            double positionAngle = 0;
+            if (currVel != null){
+                lastVel = currVel;
+                positionAngle = currVel.getAngle().getRadians();
+            }
+            double x1 = centerArcX + Math.cos(positionAngle) * arcRadius;
+            double y1 = centerArcY + Math.sin(positionAngle) * arcRadius;
+            double deltaX = Math.abs(destX - x1);
+            double deltaY = Math.abs(destY - y1);
+            currVel = fromVelAndDist(speed, deltaX, deltaY, direct);
+        } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
+        return currVel;
+    }
 
     /**
      * @param speed  speed the projectile is moving at <br> <b>Must be > 0</b>
