@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,7 +22,7 @@ public class AutoAlignment {
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
             Alignable.SPEAKER, AutoAlignment::calcRobotRotationFaceSpeaker
     ));
-    private final static HashMap<Alignable, AutoBuilder.TriFunction<Double, Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
+    private final static HashMap<Alignable, TriFunction<Double, Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
             Alignable.AMP, (x, y, vel) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
             Alignable.SPEAKER, AutoAlignment::calcRampAngle
     ));
@@ -90,7 +89,7 @@ public class AutoAlignment {
      */
     public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel, double rampXOffset) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
-        AutoBuilder.TriFunction<Double, Double, Double, Rotation2d> function = positionYawMap.get(alignable);
+        TriFunction<Double, Double, Double, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidYawFunction(function)) return new Rotation2d();
         double xNorm = x + (RobotContainer.isRedAlliance() ? rampXOffset: -rampXOffset);
         double deltaX = xNorm - alignable.getX();
@@ -114,7 +113,7 @@ public class AutoAlignment {
         return Rotation2d.fromDegrees(clamp);
     }
 
-    private static boolean isInvalidYawFunction(AutoBuilder.TriFunction<Double, Double, Double, Rotation2d> function) {
+    private static boolean isInvalidYawFunction(TriFunction<Double, Double, Double, Rotation2d> function) {
         if (function == null) {
             DriverStation.reportError("Alignable Not in PositionYawMap", true);
             return true;
