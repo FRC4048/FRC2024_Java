@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         SmartDashboard.putNumber("Alive",aliveTics);
-        Logger.logBoolean("isRed",true, Constants.ENABLE_LOGGING);
+        Logger.logBoolean("/robot/isRed",RobotContainer.isRedAlliance(), Constants.ENABLE_LOGGING);
         aliveTics = (aliveTics + 1) % 1000;
     }
 
