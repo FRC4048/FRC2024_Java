@@ -7,19 +7,31 @@ import frc.robot.constants.Constants;
  * Utility class for vectors used in projectile motion
  */
 public class VectorUtils {
+    /**
+     * @param speed the initial velocity of the projectile
+     * @param centerArcX the x cord of the arc created by the shooter moving at different angles
+     * @param centerArcY the y cord of the arc created by the shooter moving at different angles
+     * @param arcRadius the length of the shooter, which forms an arc when changing angle
+     * @param destX the target position in the x direction
+     * @param destY the target position in the y direction
+     * @param degreeThreshold threshold before angles are considered equal when iterating over positions angle relationship created by arc
+     * @param maxIterations the max amount of iterations before an angle is returned
+     * @param direct If true then deltaX must be less than or equal to the maxima of the trajectory parabola
+     * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
+     */
     public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double arcRadius, double destX, double destY, double degreeThreshold, int maxIterations, boolean direct){
         VelocityVector lastVel = null;
         VelocityVector currVel = null;
         int i = 0;
         do {
             i++;
-            double positionAngle = 0;
+            double theta = 0;
             if (currVel != null){
                 lastVel = currVel;
-                positionAngle = currVel.getAngle().getRadians();
+                theta = currVel.getAngle().getRadians();
             }
-            double x1 = centerArcX + Math.cos(positionAngle) * arcRadius;
-            double y1 = centerArcY + Math.sin(positionAngle) * arcRadius;
+            double x1 = centerArcX + Math.cos(theta) * arcRadius;
+            double y1 = centerArcY + Math.sin(theta) * arcRadius;
             double deltaX = Math.abs(destX - x1);
             double deltaY = Math.abs(destY - y1);
             currVel = fromVelAndDist(speed, deltaX, deltaY, direct);
