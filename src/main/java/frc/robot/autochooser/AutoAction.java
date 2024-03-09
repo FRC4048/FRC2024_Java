@@ -5,6 +5,7 @@ public enum AutoAction {
     ShootAndCross("Shoot & Cross"),
     ShootFour("Shoot Four"),
     ShootTwo("Shoot Two"),
+    ShootWait("Shoot And Wait"),
     ShootTwoDip("Shoot Two & Dip"),
     Fork("Fork"),
     SmartFork("Smart Fork");

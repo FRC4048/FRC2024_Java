@@ -31,7 +31,8 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("ForkAuto")),
                 Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("SmartForkAuto")),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
-                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,ramp)))
+                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,ramp))),
+                Map.entry(new AutoEvent(AutoAction.ShootWait, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndWait")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,ramp)))
         );
     }
 
