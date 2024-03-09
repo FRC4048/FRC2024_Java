@@ -25,18 +25,31 @@ public class VectorUtils {
         int i = 0;
         do {
             i++;
-            double theta = 0;
+            double theta = Math.PI/4;
             if (currVel != null) {
                 lastVel = currVel;
                 theta = currVel.getAngle().getRadians();
             }
-            double x1 = centerArcX + Math.cos(theta) * arcRadius;
+            double x1 = centerArcX - (Math.cos(theta) * arcRadius) * (centerArcX > destX ? 1 : -1);
             double y1 = centerArcY + Math.sin(theta) * arcRadius;
             double deltaX = Math.abs(destX - x1);
             double deltaY = Math.abs(destY - y1);
             currVel = fromVelAndDist(speed, deltaX, deltaY, direct);
         } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
         return currVel;
+    }
+
+    /**
+     * @param speed           the initial velocity of the projectile
+     * @param centerArcX      the x cord of the arc created by the shooter moving at different angles
+     * @param centerArcY      the y cord of the arc created by the shooter moving at different angles
+     * @param arcRadius       the length of the shooter, which forms an arc when changing angle
+     * @param destX           the target position in the x direction
+     * @param destY           the target position in the y direction
+     * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
+     */
+    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double arcRadius, double destX, double destY){
+        return fromArcAndDestAndVel(speed,centerArcX,centerArcY,arcRadius,destX,destY,0.01,7,true);
     }
 
     /**
