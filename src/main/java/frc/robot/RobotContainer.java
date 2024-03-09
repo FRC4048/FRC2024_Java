@@ -112,11 +112,11 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
+        NamedCommands.registerCommand("SlurpWithRamp", CommandUtil.logged(new ParallelDeadlineGroup(
                 new StartFeeder(feeder),
                 new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
                 new ResetRamp(ramp))
-        );
+        ));
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
         NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp)));
