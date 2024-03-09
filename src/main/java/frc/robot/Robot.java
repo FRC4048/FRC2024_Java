@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
@@ -61,6 +60,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         SmartDashboard.putNumber("Alive",aliveTics);
+        Logger.logBoolean("isRed",true, Constants.ENABLE_LOGGING);
         aliveTics = (aliveTics + 1) % 1000;
     }
 
