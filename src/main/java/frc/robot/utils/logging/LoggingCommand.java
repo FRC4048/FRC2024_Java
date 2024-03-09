@@ -9,10 +9,14 @@ import frc.robot.constants.Constants;
 import java.util.Set;
 
 public abstract class LoggingCommand extends Command {
+    // Prefix for the command name (appended ahead of the command name) - this can be appended to when the command gets
+    // embedded at another command through appendNamePrefix
     private String namePrefix;
+    // Private name for the command (last in the hierarchy for this command) - this can be changed through setName
     private String commandName;
+    // The delegate command where we refer all calls
     private Command underlying;
-
+    // The name as it would be used in the logs
     private String fullyQualifiedName;
     // Lazy initialized log entry to make sure we don't create it until it is needed (and command is scheduled)
     // otherwise we get an empty line in the log visualization tool
@@ -100,8 +104,12 @@ public abstract class LoggingCommand extends Command {
         return namePrefix;
     }
 
-    public void setNamePrefix(String prefix) {
-        this.namePrefix = prefix;
+    /**
+     * Add a new prefix in front of the current one
+     * @param prefix the new prefix
+     */
+    public void appendNamePrefix(String prefix) {
+        this.namePrefix = prefix + CommandUtil.NAME_SEPARATOR + namePrefix;
         resetLoggingName(namePrefix, commandName);
     }
 
@@ -129,3 +137,5 @@ public abstract class LoggingCommand extends Command {
         return logEntry;
     }
 }
+
+

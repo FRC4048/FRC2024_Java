@@ -289,6 +289,10 @@ public class RobotContainer {
         return autoChooser.getAutoCommand();
     }
 
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
     /**
      * Returns a boolean based on the current alliance color assigned by the FMS.
      *
@@ -301,5 +305,9 @@ public class RobotContainer {
 
     public AutoChooser getAutoChooser() {
         return autoChooser;
+    }
+
+    public IntakeSubsystem getIntake() {
+        return intake;
     }
 }

@@ -4,13 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class RaceLoggingCommand extends LoggingCommand {
-    private static final String THIS_NAME = "-this";
-
-    private List<LoggingCommand> loggingCommands;
-
+public class RaceLoggingCommand extends GroupLoggingCommand {
     /**
      * Constructor for race command group.
      *
@@ -18,39 +13,17 @@ public class RaceLoggingCommand extends LoggingCommand {
      * @param commands   the sub commands for this group (either regular commands or LoggingCommand are OK)
      */
     public RaceLoggingCommand(String namePrefix, Command... commands) {
-        super(namePrefix, THIS_NAME, new ParallelRaceGroup());
+        // Call super with an empty group, populate children afterward
+        super(namePrefix, "(Race)", new ParallelRaceGroup());
+
         LoggingCommand[] wrapped = CommandUtil.wrapForLogging(namePrefix, commands);
         ((ParallelRaceGroup) getUnderlying()).addCommands(wrapped);
-        this.loggingCommands = Arrays.asList(wrapped);
+        addLoggingCommands(Arrays.asList(wrapped));
     }
 
     public final void addCommands(Command... commands) {
         LoggingCommand[] wrapped = CommandUtil.wrapForLogging(getNamePrefix(), commands);
         ((ParallelRaceGroup) getUnderlying()).addCommands(wrapped);
-        loggingCommands.addAll(Arrays.asList(wrapped));
-    }
-
-    @Override
-    public void setName(String name) {
-        // Do not change the logging name for this command (it is fixed)
-        getUnderlying().setName(name);
-    }
-
-    @Override
-    public void setNamePrefix(String prefix) {
-        super.setNamePrefix(prefix);
-        setChildrenPrefix(prefix);
-    }
-
-    @Override
-    public String toString() {
-        return getFullyQualifiedName();
-    }
-
-    private void setChildrenPrefix(String prefix) {
-        // Recursively change the prefix for all child commands
-        for (LoggingCommand loggingCommand : loggingCommands) {
-            loggingCommand.setNamePrefix(prefix);
-        }
+        addLoggingCommands(Arrays.asList(wrapped));
     }
 }

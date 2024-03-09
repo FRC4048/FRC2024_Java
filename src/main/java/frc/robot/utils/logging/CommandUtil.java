@@ -113,10 +113,6 @@ public class CommandUtil {
         return new RaceLoggingCommand(sequenceName, commands);
     }
 
-    public static Command deadline(String sequenceName, Command deadline, Command... commands) {
-        return new ParallelDeadlineLoggingCommand(sequenceName, deadline, commands);
-    }
-
     public static LoggingCommand[] wrapForLogging(String prefix, Command... commands) {
         // Do not use streams due to efficiency
         LoggingCommand[] newCommands = new LoggingCommand[commands.length];
@@ -128,9 +124,7 @@ public class CommandUtil {
 
     private static LoggingCommand wrapForLogging(String prefix, Command command) {
         if (command instanceof LoggingCommand loggingCommand) {
-            // change the prefix to include the current new parent
-            String childPrefix = prefix + CommandUtil.NAME_SEPARATOR + loggingCommand.getNamePrefix();
-            loggingCommand.setNamePrefix(childPrefix);
+            loggingCommand.appendNamePrefix(prefix);
             return loggingCommand;
         } else {
             // New command located in the given sequence root
