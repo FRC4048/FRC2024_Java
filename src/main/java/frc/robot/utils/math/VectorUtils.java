@@ -8,48 +8,66 @@ import frc.robot.constants.Constants;
  */
 public class VectorUtils {
     /**
+     * The projectile motion converts the given coords to 2d after applying the change in base coords from the arc provided.
+     * Because shooter angle depends on position (not point math) and position depends on angle (not point math),
+     * the function will approximate to a specified certainty by calling the function at 45 degrees,
+     * getting that pose and then looping until the delta angle result is within a specified margin,
+     * or you have exceeded the max iterations specified.
      * @param speed           the initial velocity of the projectile
      * @param centerArcX      the x cord of the arc created by the shooter moving at different angles
      * @param centerArcY      the y cord of the arc created by the shooter moving at different angles
+     * @param centerArcZ      the z cord of the arc created by the shooter moving at different angles
      * @param arcRadius       the length of the shooter, which forms an arc when changing angle
      * @param destX           the target position in the x direction
      * @param destY           the target position in the y direction
+     * @param destZ           the target position in the z direction
      * @param degreeThreshold threshold before angles are considered equal when iterating over positions angle relationship created by arc
      * @param maxIterations   the max amount of iterations before an angle is returned
      * @param direct          If true then deltaX must be less than or equal to the maxima of the trajectory parabola
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
-    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double arcRadius, double destX, double destY, double degreeThreshold, int maxIterations, boolean direct) {
+    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double centerArcZ, double arcRadius, double destX, double destY, double destZ, double degreeThreshold, int maxIterations, boolean direct) {
+        double xDist = destX - centerArcX;
+        double yDist = destY - centerArcY;
         VelocityVector lastVel = null;
         VelocityVector currVel = null;
         int i = 0;
         do {
             i++;
-            double theta = Math.PI/4;
+            double theta = Math.PI / 4;
             if (currVel != null) {
                 lastVel = currVel;
                 theta = currVel.getAngle().getRadians();
             }
-            double x1 = centerArcX - (Math.cos(theta) * arcRadius) * (centerArcX > destX ? 1 : -1);
-            double y1 = centerArcY + Math.sin(theta) * arcRadius;
-            double deltaX = Math.abs(destX - x1);
-            double deltaY = Math.abs(destY - y1);
-            currVel = fromVelAndDist(speed, deltaX, deltaY, direct);
+            double rampXYOffset = (Math.cos(theta) * arcRadius);
+            double rampZOffset = Math.sin(theta) * arcRadius;
+            double xyDist = Math.hypot(xDist, yDist) - rampXYOffset;
+            double z1 = centerArcZ + rampZOffset;
+            double deltaZ = Math.abs(destZ - z1);
+            currVel = fromVelAndDist(speed, xyDist, deltaZ, direct);
+            System.out.println(xyDist);
         } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
         return currVel;
     }
-
     /**
-     * @param speed           the initial velocity of the projectile
-     * @param centerArcX      the x cord of the arc created by the shooter moving at different angles
-     * @param centerArcY      the y cord of the arc created by the shooter moving at different angles
-     * @param arcRadius       the length of the shooter, which forms an arc when changing angle
-     * @param destX           the target position in the x direction
-     * @param destY           the target position in the y direction
+     * The projectile motion converts the given coords to 2d after applying the change in base coords from the arc provided.
+     * Because shooter angle depends on position (not point math) and position depends on angle (not point math),
+     * the function will approximate to a specified certainty by calling the function at 45 degrees,
+     * getting that pose and then looping until the delta angle result is within 0.01 degrees,
+     * or you have exceeded 7 iterations. <br>
+     * To use custom certainty see {@link #fromArcAndDestAndVel(double, double, double, double, double, double, double, double, double, int, boolean)}
+     * @param speed      the initial velocity of the projectile
+     * @param centerArcX the x cord of the arc created by the shooter moving at different angles
+     * @param centerArcY the y cord of the arc created by the shooter moving at different angles
+     * @param centerArcZ the z cord of the arc created by the shooter moving at different angles
+     * @param arcRadius  the length of the shooter, which forms an arc when changing angle
+     * @param destX      the target position in the x direction
+     * @param destY      the target position in the y direction
+     * @param destZ     the target position in the z direction
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
-    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double arcRadius, double destX, double destY){
-        return fromArcAndDestAndVel(speed,centerArcX,centerArcY,arcRadius,destX,destY,0.01,7,true);
+    public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double centerArcZ, double arcRadius, double destX, double destY, double destZ) {
+        return fromArcAndDestAndVel(speed, centerArcX, centerArcY, centerArcZ, arcRadius, destX, destY, destZ, 0.01, 7, true);
     }
 
     /**
