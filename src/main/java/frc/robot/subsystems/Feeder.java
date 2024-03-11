@@ -12,11 +12,11 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 public class Feeder extends SubsystemBase {
 
@@ -32,13 +32,17 @@ public class Feeder extends SubsystemBase {
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
-        new Thread(() -> {
-            try {
-                colorReadingBuffer.put(colorSensor.getMatchedColor());
-            } catch (InterruptedException e) {
-                DriverStation.reportError("Color Sensor put call interrupted", e.getStackTrace());
-            }
-        }).start();
+        try (ScheduledExecutorService cacheColorSensor = Executors.newScheduledThreadPool(1)) {
+            cacheColorSensor.scheduleAtFixedRate(
+                    () -> {
+                        try {
+                            colorReadingBuffer.put(colorSensor.getMatchedColor());
+                        } catch (InterruptedException e) {
+                            DriverStation.reportError("Color Sensor put call interrupted", e.getStackTrace());
+                        }
+                    }, 0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS, TimeUnit.MILLISECONDS
+            );
+        }
     }
 
     public void setFeederMotorSpeed(double speed) {
@@ -72,6 +76,7 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Logger.logDouble("/robot/colorBufferSize", colorReadingBuffer.size(), Constants.ENABLE_LOGGING);
         resultsSinceLastTic.clear();
         colorReadingBuffer.drainTo(resultsSinceLastTic);
         if (Constants.FEEDER_DEBUG) {
