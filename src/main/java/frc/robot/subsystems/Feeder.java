@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,19 +11,20 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
-import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import java.util.ArrayList;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Feeder extends SubsystemBase {
 
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensor colorSensor;
-    private final BlockingQueue<ColorMatchResult> colorReadingBuffer = new LinkedBlockingQueue<>();
-    private final ArrayList<ColorMatchResult> resultsSinceLastTic = new ArrayList<>();
+    private final AtomicInteger maxConfidence = new AtomicInteger();
+    private int thisTicMaxConfidence;
 
 
     public Feeder() {
@@ -35,10 +35,9 @@ public class Feeder extends SubsystemBase {
         try (ScheduledExecutorService cacheColorSensor = Executors.newScheduledThreadPool(1)) {
             cacheColorSensor.scheduleAtFixedRate(
                     () -> {
-                        try {
-                            colorReadingBuffer.put(colorSensor.getMatchedColor());
-                        } catch (InterruptedException e) {
-                            DriverStation.reportError("Color Sensor put call interrupted", e.getStackTrace());
+                        ColorMatchResult matchedColor = colorSensor.getMatchedColor();
+                        if (matchedColor.confidence > maxConfidence.get()){
+                            maxConfidence.set((int)(matchedColor.confidence * 100));
                         }
                     }, 0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS, TimeUnit.MILLISECONDS
             );
@@ -65,20 +64,13 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean pieceSeen(boolean incoming) {
-        for (ColorMatchResult match: resultsSinceLastTic){
-            double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-            if (match.confidence > confidence){
-                return true;
-            }
-        }
-        return false;
+        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+        return thisTicMaxConfidence > (confidence * 100);
     }
 
     @Override
     public void periodic() {
-        Logger.logDouble("/robot/colorBufferSize", colorReadingBuffer.size(), Constants.ENABLE_LOGGING);
-        resultsSinceLastTic.clear();
-        colorReadingBuffer.drainTo(resultsSinceLastTic);
+        thisTicMaxConfidence = maxConfidence.get();
         if (Constants.FEEDER_DEBUG) {
             ColorValue detectedColor = colorSensor.getColor();
             Color rawColor = colorSensor.getRawColor();
