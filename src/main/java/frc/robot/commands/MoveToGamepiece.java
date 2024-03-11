@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
@@ -13,8 +12,8 @@ public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
     private Vision vision;
     private double startTime;
-    private final ProfiledPIDController turningPIDController;
-    private final ProfiledPIDController movingPIDController;
+    private final PIDController turningPIDController;
+    private final PIDController movingPIDController;
     private ChassisSpeeds driveStates;
     private double ychange;
     private double cycle;
@@ -25,9 +24,8 @@ public class MoveToGamepiece extends Command {
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.GAMEPIECE_MAX_VELOCITY, Constants.GAMEPIECE_MAX_ACCELERATION);
-        turningPIDController = new ProfiledPIDController(Constants.TURN_TO_GAMEPIECE_TURNING_P, 0, Constants.TURN_TO_GAMEPIECE_TURNING_D, constraints);
-        movingPIDController = new ProfiledPIDController(Constants.TURN_TO_GAMEPIECE_MOVING_P, 0, 0, constraints);
+        turningPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_TURNING_P, 0, Constants.TURN_TO_GAMEPIECE_TURNING_D);
+        movingPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_MOVING_P, 0, 0);
 
     }
 
