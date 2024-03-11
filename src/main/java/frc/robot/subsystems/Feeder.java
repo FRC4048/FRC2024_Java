@@ -34,7 +34,9 @@ public class Feeder extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
         new Thread(() -> {
             try {
-                colorReadingBuffer.put(colorSensor.getMatchedColor());
+                while (true) {
+colorReadingBuffer.put(colorSensor.getMatchedColor());
+                }
             } catch (InterruptedException e) {
                 DriverStation.reportError("Color Sensor put call interrupted", e.getStackTrace());
             }
