@@ -69,12 +69,11 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
         gyroValue = getGyro();
-        if (SmartDashboard.getBoolean("USE VISION",false)){
+        if (Constants.ENABLE_VISION){
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
         }
-
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }

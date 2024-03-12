@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7004013091645886,
+      "x": 0.7,
       "y": 4.42
     },
     "rotation": 120.0
@@ -12,18 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "New Path"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootRightCenter"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ShootAndDrop"
@@ -32,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DipRight"
+            "pathName": "DipRightSlow"
           }
         },
         {
@@ -46,18 +34,88 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "StartIntakeAndFeeder"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SlurpWithRamp"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "EnterRightShoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.4
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "FeederBackDrive"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ComboShot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "EnterRightShoot"
+            "pathName": "DipRightSlow"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Pick4th"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SlurpWithRamp"
+                }
+              }
+            ]
           }
         }
       ]

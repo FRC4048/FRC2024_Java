@@ -18,12 +18,14 @@ public class Drive extends Command {
     private final DoubleSupplier strSupplier;
     private final DoubleSupplier rtSupplier;
     private boolean shouldFlip;
+    private final boolean fieldCentric;
 
-    public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier) {
+    public Drive(SwerveDrivetrain drivetrain, DoubleSupplier fwdSupplier, DoubleSupplier strSupplier, DoubleSupplier rtSupplier, boolean fieldCentric) {
         this.drivetrain = drivetrain;
         this.fwdSupplier = fwdSupplier;
         this.strSupplier = strSupplier;
         this.rtSupplier = rtSupplier;
+        this.fieldCentric = fieldCentric;
         addRequirements(drivetrain);
     }
 
@@ -41,11 +43,11 @@ public class Drive extends Command {
         if (alignable == null){
             double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble(), 0.1) * Constants.MAX_VELOCITY;
             drivetrain.setFacingTarget(false);
-            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), -rcw, Constants.FIELD_RELATIVE);
+            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), -rcw, fieldCentric);
         } else {
             double rcw = AutoAlignment.calcTurnSpeed(alignable, drivetrain.getPose(),drivetrain.getAlignableTurnPid()) * Constants.MAX_VELOCITY;
             drivetrain.setFacingTarget(AutoAlignment.angleFromTarget(alignable,drivetrain.getPose()) < Constants.AUTO_ALIGN_THRESHOLD);
-            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), rcw, Constants.FIELD_RELATIVE);
+            driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), rcw, fieldCentric);
         }
         drivetrain.drive(driveStates);
     }
