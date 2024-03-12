@@ -82,7 +82,7 @@ public class RobotContainer {
     private final Amp amp = new Amp();
     private final Shooter shooter = new Shooter();
     private final Deployer deployer = new Deployer();
-    private final Feeder feeder = new Feeder();
+    private final Feeder feeder = new Feeder(shooter);
     private final Ramp ramp = new Ramp();
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();

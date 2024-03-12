@@ -18,10 +18,13 @@ public class Feeder extends SubsystemBase {
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensor colorSensor;
+    private double dynamicConfidence;
+    private final Shooter shooter;
 
-    public Feeder() {
+    public Feeder(Shooter shooter) {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        this.shooter = shooter;
 
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
@@ -48,8 +51,15 @@ public class Feeder extends SubsystemBase {
 
     public boolean pieceSeen(boolean incoming) {
         ColorMatchResult latestResult = colorSensor.getMatchedColor();
-        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+        double confidence = incoming ? dynamicConfidence : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
         return latestResult.confidence > confidence;
+    }
+    public void updateDynamicConfidence() {
+        if (shooter.getShooterMotorLeftRPM()>0) {
+            ColorMatchResult latestResult = colorSensor.getMatchedColor();
+            dynamicConfidence = latestResult.confidence;
+        }
+        
     }
 
     @Override
@@ -67,7 +77,7 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
-
+        updateDynamicConfidence();
         SmartShuffleboard.put("Driver", "Has Game Piece?", pieceSeen(false))
             .withPosition(0, 0)
             .withSize(2, 2);
