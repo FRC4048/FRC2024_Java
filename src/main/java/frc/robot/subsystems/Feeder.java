@@ -71,6 +71,7 @@ public class Feeder extends SubsystemBase {
     @Override
     public void periodic() {
         thisTicMaxConfidence = maxConfidence.get();
+        maxConfidence.set(0);
         if (Constants.FEEDER_DEBUG) {
             ColorValue detectedColor = colorSensor.getColor();
             Color rawColor = colorSensor.getRawColor();
