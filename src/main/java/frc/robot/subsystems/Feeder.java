@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Arrays;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
@@ -50,8 +52,7 @@ public class Feeder extends SubsystemBase {
 
     public boolean pieceSeen(boolean incoming) {
         ColorMatchResult latestResult = colorSensor.getMatchedColor();
-        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return latestResult.confidence > confidence;
+        return latestResult!=Arrays.stream(ColorValue.values());
     }
 
     @Override
