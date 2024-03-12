@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.hal.PowerDistributionFaults;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
@@ -74,18 +75,15 @@ public class PowerMonitor extends SubsystemBase {
 
     @Override
     public void periodic() {
-        monitoringChannels.forEach(c -> {
-            Logger.logDouble(loggingBase + "channel" + c + "Current", pdh.getCurrent(c), Constants.ENABLE_LOGGING);
-        });
         callCurrentMaxEvents();
         callCurrentMinEvents();
-
-        Logger.logDouble(loggingBase + "totalCurrent", pdh.getTotalCurrent(), Constants.ENABLE_LOGGING);
-        // Power is the bus voltage multiplied by the current with the units Watts.
-        Logger.logDouble(loggingBase + "totalPower", pdh.getTotalPower(), Constants.ENABLE_LOGGING);
-        // Energy is the power summed over time with units Joules.
-        Logger.logDouble(loggingBase + "totalEnergy", pdh.getTotalEnergy(), Constants.ENABLE_LOGGING);
-        Logger.logBoolean(loggingBase + "haveBrownedOut", pdh.getFaults().Brownout, Constants.ENABLE_LOGGING);
+        monitoringChannels.forEach(c -> {
+            Logger.logDouble(loggingBase + "channel" + c + "Current", getChannelCurrent(c), Constants.ENABLE_LOGGING);
+        });
+        Logger.logDouble(loggingBase + "totalCurrent", getTotalCurrent(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "totalPower", getTotalPower(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "totalEnergy", getTotalEnergy(), Constants.ENABLE_LOGGING);
+        Logger.logBoolean(loggingBase + "haveBrownedOut", getFaults().Brownout, Constants.ENABLE_LOGGING);
     }
 
     private void callCurrentMaxEvents() {
@@ -104,5 +102,49 @@ public class PowerMonitor extends SubsystemBase {
         }).toList();
         events.forEach(e -> e.getAction().run());
         minCurrentEvents.removeAll(events);
+    }
+
+    /**
+     * @param channel to check
+     * @return current value from channel or {@link Double#NaN} if channel is invalid
+     */
+    public double getChannelCurrent(int channel){
+        if (channel < pdh.getNumChannels()) {
+            return pdh.getCurrent(channel);
+        }
+        return Double.NaN;
+    }
+
+    /**
+     * @return total Current draw from pdh
+     */
+    public double getTotalCurrent(){
+        return pdh.getTotalCurrent();
+    }
+    public PowerDistributionFaults getFaults(){
+        return pdh.getFaults();
+    }
+
+    /**
+     * Power is the bus voltage multiplied by the current with the units Watts.
+     * @return Total power drawn from the pdh.
+     */
+    public double getTotalPower(){
+        return pdh.getTotalPower();
+    }
+
+    /**
+     * Energy is the power summed over time with units Joules.
+     * @return Total Energy drawn from the pdh
+     */
+    public double getTotalEnergy(){
+        return pdh.getTotalEnergy();
+    }
+
+    /**
+     * @return Temperature in degrees celsius
+     */
+    public double getTemp(){
+        return pdh.getTemperature();
     }
 }
