@@ -83,13 +83,18 @@ public class PowerMonitor extends SubsystemBase {
         Logger.logDouble(loggingBase + "totalCurrent", getTotalCurrent(), Constants.ENABLE_LOGGING);
         Logger.logDouble(loggingBase + "totalPower", getTotalPower(), Constants.ENABLE_LOGGING);
         Logger.logDouble(loggingBase + "totalEnergy", getTotalEnergy(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "voltage", getVoltage(), Constants.ENABLE_LOGGING);
         Logger.logBoolean(loggingBase + "haveBrownedOut", getFaults().Brownout, Constants.ENABLE_LOGGING);
+    }
+
+    private double getVoltage() {
+        return pdh.getVoltage();
     }
 
     private void callCurrentMaxEvents() {
         List<ChannelCurrentEvent> events = maxCurrentEvents.stream().filter(event -> {
             int channel = event.getChannel();
-            return pdh.getCurrent(channel) > event.getCurrentThreshold();
+            return getChannelCurrent(channel) > event.getCurrentThreshold();
         }).toList();
         events.forEach(e -> e.getAction().run());
         maxCurrentEvents.removeAll(events);
@@ -98,7 +103,7 @@ public class PowerMonitor extends SubsystemBase {
     private void callCurrentMinEvents() {
         List<ChannelCurrentEvent> events = minCurrentEvents.stream().filter(event -> {
             int channel = event.getChannel();
-            return pdh.getCurrent(channel) < event.getCurrentThreshold();
+            return getChannelCurrent(channel) < event.getCurrentThreshold();
         }).toList();
         events.forEach(e -> e.getAction().run());
         minCurrentEvents.removeAll(events);
