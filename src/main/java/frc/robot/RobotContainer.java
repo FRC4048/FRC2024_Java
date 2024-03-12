@@ -332,10 +332,6 @@ public class RobotContainer {
         return autoChooser;
     }
 
-    public Feeder getFeeder() {
-        return feeder;
-    }
-
     public IntakeSubsystem getIntake() {
         return intake;
     }
