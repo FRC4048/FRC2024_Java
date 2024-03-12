@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PowerMonitor extends SubsystemBase {
+    private final String loggingBase = "/robot/pdh/";
     private final PowerDistribution pdh;
     private final Set<Integer> monitoringChannels = new HashSet<>();
     private final List<ChannelCurrentEvent> maxCurrentEvents = new ArrayList<>();
@@ -42,28 +43,31 @@ public class PowerMonitor extends SubsystemBase {
     /**
      * Runs action when channel current draw reaches a threshold. <br>
      * Note, when channel reaches current draw you will have to re-register the event
-     * @param channel to monitor
+     *
+     * @param channel          to monitor
      * @param currentThreshold current threshold before runnable is called
-     * @param runnable action to preform when current is reached
+     * @param runnable         action to preform when current is reached
      * @return if addition to currentEvent list was successful
      */
-    public boolean onCurrentAboveThreshold(int channel, double currentThreshold, Runnable runnable){
-        if (channel < pdh.getNumChannels()){
-            return maxCurrentEvents.add(new ChannelCurrentEvent(channel,currentThreshold,runnable));
+    public boolean onCurrentAboveThreshold(int channel, double currentThreshold, Runnable runnable) {
+        if (channel < pdh.getNumChannels()) {
+            return maxCurrentEvents.add(new ChannelCurrentEvent(channel, currentThreshold, runnable));
         }
         return false;
     }
+
     /**
      * Runs action when channel current draw goes below a threshold. <br>
      * Note, when channel goes under min current draw you will have to re-register the event
-     * @param channel to monitor
+     *
+     * @param channel          to monitor
      * @param currentThreshold current threshold before runnable is called
-     * @param runnable action to preform when current is reached
+     * @param runnable         action to preform when current is reached
      * @return if addition to currentEvent list was successful
      */
-    public boolean onCurrentBelowThreshold(int channel, double currentThreshold, Runnable runnable){
-        if (channel < pdh.getNumChannels()){
-            return minCurrentEvents.add(new ChannelCurrentEvent(channel,currentThreshold,runnable));
+    public boolean onCurrentBelowThreshold(int channel, double currentThreshold, Runnable runnable) {
+        if (channel < pdh.getNumChannels()) {
+            return minCurrentEvents.add(new ChannelCurrentEvent(channel, currentThreshold, runnable));
         }
         return false;
     }
@@ -71,17 +75,17 @@ public class PowerMonitor extends SubsystemBase {
     @Override
     public void periodic() {
         monitoringChannels.forEach(c -> {
-            Logger.logDouble("robot/pdh/channel" + c + "Current", pdh.getCurrent(c), Constants.ENABLE_LOGGING);
+            Logger.logDouble(loggingBase + "channel" + c + "Current", pdh.getCurrent(c), Constants.ENABLE_LOGGING);
         });
         callCurrentMaxEvents();
         callCurrentMinEvents();
 
-        Logger.logDouble("robot/pdh/totalCurrent", pdh.getTotalCurrent(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "totalCurrent", pdh.getTotalCurrent(), Constants.ENABLE_LOGGING);
         // Power is the bus voltage multiplied by the current with the units Watts.
-        Logger.logDouble("robot/pdh/totalPower", pdh.getTotalPower(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "totalPower", pdh.getTotalPower(), Constants.ENABLE_LOGGING);
         // Energy is the power summed over time with units Joules.
-        Logger.logDouble("robot/pdh/totalEnergy", pdh.getTotalEnergy(), Constants.ENABLE_LOGGING);
-        Logger.logBoolean("robot/pdh/haveBrownedOut", pdh.getFaults().Brownout, Constants.ENABLE_LOGGING);
+        Logger.logDouble(loggingBase + "totalEnergy", pdh.getTotalEnergy(), Constants.ENABLE_LOGGING);
+        Logger.logBoolean(loggingBase + "haveBrownedOut", pdh.getFaults().Brownout, Constants.ENABLE_LOGGING);
     }
 
     private void callCurrentMaxEvents() {
@@ -92,6 +96,7 @@ public class PowerMonitor extends SubsystemBase {
         events.forEach(e -> e.getAction().run());
         maxCurrentEvents.removeAll(events);
     }
+
     private void callCurrentMinEvents() {
         List<ChannelCurrentEvent> events = minCurrentEvents.stream().filter(event -> {
             int channel = event.getChannel();
