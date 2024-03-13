@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import com.revrobotics.ColorMatchResult;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 
@@ -15,9 +14,7 @@ public class FeederUpdateThread {
         this.feeder = feeder;
         this.executor = new ScheduledThreadPoolExecutor(corePoolSize);
         this.runnable = () -> {
-            ColorMatchResult matchedColor = feeder.getMatchedColor();
-            if (matchedColor.confidence > feeder.getMaxConfidence()) {
-                feeder.setMaxConfidence((int) (matchedColor.confidence * 100));
+            if (feeder.updateColorSensor()){
                 updateMotorForceStop();
             }
         };

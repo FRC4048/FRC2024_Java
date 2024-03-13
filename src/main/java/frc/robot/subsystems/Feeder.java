@@ -98,7 +98,10 @@ public class Feeder extends SubsystemBase {
         return maxConfidence.get();
     }
 
-    public void setMaxConfidence(int conf) {
+    /**
+     * @param conf percent confidence: 0-100
+     */
+    private void setMaxConfidence(int conf) {
         this.maxConfidence.set(conf);
     }
 
@@ -108,5 +111,17 @@ public class Feeder extends SubsystemBase {
 
     public void setListeningForceStop(boolean shouldListen) {
         listenForceStop.set(shouldListen);
+    }
+
+    /**
+     * @return if confidence is greater than the previous confidenceValue
+     */
+    public boolean updateColorSensor() {
+        ColorMatchResult matchedColor = getMatchedColor();
+        if (matchedColor.confidence > getMaxConfidence()) {
+            setMaxConfidence((int) (matchedColor.confidence * 100));
+            return true;
+        }
+        return false;
     }
 }
