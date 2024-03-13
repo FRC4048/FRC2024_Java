@@ -86,6 +86,7 @@ public class GameConstants {
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
     public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
+    public static final double COLOR_SENSOR_CHANGE_THRESHOLD = 0.2; //value has to be tweaked
 
     //CLIMBER
     public static final double OUTTAKE_SPEED = 1.00;
