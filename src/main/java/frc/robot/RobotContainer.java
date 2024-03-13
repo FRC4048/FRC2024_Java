@@ -102,9 +102,7 @@ public class RobotContainer {
         setupAutoChooser();
         configureBindings();
         putShuffleboardCommands();
-        try (FeederUpdateThread feederUpdateThread = new FeederUpdateThread(1, feeder)) {
-            feederUpdateThread.run();
-        }
+        new FeederUpdateThread(1, feeder).run();
     }
 
     private void setupAutoChooser() {

@@ -7,12 +7,13 @@ import frc.robot.subsystems.Feeder;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class FeederUpdateThread extends ScheduledThreadPoolExecutor {
+public class FeederUpdateThread {
     private final Feeder feeder;
     private final Runnable runnable;
+    private final ScheduledThreadPoolExecutor executor;
     public FeederUpdateThread(int corePoolSize, Feeder feeder) {
-        super(corePoolSize);
         this.feeder = feeder;
+        this.executor = new ScheduledThreadPoolExecutor(corePoolSize);
         this.runnable = () -> {
             ColorMatchResult matchedColor = feeder.getMatchedColor();
             if (matchedColor.confidence > feeder.getMaxConfidence()) {
@@ -28,6 +29,8 @@ public class FeederUpdateThread extends ScheduledThreadPoolExecutor {
         }
     }
     public void run(){
-        this.scheduleAtFixedRate(runnable,0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS,TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(runnable,0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS,TimeUnit.MILLISECONDS);
+        executor.close();
     }
+
 }
