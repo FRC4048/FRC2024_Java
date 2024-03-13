@@ -282,7 +282,7 @@ public class RobotContainer {
                 new RaiseDeployer(deployer),
                 backDrive);
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
-                lowerIntake, startSpinning, endIntake));
+                lowerIntake, startSpinning, endIntake).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf));
 
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
 
