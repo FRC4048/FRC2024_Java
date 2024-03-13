@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.DriveMode;
 import frc.robot.utils.TimeoutCounter;
 
 public class MoveDistance extends Command {
@@ -49,7 +50,7 @@ public class MoveDistance extends Command {
       speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
       speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
     }
-    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, Constants.FIELD_RELATIVE));
+    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, DriveMode.FIELD_CENTRIC));
   }
 
   // Called once the command ends or is interrupted.

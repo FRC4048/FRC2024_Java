@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,14 +26,13 @@ import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
-import frc.robot.commands.climber.DisengageRatchet;
-import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.drivetrain.ToggleDrivingMode;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
@@ -78,6 +77,7 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft, 1);
     private final JoystickButton joyRightButton1 = new JoystickButton(joyright, 1);
     private final JoystickButton joyRightButton2 = new JoystickButton(joyright, 2);
+    private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
     private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
     private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
     private final Amp amp = new Amp();
@@ -121,14 +121,15 @@ public class RobotContainer {
                 new ResetRamp(ramp))
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
-        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder,ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder,ramp)));
-        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter,feeder,deployer,ramp)));
+        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp)));
+        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
-        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp,shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp,shooter,Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder)));
     }
 
     private void setupPathPlanning() {
@@ -138,7 +139,7 @@ public class RobotContainer {
                 drivetrain::drive,
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(Constants.PATH_PLANNER_TRANSLATION_PID_P, Constants.PATH_PLANNER_TRANSLATION_PID_I, Constants.PATH_PLANNER_TRANSLATION_PID_D), // Translation PID constants
-                        new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I,Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
+                        new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I, Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
                         Constants.MAX_VELOCITY, // Max module speed, in m/s
                         Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
                         new ReplanningConfig()
@@ -203,27 +204,28 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4)));
             SmartShuffleboard.putCommand("Test", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
+            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
         }
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, Constants.FIELD_RELATIVE));
-        Command rampMoveAndSpin = CommandUtil.race(
-                "SpoolAndRamp",
-                new RampFollow(ramp,() -> drivetrain.getAlignable(), () -> drivetrain.getPose()),
-                new AdvancedSpinningShot(shooter,() -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
+        Command rampMoveAndSpin = CommandUtil.sequence(
+                "AdvancedAutoShoot",
+                new ParallelRaceGroup(
+                        new RampFollow(ramp, () -> drivetrain.getAlignable(), () -> drivetrain.getPose()),
+                        new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+                ),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyLeftButton3.onTrue(rampMoveAndSpin);
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton2.onTrue(CommandUtil.logged(new ToggleDrivingMode(drivetrain)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-        // Disengage
-        controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
-
-        // Engage
-        controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
@@ -238,7 +240,7 @@ public class RobotContainer {
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
                 new DeployAmp(amp),
-                new RampMove( ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
                 new ShootAmp(shooter)));
 
         // Cancell all - B
@@ -246,11 +248,11 @@ public class RobotContainer {
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
-            new FeederGamepieceUntilLeave(feeder, ramp),
-            new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-            new StopShooter(shooter),
-            new RetractAmp(amp),
-            new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+                new FeederGamepieceUntilLeave(feeder, ramp),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new StopShooter(shooter),
+                new RetractAmp(amp),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
@@ -287,13 +289,7 @@ public class RobotContainer {
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
-
-        SequentialCommandGroup advancedShoot = new SequentialCommandGroup(
-                new FeederGamepieceUntilLeave(feeder, ramp),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-        );
-        joyRightButton3.onTrue(advancedShoot);
+        joyRightButton3.onTrue(new FeederGamepieceUntilLeave(feeder, ramp));
     }
 
     public SwerveDrivetrain getDrivetrain() {
@@ -303,6 +299,7 @@ public class RobotContainer {
     public Ramp getRamp() {
         return ramp;
     }
+
     public Climber getClimber() {
         return climber;
     }
@@ -313,6 +310,10 @@ public class RobotContainer {
 
     public Command getAutoCommand() {
         return autoChooser.getAutoCommand();
+    }
+
+    public Feeder getFeeder() {
+        return feeder;
     }
 
     /**
@@ -329,7 +330,7 @@ public class RobotContainer {
         return autoChooser;
     }
 
-    public Feeder getFeeder() {
-        return feeder;
+    public IntakeSubsystem getIntake() {
+        return intake;
     }
 }
