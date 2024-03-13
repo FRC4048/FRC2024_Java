@@ -4,15 +4,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class Ramp extends SubsystemBase {
+    private final String baseLogName = "/robot/ramp/";
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
-    private boolean shootClosePos;
-    private boolean shootAwayPos;
-    private boolean shootAmp;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
@@ -30,6 +29,11 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
         }
+
+        Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
+        Logger.logDouble(baseLogName + "DesiredPos", rampPos, Constants.ENABLE_LOGGING);
+        Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
+        Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);
 
         SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
             .withPosition(9, 0)
