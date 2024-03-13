@@ -277,8 +277,7 @@ public class RobotContainer {
                 new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
                 new FeederBackDrive(feeder));
         Command endIntake = CommandUtil.parallel("endIntake",
-                new RaiseDeployer(deployer),
-                backDrive);
+                new RaiseDeployer(deployer));
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
                 lowerIntake, startSpinning, endIntake));
 

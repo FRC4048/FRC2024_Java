@@ -11,6 +11,7 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Feeder extends SubsystemBase {
 
+    private final String baseLogName = "/robot/feeder/";
     private static final int doublePercentToIntConv = 1000;
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
@@ -88,7 +90,7 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Piece Seen Incoming", pieceSeen(true));
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
-
+        Logger.logDouble(baseLogName + "FeederMotorSpeed",getFeederMotorSpeed(),Constants.ENABLE_LOGGING);
         SmartShuffleboard.put("Driver", "Has Game Piece?", pieceSeen(false))
             .withPosition(0, 0)
             .withSize(2, 2);
