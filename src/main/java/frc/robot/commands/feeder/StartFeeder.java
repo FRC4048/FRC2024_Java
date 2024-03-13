@@ -18,22 +18,26 @@ public class StartFeeder extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
+        feeder.setListenForceStop(true);
     }
 
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
+        if (!feeder.forceStopped()) {
+            feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
+        feeder.setListenForceStop(false);
         feeder.stopFeederMotor();
         
     }
 
     @Override
     public boolean isFinished() {
-        if (feeder.pieceSeen(true)) {
+        if (feeder.pieceSeen(true) || feeder.forceStopped()) {
             return true;
         }
         else if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {

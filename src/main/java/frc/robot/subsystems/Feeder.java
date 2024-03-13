@@ -16,6 +16,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Feeder extends SubsystemBase {
@@ -25,6 +26,8 @@ public class Feeder extends SubsystemBase {
     private final ColorSensor colorSensor;
     private final AtomicInteger maxConfidence = new AtomicInteger();
     private int thisTicMaxConfidence;
+    private AtomicBoolean forceStopped = new AtomicBoolean(false);
+    private AtomicBoolean listenForceStop = new AtomicBoolean(false);
 
 
     public Feeder() {
@@ -38,13 +41,21 @@ public class Feeder extends SubsystemBase {
                         ColorMatchResult matchedColor = colorSensor.getMatchedColor();
                         if (matchedColor.confidence > maxConfidence.get()){
                             maxConfidence.set((int)(matchedColor.confidence * 100));
+                            updateMotorForceStop();
                         }
                     }, 0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS, TimeUnit.MILLISECONDS
             );
         }
     }
 
-    public void setFeederMotorSpeed(double speed) {
+    private void updateMotorForceStop() {
+        if (listenForceStop.get() && shouldStop(true,maxConfidence.get())){
+            forceStopped.set(true);
+            setFeederMotorSpeed(0);
+        }
+    }
+
+    public synchronized void setFeederMotorSpeed(double speed) {
         feederMotor.set(speed);
     }
 
@@ -53,7 +64,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void stopFeederMotor() {
-        feederMotor.set(0);
+        setFeederMotorSpeed(0);
     }
 
     /**
@@ -64,8 +75,11 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean pieceSeen(boolean incoming) {
+        return shouldStop(incoming, (double) thisTicMaxConfidence /100);
+    }
+    public static boolean shouldStop(boolean incoming, double sensorConfidence){
         double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return thisTicMaxConfidence > (confidence * 100);
+        return sensorConfidence > confidence;
     }
 
     @Override
@@ -89,5 +103,12 @@ public class Feeder extends SubsystemBase {
         SmartShuffleboard.put("Driver", "Has Game Piece?", pieceSeen(false))
             .withPosition(0, 0)
             .withSize(2, 2);
+    }
+
+    public boolean forceStopped() {
+        return forceStopped.get();
+    }
+    public void setListenForceStop(boolean listen){
+        this.listenForceStop.set(listen);
     }
 }
