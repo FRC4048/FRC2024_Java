@@ -28,7 +28,7 @@ public class FeederUpdateThread {
             feeder.setFeederMotorSpeed(0);
         }
     }
-    public void run(){
+    public void start(){
         executor.scheduleAtFixedRate(runnable,0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS,TimeUnit.MILLISECONDS);
         executor.close();
     }
