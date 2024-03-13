@@ -26,8 +26,8 @@ public class Feeder extends SubsystemBase {
     private final ColorSensor colorSensor;
     private final AtomicInteger maxConfidence = new AtomicInteger();
     private int thisTicMaxConfidence;
-    private AtomicBoolean forceStopped = new AtomicBoolean(false);
-    private AtomicBoolean listenForceStop = new AtomicBoolean(false);
+    private final AtomicBoolean forceStopped = new AtomicBoolean(false);
+    private final AtomicBoolean listenForceStop = new AtomicBoolean(false);
 
 
     public Feeder() {
