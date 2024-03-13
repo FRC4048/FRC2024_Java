@@ -35,7 +35,11 @@ public class Feeder extends SubsystemBase {
     }
 
     public synchronized void setFeederMotorSpeed(double speed) {
-        feederMotor.set(speed);
+        if (speed == 0){
+            feederMotor.stopMotor();
+        }else {
+            feederMotor.set(speed);
+        }
     }
 
     public double getFeederMotorSpeed() {
