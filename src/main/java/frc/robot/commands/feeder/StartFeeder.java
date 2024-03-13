@@ -18,7 +18,7 @@ public class StartFeeder extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        feeder.setListenForceStop(true);
+        feeder.setListeningForceStop(true);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class StartFeeder extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        feeder.setListenForceStop(false);
+        feeder.setListeningForceStop(false);
         feeder.stopFeederMotor();
         
     }

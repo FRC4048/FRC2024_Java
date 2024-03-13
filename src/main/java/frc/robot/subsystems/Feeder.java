@@ -93,8 +93,8 @@ public class Feeder extends SubsystemBase {
     public boolean forceStopped() {
         return forceStopped.get();
     }
-    public void setListenForceStop(boolean listen){
-        this.listenForceStop.set(listen);
+    public void setForceStop(boolean forceStop){
+        this.forceStopped.set(forceStop);
     }
 
     public ColorMatchResult getMatchedColor() {
