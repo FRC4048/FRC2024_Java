@@ -102,7 +102,7 @@ public class RobotContainer {
         setupAutoChooser();
         configureBindings();
         putShuffleboardCommands();
-        new FeederUpdateThread(1, feeder).start();
+        new FeederUpdateThread(Constants.COLOR_SENSOR_THREAD_CORE_COUNT, feeder).start();
     }
 
     private void setupAutoChooser() {

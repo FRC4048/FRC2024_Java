@@ -84,6 +84,7 @@ public class GameConstants {
     public static final double FEEDER_PIECE_NOT_SEEN_COUNTER = 30;
     public static final double FEEDER_BACK_DRIVE_DELAY = 0.4;
     public static final double FEEDER_WAIT_TIME_BEFORE_BACKDRIVE = 0.5;
+    public static final int COLOR_SENSOR_THREAD_CORE_COUNT = 1;
     public static final double COLOR_CONFIDENCE_RATE_INCOMING = .85;
     public static final double COLOR_CONFIDENCE_RATE_BACKDRIVE = .92;
     public static final long COLOR_SENSOR_UPDATE_RATE_MILLS = 5; // =  1000 / (iterations/second)
