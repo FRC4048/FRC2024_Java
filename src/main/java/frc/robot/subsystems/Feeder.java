@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Feeder extends SubsystemBase {
 
+    private static final int doublePercentToIntConv = 1000;
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensor colorSensor;
@@ -63,7 +64,7 @@ public class Feeder extends SubsystemBase {
      */
     public static boolean shouldStop(boolean incoming, double sensorConfidence){
         double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return sensorConfidence / 100 > confidence;
+        return sensorConfidence / doublePercentToIntConv > confidence;
     }
 
     @Override
@@ -125,7 +126,7 @@ public class Feeder extends SubsystemBase {
     public boolean updateColorSensor() {
         ColorMatchResult matchedColor = getMatchedColor();
         if (matchedColor.confidence > getMaxConfidence()) {
-            setMaxConfidence((int) (matchedColor.confidence * 100));
+            setMaxConfidence((int) (matchedColor.confidence * doublePercentToIntConv));
             return true;
         }
         return false;
