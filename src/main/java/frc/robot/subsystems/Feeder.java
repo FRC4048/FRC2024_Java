@@ -25,10 +25,9 @@ public class Feeder extends SubsystemBase {
     private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensor colorSensor;
     private final AtomicInteger maxConfidence = new AtomicInteger();
-    private int thisTicMaxConfidence;
     private final AtomicBoolean forceStopped = new AtomicBoolean(false);
     private final AtomicBoolean listenForceStop = new AtomicBoolean(false);
-
+    private int thisTicMaxConfidence;
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
