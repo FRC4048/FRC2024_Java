@@ -53,11 +53,17 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean pieceSeen(boolean incoming) {
-        return shouldStop(incoming, (double) thisTicMaxConfidence /100);
+        return shouldStop(incoming, thisTicMaxConfidence);
     }
+
+    /**
+     * @param incoming if piece is coming up from intake side (true) or leaving towards shooter side (false)
+     * @param sensorConfidence percent confidence: 0-100
+     * @return if the color sensor sees the piece
+     */
     public static boolean shouldStop(boolean incoming, double sensorConfidence){
         double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return sensorConfidence > confidence;
+        return sensorConfidence / 100 > confidence;
     }
 
     @Override
