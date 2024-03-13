@@ -56,6 +56,7 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.FeederUpdateThread;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
@@ -101,6 +102,9 @@ public class RobotContainer {
         setupAutoChooser();
         configureBindings();
         putShuffleboardCommands();
+        try (FeederUpdateThread feederUpdateThread = new FeederUpdateThread(1, feeder)) {
+            feederUpdateThread.run();
+        }
     }
 
     private void setupAutoChooser() {

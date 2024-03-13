@@ -13,9 +13,6 @@ import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,24 +31,6 @@ public class Feeder extends SubsystemBase {
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
-        try (ScheduledExecutorService cacheColorSensor = Executors.newScheduledThreadPool(1)) {
-            cacheColorSensor.scheduleAtFixedRate(
-                    () -> {
-                        ColorMatchResult matchedColor = colorSensor.getMatchedColor();
-                        if (matchedColor.confidence > maxConfidence.get()){
-                            maxConfidence.set((int)(matchedColor.confidence * 100));
-                            updateMotorForceStop();
-                        }
-                    }, 0, Constants.COLOR_SENSOR_UPDATE_RATE_MILLS, TimeUnit.MILLISECONDS
-            );
-        }
-    }
-
-    private void updateMotorForceStop() {
-        if (listenForceStop.get() && shouldStop(true,maxConfidence.get())){
-            forceStopped.set(true);
-            setFeederMotorSpeed(0);
-        }
     }
 
     public synchronized void setFeederMotorSpeed(double speed) {
@@ -109,5 +88,25 @@ public class Feeder extends SubsystemBase {
     }
     public void setListenForceStop(boolean listen){
         this.listenForceStop.set(listen);
+    }
+
+    public ColorMatchResult getMatchedColor() {
+        return colorSensor.getMatchedColor();
+    }
+
+    public double getMaxConfidence() {
+        return maxConfidence.get();
+    }
+
+    public void setMaxConfidence(int conf) {
+        this.maxConfidence.set(conf);
+    }
+
+    public boolean isListeningForceStop() {
+        return listenForceStop.get();
+    }
+
+    public void setListeningForceStop(boolean shouldListen) {
+        listenForceStop.set(shouldListen);
     }
 }

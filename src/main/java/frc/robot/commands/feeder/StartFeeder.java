@@ -37,12 +37,9 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        if (feeder.pieceSeen(true) || feeder.forceStopped()) {
-            return true;
-        }
-        else if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {
-            return true;
-        }
-        return false;
+        return (feeder.pieceSeen(true) ||
+                feeder.forceStopped() ||
+                Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT
+        );
     }
 }
