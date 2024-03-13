@@ -22,7 +22,7 @@ public class DevourerPiece extends SequentialCommandGroup {
                         new TimedIntake(intake, 10),
                         new SequentialCommandGroup(
                                 new MoveToGamepiece(drivetrain, vision),
-                                new Drive(drivetrain, () -> -0.12, () -> 0, () -> 0, ()-> DriveMode.ROBOT_CENTRIC).withTimeout(1)
+                                new Drive(drivetrain, () -> -0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC).withTimeout(1)
                         )
                 ),
                 new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
