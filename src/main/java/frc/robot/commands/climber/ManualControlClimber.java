@@ -1,9 +1,10 @@
 package frc.robot.commands.climber;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Climber;
+
+import java.util.function.DoubleSupplier;
 
 public class ManualControlClimber extends Command {
 
@@ -23,12 +24,13 @@ public class ManualControlClimber extends Command {
 
     @Override
     public void execute() {
-        double value = supplier.getAsDouble();
-        if (Math.abs(value) > .2) {
-            climber.setSpeed(supplier.getAsDouble());
-        } else {
-            climber.setSpeed(0);
+        double value = MathUtil.applyDeadband(supplier.getAsDouble(),0.2);
+        if (value > 0){
+            climber.disengageRatchet();
+        } else if (value < 0) {
+            climber.engageRatchet();
         }
+        climber.setSpeed(value);
     }
 
     @Override
