@@ -118,6 +118,7 @@ public class Feeder extends SubsystemBase {
 
     public void setListeningForceStop(boolean shouldListen) {
         listenForceStop.set(shouldListen);
+        setForceStop(false);
     }
 
     /**
