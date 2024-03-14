@@ -137,8 +137,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds speeds) {
-        speeds.vxMetersPerSecond = ((Math.abs(speeds.vxMetersPerSecond) > Math.abs(previousXSpeed)) && (Math.signum(speeds.vxMetersPerSecond) != -Math.signum(previousXSpeed))) ? xSpeedRateLimiter.calculate(speeds.vxMetersPerSecond) : speeds.vxMetersPerSecond;
-        speeds.vyMetersPerSecond = ((Math.abs(speeds.vyMetersPerSecond) > Math.abs(previousYSpeed)) && (Math.signum(speeds.vyMetersPerSecond) != -Math.signum(previousYSpeed))) ? ySpeedRateLimiter.calculate(speeds.vyMetersPerSecond) : speeds.vyMetersPerSecond;
+        if ((Math.signum(speeds.vxMetersPerSecond) != -Math.signum(previousXSpeed)) && (Math.signum(speeds.vyMetersPerSecond) != -Math.signum(previousYSpeed))) {
+            speeds.vxMetersPerSecond = ((Math.abs(speeds.vxMetersPerSecond) > Math.abs(previousXSpeed))) ? xSpeedRateLimiter.calculate(speeds.vxMetersPerSecond) : speeds.vxMetersPerSecond;
+            speeds.vyMetersPerSecond = ((Math.abs(speeds.vyMetersPerSecond) > Math.abs(previousYSpeed))) ? ySpeedRateLimiter.calculate(speeds.vyMetersPerSecond) : speeds.vyMetersPerSecond;
+        }
+        else {
+            speeds.vyMetersPerSecond = 0;
+            speeds.vxMetersPerSecond = 0;
+        }
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
         previousXSpeed = speeds.vxMetersPerSecond;

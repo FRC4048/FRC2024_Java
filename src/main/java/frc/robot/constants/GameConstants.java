@@ -113,7 +113,7 @@ public class GameConstants {
     public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.015;
     public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.0015;
     public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.05;
-    public static final double DRIVETRAIN_SPEED_RATE_LIMIT = 0.5; //TODO: Refine ASAP
+    public static final double DRIVETRAIN_SPEED_RATE_LIMIT = 1; //TODO: Refine ASAP
 
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
