@@ -12,6 +12,7 @@ import frc.robot.utils.TimeoutCounter;
 public class limitSwitchChange extends Command {
   private Deployer deployer;
   private Timer timeout = new Timer();
+  private Timer switchTime = new Timer();
   /** Creates a new limitSwitchChange. */
   public limitSwitchChange(Deployer deployer) {
     this.deployer = deployer;
@@ -22,16 +23,20 @@ public class limitSwitchChange extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    deployer.setDeployerMotorSpeed(1);
     timeout.reset();
     timeout.start();
+    switchTime.reset();
+    switchTime.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    deployer.setDeployerMotorSpeed(1);
-    if(timeout.hasElapsed(0.1)){
+    if(switchTime.hasElapsed(0.1)){
       deployer.switchConfigTSRX();
+      switchTime.restart();
+      switchTime.start();
     }
   }
 
@@ -44,6 +49,6 @@ public class limitSwitchChange extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !(timeout.hasElapsed(3));
+    return (timeout.hasElapsed(3));
   }
 }

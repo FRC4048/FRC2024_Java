@@ -31,6 +31,7 @@ import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
+import frc.robot.commands.deployer.limitSwitchChange;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
@@ -167,6 +168,7 @@ public class RobotContainer {
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer)));
+            SmartShuffleboard.putCommand("Deployer","LimitSwitchToggle", CommandUtil.logged(new limitSwitchChange(deployer)));
         }
         if (Constants.RAMP_DEBUG) {
             SmartShuffleboard.put("Ramp", "myTargetPos", 0);
@@ -211,6 +213,7 @@ public class RobotContainer {
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
+
         // Disengage
         controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
 

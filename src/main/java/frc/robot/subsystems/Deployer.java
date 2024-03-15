@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.ConstantsTestbed;
 import frc.robot.Robot;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -29,7 +30,7 @@ public class Deployer extends SubsystemBase{
     public Deployer() {
         int TIMEOUT=100;
         isSwitched = false;
-        deployerMotor = new WPI_TalonSRX(Constants.DEPLOYER_MOTOR_ID);
+        deployerMotor = new WPI_TalonSRX(ConstantsTestbed.DEPLOYER_MOTOR_ID);
         deployerMotor.configNominalOutputForward(0, TIMEOUT);
         deployerMotor.configNominalOutputReverse(0, TIMEOUT);
         deployerMotor.configPeakOutputForward(1, TIMEOUT);
