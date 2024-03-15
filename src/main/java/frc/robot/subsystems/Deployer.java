@@ -20,6 +20,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 ///This class is meant to manage the motor that "deploys" the intake, by rotating in order to raise and lower the intake area.
 public class Deployer extends SubsystemBase{
     private WPI_TalonSRX deployerMotor;
+    private boolean isSwitched;
 
     // The following line references the "protectionMechanism" subsystem, which does not currently exist in this year's code, so I am leaving it commented out. For more detail, see the last comment on this file - currently line 82, as I am writing this
     /* private ProtectionMechanism protectionMechanism; */
@@ -27,7 +28,7 @@ public class Deployer extends SubsystemBase{
 
     public Deployer() {
         int TIMEOUT=100;
-
+        isSwitched = false;
         deployerMotor = new WPI_TalonSRX(Constants.DEPLOYER_MOTOR_ID);
         deployerMotor.configNominalOutputForward(0, TIMEOUT);
         deployerMotor.configNominalOutputReverse(0, TIMEOUT);
@@ -78,6 +79,20 @@ public class Deployer extends SubsystemBase{
     //Spin deployer motor
     public void setDeployerMotorSpeed(double speed) {
         deployerMotor.set(speed);
+    }
+
+     //Switiching Config of TSRX Motor
+    public void switchConfigTSRX(){
+        if(!isSwitched){
+        deployerMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+        deployerMotor.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+        isSwitched = true;
+        }
+        else{
+        deployerMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        deployerMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        isSwitched = false;
+        }
     }
 
     //Get deployer motor speed
