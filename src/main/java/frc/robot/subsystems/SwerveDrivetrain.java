@@ -18,6 +18,7 @@ import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.DriveMode;
 import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
@@ -44,10 +45,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
-
-
-
-
+    private DriveMode driveMode = DriveMode.FIELD_CENTRIC;
 
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
@@ -120,8 +118,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
 
-    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
-        return fieldRelative
+    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
+        return driveMode.equals(DriveMode.FIELD_CENTRIC)
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
@@ -241,5 +239,13 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
     public ChassisSpeeds getFieldChassisSpeeds() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());
+    }
+
+    public DriveMode getDriveMode() {
+        return driveMode;
+    }
+
+    public void setDriveMode(DriveMode driveMode) {
+        this.driveMode = driveMode;
     }
 }

@@ -16,6 +16,7 @@ import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.constants.Constants;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
