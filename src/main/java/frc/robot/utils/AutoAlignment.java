@@ -40,10 +40,26 @@ public class AutoAlignment {
         VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
     }
+
+    /**
+     * Calculates the desired ramp angle for shooting into the speaker given an initial velocity, and the robots position
+     * @param totalVelocity the velocity of the piece the distance (unsigned) from the speaker on the xy plane
+     * @param robotX the robot's center x position
+     * @param robotY the robot's center y position
+     * @param robotZ distance robot is off the ground (include base of robot)
+     * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
+     */
     private static Rotation2d calcRampAngle(double totalVelocity, double robotX, double robotY, double robotZ){
         VelocityVector velocityVector = VectorUtils.fromArcAndDestAndVel(totalVelocity, robotX, robotY, robotZ, Constants.RAMP_RADIUS, Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY(), Alignable.SPEAKER.getZ());
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
     }
+    /**
+     * Calculates the desired ramp angle for shooting into the speaker given an initial velocity, and the robots position
+     * @param totalVelocity the velocity of the piece the distance (unsigned) from the speaker on the xy plane
+     * @param pose3d a 3 dimensional pose representing the robots center x position,
+     *               center y position, and z distance from the ground (include base of robot)
+     * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
+     */
     private static Rotation2d calcRampAngle(double totalVelocity, Translation3d pose3d){
         return calcRampAngle(totalVelocity, pose3d.getX(), pose3d.getY(), pose3d.getZ());
     }
@@ -116,9 +132,9 @@ public class AutoAlignment {
      * @param x position of robot on the x-axis
      * @param y position of robot on the y-axis
      * @param z position of the robot on y z-axis
+     * @param vel the initial velocity of the piece (including the velocity of the robot)
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
-    @Deprecated
     public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         BiFunction<Double, Translation3d, Rotation2d> function = positionYawMap.get(alignable);
@@ -129,6 +145,7 @@ public class AutoAlignment {
     /**
      * @param alignable what we are aligning to
      * @param pose3d ramp position in 3d space (use robot position plus height of ramp, DO NOT manually account for RAMP_X_OFFSET)
+     * @param vel initial velocity of piece (including velocity of drivetrain as it applies to piece)
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
     public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double vel) {
