@@ -22,8 +22,8 @@ public class AutoAlignment {
             Alignable.AMP, (x, y) -> new Rotation2d(Math.PI / 2),
             Alignable.SPEAKER, AutoAlignment::calcRobotRotationFaceSpeaker
     ));
-    private final static HashMap<Alignable, TriFunction<Double, Double, Double, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
-            Alignable.AMP, (x, y, vel) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
+    private final static HashMap<Alignable, BiFunction<Double, Translation3d, Rotation2d>> positionYawMap = new HashMap<>(Map.of(
+            Alignable.AMP, (vel, pose) -> Rotation2d.fromDegrees(Ramp.encoderToAngle(Constants.AMP_RAMP_ENC_VALUE)),
             Alignable.SPEAKER, AutoAlignment::calcRampAngle
     ));
 
@@ -33,10 +33,19 @@ public class AutoAlignment {
      * @param x the distance (unsigned) from the speaker on the xy plane
      * @param z the height between the top of the ramp and the middle of the speaker opening
      * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
+     * @see #calcRampAngle(double, double, double, double)
      */
+    @Deprecated
     private static Rotation2d calcRampAngle(double x, double z, double vel){
         VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
+    }
+    private static Rotation2d calcRampAngle(double totalVelocity, double robotX, double robotY, double robotZ){
+        VelocityVector velocityVector = VectorUtils.fromArcAndDestAndVel(totalVelocity, robotX, robotY, robotZ, Constants.RAMP_RADIUS, Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY(), Alignable.SPEAKER.getZ());
+        return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
+    }
+    private static Rotation2d calcRampAngle(double totalVelocity, Translation3d pose3d){
+        return calcRampAngle(totalVelocity, pose3d.getX(), pose3d.getY(), pose3d.getZ());
     }
 
     /**
@@ -87,9 +96,10 @@ public class AutoAlignment {
      * @param z position of the robot on y z-axis
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
+    @Deprecated
     public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel, double rampXOffset) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
-        TriFunction<Double, Double, Double, Rotation2d> function = positionYawMap.get(alignable);
+        BiFunction<Double, Translation3d, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidYawFunction(function)) return new Rotation2d();
         double xNorm = x + (RobotContainer.isRedAlliance() ? rampXOffset: -rampXOffset);
         double deltaX = xNorm - alignable.getX();
@@ -99,7 +109,21 @@ public class AutoAlignment {
             SmartDashboard.putNumber("DISTANCE_XY", dist);
             SmartDashboard.putNumber("DISTANCE_Z", alignable.getZ() -  z);
         }
-        return function.apply(dist, alignable.getZ() - z, vel);
+        return function.apply(vel, new Translation3d(dist,0,alignable.getZ() - z));
+    }
+    /**
+     * @param alignable what we are aligning to
+     * @param x position of robot on the x-axis
+     * @param y position of robot on the y-axis
+     * @param z position of the robot on y z-axis
+     * @return the desired {@link Rotation2d} of the ramp from the ground
+     */
+    @Deprecated
+    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel) {
+        if (isInvalidAngle(alignable)) return new Rotation2d();
+        BiFunction<Double, Translation3d, Rotation2d> function = positionYawMap.get(alignable);
+        if (isInvalidYawFunction(function)) return new Rotation2d();
+        return function.apply(vel, new Translation3d(x, y, z));
     }
 
     /**
@@ -108,12 +132,12 @@ public class AutoAlignment {
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
     public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double vel) {
-        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),vel,0);
+        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(),vel);
         double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
         return Rotation2d.fromDegrees(clamp);
     }
 
-    private static boolean isInvalidYawFunction(TriFunction<Double, Double, Double, Rotation2d> function) {
+    private static boolean isInvalidYawFunction(BiFunction<Double, Translation3d, Rotation2d> function) {
         if (function == null) {
             DriverStation.reportError("Alignable Not in PositionYawMap", true);
             return true;

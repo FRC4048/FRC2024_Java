@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -33,10 +34,12 @@ public class RampFollow extends Command {
         if (alignableNow != null) {
             double shootingSpeed = Constants.SHOOTER_VELOCITY;
             if (Constants.SHOOT_WHILE_MOVING) {
-                shootingSpeed += Math.abs(drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
+                shootingSpeed += (drivetrain.getFieldChassisSpeeds().vxMetersPerSecond *
+                        (RobotContainer.isRedAlliance()? 1 : -1)
+                );
             }
             Pose2d pose = drivetrain.getPose();
-            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.HIGHT_OF_RAMP/2);
+            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(),Constants.ROBOT_FROM_GROUND);
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2).minus(AutoAlignment.getYaw(alignable, rampPose, shootingSpeed));
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", targetAngle.getDegrees());
