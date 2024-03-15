@@ -93,7 +93,7 @@ public class Deployer extends SubsystemBase{
 
     //
 
-    // I'm not completely sure what the following code does (again, it is based on last year's "extender" subsystem), but it uses the "ProtectionMechanism" susbsystem, which is currently not implemented in this year's code, so I am leaving it commented out for now.
+    // I'm not completely sure what the following code does (again, it is based on last year's "extender" subsystem), but it uses the "ProtectionMechanism" subsystem, which is currently not implemented in this year's code, so I am leaving it commented out for now.
     /*
     public void setProtectionMechanism(ProtectionMechanism protectionMechanism) {
         this.protectionMechanism = protectionMechanism;
