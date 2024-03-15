@@ -44,6 +44,7 @@ public class RampFollow extends Command {
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", targetAngle.getDegrees());
                 SmartDashboard.putBoolean("CAN_AUTO_SHOOT", targetAngle.getDegrees() != 90);
+                SmartDashboard.putNumber("DRIVETRAIN X VELOCITY", drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
             }
             ramp.setAngle(targetAngle);
         }
