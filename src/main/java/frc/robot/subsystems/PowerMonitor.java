@@ -42,6 +42,7 @@ public class PowerMonitor extends SubsystemBase {
 
     /**
      * Runs action when channel current draw goes below or above a threshold.
+     *
      * @param channel       to monitor
      * @param shouldTrigger predicate that takes a current and returns true if you want event to be fired or false if you want the event to not be fired
      * @param runnable      action to preform when event triggers
@@ -54,8 +55,10 @@ public class PowerMonitor extends SubsystemBase {
         }
         return false;
     }
+
     /**
      * Runs action when channel current draw goes below or above a threshold.
+     *
      * @param event to add
      * @return if addition to currentEvent list was successful
      */
@@ -65,8 +68,10 @@ public class PowerMonitor extends SubsystemBase {
         }
         return false;
     }
+
     /**
      * Removes {@link ChannelCurrentEvent} from monitoring list
+     *
      * @param channel       to monitor
      * @param shouldTrigger predicate that takes a current and returns true if you want event to be fired or false if you want the event to not be fired
      * @param runnable      action to preform when event triggers
@@ -79,8 +84,10 @@ public class PowerMonitor extends SubsystemBase {
         }
         return false;
     }
+
     /**
      * Removes {@link ChannelCurrentEvent} from monitoring list
+     *
      * @param event to remove
      * @return if removal to currentEvent list was successful
      */
