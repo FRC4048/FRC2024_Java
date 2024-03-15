@@ -75,6 +75,7 @@ public class GameConstants {
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
+    public static final double LOW_FEEDER_SPEED = 0.2;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.25;
     public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
     public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;
@@ -106,6 +107,7 @@ public class GameConstants {
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+    public static final double INTAKE_PIECE_THESHOLD = 22;
 
     //DRIVETRAIN
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number

@@ -37,6 +37,7 @@ import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
+import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
@@ -266,11 +267,12 @@ public class RobotContainer {
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
+                new StartIntake(intake,10),
                 new LowerDeployer(deployer),
                 new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW));
-        Command startSpinning = CommandUtil.race("startSpinning",
-                new StartIntake(intake, 10),
-                new StartFeeder(feeder));
+//        Command startSpinning = CommandUtil.race("startSpinning",
+//                new StartIntake(intake, 10),
+//                new StartFeeder(feeder));
         Command backDrive = CommandUtil.sequence("backDrive",
                 new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
                 new FeederBackDrive(feeder));
@@ -278,7 +280,7 @@ public class RobotContainer {
                 new RaiseDeployer(deployer),
                 backDrive);
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
-                lowerIntake, startSpinning, endIntake));
+                lowerIntake, new CurrentBasedIntakeFeeder(intake, feeder), endIntake));
 
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
 
