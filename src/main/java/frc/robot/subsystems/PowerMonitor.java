@@ -8,7 +8,9 @@ import frc.robot.utils.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.DoublePredicate;
 
 public class PowerMonitor extends SubsystemBase {
@@ -45,13 +47,12 @@ public class PowerMonitor extends SubsystemBase {
      *
      * @param channel       to monitor
      * @param shouldTrigger predicate that takes a current and returns true if you want event to be fired or false if you want the event to not be fired
-     * @param runnable      action to preform when event triggers
-     * @param persistent    should the event persist or be removed after called once
+     * @param callback      returns true if event should remain registered after being called
      * @return if addition to currentEvent list was successful
      */
-    public boolean onCurrentChange(int channel, DoublePredicate shouldTrigger, Runnable runnable, boolean persistent) {
+    public boolean onCurrentChange(int channel, DoublePredicate shouldTrigger, BiFunction<Integer, Double, Boolean> callback) {
         if (channel < pdh.getNumChannels()) {
-            return currentEvents.add(new ChannelCurrentEvent(channel, shouldTrigger, runnable, persistent));
+            return currentEvents.add(new ChannelCurrentEvent(channel, shouldTrigger, callback));
         }
         return false;
     }
@@ -74,13 +75,12 @@ public class PowerMonitor extends SubsystemBase {
      *
      * @param channel       to monitor
      * @param shouldTrigger predicate that takes a current and returns true if you want event to be fired or false if you want the event to not be fired
-     * @param runnable      action to preform when event triggers
-     * @param persistent    should the event persist or be removed after called once
+     * @param callback      returns true if event should remain registered after being called
      * @return if removal to currentEvent list was successful
      */
-    public boolean ignoreCurrentChange(int channel, DoublePredicate shouldTrigger, Runnable runnable, boolean persistent) {
+    public boolean ignoreCurrentChange(int channel, DoublePredicate shouldTrigger, BiFunction<Integer, Double, Boolean> callback) {
         if (channel < pdh.getNumChannels()) {
-            return currentEvents.remove(new ChannelCurrentEvent(channel, shouldTrigger, runnable, persistent));
+            return currentEvents.remove(new ChannelCurrentEvent(channel, shouldTrigger, callback));
         }
         return false;
     }
@@ -116,12 +116,21 @@ public class PowerMonitor extends SubsystemBase {
     }
 
     private void callCurrentEvents() {
+        HashMap<ChannelCurrentEvent, Double> channelCurrentMap = new HashMap<>();
         List<ChannelCurrentEvent> events = currentEvents.stream().filter(event -> {
             int channel = event.getChannel();
-            return event.getCurrentThreshold().test(getChannelCurrent(channel));
+            double current = getChannelCurrent(channel);
+            if (event.getCurrentThreshold().test(current)) {
+                channelCurrentMap.put(event, current);
+                return true;
+            }
+            return false;
         }).toList();
-        events.forEach(e -> e.getAction().run());
-        currentEvents.removeAll(events.stream().filter(e -> !e.shouldPersist()).toList());
+        currentEvents.removeAll(
+                events.stream()
+                        .filter(e -> !e.getCallback().apply(e.getChannel(), channelCurrentMap.get(e)))
+                        .toList()
+        );
     }
 
     /**
