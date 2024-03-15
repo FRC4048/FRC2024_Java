@@ -44,6 +44,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
+    private double frontLeftDriveCurrent;
+    private double frontRightDriveCurrent;
+    private double backLeftDriveCurrent;
+    private double backRightDriveCurrent;
+    private double frontLeftSteerCurrent;
+    private double frontRightSteerCurrent;
+    private double backLeftSteerCurrent;
+    private double backRightSteerCurrent;
 
 
 
@@ -55,6 +63,14 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
@@ -64,10 +80,16 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartShuffleboard.put("DriveTrain", "Front Left Drive Current", frontLeftDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Front Right Drive Current", frontRightDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Back Left Drive Current", backLeftDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Back Right Drive Current", backRightDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Front Left Steer Current", frontLeftSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "Front Right Steer Current", frontRightSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "Back Left Steer Current", backLeftSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "Back Right Steer Current", backRightSteerCurrent);
         }
-
-
-
+        
         gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
             poseEstimator.updatePositionWithVis(gyroValue);
@@ -235,5 +257,29 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public PIDController getAlignableTurnPid() {
         return alignableTurnPid;
+    }
+    public double getFrontLeftDriveCurrent() {
+        return frontLeftDriveCurrent;
+    }
+    public double getFrontRightDriveCurrent() {
+        return frontRightDriveCurrent;
+    }
+    public double getBackLeftDriveCurrent() {
+        return backLeftDriveCurrent;
+    }
+    public double getBackRightDriveCurrent() {
+        return backRightDriveCurrent;
+    }
+    public double getFrontLeftSteerCurrent() {
+        return frontLeftSteerCurrent;
+    }
+    public double getFrontRightSteerCurrent() {
+        return frontRightSteerCurrent;
+    }
+    public double getBackLeftSteerCurrent() {
+        return backLeftSteerCurrent;
+    }
+    public double getBackRightSteerCurrent() {
+        return backRightSteerCurrent;
     }
 }
