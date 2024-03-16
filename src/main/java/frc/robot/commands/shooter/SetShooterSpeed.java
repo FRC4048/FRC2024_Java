@@ -18,6 +18,7 @@ public class SetShooterSpeed extends Command {
   private double desiredLeftSpeedRpm;
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
+  private final double MOTOR_DELAY_TIME = 0.1;
   public SetShooterSpeed(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
@@ -38,7 +39,9 @@ public class SetShooterSpeed extends Command {
   @Override
   public void execute() {
     shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
-    shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    if ((Timer.getFPGATimestamp() - startTime) >= MOTOR_DELAY_TIME){
+      shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    }
   }
 
   // Called once the command ends or is interrupted.
