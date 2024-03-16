@@ -16,6 +16,7 @@ public class MoveToGamepiece extends Command {
     private final PIDController movingPIDController;
     private ChassisSpeeds driveStates;
     private double ychange;
+    private double xchange;
     private double cycle;
 
 
@@ -38,8 +39,9 @@ public class MoveToGamepiece extends Command {
     @Override
     public void execute() {
         ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
+        xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X;
         if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
+        driveStates = new ChassisSpeeds(-movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
         drivetrain.drive(driveStates);
         }
         if (vision.isPieceSeen()) {

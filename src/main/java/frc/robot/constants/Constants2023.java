@@ -72,6 +72,10 @@ public class Constants2023 extends GameConstants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
 
+    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.015;
+    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.06;
+
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 13;

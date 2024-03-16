@@ -11,13 +11,13 @@ public class GameConstants {
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = false;
-    public static final boolean SWERVE_DEBUG = false;
+    public static final boolean SWERVE_DEBUG = true;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = false;
+    public static final boolean VISION_DEBUG = true;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
@@ -111,13 +111,10 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
-    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.02;
-    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.00015;
-    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.06;
 
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -4; //Put Gampeiece in middle to get offset
     public static final int INTAKE_LIME_TIMEOUT = 5;
     public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;

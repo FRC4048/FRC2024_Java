@@ -20,7 +20,7 @@ public class TurnToGampieceGroup extends ParallelRaceGroup {
             new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
             new SequentialCommandGroup(
                 new MoveToGamepiece(drivetrain, vision),
-                new Drive(drivetrain, () -> -0.15, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC)
+                new Drive(drivetrain, () -> -0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC)
             )
 
         );
