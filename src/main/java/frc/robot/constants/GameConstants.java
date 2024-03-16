@@ -20,6 +20,7 @@ public class GameConstants {
     public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
+    public static final boolean ENABLE_VISION = true;
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -70,7 +71,7 @@ public class GameConstants {
     public static final double SHOOTER_PID_I = 0.0;
     public static final double SHOOTER_PID_D = 0.00001;
     public static final double SHOOTER_PID_FF = 0.00017;
-    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.3;
+    public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
     public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
@@ -110,14 +111,15 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
-    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.015;
-    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.0015;
-    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.05;
+    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.02;
+    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.06;
     public static final double DRIVETRAIN_SPEED_RATE_LIMIT = 1; //TODO: Refine ASAP
 
     //Limelight
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
     public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
+    public static final int INTAKE_LIME_TIMEOUT = 5;
     public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
     public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
@@ -142,12 +144,11 @@ public class GameConstants {
     public static final double PATH_PLANNER_ROTATION_PID_D = 0;
     public static final double RAMP_CENTER_AUTO_SHOOT = 6;
     public static final double RAMP_SIDE_AUTO_SHOOT = 5;
-    public static final double RAMP_DIP_AUTO_SHOOT = 5;
+    public static final double RAMP_DIP_AUTO_SHOOT = 6;
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
-    public static final double RAMP_MIN_ANGLE = 32.5; //degrees
-    public static final double RAMP_MAX_ANGLE = 90; //degrees
-    public static final double RAMP_X_OFFSET = 0.3; //meters, tip of ramp offset from center of robot
+    public static final double RAMP_MIN_ANGLE = 31; //degrees
+    public static final double RAMP_MAX_ANGLE = 52; //degrees
 
 }

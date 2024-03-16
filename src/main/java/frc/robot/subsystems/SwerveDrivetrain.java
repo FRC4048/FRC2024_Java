@@ -24,6 +24,7 @@ import frc.robot.swervev2.SwervePosEstimator;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.DriveMode;
 import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
@@ -54,6 +55,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private SlewRateLimiter ySpeedRateLimiter;
     private double previousYSpeed = 0;
     private double previousXSpeed = 0;
+    private DriveMode driveMode = DriveMode.FIELD_CENTRIC;
 
     private double getGyro() {
         return (gyro.getAngle() % 360)  * -1;
@@ -75,12 +77,11 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
         gyroValue = getGyro();
-        if (SmartDashboard.getBoolean("USE VISION",false)){
+        if (Constants.ENABLE_VISION){
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
         }
-
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }
@@ -130,8 +131,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
 
-    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, boolean fieldRelative) {
-        return fieldRelative
+    public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
+        return driveMode.equals(DriveMode.FIELD_CENTRIC)
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
@@ -264,5 +265,19 @@ public class SwerveDrivetrain extends SubsystemBase {
     public void resetRateLimiters() {
         xSpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
         ySpeedRateLimiter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_RATE_LIMIT);
+    }
+    
+    public DriveMode getDriveMode() {
+        return driveMode;
+    }
+
+    public void setDriveMode(DriveMode driveMode) {
+        this.driveMode = driveMode;
+    }
+    public ChassisSpeeds getChassisSpeeds(){
+        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
+    }
+    public ChassisSpeeds getFieldChassisSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());
     }
 }

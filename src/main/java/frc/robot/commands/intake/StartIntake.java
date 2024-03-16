@@ -34,9 +34,6 @@ public class StartIntake extends Command {
 
     @Override
     public boolean isFinished() {
-        if (timer.hasElapsed(motorRunTime)) {
-            return true;
-        }
-        return false;
+        return timer.hasElapsed(motorRunTime);
     }
 }

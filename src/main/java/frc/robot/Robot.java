@@ -17,6 +17,7 @@ import frc.robot.commands.drivetrain.ResetDrivetrainRateLimiters;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.StartIntakeAndFeeder;
 import frc.robot.constants.Constants;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         aliveTics = 0;
-        SmartDashboard.putNumber("TotalTimeouts", TimeoutCounter.getTotalTimeouts());
+        SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
     }
 
     @Override
