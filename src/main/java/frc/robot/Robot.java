@@ -11,13 +11,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.lightstrip.CycleLEDPattern;
+import frc.robot.commands.lightstrip.SetLEDPattern;
+import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
+import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         aliveTics = 0;
         SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
+        new SetLEDPattern(robotContainer.getLEDStrip(), RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE).schedule();
     }
 
     @Override
@@ -97,6 +99,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
+        new CycleLEDPattern(robotContainer.getLEDStrip(),2).schedule();
     }
 
     @Override

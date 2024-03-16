@@ -131,4 +131,16 @@ public enum BlinkinPattern {
     public double getPwm(){
         return BASE_SERVO_POSITION + ((PATTERN_OFFSET * this.ordinal()) * PULSE_WIDTH_INCREMENTOR);
     }
+    public BlinkinPattern next(){
+        if (this.ordinal() + 1 < values().length){
+            return values()[this.ordinal() + 1];
+        }
+        return values()[0];
+    }
+    public BlinkinPattern previous(){
+        if (this.ordinal() - 1 > 0){
+            return values()[this.ordinal() - 1];
+        }
+        return values()[values().length - 1];
+    }
 }
