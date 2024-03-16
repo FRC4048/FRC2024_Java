@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_DEBUG = true;
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
@@ -21,7 +21,7 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
-    public static final boolean RELY_COLOR_SENSOR = true;
+    public static final boolean RELY_COLOR_SENSOR = false;
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -75,9 +75,8 @@ public class GameConstants {
     public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.85;
-    public static final double LOW_FEEDER_SPEED = 0.3;
-    public static final double FEEDER_SUPER_LOW_FEEDER_SPEED = 0.3;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.9;
+    public static final double FEEDER_SLOW_SPEED = 0.3;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.25;
     public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
     public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;
@@ -103,13 +102,14 @@ public class GameConstants {
     public static final double RESET_CLIMBER_TIMEOUT = 1;
 
     //INTAKE
-    public static final double INTAKE_MOTOR_1_SPEED = 0.8;
-    public static final double INTAKE_MOTOR_2_SPEED = 0.8;
+    public static final double INTAKE_MOTOR_1_SPEED = 0.9;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.9;
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
-    public static final double INTAKE_PIECE_THESHOLD = 22;
+    public static final double INTAKE_PIECE_THESHOLD = 15;
+    public static final int INTAKE_SPIKE_THESHOLD = 4;
 
     //DRIVETRAIN
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
