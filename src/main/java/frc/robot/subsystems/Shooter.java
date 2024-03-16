@@ -2,15 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.utils.NeoPidMotor;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Shooter extends SubsystemBase {
-  
+  private final String baseLogName = "/robot/shooter/";
   private final NeoPidMotor neoPidMotorLeft;
   private final NeoPidMotor neoPidMotorRight;
 
@@ -93,5 +93,7 @@ public class Shooter extends SubsystemBase {
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
     }
+    Logger.logDouble(baseLogName + "motorLeftRPM", getShooterMotorLeftRPM(), Constants.ENABLE_LOGGING);
+    Logger.logDouble(baseLogName + "motorRightRPM", getShooterMotorRightRPM(), Constants.ENABLE_LOGGING);
   }
 }

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -25,14 +26,13 @@ import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
-import frc.robot.commands.climber.DisengageRatchet;
-import frc.robot.commands.climber.EngageRatchet;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
+import frc.robot.commands.drivetrain.ToggleDrivingMode;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
@@ -76,6 +76,7 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton1 = new JoystickButton(joyleft, 1);
     private final JoystickButton joyRightButton1 = new JoystickButton(joyright, 1);
     private final JoystickButton joyRightButton2 = new JoystickButton(joyright, 2);
+    private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
     private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
     private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
     private final Amp amp = new Amp();
@@ -218,14 +219,10 @@ public class RobotContainer {
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyLeftButton3.onTrue(rampMoveAndSpin);
         joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        joyLeftButton2.onTrue(CommandUtil.logged(new ToggleDrivingMode(drivetrain)));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
-        // Disengage
-        controller.leftBumper().onTrue(CommandUtil.logged(new DisengageRatchet(climber)));
-
-        // Engage
-        controller.rightBumper().onTrue(CommandUtil.logged(new EngageRatchet(climber)));
 
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
@@ -312,6 +309,10 @@ public class RobotContainer {
         return autoChooser.getAutoCommand();
     }
 
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
     /**
      * Returns a boolean based on the current alliance color assigned by the FMS.
      *
@@ -326,7 +327,7 @@ public class RobotContainer {
         return autoChooser;
     }
 
-    public Feeder getFeeder() {
-        return feeder;
+    public IntakeSubsystem getIntake() {
+        return intake;
     }
 }
