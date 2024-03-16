@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
@@ -11,6 +13,7 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
+import frc.robot.utils.diag.DiagTalonSrxSwitch;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -19,10 +22,18 @@ public class Feeder extends SubsystemBase {
     private final WPI_TalonSRX feederMotor;
     private final I2C.Port i2cPort = I2C.Port.kMXP;
     private final ColorSensor colorSensor;
+    private boolean limitSwitchEnabled;
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
+
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "Limit Switch Forward (IR Beam)", this.feederMotor, DiagTalonSrxSwitch.Direction.FORWARD));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "Limit Switch Backward (IR Beam)", this.feederMotor, DiagTalonSrxSwitch.Direction.REVERSE));
+        limitSwitchEnabled = true;
 
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
@@ -38,6 +49,29 @@ public class Feeder extends SubsystemBase {
 
     public void stopFeederMotor() {
         feederMotor.set(0);
+    }
+
+    // Enables limit switch (ir beam), allowing it to stop the motor when broken
+    public void enableLimitSwitch() {
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        limitSwitchEnabled = true;
+    }
+
+    // Disables limit switch (ir beam), making the motor run regardless of whether or not the beam is broken
+    public void disableLimitSwitch() {
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyClosed);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyClosed);
+        limitSwitchEnabled = false;
+    }
+
+    // Toggles the current mode of the limit switch; enables if currently disabled, disables if currently enabled
+    public void toggleLimitSwitch() {
+        if (limitSwitchEnabled) {
+            disableLimitSwitch();
+        } else {
+            enableLimitSwitch();
+        }
     }
 
     /**
