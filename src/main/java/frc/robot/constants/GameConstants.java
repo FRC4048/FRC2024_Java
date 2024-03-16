@@ -14,13 +14,14 @@ public class GameConstants {
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
-    public static final boolean INTAKE_DEBUG = false;
+    public static final boolean INTAKE_DEBUG = true;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
     public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
+    public static final boolean RELY_COLOR_SENSOR = true;
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -74,8 +75,9 @@ public class GameConstants {
     public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
-    public static final double LOW_FEEDER_SPEED = 0.2;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.85;
+    public static final double LOW_FEEDER_SPEED = 0.3;
+    public static final double FEEDER_SUPER_LOW_FEEDER_SPEED = 0.3;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.25;
     public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
     public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;

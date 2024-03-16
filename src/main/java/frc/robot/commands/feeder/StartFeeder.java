@@ -33,10 +33,10 @@ public class StartFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        if (feeder.pieceSeen(true)) {
-            return true;
-        }
-        else if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {
+//        if (feeder.pieceSeen(true)) {
+//            return true;
+//        }
+        if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {
             return true;
         }
         return false;

@@ -31,13 +31,15 @@ public class CurrentBasedIntakeFeeder extends Command {
         if(intake.getMotor1StatorCurrent() > Constants.INTAKE_PIECE_THESHOLD){
             intakeSpikeCount++;
         }
-        slowState = (intakeSpikeCount > 1);
-        double speed = slowState ? Constants.LOW_FEEDER_SPEED : Constants.FEEDER_MOTOR_ENTER_SPEED;
+        slowState = (intakeSpikeCount > 2);
+        double speed = slowState ? (Constants.RELY_COLOR_SENSOR ? Constants.FEEDER_SUPER_LOW_FEEDER_SPEED :Constants.LOW_FEEDER_SPEED) : Constants.FEEDER_MOTOR_ENTER_SPEED;
         feeder.setFeederMotorSpeed(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
+        intake.stopMotors();
+        feeder.stopFeederMotor();
         intakeSpikeCount = 0;
         slowState = false;
         timer.stop();
