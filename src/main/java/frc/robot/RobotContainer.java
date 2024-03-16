@@ -54,7 +54,6 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.DriveMode;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
@@ -210,7 +209,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, () -> DriveMode.FIELD_CENTRIC));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
                 new RampFollow(ramp, ()-> drivetrain.getAlignable(), ()-> drivetrain.getPose()),
