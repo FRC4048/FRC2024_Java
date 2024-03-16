@@ -52,6 +52,9 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double frontRightSteerCurrent;
     private double backLeftSteerCurrent;
     private double backRightSteerCurrent;
+    private double totalCurrent;
+    private double totalSteerCurrent;
+    private double totalDriveCurrent;
 
 
 
@@ -71,6 +74,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
+        totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
+        totalCurrent = totalSteerCurrent + totalDriveCurrent;
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
@@ -88,6 +94,9 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("DriveTrain", "Front Right Steer Current", frontRightSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "Back Left Steer Current", backLeftSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "Back Right Steer Current", backRightSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "Total Current", totalDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalCurrent);
         }
         
         gyroValue = getGyro();
@@ -281,5 +290,14 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
     public double getBackRightSteerCurrent() {
         return backRightSteerCurrent;
+    }
+    public double getTotalDriveCurrent() {
+        return totalDriveCurrent;
+    }
+    public double getTotalSteerCurrent() {
+        return totalSteerCurrent;
+    }
+    public double getTotalCurrent() {
+        return totalCurrent;
     }
 }

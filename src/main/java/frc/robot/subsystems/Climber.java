@@ -21,6 +21,9 @@ public class Climber extends SubsystemBase {
     private final SparkLimitSwitch rightExtendedLimit;
     private final SparkLimitSwitch leftExtendedLimit;
     private boolean ratchetEngaged = true;
+    private double rightClimberCurrent;
+    private double leftClimberCurrent;
+    private double totalClimberCurrent;
 
     public Climber() {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
@@ -97,9 +100,21 @@ public class Climber extends SubsystemBase {
     public boolean isRightReverseLimitSwitchPressed() {
         return rightRetractedLimit.isPressed();
     }
+    public double getLeftClimberCurrent() {
+        return leftClimberCurrent;
+    }
+    public double getRightClimberCurrent() {
+        return rightClimberCurrent;
+    }
+    public double getTotalClimberCurrent() {
+        return totalClimberCurrent;
+    }
 
     @Override
     public void periodic() {
+        rightClimberCurrent = climberRight.getOutputCurrent();
+        leftClimberCurrent = climberLeft.getOutputCurrent();
+        totalClimberCurrent = rightClimberCurrent + leftClimberCurrent;
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.put("Climber", "Left Retracted", leftRetractedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Right Retracted", rightRetractedLimit.isPressed());
@@ -108,6 +123,9 @@ public class Climber extends SubsystemBase {
 
             SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
             SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
+            SmartShuffleboard.put("Climber", "Right Current", rightClimberCurrent);
+            SmartShuffleboard.put("Climber", "Left Current", leftClimberCurrent);
+            SmartShuffleboard.put("Climber", "Total Current", totalClimberCurrent);
         }
     }
 }
