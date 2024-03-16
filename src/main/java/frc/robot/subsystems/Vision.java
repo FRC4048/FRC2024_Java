@@ -8,7 +8,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.Robot;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.DiagAprilTags;
 import frc.robot.utils.diag.DiagLimelight;
@@ -24,7 +26,8 @@ public class Vision extends SubsystemBase {
   private boolean pieceSeen;
   private double x;
   private double y;
-
+  private LimelightHelpers.LimelightResults jsonParsed;
+  private LimelightHelpers.LimelightTarget_Detector[] detections;
   
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -33,6 +36,9 @@ public class Vision extends SubsystemBase {
     ty = table.getEntry("ty");
     Robot.getDiagnostics().addDiagnosable(new DiagLimelight("Vision", "Piece Seen"));
     Robot.getDiagnostics().addDiagnosable(new DiagAprilTags("Vision", "Apriltag Seen"));
+    jsonParsed = LimelightHelpers.getLatestResults("");
+    detections = jsonParsed.targetingResults.targets_Detector;
+
   }
 
   /**
@@ -56,6 +62,15 @@ public class Vision extends SubsystemBase {
   public double getPieceOffestAngleY() {
     return y;
   }
+
+  public LimelightHelpers.LimelightResults getJsonParsed() {
+    return jsonParsed;
+  }
+
+  public LimelightHelpers.LimelightTarget_Detector[] getDetections() {
+    return detections;
+  }
+
 
   @Override
   public void periodic() {

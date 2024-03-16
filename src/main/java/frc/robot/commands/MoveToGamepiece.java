@@ -4,10 +4,14 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -16,6 +20,8 @@ public class MoveToGamepiece extends Command {
     private double timeSincePieceLoss;
     private final ProfiledPIDController turningPIDController;
     private final ProfiledPIDController movingPIDController;
+    private LimelightHelpers.LimelightTarget_Detector[] dets;
+    private LimelightHelpers.LimelightTarget_Detector detFocus;
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
         this.drivetrain = drivetrain;
@@ -26,7 +32,7 @@ public class MoveToGamepiece extends Command {
         double mP = 0.05;
         turningPIDController = new ProfiledPIDController(tP, 0, 0, constraints);
         movingPIDController = new ProfiledPIDController(mP, 0, 0, constraints);
-
+        dets = vision.getDetections();
     }
 
     @Override
@@ -45,6 +51,17 @@ public class MoveToGamepiece extends Command {
         }
         else driveStates = drivetrain.createChassisSpeeds(-0.6, 0.0, 0.0, false);
         drivetrain.drive(driveStates);
+
+        if(dets.length > 1) {
+            detFocus = dets[0];
+            for(LimelightHelpers.LimelightTarget_Detector det : dets) {
+                if(det.ty  < detFocus.ty) {
+                    detFocus = det;
+                }
+            }  
+        }
+
+        SmartShuffleboard.put("Dets", "Num of Dets", dets.length);
     }
 
     @Override
