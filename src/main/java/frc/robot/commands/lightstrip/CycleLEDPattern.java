@@ -22,9 +22,8 @@ public class CycleLEDPattern extends Command {
 
     @Override
     public void execute() {
-        if (timer.hasElapsed(patternDuration)){
+        if (timer.advanceIfElapsed(patternDuration)){
             strip.setPattern(strip.getPattern().next());
-            timer.restart();
         }
     }
 

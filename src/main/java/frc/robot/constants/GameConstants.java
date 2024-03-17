@@ -150,6 +150,6 @@ public class GameConstants {
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
-    public static final int LIGHTSTRIP_PORT = 17;
+    public static final int LIGHTSTRIP_PORT = 7;
 
 }

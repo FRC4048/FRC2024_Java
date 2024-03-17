@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
-        new CycleLEDPattern(robotContainer.getLEDStrip(),2).schedule();
+        new CycleLEDPattern(robotContainer.getLEDStrip(),0.5).schedule();
     }
 
     @Override
