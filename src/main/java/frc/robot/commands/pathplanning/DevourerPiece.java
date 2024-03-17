@@ -1,22 +1,28 @@
 package frc.robot.commands.pathplanning;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SpoolIntake;
 import frc.robot.commands.MoveToGamepiece;
+import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.*;
 import frc.robot.utils.DriveMode;
 
 public class DevourerPiece extends SequentialCommandGroup {
-    public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, IntakeSubsystem intake, Feeder feeder, LightStrip lightStrip) {
+    public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, IntakeSubsystem intake, Feeder feeder, Deployer deployer, LightStrip lightStrip) {
         super(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                                new ParallelCommandGroup(
+                                new LowerDeployer(deployer),
+                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
+                                ),
                                 new ParallelRaceGroup(
                                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
                                         new WaitCommand(5)
@@ -24,7 +30,7 @@ public class DevourerPiece extends SequentialCommandGroup {
                         ),
                         new SequentialCommandGroup(
                                 new MoveToGamepiece(drivetrain, vision),
-                                new Drive(drivetrain, () -> -0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC).withTimeout(1)
+                                new Drive(drivetrain, () -> 0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC).withTimeout(1)
                         )
                 )
         );
