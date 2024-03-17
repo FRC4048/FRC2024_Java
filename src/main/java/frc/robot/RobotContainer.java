@@ -193,9 +193,19 @@ public class RobotContainer {
         }
         if (Constants.FEEDER_DEBUG) {
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
+            SmartShuffleboard.putCommand("Feeder", "IntakeFeederCombo", CommandUtil.sequence(
+                    "IntakeFeederCurrentCombo",
+                    new SpoolIntake(intake,0.25),
+                    new CurrentBasedIntakeFeeder(intake, feeder))
+            );
         }
         if (Constants.INTAKE_DEBUG) {
             SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake, 5)));
+            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", CommandUtil.sequence(
+                    "IntakeFeederCurrentCombo",
+                    new SpoolIntake(intake,0.25),
+                    new CurrentBasedIntakeFeeder(intake, feeder))
+            );
         }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
@@ -269,9 +279,6 @@ public class RobotContainer {
                 new LowerDeployer(deployer),
                 new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
         );
-//        Command startSpinning = CommandUtil.race("startSpinning",
-//                new StartIntake(intake, 10),
-//                new StartFeeder(feeder));
         Command endIntake = CommandUtil.parallel("endIntake",
                 new RaiseDeployer(deployer));
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
