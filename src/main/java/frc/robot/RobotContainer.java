@@ -22,6 +22,7 @@ import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.SetLEDValue;
 import frc.robot.commands.amp.DeployAmp;
 import frc.robot.commands.amp.RetractAmp;
 import frc.robot.commands.amp.ToggleAmp;
@@ -212,6 +213,11 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Test", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp, lightStrip));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
             SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, lightStrip));
+        }
+
+        if (Constants.LED_DEBUG) {
+            SmartShuffleboard.put("LED", "TargetValue", 0);
+            SmartShuffleboard.putCommand("LED", "Set Target Value", new SetLEDValue(this.lightStrip));
         }
     }
 
