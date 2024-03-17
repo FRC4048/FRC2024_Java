@@ -83,11 +83,10 @@ public class RobotContainer {
     private final Deployer deployer = new Deployer();
     private final Feeder feeder = new Feeder();
     private final Ramp ramp = new Ramp();
-    private final LEDDisplay ledDisplay = new LEDDisplay();
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final LightStrip ledStrip = new LightStrip(1);
+    private final LightStrip ledStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
 
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
@@ -331,10 +330,6 @@ public class RobotContainer {
 
     public IntakeSubsystem getIntake() {
         return intake;
-    }
-
-    public LEDDisplay getLEDDisplay() {
-        return ledDisplay;
     }
 
     public LightStrip getLEDStrip() {
