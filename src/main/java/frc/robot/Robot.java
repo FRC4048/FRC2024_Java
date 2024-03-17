@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.lightstrip.CycleLEDPattern;
-import frc.robot.commands.lightstrip.SetLEDPattern;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
@@ -30,6 +28,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private double loopTime = 0;
     private double aliveTics = 0;
+    private Timer ledCycleTimer = new Timer();
 
     private RobotContainer robotContainer;
     private Command autoCommand;
@@ -58,7 +57,7 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         aliveTics = 0;
         SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
-        new SetLEDPattern(robotContainer.getLEDStrip(), RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE).schedule();
+        robotContainer.getLEDStrip().setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
     }
 
     @Override
@@ -99,13 +98,16 @@ public class Robot extends TimedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
-        new CycleLEDPattern(robotContainer.getLEDStrip(),0.5).schedule();
+        ledCycleTimer.restart();
     }
 
     @Override
     public void testPeriodic() {
         loopTime = 0;
         diagnostics.refresh();
+        if (ledCycleTimer.advanceIfElapsed(0.5)){
+            robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
+        }
     }
 
     @Override
