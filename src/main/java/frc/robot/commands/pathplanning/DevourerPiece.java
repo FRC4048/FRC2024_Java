@@ -1,5 +1,6 @@
 package frc.robot.commands.pathplanning;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,7 +22,10 @@ public class DevourerPiece extends SequentialCommandGroup {
         super(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                                new ParallelCommandGroup(
+                                new LowerDeployer(deployer),
+                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
+                                ),
                                 new ParallelRaceGroup(
                                         new CurrentBasedIntakeFeeder(intake, feeder),
                                         new WaitCommand(5)
