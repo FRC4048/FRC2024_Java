@@ -73,6 +73,11 @@ public class Constants2024 extends GameConstants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 119.35;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 306.29;
 
+    //Limelight
+    public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.02;
+    public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.08;
+
     //Feeder
     public static final int FEEDER_MOTOR_ID = 4;
     public static final int FEEDER_SENSOR_ID = 30; // this should be changed to the color sensor

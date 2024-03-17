@@ -117,19 +117,11 @@ public class GameConstants {
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
-    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.02;
-    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.00015;
-    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.06;
 
     //Limelight
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
-    public static final int INTAKE_LIME_TIMEOUT = 5;
-    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y = -17;
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
-    public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
-    public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
-    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
     public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";
