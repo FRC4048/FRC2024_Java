@@ -5,17 +5,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LightStrip;
+import frc.robot.utils.BlinkinPattern;
 
 public class CurrentBasedIntakeFeeder extends Command {
     private final Feeder feeder;
+    private final LightStrip lightStrip;
     private final IntakeSubsystem intake;
     private final Timer timer = new Timer();
     private boolean slowState = false;
     private double intakeSpikeCount = 0;
 
-    public CurrentBasedIntakeFeeder(IntakeSubsystem intake, Feeder feeder) {
+    public CurrentBasedIntakeFeeder(IntakeSubsystem intake, Feeder feeder, LightStrip lightStrip) {
         this.intake = intake;
         this.feeder = feeder;
+        this.lightStrip = lightStrip;
         addRequirements(intake, feeder);
     }
 
@@ -44,6 +48,9 @@ public class CurrentBasedIntakeFeeder extends Command {
         intakeSpikeCount = 0;
         slowState = false;
         timer.stop();
+        if (feeder.pieceSeen(true)){
+            lightStrip.setPattern(BlinkinPattern.GREEN);
+        }
     }
 
     @Override

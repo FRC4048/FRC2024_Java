@@ -4,7 +4,9 @@
 
 package frc.robot.utils;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.logging.Logger;
 
 /** Counts how many timeouts each command had during a match. */
@@ -12,8 +14,11 @@ public class TimeoutCounter {
     private int timeoutCounter = 0;
     private static int totalTimeouts = 0;
     private final String commandName;
-    public TimeoutCounter(String commandName) {
+    private final LightStrip lightStrip;
+
+    public TimeoutCounter(String commandName, LightStrip lightStrip) {
         this.commandName = commandName;
+        this.lightStrip = lightStrip;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
     }
     public double getTimeoutCount() {
@@ -23,6 +28,8 @@ public class TimeoutCounter {
         timeoutCounter++;
         totalTimeouts++;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
+        lightStrip.setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
+        lightStrip.setPatternLater(1,BlinkinPattern.BLACK);
     }
     public String getCommandName() {
         return commandName;
