@@ -8,7 +8,6 @@ import frc.robot.utils.logging.Logger;
 
 public class LightStrip extends SubsystemBase {
     private static final String baseLogName = "/robot/lightstrip/";
-
     private final Spark colorSensorPort;
     private BlinkinPattern pattern = BlinkinPattern.WHITE;
 
@@ -22,7 +21,7 @@ public class LightStrip extends SubsystemBase {
         Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
     }
 
-    public void setPattern(BlinkinPattern pattern){
+    public void setPattern(BlinkinPattern pattern) {
         this.pattern = pattern;
         colorSensorPort.set(pattern.getPwm());
     }
