@@ -53,6 +53,11 @@ public class Constants2023 extends GameConstants {
     public static final double DRIVE_PID_FF_S = 1;
     public static final double DRIVE_PID_FF_V = 2.8;
 
+    //Current Caps
+    public static final int DRIVE_SMART_LIMIT = 30;
+    public static final int DRIVE_SECONDARY_LIMIT = 40;
+    public static final double DRIVE_RAMP_RATE_LIMIT = 0.25;
+
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
     public static final double STEER_PID_D = 0;
@@ -71,6 +76,11 @@ public class Constants2023 extends GameConstants {
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
+
+    //Limelight
+    public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.015;
+    public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.06;
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;

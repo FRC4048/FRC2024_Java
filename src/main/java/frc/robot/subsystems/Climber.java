@@ -98,7 +98,6 @@ public class Climber extends SubsystemBase {
     public boolean isRightReverseLimitSwitchPressed() {
         return rightRetractedLimit.isPressed();
     }
-
     @Override
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {
