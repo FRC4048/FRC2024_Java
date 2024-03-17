@@ -53,6 +53,12 @@ public class Constants2024 extends GameConstants {
     public static final double DRIVE_PID_FF_S = 1;
     public static final double DRIVE_PID_FF_V = 2.8;
 
+
+    //Current Caps
+    public static final int DRIVE_SMART_LIMIT = 30;
+    public static final int DRIVE_SECONDARY_LIMIT = 40;
+    public static final double DRIVE_RAMP_RATE_LIMIT = 0.25;
+
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
     public static final double STEER_PID_D = 0.005;

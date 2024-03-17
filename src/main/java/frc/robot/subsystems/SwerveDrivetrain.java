@@ -22,6 +22,7 @@ import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.utils.logging.Logger;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -77,6 +78,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
         totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
         totalCurrent = totalSteerCurrent + totalDriveCurrent;
+        Logger.logDouble("/Robot/Current", totalDriveCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/Current", totalSteerCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/Current", totalCurrent, Constants.ENABLE_LOGGING);
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
@@ -94,10 +98,11 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("DriveTrain", "Front Right Steer Current", frontRightSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "Back Left Steer Current", backLeftSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "Back Right Steer Current", backRightSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "Total Current", totalDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalCurrent);
+            SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
         }
+        
         
         gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
@@ -148,6 +153,27 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
         alignableTurnPid.enableContinuousInput(-180, 180);
+        //TODO: Understand what all these limits specifically do
+        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
+        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
+        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
+        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
+        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
+        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
+        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
+        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
+        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
+        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
+        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
+        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
+        /*((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
+        ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
+        ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
+        ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
+        ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
+        ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
+        ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
+        ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);*/
     }
 
 
