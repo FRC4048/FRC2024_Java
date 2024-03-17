@@ -7,6 +7,7 @@ import frc.robot.SpoolIntake;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -18,7 +19,7 @@ public class DevourerPiece extends SequentialCommandGroup {
         super(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
-                                new SpoolIntake(intake, 0.25),
+                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                                 new ParallelRaceGroup(
                                         new CurrentBasedIntakeFeeder(intake, feeder),
                                         new WaitCommand(5)

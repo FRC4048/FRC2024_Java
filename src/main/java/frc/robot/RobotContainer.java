@@ -195,7 +195,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
             SmartShuffleboard.putCommand("Feeder", "IntakeFeederCombo", CommandUtil.sequence(
                     "IntakeFeederCurrentCombo",
-                    new SpoolIntake(intake,0.25),
+                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                     new CurrentBasedIntakeFeeder(intake, feeder))
             );
         }
@@ -203,7 +203,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake, 5)));
             SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", CommandUtil.sequence(
                     "IntakeFeederCurrentCombo",
-                    new SpoolIntake(intake,0.25),
+                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                     new CurrentBasedIntakeFeeder(intake, feeder))
             );
         }
@@ -275,7 +275,7 @@ public class RobotContainer {
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
-                new SpoolIntake(intake,0.25),
+                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                 new LowerDeployer(deployer),
                 new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
         );

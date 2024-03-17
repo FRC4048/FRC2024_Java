@@ -104,6 +104,7 @@ public class GameConstants {
     //INTAKE
     public static final double INTAKE_MOTOR_1_SPEED = 0.9;
     public static final double INTAKE_MOTOR_2_SPEED = 0.9;
+    public static final double INTAKE_SPOOL_TIME = 0.25;
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
