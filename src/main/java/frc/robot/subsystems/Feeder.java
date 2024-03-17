@@ -28,8 +28,7 @@ public class Feeder extends SubsystemBase {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
 
-        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
-        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "Limit Switch Forward (IR Beam)", this.feederMotor, DiagTalonSrxSwitch.Direction.FORWARD));
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "Limit Switch Backward (IR Beam)", this.feederMotor, DiagTalonSrxSwitch.Direction.REVERSE));
@@ -82,9 +81,12 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean pieceSeen(boolean incoming) {
-        ColorMatchResult latestResult = colorSensor.getMatchedColor();
-        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return latestResult.confidence > confidence;
+        if (Constants.RELY_COLOR_SENSOR){
+            ColorMatchResult latestResult = colorSensor.getMatchedColor();
+            double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+            return latestResult.confidence > confidence;
+        }
+        return this.getForwardSwitchTripped();
     }
 
     @Override
@@ -107,5 +109,16 @@ public class Feeder extends SubsystemBase {
             .withPosition(0, 0)
             .withSize(2, 2);
         Logger.logDouble(baseLogName + "FeederMotorSpeed",getFeederMotorSpeed(),Constants.ENABLE_LOGGING);
+    }
+
+    public boolean getForwardSwitchTripped() {
+        return feederMotor.isFwdLimitSwitchClosed() == 1;
+    }
+    public void switchFeederBeamState(boolean enable) {
+        if (enable){
+            this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        }else {
+            this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.Disabled);
+        }
     }
 }
