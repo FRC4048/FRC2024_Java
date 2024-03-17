@@ -35,6 +35,8 @@ import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.drivetrain.ToggleDrivingMode;
 import frc.robot.commands.feeder.FeederBackDrive;
 import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
+import frc.robot.commands.feeder.FeederLimitSwitchDisable;
+import frc.robot.commands.feeder.FeederLimitSwitchEnable;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.intake.StartIntake;
@@ -251,7 +253,7 @@ public class RobotContainer {
                 new StopShooter(shooter),
                 new RetractAmp(amp),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
-
+        
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new FeederGamepieceUntilLeave(feeder, ramp),
@@ -266,6 +268,7 @@ public class RobotContainer {
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
+                new FeederLimitSwitchEnable(feeder),
                 new LowerDeployer(deployer),
                 new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW));
         Command startSpinning = CommandUtil.race("startSpinning",
@@ -286,7 +289,8 @@ public class RobotContainer {
         controller.povUp().onTrue(CommandUtil.parallel("stop intake",
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
-                CommandUtil.logged(new StopFeeder(feeder))));
+                CommandUtil.logged(new StopFeeder(feeder)),
+                CommandUtil.logged(new FeederLimitSwitchDisable(feeder))));
         joyRightButton3.onTrue(new FeederGamepieceUntilLeave(feeder, ramp));
     }
 
