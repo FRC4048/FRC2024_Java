@@ -9,12 +9,12 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = true;
+    public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
-    public static final boolean INTAKE_DEBUG = true;
+    public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
     public static final boolean VISION_DEBUG = false;
@@ -110,6 +110,7 @@ public class GameConstants {
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
     public static final double INTAKE_PIECE_THESHOLD = 15;
     public static final int INTAKE_SPIKE_THESHOLD = 4;
+    public static final double CURRENT_INTAKE_TIMEOUT = 10;
 
     //DRIVETRAIN
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number

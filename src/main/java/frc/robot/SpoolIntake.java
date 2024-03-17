@@ -28,6 +28,13 @@ public class SpoolIntake extends Command {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        if (interrupted){
+            intakeSubsystem.stopMotors();
+        }
+    }
+
+    @Override
     public boolean isFinished() {
         return timer.hasElapsed(motorRunTime);
     }

@@ -41,7 +41,6 @@ public class CurrentBasedIntakeFeeder extends Command {
     public void end(boolean interrupted) {
         intake.stopMotors();
         feeder.stopFeederMotor();
-        feeder.switchFeederBeamState(false);
         intakeSpikeCount = 0;
         slowState = false;
         timer.stop();
@@ -49,6 +48,6 @@ public class CurrentBasedIntakeFeeder extends Command {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(10) || feeder.pieceSeen(true);
+        return timer.hasElapsed(Constants.CURRENT_INTAKE_TIMEOUT) || feeder.pieceSeen(true);
     }
 }
