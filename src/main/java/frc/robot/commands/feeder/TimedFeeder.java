@@ -1,35 +1,36 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.feeder;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Feeder;
 
-public class StartIntake extends Command {
-    private final IntakeSubsystem intakeSubsystem;
+public class TimedFeeder extends Command {
+    private final Feeder feeder;
     private final Timer timer = new Timer();
     private final double motorRunTime; // temporary until  done testing
 
-    public StartIntake(IntakeSubsystem intakeSubsystem, double motorRunTime ) {
-        addRequirements(intakeSubsystem);
-        this.intakeSubsystem = intakeSubsystem;
+    public TimedFeeder(Feeder feeder, double motorRunTime) {
+        this.feeder = feeder;
         this.motorRunTime = motorRunTime;
+        addRequirements(feeder);
     }
 
     @Override
     public void initialize() {
+        feeder.switchFeederBeamState(false);
         timer.reset();
         timer.start();
     }
-  
+
     @Override
     public void execute() {
-        intakeSubsystem.setMotorSpeed(Constants.INTAKE_MOTOR_1_SPEED, Constants.INTAKE_MOTOR_2_SPEED);
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEAKER_SPEED);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.stopMotors();
+        feeder.stopFeederMotor();
     }
 
     @Override

@@ -46,7 +46,7 @@ public class RampMoveAndWait extends Command{
     @Override
     public boolean isFinished() {
 
-        if ((movingUp && ramp.getForwardSwitchState()) || 
+        if ((movingUp && ramp.getForwardSwitchState()) ||
             (!movingUp && ramp.getReversedSwitchState())) {
             return true;
         }

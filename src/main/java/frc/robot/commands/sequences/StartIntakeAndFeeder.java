@@ -1,12 +1,11 @@
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.SpoolIntake;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
-import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.StartFeeder;
-import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.ramp.RampMoveAndWait;
+import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
@@ -28,20 +27,11 @@ public class StartIntakeAndFeeder extends SequentialLoggingCommand {
     public StartIntakeAndFeeder(Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp) {
         super("StartIntakeAndFeeder",
                 CommandUtil.parallel("First",
+                        new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new LowerDeployer(deployer),
                         new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
-                ),
-                CommandUtil.race("second",
-                        new StartIntake(intake, 10), //intake stops by ParallelRaceGroup when note in feeder
-                        new StartFeeder(feeder)
-                ),
-                CommandUtil.parallel("third",
-                        new RaiseDeployer(deployer),
-                        CommandUtil.sequence("Fourth",
-                                new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
-                                new FeederBackDrive(feeder)
-                        )
-                )
+                ), new CurrentBasedIntakeFeeder(intake, feeder),
+                new RaiseDeployer(deployer)
         );
     }
 }

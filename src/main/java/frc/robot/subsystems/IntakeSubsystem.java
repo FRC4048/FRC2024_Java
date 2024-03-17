@@ -56,4 +56,8 @@ public class IntakeSubsystem extends SubsystemBase {
             SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
         }
     }
+
+    public double getMotor1StatorCurrent() {
+        return intakeMotor1.getStatorCurrent();
+    }
 }
