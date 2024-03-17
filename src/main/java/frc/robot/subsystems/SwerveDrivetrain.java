@@ -148,27 +148,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
         alignableTurnPid.enableContinuousInput(-180, 180);
-        //TODO: Understand what all these limits specifically do; then adjust values
-        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
-        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
-        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
-        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
-        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
-        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
-        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
-        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
-        ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
-        ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
-        ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
-        ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
-        /*((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
-        ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
-        ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
-        ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).setSmartCurrentLimit(10);
-        ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
-        ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
-        ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);
-        ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).setSecondaryCurrentLimit(15);*/
     }
 
 
