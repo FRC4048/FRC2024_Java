@@ -130,6 +130,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder)));
     }
 
+    /**
+     * <a href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib-Changelog>Change log</a>
+     */
     private void setupPathPlanning() {
         AutoBuilder.configureHolonomic(drivetrain::getPose,
                 drivetrain::resetOdometry,
@@ -207,7 +210,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, () -> DriveMode.FIELD_CENTRIC));
+        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
                 new RampFollow(ramp, drivetrain),
