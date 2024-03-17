@@ -37,6 +37,7 @@ public class FeederGamepieceUntilLeave extends Command {
 
     @Override
     public void initialize() {
+        feeder.switchFeederBeamState(false);
         time = Timer.getFPGATimestamp();
         this.pieceNotFoundCounter = 0;
     }

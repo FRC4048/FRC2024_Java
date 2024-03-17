@@ -12,6 +12,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.utils.DriveMode;
 
 public class TurnToGampieceGroup extends ParallelRaceGroup {
     public TurnToGampieceGroup(Vision vision, SwerveDrivetrain drivetrain, Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp) {
@@ -19,7 +20,7 @@ public class TurnToGampieceGroup extends ParallelRaceGroup {
             new StartIntakeAndFeeder(feeder, intake, deployer, ramp),
             new SequentialCommandGroup(
                 new MoveToGamepiece(drivetrain, vision),
-                new Drive(drivetrain, () -> -0.15, () -> 0, () -> 0, false)
+                new Drive(drivetrain, () -> -0.15, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC)
             )
 
         );
