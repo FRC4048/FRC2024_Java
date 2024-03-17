@@ -17,9 +17,9 @@ public class EncodedSwerveSparkMax extends GenericEncodedSwerve {
         steerMotor.restoreFactoryDefaults();
         driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        driveMotor.setSmartCurrentLimit(40);
+        //driveMotor.setSmartCurrentLimit(40);
         // driveMotor.setClosedLoopRampRate(.5);
-        steerMotor.setSmartCurrentLimit(20);
+        //steerMotor.setSmartCurrentLimit(20);
         super.configureEncoders(driveVelFactor, drivePosFactor, steerPosFactor);
     }
 }
