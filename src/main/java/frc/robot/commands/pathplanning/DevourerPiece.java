@@ -3,11 +3,11 @@ package frc.robot.commands.pathplanning;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.SpoolIntake;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.drivetrain.Drive;
-import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.StartFeeder;
+import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
@@ -20,18 +20,18 @@ public class DevourerPiece extends SequentialCommandGroup {
     public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, IntakeSubsystem intake, Feeder feeder, Deployer deployer) {
         super(
                 new ParallelRaceGroup(
-                        new StartFeeder(feeder),
                         new SequentialCommandGroup(
-                                new LowerDeployer(deployer),
-                                new TimedIntake(intake, 10)
+                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                                new ParallelRaceGroup(
+                                        new CurrentBasedIntakeFeeder(intake, feeder),
+                                        new WaitCommand(5)
+                                )
                         ),
                         new SequentialCommandGroup(
                                 new MoveToGamepiece(drivetrain, vision),
                                 new Drive(drivetrain, () -> 0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC).withTimeout(1)
                         )
-                ),
-                new WaitCommand(Constants.FEEDER_BACK_DRIVE_DELAY),
-                new FeederBackDrive(feeder)
+                )
         );
     }
 }
