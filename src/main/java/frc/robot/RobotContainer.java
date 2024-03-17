@@ -33,9 +33,10 @@ import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.drivetrain.ToggleDrivingMode;
 import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
+import frc.robot.commands.feeder.TimedFeeder;
+import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
@@ -119,7 +120,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, Constants.TIMED_FEEDER_EXIT)));
         NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
@@ -192,9 +193,19 @@ public class RobotContainer {
         }
         if (Constants.FEEDER_DEBUG) {
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
+            SmartShuffleboard.putCommand("Feeder", "IntakeFeederCombo", CommandUtil.sequence(
+                    "IntakeFeederCurrentCombo",
+                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                    new CurrentBasedIntakeFeeder(intake, feeder))
+            );
         }
         if (Constants.INTAKE_DEBUG) {
             SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake, 5)));
+            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", CommandUtil.sequence(
+                    "IntakeFeederCurrentCombo",
+                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                    new CurrentBasedIntakeFeeder(intake, feeder))
+            );
         }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0, 0.4)));
@@ -244,7 +255,7 @@ public class RobotContainer {
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
-                new FeederGamepieceUntilLeave(feeder, ramp),
+                new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -252,7 +263,7 @@ public class RobotContainer {
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder, ramp),
+                new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -264,19 +275,14 @@ public class RobotContainer {
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
+                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                 new LowerDeployer(deployer),
-                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW));
-        Command startSpinning = CommandUtil.race("startSpinning",
-                new StartIntake(intake, 10),
-                new StartFeeder(feeder));
-        Command backDrive = CommandUtil.sequence("backDrive",
-                new WaitCommand(GameConstants.FEEDER_WAIT_TIME_BEFORE_BACKDRIVE),
-                new FeederBackDrive(feeder));
+                new RampMoveAndWait(ramp, () -> GameConstants.RAMP_POS_STOW)
+        );
         Command endIntake = CommandUtil.parallel("endIntake",
-                new RaiseDeployer(deployer),
-                backDrive);
+                new RaiseDeployer(deployer));
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
-                lowerIntake, startSpinning, endIntake));
+                lowerIntake, new CurrentBasedIntakeFeeder(intake, feeder), endIntake));
 
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder));
 
@@ -285,7 +291,7 @@ public class RobotContainer {
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
-        joyRightButton3.onTrue(new FeederGamepieceUntilLeave(feeder, ramp));
+        joyRightButton3.onTrue(new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT));
     }
 
     public SwerveDrivetrain getDrivetrain() {
