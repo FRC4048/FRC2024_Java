@@ -120,7 +120,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, 1)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, Constants.TIMED_FEEDER_EXIT)));
         NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
@@ -255,7 +255,7 @@ public class RobotContainer {
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
-                new TimedFeeder(feeder,1),
+                new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -263,7 +263,7 @@ public class RobotContainer {
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new TimedFeeder(feeder,1),
+                new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -291,7 +291,7 @@ public class RobotContainer {
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
-        joyRightButton3.onTrue(new TimedFeeder(feeder,1));
+        joyRightButton3.onTrue(new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT));
     }
 
     public SwerveDrivetrain getDrivetrain() {

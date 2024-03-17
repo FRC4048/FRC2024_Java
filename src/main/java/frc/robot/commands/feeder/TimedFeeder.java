@@ -8,9 +8,9 @@ import frc.robot.subsystems.Feeder;
 public class TimedFeeder extends Command {
     private final Feeder feeder;
     private final Timer timer = new Timer();
-    private final int motorRunTime; // temporary until  done testing
+    private final double motorRunTime; // temporary until  done testing
 
-    public TimedFeeder(Feeder feeder, int motorRunTime) {
+    public TimedFeeder(Feeder feeder, double motorRunTime) {
         this.feeder = feeder;
         this.motorRunTime = motorRunTime;
         addRequirements(feeder);
@@ -18,6 +18,7 @@ public class TimedFeeder extends Command {
 
     @Override
     public void initialize() {
+        feeder.switchFeederBeamState(false);
         timer.reset();
         timer.start();
     }

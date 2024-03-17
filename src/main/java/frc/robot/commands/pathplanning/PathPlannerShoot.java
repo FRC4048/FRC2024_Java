@@ -19,7 +19,7 @@ public class PathPlannerShoot extends ParallelCommandGroup {
                 new BasicShoot(shooter, 1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.05),
-                        new TimedFeeder(feeder,1),
+                        new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT),
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new ParallelCommandGroup (
                                 new CurrentBasedIntakeFeeder(intake, feeder),

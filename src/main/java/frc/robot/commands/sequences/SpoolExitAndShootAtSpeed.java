@@ -16,7 +16,7 @@ public class SpoolExitAndShootAtSpeed extends ParallelCommandGroup {
                 new SetShooterSpeed(shooter),
                 new SequentialCommandGroup(
                         new WaitCommand(Constants.SPOOL_TIME),
-                        new TimedFeeder(feeder,1)
+                        new TimedFeeder(feeder,Constants.TIMED_FEEDER_EXIT)
                 )
         );
     }
