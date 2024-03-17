@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SpoolIntake;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
+import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.constants.Constants;
@@ -19,7 +19,7 @@ public class PathPlannerShoot extends ParallelCommandGroup {
                 new BasicShoot(shooter, 1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.05),
-                        new FeederGamepieceUntilLeave(feeder, ramp),
+                        new TimedFeeder(feeder,1),
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new ParallelCommandGroup (
                                 new CurrentBasedIntakeFeeder(intake, feeder),

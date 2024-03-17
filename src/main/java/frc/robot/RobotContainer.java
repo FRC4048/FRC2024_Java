@@ -33,9 +33,9 @@ import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetInitOdom;
 import frc.robot.commands.drivetrain.ToggleDrivingMode;
 import frc.robot.commands.feeder.FeederBackDrive;
-import frc.robot.commands.feeder.FeederGamepieceUntilLeave;
 import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
+import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
@@ -120,7 +120,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new FeederGamepieceUntilLeave(feeder, ramp)));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, 1)));
         NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
@@ -255,7 +255,7 @@ public class RobotContainer {
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
-                new FeederGamepieceUntilLeave(feeder, ramp),
+                new TimedFeeder(feeder,1),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -263,7 +263,7 @@ public class RobotContainer {
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new FeederGamepieceUntilLeave(feeder, ramp),
+                new TimedFeeder(feeder,1),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RetractAmp(amp),
@@ -291,7 +291,7 @@ public class RobotContainer {
                 CommandUtil.logged(new RaiseDeployer(deployer)),
                 CommandUtil.logged(new StopIntake(intake)),
                 CommandUtil.logged(new StopFeeder(feeder))));
-        joyRightButton3.onTrue(new FeederGamepieceUntilLeave(feeder, ramp));
+        joyRightButton3.onTrue(new TimedFeeder(feeder,1));
     }
 
     public SwerveDrivetrain getDrivetrain() {
