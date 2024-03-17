@@ -17,7 +17,7 @@ public class GameConstants {
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = false;
+    public static final boolean VISION_DEBUG = true;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
@@ -113,8 +113,8 @@ public class GameConstants {
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
 
     //Limelight
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -17;
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y = -17;
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;

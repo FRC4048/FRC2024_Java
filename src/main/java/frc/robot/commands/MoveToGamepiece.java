@@ -17,7 +17,6 @@ public class MoveToGamepiece extends Command {
     private ChassisSpeeds driveStates;
     private double ychange;
     private double xchange;
-    private double cycle;
 
 
 
@@ -33,27 +32,21 @@ public class MoveToGamepiece extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        cycle = 0;
     }
 
     @Override
     public void execute() {
-        ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
-        xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X;
-        if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
+        ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
+        xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
+        if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
         driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(xchange));
         drivetrain.drive(driveStates);
-        }
-        if (vision.isPieceSeen()) {
-            cycle = 0;
-        } else {
-            cycle++;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || (cycle > 5));
+        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (ychange <= Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || !vision.isPieceSeen());
     }
 
     @Override

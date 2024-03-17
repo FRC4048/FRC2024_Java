@@ -76,7 +76,7 @@ public class Constants2024 extends GameConstants {
     //Limelight
     public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.02;
     public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
-    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.006;
+    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.08;
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 4;

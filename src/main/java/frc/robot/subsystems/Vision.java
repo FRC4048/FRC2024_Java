@@ -53,14 +53,14 @@ public class Vision extends SubsystemBase {
   }
 
   /**
-   * @return The pieces' x offset angle in degrees and 0.0 if the piece isn't seen
+   * @return The piece's x offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleX() {
     return x;
   }
 
   /**
-   * @return The pieces' y offset angle in degrees and 0.0 if the piece isn't seen
+   * @return The piece's y offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleY() {
     return y;
