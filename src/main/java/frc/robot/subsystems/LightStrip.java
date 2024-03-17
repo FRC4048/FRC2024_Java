@@ -15,15 +15,11 @@ public class LightStrip extends SubsystemBase {
         this.colorSensorPort = new Spark(port);
     }
 
-    @Override
-    public void periodic() {
-        Logger.logDouble(baseLogName + "pwmSignal", pattern.getPwm(), Constants.ENABLE_LOGGING);
-        Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
-    }
-
     public void setPattern(BlinkinPattern pattern) {
         this.pattern = pattern;
         colorSensorPort.set(pattern.getPwm());
+        Logger.logDouble(baseLogName + "pwmSignal", pattern.getPwm(), Constants.ENABLE_LOGGING);
+        Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
     }
 
     public BlinkinPattern getPattern() {
