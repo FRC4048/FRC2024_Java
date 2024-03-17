@@ -29,7 +29,7 @@ public class TimeoutCounter {
         totalTimeouts++;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
         lightStrip.setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
-        lightStrip.setPatternLater(1,BlinkinPattern.BLACK);
+        lightStrip.setPatternLater(1,BlinkinPattern.DARK_GRAY);
     }
     public String getCommandName() {
         return commandName;

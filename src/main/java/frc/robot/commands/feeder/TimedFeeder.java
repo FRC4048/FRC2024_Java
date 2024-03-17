@@ -25,9 +25,7 @@ public class TimedFeeder extends Command {
         feeder.switchFeederBeamState(false);
         timer.reset();
         timer.start();
-        if (feeder.pieceSeen(false)){
-            lightStrip.setPattern(BlinkinPattern.BLACK);
-        }
+        lightStrip.setPattern(BlinkinPattern.DARK_GRAY);
     }
 
     @Override

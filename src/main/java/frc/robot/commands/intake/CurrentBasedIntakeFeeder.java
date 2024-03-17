@@ -49,7 +49,7 @@ public class CurrentBasedIntakeFeeder extends Command {
         slowState = false;
         timer.stop();
         if (feeder.pieceSeen(true)){
-            lightStrip.setPattern(BlinkinPattern.GREEN);
+            lightStrip.setPattern(BlinkinPattern.DARK_GREEN);
         }
     }
 

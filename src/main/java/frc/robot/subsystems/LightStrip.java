@@ -1,15 +1,16 @@
 package frc.robot.subsystems;
 
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.logging.Logger;
+
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 public class LightStrip extends SubsystemBase {
     private static final String baseLogName = "/robot/lightstrip/";
@@ -32,6 +33,7 @@ public class LightStrip extends SubsystemBase {
     public void setPattern(BlinkinPattern pattern) {
         this.pattern = pattern;
         colorSensorPort.set(pattern.getPwm());
+        SmartDashboard.putNumber("pwm",pattern.getPwm());
         Logger.logDouble(baseLogName + "pwmSignal", pattern.getPwm(), Constants.ENABLE_LOGGING);
         Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
     }
