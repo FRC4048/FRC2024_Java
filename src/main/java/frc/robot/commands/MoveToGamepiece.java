@@ -25,8 +25,8 @@ public class MoveToGamepiece extends Command {
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
-        turningPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_TURNING_P, 0, Constants.TURN_TO_GAMEPIECE_TURNING_D);
-        movingPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_MOVING_P, 0, 0);
+        turningPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_TURNING_P, 0, Constants.MOVE_TO_GAMEPIECE_TURNING_D);
+        movingPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_MOVING_P, 0, 0);
 
     }
 
@@ -41,7 +41,7 @@ public class MoveToGamepiece extends Command {
         ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
         xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X;
         if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-        driveStates = new ChassisSpeeds(-movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
+        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(xchange));
         drivetrain.drive(driveStates);
         }
         if (vision.isPieceSeen()) {

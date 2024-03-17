@@ -200,9 +200,11 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, 0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0, -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Test", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp));
-            SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
+        }
+        if (Constants.VISION_DEBUG) {
+            SmartShuffleboard.putCommand("Vision", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp));
+            SmartShuffleboard.putCommand("Vision", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
+            SmartShuffleboard.putCommand("Vision", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
         }
     }
 

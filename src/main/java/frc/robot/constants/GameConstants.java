@@ -11,13 +11,13 @@ public class GameConstants {
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = false;
     public static final boolean RAMP_PID_DEBUG = false;
-    public static final boolean SWERVE_DEBUG = true;
+    public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
     public static final boolean INTAKE_DEBUG = false;
     public static final boolean DEPLOYER_DEBUG = false;
     public static final boolean AMP_DEBUG = false;
-    public static final boolean VISION_DEBUG = true;
+    public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
@@ -113,14 +113,9 @@ public class GameConstants {
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
 
     //Limelight
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -4; //Put Gampeiece in middle to get offset
-    public static final int INTAKE_LIME_TIMEOUT = 5;
-    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -17;
+    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
-    public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
-    public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
-    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
     public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";

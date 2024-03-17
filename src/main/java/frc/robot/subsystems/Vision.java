@@ -70,7 +70,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     if(tv.getDouble(0) == 0) {
       noPieceSeenCounter++;
-      if(noPieceSeenCounter >= Constants.FEEDER_PIECE_NOT_SEEN_COUNTER) {
+      if(noPieceSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT) {
         x = 0.0;
         y = 0.0;
         pieceSeen = false;
@@ -84,9 +84,9 @@ public class Vision extends SubsystemBase {
     }
 
     if(Constants.VISION_DEBUG) {
-      SmartShuffleboard.put("Limeight", "tv", tv.getDouble(-1));
-      SmartShuffleboard.put("Limeight", "tx", tx.getDouble(0.0));
-      SmartShuffleboard.put("Limeight", "ty", ty.getDouble(0.0));
+      SmartShuffleboard.put("Vision", "tv", tv.getDouble(-1));
+      SmartShuffleboard.put("Vision", "tx", tx.getDouble(0.0));
+      SmartShuffleboard.put("Vision", "ty", ty.getDouble(0.0));
     }
   }
 }
