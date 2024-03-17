@@ -80,9 +80,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
         totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
         totalCurrent = totalSteerCurrent + totalDriveCurrent;
-        Logger.logDouble("/Robot/Current", totalDriveCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/Current", totalSteerCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/Current", totalCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
@@ -92,14 +92,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-            SmartShuffleboard.put("DriveTrain", "Front Left Drive Current", frontLeftDriveCurrent);
-            SmartShuffleboard.put("DriveTrain", "Front Right Drive Current", frontRightDriveCurrent);
-            SmartShuffleboard.put("DriveTrain", "Back Left Drive Current", backLeftDriveCurrent);
-            SmartShuffleboard.put("DriveTrain", "Back Right Drive Current", backRightDriveCurrent);
-            SmartShuffleboard.put("DriveTrain", "Front Left Steer Current", frontLeftSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "Front Right Steer Current", frontRightSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "Back Left Steer Current", backLeftSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "Back Right Steer Current", backRightSteerCurrent);
+
             SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
