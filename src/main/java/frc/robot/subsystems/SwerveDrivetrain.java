@@ -155,7 +155,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
         alignableTurnPid.enableContinuousInput(-180, 180);
-        //TODO: Understand what all these limits specifically do
+        //TODO: Understand what all these limits specifically do; then adjust values
         ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
         ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
         ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
