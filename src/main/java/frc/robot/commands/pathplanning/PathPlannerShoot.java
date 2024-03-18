@@ -13,7 +13,7 @@ import frc.robot.subsystems.*;
 public class PathPlannerShoot extends ParallelCommandGroup {
     public PathPlannerShoot(Shooter shooter, Feeder feeder, Ramp ramp, IntakeSubsystem intake, LightStrip lightStrip) {
         addCommands(
-                new BasicShoot(shooter, 1),
+                new BasicShoot(shooter, lightStrip,1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.05),
                         new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),

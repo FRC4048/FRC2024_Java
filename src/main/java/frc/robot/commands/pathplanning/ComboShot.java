@@ -10,7 +10,7 @@ import frc.robot.subsystems.Shooter;
 public class ComboShot extends ParallelCommandGroup {
     public ComboShot(Shooter shooter, Feeder feeder, LightStrip lightStrip) {
         addCommands(
-                new BasicShoot(shooter,1),
+                new BasicShoot(shooter, lightStrip,1),
                 new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT)
         );
     }

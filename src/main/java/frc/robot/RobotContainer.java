@@ -125,9 +125,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, lightStrip)));
         NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder, lightStrip)));
         NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp, lightStrip)));
-        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
         NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder, lightStrip)));
     }
 
@@ -220,7 +220,7 @@ public class RobotContainer {
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
                 new RampFollow(ramp, ()-> drivetrain.getAlignable(), ()-> drivetrain.getPose()),
-                new AdvancedSpinningShot(shooter, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
+                new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
         joyLeftButton3.onTrue(rampMoveAndSpin);
@@ -233,18 +233,18 @@ public class RobotContainer {
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
-                new ShootSpeaker(shooter, drivetrain)));
+                new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot Speaker AWAY - X
         controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
-                new ShootSpeaker(shooter, drivetrain)));
+                new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
                 new DeployAmp(amp, lightStrip),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
-                new ShootAmp(shooter)));
+                new ShootAmp(shooter, lightStrip)));
 
         // Cancell all - B
         controller.b().onTrue(CommandUtil.logged(new CancelAllSequence(ramp, shooter, amp, lightStrip)));

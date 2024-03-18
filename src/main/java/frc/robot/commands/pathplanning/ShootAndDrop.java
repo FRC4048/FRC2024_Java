@@ -11,7 +11,7 @@ import frc.robot.subsystems.Shooter;
 
 public class ShootAndDrop extends ParallelDeadlineGroup {
     public ShootAndDrop(Shooter shooter, Feeder feeder, Deployer deployer, LightStrip lightStrip) {
-        super(new BasicShoot(shooter,0.3),
+        super(new BasicShoot(shooter, lightStrip,0.3),
                 new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
                 new LowerDeployer(deployer, lightStrip));
     }
