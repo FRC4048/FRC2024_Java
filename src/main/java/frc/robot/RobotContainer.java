@@ -14,7 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -115,9 +115,12 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
+        NamedCommands.registerCommand("SlurpWithRamp", CommandUtil.race("SlurpWithRamp",
                 new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                new ResetRamp(ramp, lightStrip))
+                new SequentialCommandGroup(
+                        new ResetRamp(ramp, lightStrip),
+                        new WaitCommand(2))
+                )
         );
         NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake, lightStrip)));
         NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, lightStrip)));
