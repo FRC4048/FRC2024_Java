@@ -155,9 +155,7 @@ public class AutoAlignment {
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
     public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double vel) {
-        Rotation2d yaw = getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(), vel);
-        double clamp = MathUtil.clamp(yaw.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
-        return Rotation2d.fromDegrees(clamp);
+        return getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(), vel);
     }
 
     private static boolean isInvalidYawFunction(BiFunction<Double, Translation3d, Rotation2d> function) {

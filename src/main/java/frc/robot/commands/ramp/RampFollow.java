@@ -1,5 +1,6 @@
 package frc.robot.commands.ramp;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -44,7 +45,8 @@ public class RampFollow extends Command {
                 SmartDashboard.putBoolean("CAN_AUTO_SHOOT", targetAngle.getDegrees() != 90);
                 SmartDashboard.putNumber("DRIVETRAIN X VELOCITY", drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
             }
-            ramp.setAngle(targetAngle);
+            double clamp = MathUtil.clamp(targetAngle.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
+            ramp.setAngle(Rotation2d.fromDegrees(clamp));
         }
     }
 

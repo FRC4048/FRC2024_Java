@@ -152,6 +152,6 @@ public class GameConstants {
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double TIMED_FEEDER_EXIT = 0.5;
     public static final double RAMP_RADIUS = 0.5715;
-    public static final double ROBOT_FROM_GROUND = 0.3;
+    public static final double ROBOT_FROM_GROUND = 0.1;
 
 }
