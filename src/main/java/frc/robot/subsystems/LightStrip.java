@@ -48,7 +48,7 @@ public class LightStrip extends SubsystemBase {
     public BlinkinPattern getPattern() {
         return pattern;
     }
-    public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {;
+    public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {
         predicateLightEvents.put(callable, pattern);
     }
     public static BooleanSupplier isDelayOver(double delay){
