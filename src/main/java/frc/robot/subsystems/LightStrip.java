@@ -51,7 +51,8 @@ public class LightStrip extends SubsystemBase {
         predicateLightEvents.put(callable, pattern);
     }
     public static BooleanSupplier isDelayOver(double delay){
-        return () -> hasHappned(Timer.getFPGATimestamp() + delay);
+        double startTime = Timer.getFPGATimestamp();
+        return () -> hasHappned(startTime + delay);
     }
 
     private static boolean hasHappned(double time) {
