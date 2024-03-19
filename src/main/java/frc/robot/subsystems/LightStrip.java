@@ -52,10 +52,10 @@ public class LightStrip extends SubsystemBase {
     }
     public static BooleanSupplier isDelayOver(double delay){
         double startTime = Timer.getFPGATimestamp();
-        return () -> hasHappned(startTime + delay);
+        return () -> hasHappened(startTime + delay);
     }
 
-    private static boolean hasHappned(double time) {
+    private static boolean hasHappened(double time) {
         return time - Timer.getFPGATimestamp() <= TimeUnit.MILLISECONDS.convert(20,TimeUnit.SECONDS);
     }
 }
