@@ -86,6 +86,7 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
+    private final PowerMonitor powerMonitor = new PowerMonitor();
     private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
 
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
