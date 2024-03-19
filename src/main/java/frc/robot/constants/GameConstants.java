@@ -21,7 +21,7 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
-    public static final boolean LED_DEBUG = true;
+    public static final boolean LED_DEBUG = false;
     public static final boolean RELY_COLOR_SENSOR = false;
 
     //AMP
