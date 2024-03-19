@@ -56,6 +56,6 @@ public class LightStrip extends SubsystemBase {
     }
 
     private static boolean hasHappened(double time) {
-        return time - Timer.getFPGATimestamp() <= TimeUnit.MILLISECONDS.convert(20,TimeUnit.SECONDS);
+        return Timer.getFPGATimestamp() - time >= TimeUnit.MILLISECONDS.convert(20,TimeUnit.SECONDS);
     }
 }
