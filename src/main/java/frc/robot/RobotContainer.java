@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -42,34 +39,17 @@ import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.ComboShot;
-import frc.robot.commands.pathplanning.DevourerPiece;
-import frc.robot.commands.pathplanning.PathPlannerShoot;
-import frc.robot.commands.pathplanning.RampShootCombo;
-import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.commands.pathplanning.TimedIntake;
+import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
 import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.shooter.AdvancedSpinningShot;
-import frc.robot.commands.shooter.SetShooterSpeed;
-import frc.robot.commands.shooter.ShootAmp;
-import frc.robot.commands.shooter.ShootSpeaker;
-import frc.robot.commands.shooter.StopShooter;
+import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.Amp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -78,6 +58,8 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.Optional;
 
 
 /**
@@ -226,7 +208,6 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0, 0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0, -0.3048, 0.4)));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Test", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp, lightStrip));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
             SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
         }

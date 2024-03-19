@@ -10,7 +10,6 @@ import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.*;
 import frc.robot.utils.DriveMode;
 
@@ -20,7 +19,7 @@ public class DevourerPiece extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
                                 new ParallelCommandGroup(
-                                new LowerDeployer(deployer),
+                                new LowerDeployer(deployer, lightStrip),
                                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
                                 ),
                                 new ParallelRaceGroup(
