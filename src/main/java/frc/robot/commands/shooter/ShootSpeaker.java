@@ -37,16 +37,12 @@ public class ShootSpeaker extends Command {
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-            if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED)){
-                lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-            }
+            lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED,Constants.SHOOTER_MOTOR_LOW_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
         else {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
-            if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED)){
-                lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-            }
+            lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED,Constants.SHOOTER_MOTOR_HIGH_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
     }
 

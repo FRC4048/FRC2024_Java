@@ -12,7 +12,7 @@ public class CancelAllSequence extends SequentialCommandGroup {
     public CancelAllSequence(Ramp ramp, Shooter shooter, Amp amp, LightStrip lightStrip) {
         addCommands(
             new RetractAmp(amp, lightStrip),
-            new CancelAll(ramp, shooter)
+            new CancelAll(ramp, shooter, lightStrip)
         );
     }
 }
