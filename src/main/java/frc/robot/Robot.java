@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -11,12 +12,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
@@ -44,6 +43,7 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
         CommandUtil.logged(new WheelAlign(robotContainer.getDrivetrain())).schedule();
         CommandUtil.logged(new ResetGyro(robotContainer.getDrivetrain(), 2)).schedule();
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     @Override
