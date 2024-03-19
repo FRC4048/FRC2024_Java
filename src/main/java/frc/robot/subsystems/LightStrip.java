@@ -29,10 +29,11 @@ public class LightStrip extends SubsystemBase {
                 .stream()
                 .filter(BooleanSupplier::getAsBoolean)
                 .findFirst()
-                .ifPresentOrElse(c -> {
+                .ifPresent(c -> {
                     setPattern(predicateLightEvents.get(c));
                     predicateLightEvents.remove(c);
-                }, ()->{}
+                    Logger.logInteger(baseLogName + "predicateSize", predicateLightEvents.size(), Constants.ENABLE_LOGGING);
+                }
         );
     }
 
