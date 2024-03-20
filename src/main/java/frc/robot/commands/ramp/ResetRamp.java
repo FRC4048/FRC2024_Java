@@ -7,6 +7,7 @@ package frc.robot.commands.ramp;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Ramp;
 import frc.robot.utils.TimeoutCounter;
 
@@ -14,7 +15,7 @@ public class ResetRamp extends Command {
   /** Creates a new ResetRamp. */
   private final Ramp ramp;
   private double startTime;
-  private final TimeoutCounter timeoutCounter = new TimeoutCounter("Reset Ramp");
+  private final TimeoutCounter timeoutCounter;
 
   /*
    *When we get the robot:
@@ -23,8 +24,9 @@ public class ResetRamp extends Command {
    *TODO: Check if the motor is at a reasonable speed
    */
 
-  public ResetRamp(Ramp ramp) {
+  public ResetRamp(Ramp ramp, LightStrip lightStrip) {
     this.ramp = ramp;
+    timeoutCounter = new TimeoutCounter("Reset Ramp", lightStrip);
     addRequirements(ramp);
   }
 

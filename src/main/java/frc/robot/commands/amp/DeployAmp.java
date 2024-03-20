@@ -4,15 +4,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class DeployAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
-    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Deploy Amp");
+    private final TimeoutCounter timeoutCounter;
 
-    public DeployAmp(Amp amp) {
+    public DeployAmp(Amp amp, LightStrip lightStrip) {
         this.amp = amp;
+        timeoutCounter = new TimeoutCounter("Deploy Amp", lightStrip);
         addRequirements(amp);
     }
 

@@ -7,6 +7,7 @@ package frc.robot.commands.drivetrain;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.TimeoutCounter;
@@ -20,14 +21,15 @@ public class MoveDistance extends Command {
   private double desiredPoseX;
   private double desiredPoseY;
   private SwerveDrivetrain drivetrain;
-  private TimeoutCounter timeoutCounter = new TimeoutCounter("Move Distance");
+  private final TimeoutCounter timeoutCounter;
 
-  public MoveDistance(SwerveDrivetrain drivetrain, double changeXMeters, double changeYMeters, double maxSpeed) {
+  public MoveDistance(SwerveDrivetrain drivetrain, LightStrip lightStrip, double changeXMeters, double changeYMeters, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
     this.changeXMeters = changeXMeters;
     this.changeYMeters = changeYMeters;
     this.maxSpeed = Math.abs(maxSpeed);
+    timeoutCounter = new TimeoutCounter("Move Distance", lightStrip);
     addRequirements(drivetrain);
   }
 

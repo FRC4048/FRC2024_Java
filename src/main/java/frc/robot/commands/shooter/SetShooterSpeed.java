@@ -6,8 +6,9 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
+import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -15,14 +16,17 @@ public class SetShooterSpeed extends Command {
   /** Creates a new DummyShoot. */
   private double startTime = Timer.getFPGATimestamp();
   private final Shooter shooter;
+  private final LightStrip lightStrip;
   private double desiredLeftSpeedRpm;
   private double desiredRightSpeedRpm;
-  private final TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
-  public SetShooterSpeed(Shooter shooter) {
+  private final TimeoutCounter timeoutCounter;
+  public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
     this.shooter = shooter;
-    addRequirements(shooter);
+    this.lightStrip = lightStrip;
     SmartShuffleboard.put("Shooter", "Desired Left Speed", 0.0);
     SmartShuffleboard.put("Shooter", "Desired Right Speed", 0.0);
+    timeoutCounter = new TimeoutCounter(getName(), lightStrip);
+    addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -39,6 +43,9 @@ public class SetShooterSpeed extends Command {
   public void execute() {
     shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
     shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    if (shooter.upToSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
+      lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+    }
   }
 
   // Called once the command ends or is interrupted.
