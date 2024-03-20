@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -168,12 +169,6 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
-
-        if (Constants.AMP_DEBUG) {
-//            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
-//            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
-            SmartShuffleboard.put("Amp", "isDeployed", amp.isAmpDeployed());
-        }
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer, lightStrip)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer, lightStrip)));
@@ -241,19 +236,17 @@ public class RobotContainer {
 
         // Set up to shoot AMP - A
         controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
-                new DeployAmp(amp, lightStrip),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
                 new ShootAmp(shooter, lightStrip)));
 
         // Cancell all - B
-        controller.b().onTrue(CommandUtil.logged(new CancelAllSequence(ramp, shooter, amp, lightStrip)));
+        controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
                 new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RetractAmp(amp, lightStrip),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
 
         //Driver Shoot
@@ -261,13 +254,9 @@ public class RobotContainer {
                 new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RetractAmp(amp, lightStrip),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
         );
-
-        // amp up and down
-        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp, lightStrip)));
-
+        
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
