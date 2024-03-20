@@ -50,20 +50,7 @@ import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-<<<<<<< HEAD
-import frc.robot.subsystems.Amp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PowerMonitor;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.subsystems.Vision;
-=======
 import frc.robot.subsystems.*;
->>>>>>> main
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -272,7 +259,7 @@ public class RobotContainer {
 
         // amp up and down
         controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp, lightStrip)));
-        
+
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
