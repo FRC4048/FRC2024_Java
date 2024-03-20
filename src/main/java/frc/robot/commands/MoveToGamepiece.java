@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
+import frc.robot.utils.logging.Logger;
 
 public class MoveToGamepiece extends Command {
     private SwerveDrivetrain drivetrain;
@@ -36,11 +37,17 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public void execute() {
+        Logger.logDouble("/Vision/XAngle", vision.getPieceOffestAngleX(), Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Vision/YAngle", vision.getPieceOffestAngleY(), Constants.ENABLE_LOGGING);
         ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
         xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
         if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(xchange));
-        drivetrain.drive(driveStates);
+            double forwardSpeed = movingPIDController.calculate(ychange);
+            double turningSpeed = turningPIDController.calculate(xchange);
+            Logger.logDouble("/MoveToGamePiece/ForwardSpeed", forwardSpeed, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Vision/turningSpeed", turningSpeed, Constants.ENABLE_LOGGING);
+            driveStates = new ChassisSpeeds(forwardSpeed, 0, turningSpeed);
+            drivetrain.drive(driveStates);
         }
     }
 
@@ -51,6 +58,8 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        Logger.logDouble("/MoveToGamePiece/ForwardSpeed", 0, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Vision/turningSpeed", 0, Constants.ENABLE_LOGGING);
         drivetrain.drive(new ChassisSpeeds(0, 0, 0));
     }
 }
