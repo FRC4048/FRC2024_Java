@@ -66,6 +66,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PowerMonitor;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrivetrain;
