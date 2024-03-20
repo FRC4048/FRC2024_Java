@@ -4,14 +4,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.LightStrip;
+import frc.robot.utils.BlinkinPattern;
 
 public class TimedFeeder extends Command {
     private final Feeder feeder;
     private final Timer timer = new Timer();
+    private final LightStrip lightStrip;
     private final double motorRunTime; // temporary until  done testing
 
-    public TimedFeeder(Feeder feeder, double motorRunTime) {
+    public TimedFeeder(Feeder feeder, LightStrip lightStrip, double motorRunTime) {
         this.feeder = feeder;
+        this.lightStrip = lightStrip;
         this.motorRunTime = motorRunTime;
         addRequirements(feeder);
     }
@@ -21,6 +25,9 @@ public class TimedFeeder extends Command {
         feeder.switchFeederBeamState(false);
         timer.reset();
         timer.start();
+        if (feeder.pieceSeen(false)){
+            lightStrip.setPattern(BlinkinPattern.BLACK);
+        }
     }
 
     @Override
