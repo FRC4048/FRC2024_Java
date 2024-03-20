@@ -256,9 +256,6 @@ public class RobotContainer {
                 new StopShooter(shooter),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
         );
-
-        // amp up and down
-        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp, lightStrip)));
         
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
