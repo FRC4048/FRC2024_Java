@@ -4,14 +4,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.LightStrip;
+import frc.robot.utils.BlinkinPattern;
 
 public class StartFeeder extends Command {
 
     private final Feeder feeder;
+    private final LightStrip lightStrip;
     private double startTime;
 
-    public StartFeeder(Feeder feeder) {
+    public StartFeeder(Feeder feeder, LightStrip lightStrip) {
         this.feeder = feeder;
+        this.lightStrip = lightStrip;
         addRequirements(feeder);
     }
 
@@ -28,6 +32,7 @@ public class StartFeeder extends Command {
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
+        lightStrip.setPattern(BlinkinPattern.ORANGE);
         
     }
 

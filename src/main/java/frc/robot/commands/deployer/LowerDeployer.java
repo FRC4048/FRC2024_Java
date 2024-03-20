@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Deployer;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class LowerDeployer extends Command {
@@ -11,10 +12,11 @@ public class LowerDeployer extends Command {
     private Deployer deployer;
     private Timer timer = new Timer();
     private final double MOTOR_RUN_TIME = Constants.DEPLOYER_RAISE_TIMEOUT;
-    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Lower Deployer");
+    private final TimeoutCounter timeoutCounter;
 
-    public LowerDeployer(Deployer deployer) {
+    public LowerDeployer(Deployer deployer, LightStrip lightStrip) {
         this.deployer = deployer;
+        timeoutCounter = new TimeoutCounter("Lower Deployer", lightStrip);
         addRequirements(deployer);
     }
 
