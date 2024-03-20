@@ -21,6 +21,7 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
+    public static final boolean RELY_COLOR_SENSOR = false;
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -74,7 +75,8 @@ public class GameConstants {
     public static final double SHOOTER_TIME_BEFORE_STOPPING = 0.5;
 
     //FEEDER
-    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.5;
+    public static final double FEEDER_MOTOR_ENTER_SPEED = 0.9;
+    public static final double FEEDER_SLOW_SPEED = 0.3;
     public static final double FEEDER_BACK_DRIVE_SPEED = -0.25;
     public static final double FEEDER_MOTOR_SPEAKER_SPEED = 1.0;
     public static final double FEEDER_MOTOR_AMP_SPEED = 0.7;
@@ -101,30 +103,26 @@ public class GameConstants {
     public static final double CLIMBER_TORTURE_SPEED = 1.0;
 
     //INTAKE
-    public static final double INTAKE_MOTOR_1_SPEED = 0.8;
-    public static final double INTAKE_MOTOR_2_SPEED = 0.8;
+    public static final double INTAKE_MOTOR_1_SPEED = 0.9;
+    public static final double INTAKE_MOTOR_2_SPEED = 0.9;
+    public static final double INTAKE_SPOOL_TIME = 0.25;
     public static final int INTAKE_MOTOR_PEAK_CURRENT_LIMIT = 0; //value has to be tweaked
     public static final int INTAKE_MOTOR_PEAK_CURRENT_DURATION = 10; //value has to be tweaked
     public static final int INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT = 1; //value has to be tweaked
     public static final boolean INTAKE_CURRENT_LIMIT_ENABLED = false; //value has to be tweaked
+    public static final double INTAKE_PIECE_THESHOLD = 15;
+    public static final int INTAKE_SPIKE_THESHOLD = 4;
+    public static final double CURRENT_INTAKE_TIMEOUT = 10;
 
     //DRIVETRAIN
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
     public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
-    public static final double TURN_TO_GAMEPIECE_TURNING_P = 0.02;
-    public static final double TURN_TO_GAMEPIECE_TURNING_D = 0.00015;
-    public static final double TURN_TO_GAMEPIECE_MOVING_P = 0.06;
 
     //Limelight
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_Y = -21;
-    public static final double LIMELIGHT_TURN_TO_PIECE_DESIRED_X = -8; //Put Gampeiece in middle to get offset
-    public static final int INTAKE_LIME_TIMEOUT = 5;
-    public static final double PIECE_LOST_TIME_THRESHOLD = 0.5;
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y = -17;
+    public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
     public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
-    public static final double TIMEOUT_AFTER_PIECE_NOT_SEEN = 0.5;
-    public static final double GAMEPIECE_MAX_VELOCITY = 150 * 4.8 / (2* 0.381);
-    public static final double GAMEPIECE_MAX_ACCELERATION = 2 * Math.PI * 150;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
     public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";
@@ -150,5 +148,6 @@ public class GameConstants {
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
+    public static final double TIMED_FEEDER_EXIT = 0.5;
 
 }
