@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,7 +9,6 @@ import frc.robot.utils.logging.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 public class LightStrip extends SubsystemBase {
@@ -50,13 +48,5 @@ public class LightStrip extends SubsystemBase {
     }
     public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {
         predicateLightEvents.put(callable, pattern);
-    }
-    public static BooleanSupplier isDelayOver(double delay){
-        double startTime = Timer.getFPGATimestamp();
-        return () -> hasHappened(startTime + delay);
-    }
-
-    private static boolean hasHappened(double time) {
-        return Timer.getFPGATimestamp() - time >= TimeUnit.MILLISECONDS.convert(20,TimeUnit.SECONDS);
     }
 }
