@@ -44,8 +44,8 @@ public class MoveToGamepiece extends Command {
         if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
             double forwardSpeed = movingPIDController.calculate(ychange);
             double turningSpeed = turningPIDController.calculate(xchange);
-            Logger.logDouble("/MoveToGamePiece/ForwardSpeed", forwardSpeed, Constants.ENABLE_LOGGING);
-            Logger.logDouble("/Vision/turningSpeed", turningSpeed, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Vision/" + getName() + "/ForwardSpeed", forwardSpeed, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Vision/" + getName() + "/turningSpeed", turningSpeed, Constants.ENABLE_LOGGING);
             driveStates = new ChassisSpeeds(forwardSpeed, 0, turningSpeed);
             drivetrain.drive(driveStates);
         }
