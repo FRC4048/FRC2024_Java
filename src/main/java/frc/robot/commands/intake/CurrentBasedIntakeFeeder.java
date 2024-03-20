@@ -26,6 +26,7 @@ public class CurrentBasedIntakeFeeder extends Command {
     @Override
     public void initialize() {
         feeder.switchFeederBeamState(true);
+        lightStrip.setPattern(BlinkinPattern.ORANGE);
         timer.reset();
         timer.start();
     }
@@ -49,7 +50,7 @@ public class CurrentBasedIntakeFeeder extends Command {
         slowState = false;
         timer.stop();
         if (feeder.pieceSeen(true)){
-            lightStrip.setPattern(BlinkinPattern.DARK_GREEN);
+            lightStrip.setPattern(BlinkinPattern.GREEN);
         }
     }
 

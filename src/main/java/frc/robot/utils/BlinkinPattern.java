@@ -125,11 +125,10 @@ public enum BlinkinPattern {
      * range of 500 to 2500 mS.  The first pattern expects 1005mS, ergo the position
      * for the first pattern is 0.2525.
      */
-    private final static double PULSE_WIDTH_INCREMENTOR = 0.001;
-    private final static double BASE_SERVO_POSITION = 1005 * PULSE_WIDTH_INCREMENTOR;
-    private final static int PATTERN_OFFSET = 10;
+    private final static double start = -0.99;
+    private final static double increment = 0.02;
     public double getPwm(){
-        return ((PATTERN_OFFSET * this.ordinal()) / -1015.15);
+        return start + (increment * this.ordinal());
     }
     public BlinkinPattern next(){
         if (this.ordinal() + 1 < values().length){

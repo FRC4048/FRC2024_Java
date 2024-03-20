@@ -4,6 +4,7 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
@@ -28,8 +29,9 @@ public class TimeoutCounter {
         timeoutCounter++;
         totalTimeouts++;
         Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
-        lightStrip.setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
-        lightStrip.setPatternLater(1,BlinkinPattern.DARK_GRAY);
+        lightStrip.setPattern(BlinkinPattern.HOT_PINK);
+        double startTime = Timer.getFPGATimestamp();
+        lightStrip.scheduleOnTrue(()-> Timer.getFPGATimestamp() - startTime >= 1, BlinkinPattern.BLACK);
     }
     public String getCommandName() {
         return commandName;

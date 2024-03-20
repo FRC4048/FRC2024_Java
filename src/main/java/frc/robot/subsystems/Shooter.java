@@ -96,4 +96,9 @@ public class Shooter extends SubsystemBase {
     Logger.logDouble(baseLogName + "motorLeftRPM", getShooterMotorLeftRPM(), Constants.ENABLE_LOGGING);
     Logger.logDouble(baseLogName + "motorRightRPM", getShooterMotorRightRPM(), Constants.ENABLE_LOGGING);
   }
+
+  public boolean upToSpeed(double leftSpeed, double rightSpeed) {
+    return ((getShooterMotorLeftRPM() / leftSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD) &&
+            ((getShooterMotorRightRPM() / rightSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD);
+  }
 }
