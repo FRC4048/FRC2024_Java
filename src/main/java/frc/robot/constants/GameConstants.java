@@ -13,9 +13,9 @@ public class GameConstants {
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
-    public static final boolean CLIMBER_DEBUG = false;
+    public static final boolean CLIMBER_DEBUG = true;
     public static final boolean INTAKE_DEBUG = false;
-    public static final boolean DEPLOYER_DEBUG = false;
+    public static final boolean DEPLOYER_DEBUG = true;
     public static final boolean AMP_DEBUG = false;
     public static final boolean VISION_DEBUG = false;
     public static final boolean PATHPLANNER_DEBUG = false;
@@ -98,6 +98,7 @@ public class GameConstants {
     public static final double MAX_CLIMBER_ENCODER = 80.0;
     public static final double RAISING_TIMEOUT = 3;
     public static final double RESET_CLIMBER_TIMEOUT = 1;
+    public static final double CLIMBER_TORTURE_SPEED = 1.0;
 
     //INTAKE
     public static final double INTAKE_MOTOR_1_SPEED = 0.8;

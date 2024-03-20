@@ -60,6 +60,7 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.commands.climber.ClimberTorture;
 
 import java.util.Optional;
 
@@ -165,6 +166,10 @@ public class RobotContainer {
 
     public void putShuffleboardCommands() {
 
+        if (Constants.CLIMBER_DEBUG) {
+            SmartShuffleboard.putCommand("Climber", "TortureClimber", CommandUtil.logged(new ClimberTorture(climber)));
+        }
+
         if (Constants.AMP_DEBUG) {
 //            SmartShuffleboard.putCommand("Amp", "Deploy AMP", CommandUtil.logged(new DeployAmpSequence(ramp, amp)));
 //            SmartShuffleboard.putCommand("Amp", "Retract AMP", CommandUtil.logged(new RetractAmpSequence(ramp, amp)));
@@ -188,7 +193,7 @@ public class RobotContainer {
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
 
         }
-        if (Constants.FEEDER_DEBUG) {
+        if (Constants.FEEDER_DEBUG) {   
             SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder)));
         }
         if (Constants.INTAKE_DEBUG) {

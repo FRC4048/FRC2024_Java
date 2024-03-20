@@ -21,6 +21,8 @@ public class Climber extends SubsystemBase {
     private final SparkLimitSwitch rightExtendedLimit;
     private final SparkLimitSwitch leftExtendedLimit;
     private boolean ratchetEngaged = true;
+    private double leftCurrent;
+    private double rightCurrent;
 
     public Climber() {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
@@ -43,7 +45,8 @@ public class Climber extends SubsystemBase {
         this.rightServo = new Servo(Constants.RIGHT_SERVO_ID);
         this.leftServo.setBoundsMicroseconds(2200, 0, 1500, 0, 800);
         this.rightServo.setBoundsMicroseconds(2200, 0, 1500, 0, 1100);
-
+        climberRight.setSmartCurrentLimit(15);
+        climberLeft.setSmartCurrentLimit(15);
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftExtendedLimit, "Climber", "Left Extended"));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(rightExtendedLimit, "Climber", "Right Extended"));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxLimit(leftRetractedLimit, "Climber", "Left Retracted"));
@@ -56,7 +59,7 @@ public class Climber extends SubsystemBase {
      * @return true if setting speed was successful
      */
     public boolean setSpeed(double spd) {
-        if (spd > 0 && ratchetEngaged) return false;
+        /*if (spd > 0 && ratchetEngaged) return false;
         if (spd > 0) {
             if (climberRight.getEncoder().getPosition() < -78) {
                 climberRight.set(0);
@@ -68,10 +71,9 @@ public class Climber extends SubsystemBase {
             } else {
                 climberLeft.set(spd);
             }
-        } else {
-            climberRight.set(-spd);
-            climberLeft.set(spd);
-        }
+        } else {*/
+        climberLeft.set(spd);
+        //}
         return true;
     }
 
@@ -100,11 +102,15 @@ public class Climber extends SubsystemBase {
 
     @Override
     public void periodic() {
+        leftCurrent = climberLeft.getOutputCurrent();
+        rightCurrent = climberRight.getOutputCurrent();
         if (Constants.CLIMBER_DEBUG) {
             SmartShuffleboard.put("Climber", "Left Retracted", leftRetractedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Right Retracted", rightRetractedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Left Extended", leftExtendedLimit.isPressed());
             SmartShuffleboard.put("Climber", "Right Extended", rightExtendedLimit.isPressed());
+            SmartShuffleboard.put("Climber", "Left Current", leftCurrent);
+            SmartShuffleboard.put("Climber", "Right Current", rightCurrent);
 
             SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
             SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
