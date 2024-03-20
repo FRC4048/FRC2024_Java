@@ -240,7 +240,7 @@ public class RobotContainer {
                 new ShootAmp(shooter, lightStrip)));
 
         // Cancell all - B
-        controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter)));
+        controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));
 
         // Shoot - Right Trigger
         controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
