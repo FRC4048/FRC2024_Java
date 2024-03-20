@@ -18,6 +18,9 @@ public class SetShooterSpeed extends Command {
   private double desiredLeftSpeedRpm;
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter = new TimeoutCounter(getName());
+  private Timer timer;
+  private boolean leftStarted;
+  private boolean rightStarted;
   public SetShooterSpeed(Shooter shooter) {
     this.shooter = shooter;
     addRequirements(shooter);
@@ -32,13 +35,21 @@ public class SetShooterSpeed extends Command {
     startTime = Timer.getFPGATimestamp();
     desiredLeftSpeedRpm = SmartShuffleboard.getDouble("Shooter", "Desired Left Speed", 0.0);
     desiredRightSpeedRpm = SmartShuffleboard.getDouble("Shooter", "Desired Right Speed", 0.0);
+    leftStarted = false;
+    rightStarted = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
-    shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    if (!leftStarted) {
+      shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
+      leftStarted = true;
+    } 
+    if (timer.getFPGATimestamp() - startTime > 0.1 && !rightStarted) {
+      shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+      rightStarted = true;
+    }
   }
 
   // Called once the command ends or is interrupted.

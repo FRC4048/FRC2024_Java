@@ -7,6 +7,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.ShooterSpeed;
+import edu.wpi.first.wpilibj.Timer;
 
 import java.util.function.Supplier;
 
@@ -18,6 +19,10 @@ public class AdvancedSpinningShot extends Command {
     private ShooterSpeed shooterSpeed;
     private static final ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
     private static final ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
+    private Timer timer = new Timer();
+    private double startTime;
+    private boolean leftStarted;
+    private boolean rightStarted;
 
     public AdvancedSpinningShot(Shooter shooter , Supplier<Pose2d> curentPoseSupplier, Supplier<Alignable> alignableSupplier) {
         this.shooter = shooter;
@@ -30,12 +35,19 @@ public class AdvancedSpinningShot extends Command {
     public void initialize() {
         this.shooterSpeed = calcuateShooterSpeed();
         this.alignable = alignableSupplier.get();
+        startTime=Timer.getFPGATimestamp();
+        leftStarted = false;
+        rightStarted = false;
     }
 
     @Override
     public void execute() {
         shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
-        shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
+        leftStarted = true;
+        if (timer.getFPGATimestamp() - startTime > 0.1) {
+            shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
+            rightStarted=true;
+        }
     }
 
     @Override
@@ -45,7 +57,7 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public boolean isFinished() {
-        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
+        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get()); // IDK WHAT THIS DOES
     }
 
     private ShooterSpeed calcuateShooterSpeed() {

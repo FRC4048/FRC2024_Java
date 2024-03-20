@@ -13,6 +13,10 @@ public class ShootSpeaker extends Command {
 
     private final Shooter shooter;
     private SwerveDrivetrain drivetrain;
+    private Timer timer = new Timer();
+    private double startTime;
+    private boolean leftStarted;
+    private boolean rightStarted;
     public ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain) {
         this.shooter = shooter;
         this.drivetrain = drivetrain;
@@ -21,6 +25,9 @@ public class ShootSpeaker extends Command {
 
     @Override
     public void initialize() {
+        startTime = Timer.getFPGATimestamp();
+        leftStarted = false;
+        rightStarted = false;
     }
 
     @Override 
@@ -33,12 +40,22 @@ public class ShootSpeaker extends Command {
         double gyro = ((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360); //Gets the gyro value 0-360
         if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) ||
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
-            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
-            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            if (!leftStarted) {
+                shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+                leftStarted = true;
+            }
+            if (timer.getFPGATimestamp() - startTime > 0.1 && !rightStarted) {
+                shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            }
         }
         else {
-            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            if (!rightStarted) {
+                shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+                rightStarted = true;
+            }
+            if (timer.getFPGATimestamp() - startTime > 0.1 && !leftStarted) {
+                shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            }
         }
     }
 
