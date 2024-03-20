@@ -6,11 +6,11 @@ import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
 
-public class ShootAmp extends Command {
+public class ShootTrap extends Command {
     private final Shooter shooter;
     private final LightStrip lightStrip;
 
-    public ShootAmp(Shooter shooter, LightStrip lightStrip) {
+    public ShootTrap(Shooter shooter, LightStrip lightStrip) {
         this.shooter = shooter;
         this.lightStrip = lightStrip;
         addRequirements(shooter);
@@ -27,9 +27,9 @@ public class ShootAmp extends Command {
 
     @Override
     public void execute() {
-        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-        if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED, Constants.SHOOTER_MOTOR_AMP_SPEED)){
+        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_TRAP_SPEED);
+        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_TRAP_SPEED);
+        if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_TRAP_SPEED, Constants.SHOOTER_MOTOR_TRAP_SPEED)){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
     }

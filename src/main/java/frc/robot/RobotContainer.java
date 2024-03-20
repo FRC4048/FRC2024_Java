@@ -234,10 +234,10 @@ public class RobotContainer {
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
-        // Set up to shoot AMP - A
-        controller.a().onTrue(CommandUtil.parallel("Setup Amp shot",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_AMP),
-                new ShootAmp(shooter, lightStrip)));
+        // Set up to shoot TRAP - A
+        controller.a().onTrue(CommandUtil.parallel("Setup Trap shot",
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_TRAP), //Needs to be set
+                new ShootTrap(shooter, lightStrip)));
 
         // Cancell all - B
         controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));
