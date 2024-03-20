@@ -150,6 +150,7 @@ public class GameConstants {
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double TIMED_FEEDER_EXIT = 0.5;
+    public static final double FEEDER_TRAP_EXIT_SPEED = 0.8;
     public static final int LIGHTSTRIP_PORT = 7;
 
 }

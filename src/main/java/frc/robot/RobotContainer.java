@@ -257,8 +257,13 @@ public class RobotContainer {
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
         );
 
-        // amp up and down
-        controller.povLeft().onTrue(CommandUtil.logged(new ToggleAmp(amp, lightStrip)));
+        // trap up and down (Need to apply shooter and ramp)
+        controller.povLeft().onTrue(CommandUtil.sequence("Trap Shot",                
+                new TimedFeeder(feeder,lightStrip, Constants.FEEDER_TRAP_EXIT_SPEED),
+                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new StopShooter(shooter),
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))//Needs to be updated
+                );
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
