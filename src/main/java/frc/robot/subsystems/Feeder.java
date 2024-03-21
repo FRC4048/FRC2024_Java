@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
+
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,8 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.ColorSensor;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
+import frc.robot.utils.diag.DiagTalonSrxSwitch;
+import frc.robot.utils.diag.DiagTalonSrxSwitch.Direction;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -28,6 +31,8 @@ public class Feeder extends SubsystemBase {
         this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "FwdLimitSwitch", feederMotor, Direction.FORWARD));
+
     }
 
     public void setFeederMotorSpeed(double speed) {
