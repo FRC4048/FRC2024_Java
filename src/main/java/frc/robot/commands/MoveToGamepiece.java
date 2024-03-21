@@ -37,10 +37,10 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public void execute() {
-        Logger.logDouble("/Vision/XAngle", vision.getPieceOffestAngleX(), Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Vision/YAngle", vision.getPieceOffestAngleY(), Constants.ENABLE_LOGGING);
         ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
         xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
+        Logger.logDouble("/Vision/XError", xchange, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Vision/YError", ychange, Constants.ENABLE_LOGGING);
         if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
             double forwardSpeed = movingPIDController.calculate(ychange);
             double turningSpeed = turningPIDController.calculate(xchange);
