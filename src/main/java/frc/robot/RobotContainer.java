@@ -50,6 +50,7 @@ import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
+import frc.robot.constants.TagConstants;
 import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
@@ -57,6 +58,7 @@ import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
+import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -235,9 +237,9 @@ public class RobotContainer {
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot TRAP - A
-        controller.a().onTrue(CommandUtil.parallel("Setup Trap shot",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_TRAP), //Needs to be set
-                new ShootTrap(shooter, lightStrip)));
+        controller.a().onTrue(PathPlannerUtils.pathToPose(TagConstants.getTrapPosition(drivetrain), 0));
+                // new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_TRAP), //Needs to be set
+                // new ShootTrap(shooter, lightStrip)));
 
         // Cancell all - B
         controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));
