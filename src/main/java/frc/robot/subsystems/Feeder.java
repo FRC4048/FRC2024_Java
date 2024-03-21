@@ -31,7 +31,6 @@ public class Feeder extends SubsystemBase {
     public void configureMotor(){
         this.feederMotor.setNeutralMode(NeutralMode.Brake);
         this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
-        feederMotor.setStatusFramePeriod(1,100);
         feederMotor.setStatusFramePeriod(2,100);
         feederMotor.setStatusFramePeriod(3,100);
     }
