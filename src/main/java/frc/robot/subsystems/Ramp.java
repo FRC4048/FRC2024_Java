@@ -18,16 +18,39 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         resetEncoder();
+        neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
+//        neoPidMotor.getPidController().setI(0.0000);
+        neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
+//        SmartShuffleboard.put("Ramp", "PID P", neoPidMotor.getPidController().getP());
+//        SmartShuffleboard.put("Ramp", "PID I", neoPidMotor.getPidController().getI());
+//        SmartShuffleboard.put("Ramp", "PID D", neoPidMotor.getPidController().getD());
+//        SmartShuffleboard.put("Ramp", "PID FF", neoPidMotor.getPidController().getFF());
 
         neoPidMotor.enableDiagnostics("Ramp", true, true);
     }
 
     public void periodic() {
+        if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD){
+            neoPidMotor.getPidController().setFF(NeoPidMotor.DEFAULT_FF);
+        }else{
+            neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
+        }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+//            double pidP = SmartShuffleboard.getDouble("Ramp", "PID P", neoPidMotor.getPidController().getP());
+//            double pidI = SmartShuffleboard.getDouble("Ramp", "PID I", neoPidMotor.getPidController().getI());
+//            double pidD = SmartShuffleboard.getDouble("Ramp", "PID D", neoPidMotor.getPidController().getD());
+//            double pidFF = SmartShuffleboard.getDouble("Ramp", "PID FF", neoPidMotor.getPidController().getFF());
+//            if (pidP != neoPidMotor.getPidController().getP()) neoPidMotor.getPidController().setP(pidP);
+//            if (pidI != neoPidMotor.getPidController().getI()) neoPidMotor.getPidController().setI(pidI);
+//            if (pidD != neoPidMotor.getPidController().getD()) neoPidMotor.getPidController().setD(pidD);
+//            if (pidFF != neoPidMotor.getPidController().getFF()) neoPidMotor.getPidController().setFF(pidFF);
+            SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+            SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+
         }
 
         Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);

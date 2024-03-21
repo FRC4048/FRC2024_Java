@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_DEBUG = true;
     public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
@@ -150,6 +150,9 @@ public class GameConstants {
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double TIMED_FEEDER_EXIT = 0.5;
+    public static final double RAMP_PID_P = .0000055;
+    public static final double RAMP_PID_FAR_FF = 0.00031;
+    public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
 
 }
