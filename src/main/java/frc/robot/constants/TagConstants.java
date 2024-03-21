@@ -47,40 +47,13 @@ public class TagConstants {
 
         for (int i = 11; i > 16; i++) {
             if (setLowestTag(lowest, lowestTag, drivetrain.getPose())) {
-                lowestTag = TrapPositionList.ELEVEN;//Help
+                lowestTag = TrapPositionList.values() [i];
+                lowest = Math.sqrt(Math.pow((lowestTag.getXPos() - x), 2) + Math.pow(lowestTag.getYPos() - y, 2));
             }
         }
 
-       
-            lowestTag = TrapPositionList.ELEVEN;
-
-            lowest = Math.sqrt(Math.pow((TrapPositionList.ELEVEN.getXPos() - x), 2) + Math.pow(TrapPositionList.TWELVE.getYPos() - y, 2));
-
-        if (lowest > (Math.sqrt(Math.pow((TrapPositionList.TWELVE.getXPos() - x), 2) + Math.pow(TrapPositionList.TWELVE.getYPos() - y, 2)))) {
-            lowestTag = TrapPositionList.TWELVE;
-        }
-        if (lowest > (Math.sqrt(Math.pow((TrapPositionList.THIRTEEN.getXPos() - x), 2) + Math.pow(TrapPositionList.THIRTEEN.getYPos() - y, 2)))) {
-            lowestTag = TrapPositionList.THIRTEEN;     
-        }
-        if (lowest > (Math.sqrt(Math.pow((TrapPositionList.FOURTEEN.getXPos() - x), 2) + Math.pow(TrapPositionList.FOURTEEN.getYPos() - y, 2)))) {
-            lowestTag = TrapPositionList.FOURTEEN;     
-        }
-        if (lowest > (Math.sqrt(Math.pow((TrapPositionList.FIFTEEN.getXPos() - x), 2) + Math.pow(TrapPositionList.FIFTEEN.getYPos() - y, 2)))) {
-            lowestTag = TrapPositionList.FIFTEEN;       
-        }
-        if (lowest > (Math.sqrt(Math.pow((TrapPositionList.SIXTEEN.getXPos() - x), 2) + Math.pow(TrapPositionList.SIXTEEN.getYPos() - y, 2)))) {
-            lowestTag = TrapPositionList.SIXTEEN;
-        }
-
         return new Pose2d(lowestTag.getXPos(), lowestTag.getYPos(), new Rotation2d(lowestTag.getRot()));
-
-        
-        // todo:
-        // Get current position
-        // Figure out which location is closest
-        // Return that target position
-    }
-
-    public class getTrapPosition {
     }
 }
+        
+        
