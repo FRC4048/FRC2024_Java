@@ -15,11 +15,15 @@ public class Ramp extends SubsystemBase {
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+
+        configureMotor();
+        resetEncoder();
+        neoPidMotor.enableDiagnostics("Ramp", true, true);
+    }
+
+    private void configureMotor() {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
-        resetEncoder();
-
-        neoPidMotor.enableDiagnostics("Ramp", true, true);
     }
 
     public void periodic() {
