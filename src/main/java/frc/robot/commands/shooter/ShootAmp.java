@@ -1,13 +1,11 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.utils.logging.Logger;
+import frc.robot.utils.BlinkinPattern;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ShootAmp extends Command {
     private final Shooter shooter;
@@ -15,9 +13,11 @@ public class ShootAmp extends Command {
     private double startTime;
     private boolean leftStarted;
     private boolean rightStarted;
+    private final LightStrip lightStrip;
 
-    public ShootAmp(Shooter shooter) {
+    public ShootAmp(Shooter shooter, LightStrip lightStrip) {
         this.shooter = shooter;
+        this.lightStrip = lightStrip;
         addRequirements(shooter);
     }
 
@@ -42,6 +42,9 @@ public class ShootAmp extends Command {
         if (timer.getFPGATimestamp() - startTime > 0.1) {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
             rightStarted = true;
+        }
+        if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED, Constants.SHOOTER_MOTOR_AMP_SPEED)){
+            lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
     }
 

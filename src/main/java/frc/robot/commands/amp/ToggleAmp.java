@@ -1,19 +1,21 @@
 package frc.robot.commands.amp;
 
-        import edu.wpi.first.wpilibj.Timer;
-        import edu.wpi.first.wpilibj2.command.Command;
-        import frc.robot.constants.Constants;
-        import frc.robot.subsystems.Amp;
-        import frc.robot.utils.TimeoutCounter;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.LightStrip;
+import frc.robot.utils.TimeoutCounter;
 
 public class ToggleAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
     private double speed;
-    private final TimeoutCounter timeoutCounter = new TimeoutCounter("ToggleAmp");
+    private final TimeoutCounter timeoutCounter;
 
-    public ToggleAmp(Amp amp) {
+    public ToggleAmp(Amp amp, LightStrip lightStrip) {
         this.amp = amp;
+        timeoutCounter = new TimeoutCounter("ToggleAmp", lightStrip);
         addRequirements(amp);
     }
 

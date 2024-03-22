@@ -11,13 +11,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.teleOPinitReset;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.StartIntakeAndFeeder;
+import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
+import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
@@ -29,6 +28,8 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private double loopTime = 0;
     private double aliveTics = 0;
+    private Timer ledCycleTimer = new Timer();
+    private Timer ledEndgameTimer = new Timer();
 
     private RobotContainer robotContainer;
     private Command autoCommand;
@@ -51,6 +52,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
+        if (ledEndgameTimer.hasElapsed(130)){
+            robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
+        }
     }
 
     @Override
@@ -67,6 +71,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        ledEndgameTimer.restart();
+        robotContainer.getLEDStrip().setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -84,8 +90,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer())).schedule();
-        CommandUtil.parallel("Reset Climber and Ramp",new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber())).schedule();
+        CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip())).schedule();
+        CommandUtil.parallel("Reset Climber and Ramp", new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).schedule();
     }
 
     @Override
@@ -97,12 +103,16 @@ public class Robot extends TimedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
+        ledCycleTimer.restart();
     }
 
     @Override
     public void testPeriodic() {
         loopTime = 0;
         diagnostics.refresh();
+        if (ledCycleTimer.advanceIfElapsed(0.5)){
+            robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
+        }
     }
 
     @Override

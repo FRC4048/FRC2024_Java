@@ -8,9 +8,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class StartIntake extends Command {
     private final IntakeSubsystem intakeSubsystem;
     private final Timer timer = new Timer();
-    private final int motorRunTime; // temporary until  done testing
+    private final double motorRunTime; // temporary until  done testing
 
-    public StartIntake(IntakeSubsystem intakeSubsystem, int motorRunTime ) {
+    public StartIntake(IntakeSubsystem intakeSubsystem, double motorRunTime ) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;

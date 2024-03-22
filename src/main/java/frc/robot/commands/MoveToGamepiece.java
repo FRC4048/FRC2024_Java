@@ -16,7 +16,7 @@ public class MoveToGamepiece extends Command {
     private final PIDController movingPIDController;
     private ChassisSpeeds driveStates;
     private double ychange;
-    private double cycle;
+    private double xchange;
 
 
 
@@ -24,34 +24,29 @@ public class MoveToGamepiece extends Command {
         this.drivetrain = drivetrain;
         this.vision = vision;
         addRequirements(drivetrain);
-        turningPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_TURNING_P, 0, Constants.TURN_TO_GAMEPIECE_TURNING_D);
-        movingPIDController = new PIDController(Constants.TURN_TO_GAMEPIECE_MOVING_P, 0, 0);
+        turningPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_TURNING_P, 0, Constants.MOVE_TO_GAMEPIECE_TURNING_D);
+        movingPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_MOVING_P, 0, 0);
 
     }
 
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        cycle = 0;
     }
 
     @Override
     public void execute() {
-        ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_Y;
-        if (vision.isPieceSeen() && (Math.abs(ychange) > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(vision.getPieceOffestAngleX() - Constants.LIMELIGHT_TURN_TO_PIECE_DESIRED_X));
+        ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
+        xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
+        if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
+        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(xchange));
         drivetrain.drive(driveStates);
-        }
-        if (vision.isPieceSeen()) {
-            cycle = 0;
-        } else {
-            cycle++;
         }
     }
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (Math.abs(ychange) < Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || (cycle > 5));
+        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (ychange <= Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || !vision.isPieceSeen());
     }
 
     @Override

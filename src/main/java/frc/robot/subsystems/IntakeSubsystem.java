@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-public class IntakeSubsystem extends SubsystemBase{
+public class IntakeSubsystem extends SubsystemBase {
+    private final String baseLogName = "/robot/intake/";
     private final WPI_TalonSRX intakeMotor1;
     private final WPI_TalonSRX intakeMotor2;
 
@@ -49,11 +50,14 @@ public class IntakeSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         if (Constants.INTAKE_DEBUG){
-        SmartShuffleboard.put("Intake", "Intake Motor 1 Speed", getMotor1Speed());
-        SmartShuffleboard.put("Intake", "Intake Motor 2 Speed", getMotor2Speed());
-
-        SmartShuffleboard.put("Intake", "Intake Motor 1 current", intakeMotor1.getStatorCurrent());
-        SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
+            SmartShuffleboard.put("Intake", "Intake Motor 1 Speed", getMotor1Speed());
+            SmartShuffleboard.put("Intake", "Intake Motor 2 Speed", getMotor2Speed());
+            SmartShuffleboard.put("Intake", "Intake Motor 1 current", intakeMotor1.getStatorCurrent());
+            SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
         }
+    }
+
+    public double getMotor1StatorCurrent() {
+        return intakeMotor1.getStatorCurrent();
     }
 }

@@ -1,11 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.Robot;
-import frc.robot.utils.diag.DiagTalonSrxSwitch;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -15,10 +9,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 ///This class is meant to manage the motor that "deploys" the intake, by rotating in order to raise and lower the intake area.
 public class Deployer extends SubsystemBase{
+    private final String baseLogName = "/robot/deployer/";
     private WPI_TalonSRX deployerMotor;
 
     // The following line references the "protectionMechanism" subsystem, which does not currently exist in this year's code, so I am leaving it commented out. For more detail, see the last comment on this file - currently line 82, as I am writing this
@@ -70,9 +66,13 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
         
+        /*
         SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", isDeployerForwardLimitSwitchClosed())
             .withPosition(0, 2)
             .withSize(2, 2);
+        */
+        Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+        Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
     }
 
     //Spin deployer motor

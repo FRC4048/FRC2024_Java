@@ -3,15 +3,16 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkLimitSwitch;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.DiagSparkMaxLimit;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Climber extends SubsystemBase {
+    private final String baseLogName = "/robot/climber/";
     private final CANSparkMax climberLeft;
     private final CANSparkMax climberRight; //invert this motor
     private final Servo leftServo;
@@ -97,7 +98,6 @@ public class Climber extends SubsystemBase {
     public boolean isRightReverseLimitSwitchPressed() {
         return rightRetractedLimit.isPressed();
     }
-
     @Override
     public void periodic() {
         if (Constants.CLIMBER_DEBUG) {
@@ -109,5 +109,6 @@ public class Climber extends SubsystemBase {
             SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
             SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
         }
+        Logger.logBoolean(baseLogName + "climber/engaged",ratchetEngaged, Constants.ENABLE_LOGGING);
     }
 }

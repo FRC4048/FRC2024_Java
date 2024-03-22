@@ -4,15 +4,17 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class RetractAmp extends Command {
     private Amp amp;
     private Timer timeout = new Timer();
-    private final TimeoutCounter timeoutCounter = new TimeoutCounter("Retract Amp");
+    private final TimeoutCounter timeoutCounter;
 
-    public RetractAmp(Amp amp) {
+    public RetractAmp(Amp amp, LightStrip lightStrip) {
         this.amp = amp;
+        timeoutCounter = new TimeoutCounter("Retract Amp", lightStrip);
         addRequirements(amp);
     }
 

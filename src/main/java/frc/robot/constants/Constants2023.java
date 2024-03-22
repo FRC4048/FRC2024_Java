@@ -19,6 +19,7 @@ public class Constants2023 extends GameConstants {
     public static final int LEFT_SERVO_DISENGAGED = 180;
     public static final int LEFT_SERVO_ID = 0;
     public static final int RIGHT_SERVO_ID = 1;
+    public static final int LED_PWM_ID = 2;
     //Shooter
     public static final int SHOOTER_MOTOR_LEFT = 4400; //needs to be changed
     public static final int SHOOTER_MOTOR_RIGHT = 4500; //needs to be changed
@@ -53,6 +54,11 @@ public class Constants2023 extends GameConstants {
     public static final double DRIVE_PID_FF_S = 1;
     public static final double DRIVE_PID_FF_V = 2.8;
 
+    //Current Caps
+    public static final int DRIVE_SMART_LIMIT = 30;
+    public static final int DRIVE_SECONDARY_LIMIT = 40;
+    public static final double DRIVE_RAMP_RATE_LIMIT = 0.25;
+
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
     public static final double STEER_PID_D = 0;
@@ -71,6 +77,11 @@ public class Constants2023 extends GameConstants {
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 339.5;
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 18.72;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 133.3;
+
+    //Limelight
+    public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.015;
+    public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.06;
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;
