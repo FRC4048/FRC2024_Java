@@ -23,9 +23,6 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
-import frc.robot.commands.amp.RetractAmp;
-import frc.robot.commands.amp.ToggleAmp;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -45,7 +42,6 @@ import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.*;
 import frc.robot.constants.Constants;
@@ -89,8 +85,6 @@ public class RobotContainer {
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
     private final PowerMonitor powerMonitor = new PowerMonitor();
-    private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
-
     private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
 
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
