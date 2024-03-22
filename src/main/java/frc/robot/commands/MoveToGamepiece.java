@@ -9,44 +9,46 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.Vision;
 
 public class MoveToGamepiece extends Command {
-    private SwerveDrivetrain drivetrain;
-    private Vision vision;
+    private final SwerveDrivetrain drivetrain;
+    private final Vision vision;
     private double startTime;
     private final PIDController turningPIDController;
     private final PIDController movingPIDController;
-    private ChassisSpeeds driveStates;
-    private double ychange;
-    private double xchange;
+    private double yChange;
+    private double pieceNotSeenCounter = 0;
 
 
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
         this.drivetrain = drivetrain;
         this.vision = vision;
-        addRequirements(drivetrain);
         turningPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_TURNING_P, 0, Constants.MOVE_TO_GAMEPIECE_TURNING_D);
         movingPIDController = new PIDController(Constants.MOVE_TO_GAMEPIECE_MOVING_P, 0, 0);
-
+        addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
+        pieceNotSeenCounter = 0;
     }
 
     @Override
     public void execute() {
-        ychange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
-        xchange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
-        if (vision.isPieceSeen() && (ychange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD)) {
-        driveStates = new ChassisSpeeds(movingPIDController.calculate(ychange), 0, turningPIDController.calculate(xchange));
-        drivetrain.drive(driveStates);
+        yChange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
+        double xChange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
+        if (yChange == 0){
+            pieceNotSeenCounter++;
+        }
+        if (pieceNotSeenCounter < Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT && yChange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD){
+            ChassisSpeeds driveStates = new ChassisSpeeds(movingPIDController.calculate(yChange), 0, turningPIDController.calculate(xChange));
+            drivetrain.drive(driveStates);
         }
     }
 
     @Override
     public boolean isFinished() {
-        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (ychange <= Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || !vision.isPieceSeen());
+        return ((Timer.getFPGATimestamp() - startTime > Constants.MOVE_TO_GAMEPIECE_TIMEOUT) || (yChange <= Constants.MOVE_TO_GAMEPIECE_THRESHOLD) || pieceNotSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT);
     }
 
     @Override

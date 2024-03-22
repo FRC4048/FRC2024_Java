@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -19,16 +17,14 @@ import frc.robot.utils.diag.DiagAprilTags;
 import frc.robot.utils.diag.DiagLimelight;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
+import java.util.Map;
+
 public class Vision extends SubsystemBase {
   /** Creates a new Limelight. */
   private final NetworkTable table;
   private final NetworkTableEntry tv;
   private final NetworkTableEntry tx;
   private final NetworkTableEntry ty;
-  private int noPieceSeenCounter;
-  private boolean pieceSeen;
-  private double x;
-  private double y;
 
   
   public Vision() {
@@ -45,44 +41,21 @@ public class Vision extends SubsystemBase {
   }
 
   /**
-   * 
-   * @return whether or not the piece has not been seen for a number of cycles
-   */
-  public boolean isPieceSeen() {
-    return pieceSeen;
-  }
-
-  /**
    * @return The piece's x offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleX() {
-    return x;
+    return tx.getDouble(0);
   }
 
   /**
    * @return The piece's y offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleY() {
-    return y;
+    return ty.getDouble(0);
   }
 
   @Override
   public void periodic() {
-    if(tv.getDouble(0) == 0) {
-      noPieceSeenCounter++;
-      if(noPieceSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT) {
-        x = 0.0;
-        y = 0.0;
-        pieceSeen = false;
-      }
-    }
-    else {
-      noPieceSeenCounter = 0;
-      x = tx.getDouble(0.0);
-      y = ty.getDouble(0.0);
-      pieceSeen = true;
-    }
-
     if(Constants.VISION_DEBUG) {
       SmartShuffleboard.put("Vision", "tv", tv.getDouble(-1));
       SmartShuffleboard.put("Vision", "tx", tx.getDouble(0.0));
