@@ -7,7 +7,7 @@ import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
-public class Ramp extends SubsystemBase {
+public class Ramp extends SubsystemBase { 
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
     private boolean shootClosePos;

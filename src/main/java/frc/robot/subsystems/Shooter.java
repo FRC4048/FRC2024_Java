@@ -13,6 +13,9 @@ public class Shooter extends SubsystemBase {
   
   private final NeoPidMotor neoPidMotorLeft;
   private final NeoPidMotor neoPidMotorRight;
+  private double leftCurrent;
+  private double rightCurrent;
+  private double totalCurrent;
 
   public Shooter() {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
@@ -32,6 +35,8 @@ public class Shooter extends SubsystemBase {
 
     neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
     neoPidMotorRight.setIdleMode(IdleMode.kBrake);
+
+
   }
 
   /**
@@ -89,9 +94,17 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
+    rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
+    totalCurrent = leftCurrent + rightCurrent;
     if (Constants.SHOOTER_DEBUG){
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
+      SmartShuffleboard.put("Shooter", "Left Motor Current", leftCurrent);
+      SmartShuffleboard.put("Shooter", "Right Motor Current", rightCurrent);
+      SmartShuffleboard.put("Shooter", "Total Motor Current", totalCurrent);
+      SmartShuffleboard.put("Shooter", "Reverse Switch Tripped", neoPidMotorLeft.forwardLimitSwitchIsPressed());
+            SmartShuffleboard.put("Shooter", "Forward Switch Tripped", neoPidMotorLeft.reversedLimitSwitchIsPressed());
     }
   }
 }
