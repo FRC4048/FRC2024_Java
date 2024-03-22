@@ -91,7 +91,6 @@ public class SwervePosEstimator{
                         .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
                         .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
             if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
-                SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().minus(new Rotation2d(Math.PI)).getDegrees()});
                 poseEstimator.addVisionMeasurement(visionPose, visionArray.timestamp);
             }
         }
