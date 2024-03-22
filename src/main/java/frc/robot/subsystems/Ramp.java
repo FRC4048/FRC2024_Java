@@ -28,6 +28,15 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
             SmartShuffleboard.put("Ramp", "Reverse Switch Tripped", getReversedSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+            SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
+                    .withPosition(9, 0)
+                    .withSize(1, 1);
+            SmartShuffleboard.put("Driver", "Speaker Away", isShootAwayAngle())
+                    .withPosition(9, 1)
+                    .withSize(1, 1);
+            SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
+                    .withPosition(8, 1)
+                    .withSize(1, 1);
         }
 
         Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
@@ -35,15 +44,7 @@ public class Ramp extends SubsystemBase {
         Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
         Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);
 
-        SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
-            .withPosition(9, 0)
-            .withSize(1, 1);
-        SmartShuffleboard.put("Driver", "Speaker Away", isShootAwayAngle())
-            .withPosition(9, 1)
-            .withSize(1, 1);
-        SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
-            .withPosition(8, 1)
-            .withSize(1, 1);
+
     }
 
     public void setRampPos(double targetPosition) {
