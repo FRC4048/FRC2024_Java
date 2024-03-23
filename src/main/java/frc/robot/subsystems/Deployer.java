@@ -24,7 +24,7 @@ public class Deployer extends SubsystemBase{
     public Deployer() {
 
         deployerMotor = new WPI_TalonSRX(Constants.DEPLOYER_MOTOR_ID);
-
+        configureMotor();
 
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
