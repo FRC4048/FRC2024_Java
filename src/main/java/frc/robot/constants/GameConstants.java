@@ -122,7 +122,7 @@ public class GameConstants {
     //Limelight
     public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y = -17;
     public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
-    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
+    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 10;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
     public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";
