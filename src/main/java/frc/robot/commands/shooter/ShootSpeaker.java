@@ -16,8 +16,6 @@ public class ShootSpeaker extends Command {
     private final LightStrip lightStrip;
     private Timer timer = new Timer();
     private double startTime;
-    private boolean leftStarted;
-    private boolean rightStarted;
 
     public ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain, LightStrip lightStrip) {
         this.shooter = shooter;
@@ -29,8 +27,6 @@ public class ShootSpeaker extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        leftStarted = false;
-        rightStarted = false;
     }
 
     @Override 
@@ -44,24 +40,16 @@ public class ShootSpeaker extends Command {
        double gyro = ((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360); //Gets the gyro value 0-360
         if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) ||
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
-            if (!leftStarted) {
-                shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-                leftStarted = true;
-            }
-            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
+            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
                 shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
-                rightStarted = true;
             }
             lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED,Constants.SHOOTER_MOTOR_LOW_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
         else {
-            if (!rightStarted) {
-                shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-                rightStarted = true;
-            }
-            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !leftStarted) {
+            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
                 shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
-                leftStarted=true;
             }
             lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED,Constants.SHOOTER_MOTOR_HIGH_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }

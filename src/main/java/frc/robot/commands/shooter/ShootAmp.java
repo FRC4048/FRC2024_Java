@@ -11,8 +11,6 @@ public class ShootAmp extends Command {
     private final Shooter shooter;
     private Timer timer = new Timer();
     private double startTime;
-    private boolean leftStarted;
-    private boolean rightStarted;
     private final LightStrip lightStrip;
 
     public ShootAmp(Shooter shooter, LightStrip lightStrip) {
@@ -24,8 +22,6 @@ public class ShootAmp extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
-        leftStarted = false;
-        rightStarted = false;
     }
 
     @Override
@@ -35,13 +31,9 @@ public class ShootAmp extends Command {
 
     @Override
     public void execute() {
-        if (!leftStarted) {
-            shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-            leftStarted = true;
-        }
-        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
+        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
+        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET ) {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-            rightStarted = true;
         }
         if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED, Constants.SHOOTER_MOTOR_AMP_SPEED)){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);

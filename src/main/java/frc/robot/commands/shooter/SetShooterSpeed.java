@@ -22,8 +22,6 @@ public class SetShooterSpeed extends Command {
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter;
   private Timer timer;
-  private boolean leftStarted;
-  private boolean rightStarted;
   public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
     this.shooter = shooter;
     this.lightStrip = lightStrip;
@@ -40,20 +38,14 @@ public class SetShooterSpeed extends Command {
     startTime = Timer.getFPGATimestamp();
     desiredLeftSpeedRpm = SmartShuffleboard.getDouble("Shooter", "Desired Left Speed", 0.0);
     desiredRightSpeedRpm = SmartShuffleboard.getDouble("Shooter", "Desired Right Speed", 0.0);
-    leftStarted = false;
-    rightStarted = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!leftStarted) {
-      shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
-      leftStarted = true;
-    } 
-    if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
+    shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
+    if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
       shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
-      rightStarted = true;
     }
     if (shooter.upToSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
       lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);

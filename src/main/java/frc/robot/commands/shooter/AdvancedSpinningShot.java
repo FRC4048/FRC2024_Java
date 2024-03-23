@@ -24,8 +24,6 @@ public class AdvancedSpinningShot extends Command {
     private static final ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
     private Timer timer = new Timer();
     private double startTime;
-    private boolean leftStarted;
-    private boolean rightStarted;
 
     public AdvancedSpinningShot(Shooter shooter, LightStrip lightStrip, Supplier<Pose2d> curentPoseSupplier, Supplier<Alignable> alignableSupplier) {
         this.shooter = shooter;
@@ -40,19 +38,21 @@ public class AdvancedSpinningShot extends Command {
         this.shooterSpeed = calcuateShooterSpeed();
         this.alignable = alignableSupplier.get();
         startTime=Timer.getFPGATimestamp();
-        leftStarted = false;
-        rightStarted = false;
     }
 
     @Override
     public void execute() {
-        if (!leftStarted) {
+        if (shooterSpeed.getLeftMotorSpeed()>shooterSpeed.getRightMotorSpeed()) {
             shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
-            leftStarted = true;
-        }
-        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
+        } else {
             shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
-            rightStarted=true;
+        }
+        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
+            if (shooterSpeed.getLeftMotorSpeed()>shooterSpeed.getRightMotorSpeed()) {
+                shooter.setShooterMotorRightRPM(shooterSpeed.getLeftMotorSpeed());
+            } else {
+                shooter.setShooterMotorLeftRPM(shooterSpeed.getRightMotorSpeed());
+            }
         }
         if (shooter.upToSpeed(shooterSpeed.getLeftMotorSpeed(),shooterSpeed.getRightMotorSpeed())){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
@@ -67,7 +67,7 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public boolean isFinished() {
-        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get()); // IDK WHAT THIS DOES
+        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
     }
 
     private ShooterSpeed calcuateShooterSpeed() {
