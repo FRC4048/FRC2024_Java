@@ -15,18 +15,19 @@ public class Ramp extends SubsystemBase {
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+        configureMotor();
+        resetEncoder();
+        neoPidMotor.enableDiagnostics("Ramp", true, true);
+    }
+
+    private void configureMotor() {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
-        resetEncoder();
+        neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
+        neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
-//        neoPidMotor.getPidController().setI(0.0000);
         neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
-//        SmartShuffleboard.put("Ramp", "PID P", neoPidMotor.getPidController().getP());
-//        SmartShuffleboard.put("Ramp", "PID I", neoPidMotor.getPidController().getI());
-//        SmartShuffleboard.put("Ramp", "PID D", neoPidMotor.getPidController().getD());
-//        SmartShuffleboard.put("Ramp", "PID FF", neoPidMotor.getPidController().getFF());
-
-        neoPidMotor.enableDiagnostics("Ramp", true, true);
+        resetEncoder();
     }
 
     public void periodic() {

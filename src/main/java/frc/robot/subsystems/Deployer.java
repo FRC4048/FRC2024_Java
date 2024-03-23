@@ -22,9 +22,15 @@ public class Deployer extends SubsystemBase{
     
 
     public Deployer() {
-        int TIMEOUT=100;
 
         deployerMotor = new WPI_TalonSRX(Constants.DEPLOYER_MOTOR_ID);
+        configureMotor();
+
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
+    }
+    private void configureMotor(){
+        int TIMEOUT = 100;
         deployerMotor.configNominalOutputForward(0, TIMEOUT);
         deployerMotor.configNominalOutputReverse(0, TIMEOUT);
         deployerMotor.configPeakOutputForward(1, TIMEOUT);
@@ -34,9 +40,9 @@ public class Deployer extends SubsystemBase{
         deployerMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         deployerMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         deployerMotor.setSelectedSensorPosition(0);
-
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", deployerMotor, DiagTalonSrxSwitch.Direction.FORWARD));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Reverse switch", deployerMotor, DiagTalonSrxSwitch.Direction.REVERSE));
+        deployerMotor.setStatusFramePeriod(1,20);
+        deployerMotor.setStatusFramePeriod(2,100);
+        deployerMotor.setStatusFramePeriod(3,100);
     }
 
     public void resetEncoder() {
