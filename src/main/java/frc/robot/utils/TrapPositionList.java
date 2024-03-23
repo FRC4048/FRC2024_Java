@@ -11,7 +11,7 @@ public enum TrapPositionList {
     THIRTEEN(13, 441.739 - Constants.FULL_ADJUMENT, 161.620, 0),
     FOURTEEN(14, 209.480 + Constants.FULL_ADJUMENT, 161.620, 180),
     FIFTEEN(15, 182.72 - Constants.X_ADJUSTMENT, 177.099 + Constants.Y_ADJUSTMENT, 300),
-    SIXTEEN(16, 182.72 - Constants.X_ADJUSTMENT, 146.063 - Constants.Y_ADJUSTMENT, 240);
+    SIXTEEN(16, 182.72 - Constants.X_ADJUSTMENT, 146.063 - Constants.Y_ADJUSTMENT, 60);
 
     private final int tagId;
     private final double xPos;
