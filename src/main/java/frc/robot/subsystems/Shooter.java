@@ -105,15 +105,12 @@ public class Shooter extends SubsystemBase {
     leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
     rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
     totalCurrent = leftCurrent + rightCurrent;
-    Logger.logDouble("leftCurrent", leftCurrent, Constants.ENABLE_LOGGING);
-    Logger.logDouble("rightCurrent", rightCurrent, Constants.ENABLE_LOGGING);
-    Logger.logDouble("totalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
+    Logger.logDouble(baseLogName + "leftCurrent", leftCurrent, Constants.ENABLE_LOGGING);
+    Logger.logDouble(baseLogName + "rightCurrent", rightCurrent, Constants.ENABLE_LOGGING);
+    Logger.logDouble(baseLogName + "totalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
     if (Constants.SHOOTER_DEBUG){
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
-      SmartShuffleboard.put("Shooter", "Left Motor Current", leftCurrent);
-      SmartShuffleboard.put("Shooter", "Right Motor Current", rightCurrent);
-      SmartShuffleboard.put("Shooter", "Total Motor Current", totalCurrent);
       SmartShuffleboard.put("Shooter", "Reverse Switch Tripped", neoPidMotorLeft.forwardLimitSwitchIsPressed());
             SmartShuffleboard.put("Shooter", "Forward Switch Tripped", neoPidMotorLeft.reversedLimitSwitchIsPressed());
     }

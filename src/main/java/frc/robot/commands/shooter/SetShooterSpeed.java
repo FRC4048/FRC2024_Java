@@ -6,6 +6,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
@@ -50,7 +51,7 @@ public class SetShooterSpeed extends Command {
       shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
       leftStarted = true;
     } 
-    if (timer.getFPGATimestamp() - startTime > 0.2 && !rightStarted) {
+    if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
       shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
       rightStarted = true;
     }

@@ -182,7 +182,6 @@ public class RobotContainer {
         if (Constants.SHOOTER_DEBUG) {
             SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder, lightStrip));
             SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter, lightStrip));
-            SmartShuffleboard.putCommand("Shooter", "Shoot Speaker", new ShootSpeaker(shooter, drivetrain, lightStrip));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
 //            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
 
