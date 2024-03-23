@@ -22,8 +22,8 @@ import frc.robot.utils.DriveMode;
 import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -92,7 +92,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-
+            SmartDashboard.putNumber("DRIVE_X_VEL",getFieldChassisSpeeds().vxMetersPerSecond);
             SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
