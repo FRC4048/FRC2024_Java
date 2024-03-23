@@ -103,5 +103,27 @@ public class VectorUtils {
     private static boolean isDirect(VelocityVector velocityVector, double deltaX) {
         return deltaX <= horizontalRange(velocityVector) / 2;
     }
+    public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ, double degreeThreshold, int maxIterations, boolean direct) {
+        double xDist = destX - startX;
+        double yDist = destY - startY;
+        double xyDist = Math.hypot(xDist, yDist);
+        double deltaZ = Math.abs(destZ - startZ);
+        VelocityVector lastVel = null;
+        VelocityVector currVel = null;
+        int i = 0;
+        do {
+            i++;
+            lastVel = currVel;
+            double theta = lastVel == null ? Math.PI/4 : lastVel.getAngle().getRadians();
+            double xySpeed = (Math.cos(theta) * speed) + driveSpeedX;
+            double zSpeed = Math.sin(theta) * speed;
+            double appliedSpeed = Math.hypot(xySpeed,zSpeed);
+            currVel = fromVelAndDist(appliedSpeed, xyDist, deltaZ, direct);
+        } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
+        return currVel;
+    }
+    public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ) {
+        return fromArcAndDestAndVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 100, true);
+    }
 
 }

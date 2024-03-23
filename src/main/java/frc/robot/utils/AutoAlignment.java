@@ -51,8 +51,8 @@ public class AutoAlignment {
      * @param robotZ        distance robot is off the ground (include base of robot)
      * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
      */
-    private static Rotation2d calcRampAngle(double totalVelocity, double robotX, double robotY, double robotZ) {
-        VelocityVector velocityVector = VectorUtils.fromArcAndDestAndVel(totalVelocity, robotX, robotY, robotZ, Constants.RAMP_RADIUS, Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY(), Alignable.SPEAKER.getZ());
+    private static Rotation2d calcRampAngle(double robotVelocityX, double robotX, double robotY, double robotZ) {
+        VelocityVector velocityVector = VectorUtils.fromDestAndCompoundVel(Constants.SHOOTER_VELOCITY, robotX, robotY, robotZ, robotVelocityX, Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY(), Alignable.SPEAKER.getZ());
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
     }
 
@@ -134,28 +134,28 @@ public class AutoAlignment {
     }
 
     /**
-     * @param alignable what we are aligning to
-     * @param x         position of robot on the x-axis
-     * @param y         position of robot on the y-axis
-     * @param z         position of the robot on y z-axis
-     * @param vel       the initial velocity of the piece (including the velocity of the robot)
+     * @param alignable      what we are aligning to
+     * @param x              position of robot on the x-axis
+     * @param y              position of robot on the y-axis
+     * @param z              position of the robot on y z-axis
+     * @param drivetrainVelX velocity the robo is moving in the x direction
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
-    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double vel) {
+    public static Rotation2d getYaw(Alignable alignable, double x, double y, double z, double drivetrainVelX) {
         if (isInvalidAngle(alignable)) return new Rotation2d();
         BiFunction<Double, Translation3d, Rotation2d> function = positionYawMap.get(alignable);
         if (isInvalidYawFunction(function)) return new Rotation2d();
-        return function.apply(vel, new Translation3d(x, y, z));
+        return function.apply(drivetrainVelX, new Translation3d(x, y, z));
     }
 
     /**
-     * @param alignable what we are aligning to
-     * @param pose3d    ramp position in 3d space (use robot position plus height of ramp, DO NOT manually account for RAMP_X_OFFSET)
-     * @param vel       initial velocity of piece (including velocity of drivetrain as it applies to piece)
+     * @param alignable      what we are aligning to
+     * @param pose3d         ramp position in 3d space (use robot position plus height of ramp, DO NOT manually account for RAMP_X_OFFSET)
+     * @param drivetrainVelX velocity the robo is moving in the x direction
      * @return the desired {@link Rotation2d} of the ramp from the ground
      */
-    public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double vel) {
-        return getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(), vel);
+    public static Rotation2d getYaw(Alignable alignable, Translation3d pose3d, double drivetrainVelX) {
+        return getYaw(alignable, pose3d.getX(), pose3d.getY(), pose3d.getZ(), drivetrainVelX);
     }
 
     private static boolean isInvalidYawFunction(BiFunction<Double, Translation3d, Rotation2d> function) {
