@@ -23,9 +23,6 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
-import frc.robot.commands.amp.DeployAmp;
-import frc.robot.commands.amp.RetractAmp;
-import frc.robot.commands.amp.ToggleAmp;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -45,9 +42,11 @@ import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.commands.sequences.CancelAllSequence;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
-import frc.robot.commands.shooter.*;
+import frc.robot.commands.shooter.AdvancedSpinningShot;
+import frc.robot.commands.shooter.SetShooterSpeed;
+import frc.robot.commands.shooter.ShootSpeaker;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.constants.TagConstants;
@@ -81,7 +80,6 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
     private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
     private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
-    private final Amp amp = new Amp();
     private final Shooter shooter = new Shooter();
     private final Deployer deployer = new Deployer();
     private final Feeder feeder = new Feeder();
@@ -171,6 +169,7 @@ public class RobotContainer {
     }
 
     public void putShuffleboardCommands() {
+
         if (Constants.DEPLOYER_DEBUG) {
             SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer, lightStrip)));
             SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer, lightStrip)));
@@ -258,7 +257,7 @@ public class RobotContainer {
                 new StopShooter(shooter),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
         );
-        
+
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
