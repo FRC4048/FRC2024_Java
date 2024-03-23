@@ -59,13 +59,13 @@ public class AutoAlignment {
     /**
      * Calculates the desired ramp angle for shooting into the speaker given an initial velocity, and the robots position
      *
-     * @param totalVelocity the velocity of the piece the distance (unsigned) from the speaker on the xy plane
-     * @param pose3d        a 3 dimensional pose representing the robots center x position,
-     *                      center y position, and z distance from the ground (include base of robot)
+     * @param robotVelocityX velocity the robo is moving in the x direction
+     * @param pose3d         a 3 dimensional pose representing the robots center x position,
+     *                       center y position, and z distance from the ground (include base of robot)
      * @return a {@link Rotation2d} from the ground to the ramp representing the desired angle for shooting
      */
-    private static Rotation2d calcRampAngle(double totalVelocity, Translation3d pose3d) {
-        return calcRampAngle(totalVelocity, pose3d.getX(), pose3d.getY(), pose3d.getZ());
+    private static Rotation2d calcRampAngle(double robotVelocityX, Translation3d pose3d) {
+        return calcRampAngle(robotVelocityX, pose3d.getX(), pose3d.getY(), pose3d.getZ());
     }
 
     /**

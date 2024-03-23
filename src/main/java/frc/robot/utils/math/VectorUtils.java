@@ -123,7 +123,7 @@ public class VectorUtils {
         return currVel;
     }
     public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ) {
-        return fromArcAndDestAndVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 100, true);
+        return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 100, true);
     }
 
 }
