@@ -111,8 +111,6 @@ public class Shooter extends SubsystemBase {
     if (Constants.SHOOTER_DEBUG){
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
-      SmartShuffleboard.put("Shooter", "Reverse Switch Tripped", neoPidMotorLeft.forwardLimitSwitchIsPressed());
-            SmartShuffleboard.put("Shooter", "Forward Switch Tripped", neoPidMotorLeft.reversedLimitSwitchIsPressed());
     }
     Logger.logDouble(baseLogName + "motorLeftRPM", getShooterMotorLeftRPM(), Constants.ENABLE_LOGGING);
     Logger.logDouble(baseLogName + "motorRightRPM", getShooterMotorRightRPM(), Constants.ENABLE_LOGGING);
