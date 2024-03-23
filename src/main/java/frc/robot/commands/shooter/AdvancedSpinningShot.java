@@ -49,9 +49,9 @@ public class AdvancedSpinningShot extends Command {
         }
         if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
             if (shooterSpeed.getLeftMotorSpeed()>shooterSpeed.getRightMotorSpeed()) {
-                shooter.setShooterMotorRightRPM(shooterSpeed.getLeftMotorSpeed());
+                shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
             } else {
-                shooter.setShooterMotorLeftRPM(shooterSpeed.getRightMotorSpeed());
+                shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
             }
         }
         if (shooter.upToSpeed(shooterSpeed.getLeftMotorSpeed(),shooterSpeed.getRightMotorSpeed())){
