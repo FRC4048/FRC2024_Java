@@ -110,7 +110,7 @@ public class Ramp extends SubsystemBase {
     }
     public static double angleToEncoder(double angle){
         //(y-b)/m=x
-        return (angle - 28.5) / 2.48;//needs be to measured again and put in constants
+        return (angle - 30.5) / 2.5;//needs be to measured again and put in constants
     }
 
     public void setAngle(Rotation2d angleFromGround) {
