@@ -7,6 +7,9 @@ public class GameConstants {
     public static final int XBOX_CONTROLLER_ID = 2;
 
     public static final double METERS_TO_INCHES = 39.37;
+    public static final double X_ADJUSTMENT = 17.625;
+    public static final double Y_ADJUSTMENT = 30.52;
+    public static final double FULL_ADJUMENT = 35.24;
 
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
