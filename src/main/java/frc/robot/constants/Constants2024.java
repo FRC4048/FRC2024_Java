@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 
@@ -84,6 +85,10 @@ public class Constants2024 extends GameConstants {
     public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.02;
     public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
     public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.08;
+
+    //Vision
+    public static final double  CAMERA_OFFSET_FROM_CENTER_X = Units.inchesToMeters(-5); //center of bot is 5" back from camera
+    public static final double  CAMERA_OFFSET_FROM_CENTER_Y = Units.inchesToMeters(0);
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 4;
