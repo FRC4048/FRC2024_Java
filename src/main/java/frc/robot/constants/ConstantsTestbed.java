@@ -19,8 +19,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final int LED_PWM_ID = 7;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_LEFT = 45;
-    public static final int SHOOTER_MOTOR_RIGHT = 44;
+    public static final int SHOOTER_MOTOR_LEFT = 144;
+    public static final int SHOOTER_MOTOR_RIGHT = 145;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
@@ -98,8 +98,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_LEFT = 144;
-    public static final int CLIMBER_RIGHT = 145;
+    public static final int CLIMBER_LEFT = 44;
+    public static final int CLIMBER_RIGHT = 45;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 211;
