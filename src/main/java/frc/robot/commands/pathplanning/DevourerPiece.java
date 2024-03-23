@@ -19,17 +19,20 @@ public class DevourerPiece extends SequentialCommandGroup {
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(
                                 new ParallelCommandGroup(
-                                new LowerDeployer(deployer, lightStrip),
-                                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
+                                    new LowerDeployer(deployer, lightStrip),
+                                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
                                 ),
                                 new ParallelRaceGroup(
                                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                                        new WaitCommand(5)
+                                        new WaitCommand(7)
                                 )
                         ),
                         new SequentialCommandGroup(
                                 new MoveToGamepiece(drivetrain, vision),
-                                new Drive(drivetrain, () -> 0.12, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC).withTimeout(1)
+                                new ParallelRaceGroup(
+                                        new Drive(drivetrain, () -> -0.4, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC),
+                                        new WaitCommand(0.7)
+                                ), new WaitCommand(5)
                         )
                 )
         );
