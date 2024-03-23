@@ -4,7 +4,7 @@ import frc.robot.RobotContainer;
 
 public enum Alignable {
     AMP(0,0,0,0),
-    SPEAKER(-0.0381+0.234809,16.46,5.548,2.00);//1.343 - dist center of robot to speaker shot //value v2 1.343 - 0.447649 - Constants.ROBOT_LENGTH / 2
+    SPEAKER(-0.0381+0.234809,16.46,5.548,1.90);//1.343 - dist center of robot to speaker shot //value v2 1.343 - 0.447649 - Constants.ROBOT_LENGTH / 2
 
     private final double blueX;
     private final double redX;

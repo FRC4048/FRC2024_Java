@@ -45,7 +45,6 @@ public class VectorUtils {
             double z1 = centerArcZ + rampZOffset;
             double deltaZ = Math.abs(destZ - z1);
             currVel = fromVelAndDist(speed, xyDist, deltaZ, direct);
-            System.out.println(xyDist);
         } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
         return currVel;
     }
@@ -67,7 +66,7 @@ public class VectorUtils {
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
     public static VelocityVector fromArcAndDestAndVel(double speed, double centerArcX, double centerArcY, double centerArcZ, double arcRadius, double destX, double destY, double destZ) {
-        return fromArcAndDestAndVel(speed, centerArcX, centerArcY, centerArcZ, arcRadius, destX, destY, destZ, 0.01, 7, true);
+        return fromArcAndDestAndVel(speed, centerArcX, centerArcY, centerArcZ, arcRadius, destX, destY, destZ, 0.01, 1, true);
     }
 
     /**

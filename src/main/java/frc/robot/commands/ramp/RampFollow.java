@@ -38,12 +38,14 @@ public class RampFollow extends Command {
                 shootingSpeed += drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? 1 : -1);
             }
             Pose2d pose = drivetrain.getPose();
-            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
+            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND)
+                    .plus(new Translation3d(RobotContainer.isRedAlliance() ? -Constants.RAMP_FROM_CENTER : Constants.RAMP_FROM_CENTER, 0,0));
             Rotation2d targetAngle = new Rotation2d(Math.PI / 2).minus(AutoAlignment.getYaw(alignable, rampPose, shootingSpeed));
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", targetAngle.getDegrees());
                 SmartDashboard.putBoolean("CAN_AUTO_SHOOT", targetAngle.getDegrees() != 90);
                 SmartDashboard.putNumber("DRIVETRAIN X VELOCITY", drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
+                SmartDashboard.putNumber("DELTA X",rampPose.getX()-Alignable.SPEAKER.getX());
             }
             double clamp = MathUtil.clamp(targetAngle.getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
             ramp.setAngle(Rotation2d.fromDegrees(clamp));
