@@ -38,21 +38,21 @@ public class TagConstants {
         } 
 
     public static boolean setLowestTag(double currentLowestTag, TrapPositionList possibleLowestTag, Pose2d currentPose) {
-        return currentLowestTag > Math.sqrt(Math.pow((possibleLowestTag.getXPos() - currentPose.getX()), 2) + Math.pow(possibleLowestTag.getYPos() - currentPose.getY(), 2));
+        return currentLowestTag > Math.sqrt(Math.pow((possibleLowestTag.getXPos() - currentPose.getX() * Constants.METERS_TO_INCHES), 2) + Math.pow(possibleLowestTag.getYPos() - currentPose.getY() * Constants.METERS_TO_INCHES, 2));
     }
 
     public static Pose2d getTrapPosition(SwerveDrivetrain drivetrain) {
         double x = drivetrain.getPose().getX();
         double y = drivetrain.getPose().getY();
 
-        for (int i = 11; i > 16; i++) {
+        for (int i = 0; i >= 5; i++) {
             if (setLowestTag(lowest, lowestTag, drivetrain.getPose())) {
                 lowestTag = TrapPositionList.values() [i];
-                lowest = Math.sqrt(Math.pow((lowestTag.getXPos() - x), 2) + Math.pow(lowestTag.getYPos() - y, 2));
+                lowest = Math.sqrt(Math.pow((lowestTag.getXPos() - x * Constants.METERS_TO_INCHES), 2) + Math.pow(lowestTag.getYPos() - y * Constants.METERS_TO_INCHES, 2));
             }
         }
 
-        return new Pose2d(lowestTag.getXPos(), lowestTag.getYPos(), new Rotation2d(lowestTag.getRot()));
+        return new Pose2d(lowestTag.getXPos() / Constants.METERS_TO_INCHES, lowestTag.getYPos() / Constants.METERS_TO_INCHES, new Rotation2d(lowestTag.getRot()));
     }
 }
         
