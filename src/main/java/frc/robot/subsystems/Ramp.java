@@ -25,7 +25,6 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
         neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
-        resetEncoder();
     }
 
     public void periodic() {
