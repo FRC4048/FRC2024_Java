@@ -27,7 +27,7 @@ public enum TrapPositionList {
 
         public Pose2d getTrapPosition() {
             return new Pose2d(getXPos() / Constants.METERS_TO_INCHES, getYPos() / Constants.METERS_TO_INCHES,
-                    new Rotation2d(getRot()));
+                    Rotation2d.fromDegrees(getRot()));
         }
 
         public static TrapPositionList getTag(int tag) {
