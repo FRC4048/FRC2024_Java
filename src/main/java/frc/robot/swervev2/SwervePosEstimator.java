@@ -16,7 +16,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
@@ -92,8 +91,7 @@ public class SwervePosEstimator{
                         .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
                         .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
             if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
-                poseEstimator.addVisionMeasurement(visionPose, visionArray.timestamp);
-                SmartDashboard.putNumber("latency", Timer.getFPGATimestamp()*1000*1000-visionArray.timestamp);
+                poseEstimator.addVisionMeasurement(visionPose, (double) visionArray.timestamp /(1000*1000));
             }
         }
         updatePosition(gyroValueDeg);
