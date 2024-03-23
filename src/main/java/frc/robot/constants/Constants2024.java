@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 
@@ -14,6 +15,7 @@ public class Constants2024 extends GameConstants {
     //Servo
     public static final int LEFT_SERVO_ID = 9;
     public static final int RIGHT_SERVO_ID = 8;
+    public static final int LED_PWM_ID = 7;
 
     //Shooter
     public static final int SHOOTER_MOTOR_LEFT = 55; //needs to be changed
@@ -57,7 +59,7 @@ public class Constants2024 extends GameConstants {
     //Current Caps
     public static final int DRIVE_SMART_LIMIT = 30;
     public static final int DRIVE_SECONDARY_LIMIT = 40;
-    public static final double DRIVE_RAMP_RATE_LIMIT = 0.25;
+    public static final double DRIVE_RAMP_RATE_LIMIT = 0.1;
 
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
@@ -83,6 +85,10 @@ public class Constants2024 extends GameConstants {
     public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.02;
     public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
     public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.08;
+
+    //Vision
+    public static final double  CAMERA_OFFSET_FROM_CENTER_X = Units.inchesToMeters(-5); //center of bot is 5" back from camera
+    public static final double  CAMERA_OFFSET_FROM_CENTER_Y = Units.inchesToMeters(0);
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 4;

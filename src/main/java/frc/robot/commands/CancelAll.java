@@ -6,19 +6,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.amp.RetractAmp;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Amp;
+import frc.robot.utils.BlinkinPattern;
 
 public class CancelAll extends Command {
   /** Creates a new CancelAll. */
   Ramp ramp;
   Shooter shooter;
-  public CancelAll(Ramp ramp, Shooter shooter) {
+  private final LightStrip lightStrip;
+
+  public CancelAll(Ramp ramp, Shooter shooter, LightStrip lightStrip) {
     this.ramp = ramp;
     this.shooter = shooter;
+    this.lightStrip = lightStrip;
     addRequirements(ramp, shooter);
   }
 
@@ -28,7 +31,7 @@ public class CancelAll extends Command {
     ramp.setRampPos(Constants.RAMP_POS_STOW);
     shooter.setShooterMotorLeftRPM(0);
     shooter.setShooterMotorRightRPM(0);
-
+    lightStrip.setPattern(BlinkinPattern.BLACK);
     CommandScheduler.getInstance().cancelAll();
   }
 
