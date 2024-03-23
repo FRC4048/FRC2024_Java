@@ -53,6 +53,5 @@ public class ShootAmp extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.slowStop();
     }
 }
