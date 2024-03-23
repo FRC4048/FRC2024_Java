@@ -237,7 +237,7 @@ public class RobotContainer {
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot TRAP - A
-        controller.a().onTrue(PathPlannerUtils.pathToPose(TagConstants.getTrapPosition(drivetrain), 0));
+        controller.a().onTrue(PathPlannerUtils.pathToPose(TagConstants.getTrapPosition(), 0));
                 // new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_TRAP), //Needs to be set
                 // new ShootTrap(shooter, lightStrip)));
 

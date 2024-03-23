@@ -2,14 +2,18 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.subsystems.SwerveDrivetrain;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class TagConstants {
     private static final double X_ADJUSTMENT = 10.625;
     private static final double Y_ADJUSTMENT = 18.4;
     private static final double FULL_ADJUMENT = 21.25;
-    private static double lowest;
     private static TrapPositionList lowestTag;
+    private static NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    private static NetworkTable table = inst.getTable("ROS");
+    private static DoubleSubscriber subscriber = table.getDoubleTopic("apriltag_id").subscribe(0);
 
     enum TrapPositionList {
         ELEVEN(11, 468.660 + X_ADJUSTMENT, 146.063 - Y_ADJUSTMENT, 120),
@@ -37,22 +41,38 @@ public class TagConstants {
         public double getTagID() {return tagId;}
         } 
 
-    public static boolean setLowestTag(double currentLowestTag, TrapPositionList possibleLowestTag, Pose2d currentPose) {
-        return currentLowestTag > Math.sqrt(Math.pow((possibleLowestTag.getXPos() - currentPose.getX() * Constants.METERS_TO_INCHES), 2) + Math.pow(possibleLowestTag.getYPos() - currentPose.getY() * Constants.METERS_TO_INCHES, 2));
+    public static void setLowestTag() {
+        
+        if (subscriber.get() == 11) {
+            lowestTag = TrapPositionList.ELEVEN;
+        }
+        if (subscriber.get() == 12) {
+            lowestTag = TrapPositionList.TWELVE;
+        }
+        if (subscriber.get() == 13) {
+            lowestTag = TrapPositionList.THIRTEEN;
+        }
+        if (subscriber.get() == 14) {
+            lowestTag = TrapPositionList.FOURTEEN;
+        }
+        if (subscriber.get() == 15) {
+            lowestTag = TrapPositionList.FIFTEEN;
+        }
+        if (subscriber.get() == 16) {
+            lowestTag = TrapPositionList.SIXTEEN;
+        } else {
+            lowestTag = null;
+        }
+        
     }
 
-    public static Pose2d getTrapPosition(SwerveDrivetrain drivetrain) {
-        double x = drivetrain.getPose().getX();
-        double y = drivetrain.getPose().getY();
-
-        for (int i = 0; i >= 5; i++) {
-            if (setLowestTag(lowest, lowestTag, drivetrain.getPose())) {
-                lowestTag = TrapPositionList.values() [i];
-                lowest = Math.sqrt(Math.pow((lowestTag.getXPos() - x * Constants.METERS_TO_INCHES), 2) + Math.pow(lowestTag.getYPos() - y * Constants.METERS_TO_INCHES, 2));
-            }
+    public static Pose2d getTrapPosition() {
+        setLowestTag();
+        if (lowestTag != null) {
+            return new Pose2d(lowestTag.getXPos() / Constants.METERS_TO_INCHES, lowestTag.getYPos() / Constants.METERS_TO_INCHES, new Rotation2d(lowestTag.getRot()));
+        } else {
+            return null;
         }
-
-        return new Pose2d(lowestTag.getXPos() / Constants.METERS_TO_INCHES, lowestTag.getYPos() / Constants.METERS_TO_INCHES, new Rotation2d(lowestTag.getRot()));
     }
 }
         
