@@ -48,7 +48,7 @@ public class AdvancedSpinningShot extends Command {
     public void execute() {
         shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
         leftStarted = true;
-        if (timer.getFPGATimestamp() - startTime > 0.1) {
+        if (timer.getFPGATimestamp() - startTime > 0.2) {
             shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
             rightStarted=true;
         }
@@ -60,7 +60,7 @@ public class AdvancedSpinningShot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stopShooter();
+        shooter.slowStop();
     }
 
     @Override

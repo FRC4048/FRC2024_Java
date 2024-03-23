@@ -50,7 +50,7 @@ public class SetShooterSpeed extends Command {
       shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
       leftStarted = true;
     } 
-    if (timer.getFPGATimestamp() - startTime > 0.1 && !rightStarted) {
+    if (timer.getFPGATimestamp() - startTime > 0.2 && !rightStarted) {
       shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
       rightStarted = true;
     }
@@ -62,8 +62,7 @@ public class SetShooterSpeed extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setShooterMotorLeftRPM(0.0);
-    shooter.setShooterMotorRightRPM(0.0);
+    shooter.slowStop();
   }
 
   // Returns true when the command should end.
