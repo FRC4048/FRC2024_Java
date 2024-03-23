@@ -72,9 +72,11 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
         }
         
+        /*
         SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", isDeployerForwardLimitSwitchClosed())
             .withPosition(0, 2)
             .withSize(2, 2);
+        */
         Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
         Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
     }

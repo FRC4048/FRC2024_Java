@@ -39,6 +39,7 @@ public class Ramp extends SubsystemBase {
         Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
         Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);
 
+    /*
         SmartShuffleboard.put("Driver", "Speaker Close", isShootCloseAngle())
             .withPosition(9, 0)
             .withSize(1, 1);
@@ -48,6 +49,7 @@ public class Ramp extends SubsystemBase {
         SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
             .withPosition(8, 1)
             .withSize(1, 1);
+    */
     }
 
     public void setRampPos(double targetPosition) {
