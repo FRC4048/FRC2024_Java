@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
+import frc.robot.utils.logging.Logger;
 
 /**
  * Class to estimate the current position of the robot,
@@ -92,6 +93,7 @@ public class SwervePosEstimator{
                         .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
             if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
                 poseEstimator.addVisionMeasurement(visionPose, (double) visionArray.timestamp /(1000*1000));
+                Logger.logDouble("/robot/visionLatencyMicro", visionArray.timestamp, Constants.ENABLE_LOGGING);
             }
         }
         updatePosition(gyroValueDeg);
