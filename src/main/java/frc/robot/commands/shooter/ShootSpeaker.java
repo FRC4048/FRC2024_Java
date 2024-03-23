@@ -35,7 +35,7 @@ public class ShootSpeaker extends Command {
 
     @Override 
     public boolean isFinished() {
-        return (leftStarted && rightStarted && Timer.getFPGATimestamp()-startTime>5);
+        return true;
     }
 
     @Override
@@ -72,6 +72,5 @@ public class ShootSpeaker extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.slowStop();
     }
 }
