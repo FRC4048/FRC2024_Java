@@ -48,7 +48,7 @@ public class ShootSpeaker extends Command {
                 shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
                 leftStarted = true;
             }
-            if (timer.getFPGATimestamp() - startTime > 0.2 && !rightStarted) {
+            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
                 shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
                 rightStarted = true;
             }
@@ -59,7 +59,7 @@ public class ShootSpeaker extends Command {
                 shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
                 rightStarted = true;
             }
-            if (timer.getFPGATimestamp() - startTime > 0.5 && !leftStarted) {
+            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !leftStarted) {
                 shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
                 leftStarted=true;
             }

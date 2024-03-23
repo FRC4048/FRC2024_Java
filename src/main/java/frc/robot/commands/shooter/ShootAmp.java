@@ -39,7 +39,7 @@ public class ShootAmp extends Command {
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
             leftStarted = true;
         }
-        if (timer.getFPGATimestamp() - startTime > 0.2) {
+        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET && !rightStarted) {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
             rightStarted = true;
         }
