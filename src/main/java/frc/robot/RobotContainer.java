@@ -11,9 +11,11 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -49,6 +51,7 @@ import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
+import frc.robot.constants.AprilTag;
 import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
@@ -56,6 +59,7 @@ import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
+import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -91,6 +95,7 @@ public class RobotContainer {
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
+    private final AprilTag aprilTag = new AprilTag();
 
     /**f
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -232,6 +237,11 @@ public class RobotContainer {
         controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
+
+        // Set up to shoot TRAP - A
+        controller.a().onTrue(new InstantCommand(()->aprilTag.planPath().schedule()));
+                // new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_TRAP), //Needs to be set
+                // new ShootTrap(shooter, lightStrip)));
 
         // Cancell all - B
         controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));

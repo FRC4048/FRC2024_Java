@@ -108,7 +108,7 @@ public class Ramp extends SubsystemBase {
     }
 
     public boolean isShootAmpAngle(){
-        return (Math.abs(Constants.RAMP_POS_SHOOT_AMP - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
+        return (Math.abs(Constants.RAMP_POS_SHOOT_TRAP - getRampPos()) <= Constants.RAMP_POS_THRESHOLD);
     }
     public static double angleToEncoder(double angle){
         //(y-b)/m=x
