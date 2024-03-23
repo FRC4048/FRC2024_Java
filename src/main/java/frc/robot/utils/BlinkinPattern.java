@@ -142,4 +142,15 @@ public enum BlinkinPattern {
         }
         return values()[values().length - 1];
     }
+    /**
+     * @param pwm pwm single that represents pattern
+     * @return the corresponding pattern or BLACK if that pwm value is invalid
+     */
+    public static BlinkinPattern of(double pwm){
+        double pos = (pwm - start)/increment ;
+        if (pos == (int) pos){
+            return values()[(int) pos];
+        }
+        return BLACK;
+    }
 }
