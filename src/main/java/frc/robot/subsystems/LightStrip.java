@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 
 public class LightStrip extends SubsystemBase {
-    private static final String baseLogName = "/robot/lightstrip/";
     private final Spark colorSensorPort;
-    private BlinkinPattern pattern = BlinkinPattern.BLACK;
+    private final AtomicReference<BlinkinPattern> pattern = new AtomicReference<>(BlinkinPattern.BLACK);
     private final Map<BooleanSupplier, BlinkinPattern> predicateLightEvents = new HashMap<>();
     public LightStrip(int port) {
         this.colorSensorPort = new Spark(port);
@@ -28,13 +28,13 @@ public class LightStrip extends SubsystemBase {
                 ),0,40, TimeUnit.MILLISECONDS);
     }
 
-    public synchronized void setPattern(BlinkinPattern pattern) {
-        this.pattern = pattern;
+    public void setPattern(BlinkinPattern pattern) {
+        this.pattern.set(pattern);
         colorSensorPort.set(pattern.getPwm());
     }
 
-    public synchronized BlinkinPattern getPattern() {
-        return pattern;
+    public BlinkinPattern getPattern() {
+        return pattern.get();
     }
     public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {
         predicateLightEvents.put(callable, pattern);
