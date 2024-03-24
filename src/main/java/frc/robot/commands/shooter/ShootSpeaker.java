@@ -31,12 +31,11 @@ public class ShootSpeaker extends Command {
 
     @Override 
     public boolean isFinished() {
-        return true;
+        return Timer.getFPGATimestamp()-startTime>5.1;
     }
 
     @Override
     public void execute() {
-
        double gyro = ((((drivetrain.getGyroAngle().getDegrees()) % 360) + 360) % 360); //Gets the gyro value 0-360
         if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) ||
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {

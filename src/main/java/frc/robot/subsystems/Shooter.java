@@ -40,9 +40,6 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
     neoPidMotorRight.setIdleMode(IdleMode.kBrake);
 
-    //neoPidMotorLeft.getNeoMotor().setSmartCurrentLimit(10);
-    //neoPidMotorRight.getNeoMotor().setSmartCurrentLimit(10);
-
 
   }
 
@@ -106,13 +103,14 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
-    rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
-    totalCurrent = leftCurrent + rightCurrent;
-    Logger.logDouble(baseLogName + "leftCurrent", leftCurrent, Constants.ENABLE_LOGGING);
-    Logger.logDouble(baseLogName + "rightCurrent", rightCurrent, Constants.ENABLE_LOGGING);
-    Logger.logDouble(baseLogName + "totalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
+    
     if (Constants.SHOOTER_DEBUG){
+      leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
+      rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
+      totalCurrent = leftCurrent + rightCurrent;
+      Logger.logDouble(baseLogName + "leftCurrent", leftCurrent, Constants.ENABLE_LOGGING);
+      Logger.logDouble(baseLogName + "rightCurrent", rightCurrent, Constants.ENABLE_LOGGING);
+      Logger.logDouble(baseLogName + "totalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
     }
