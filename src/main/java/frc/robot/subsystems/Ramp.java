@@ -12,6 +12,7 @@ public class Ramp extends SubsystemBase {
     private final String baseLogName = "/robot/ramp/";
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
+    private double neoModerFF = Constants.RAMP_PID_FAR_FF;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
@@ -24,14 +25,18 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
-        neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
+        neoPidMotor.getPidController().setFF(neoModerFF);
     }
 
     public void periodic() {
         if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD){
-            neoPidMotor.getPidController().setFF(NeoPidMotor.DEFAULT_FF);
-        }else{
-            neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
+            if (neoModerFF != NeoPidMotor.DEFAULT_FF){
+                neoModerFF = NeoPidMotor.DEFAULT_FF;
+                neoPidMotor.getPidController().setFF(neoModerFF);
+            }
+        } else if (neoModerFF != Constants.RAMP_PID_FAR_FF){
+            neoModerFF = Constants.RAMP_PID_FAR_FF;
+            neoPidMotor.getPidController().setFF(neoModerFF);
         }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
@@ -47,9 +52,11 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Driver", "Amp", isShootAmpAngle())
                     .withPosition(8, 1)
                     .withSize(1, 1);
+            SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+            SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
+            Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
         }
 
-        Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
         Logger.logDouble(baseLogName + "DesiredPos", rampPos, Constants.ENABLE_LOGGING);
         Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
         Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);

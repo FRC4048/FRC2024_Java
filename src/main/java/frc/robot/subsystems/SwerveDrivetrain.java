@@ -69,6 +69,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        gyroValue = getGyro();
         frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
@@ -100,7 +101,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         }
         
         
-        gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
             poseEstimator.updatePositionWithVis(gyroValue);
         }else {
