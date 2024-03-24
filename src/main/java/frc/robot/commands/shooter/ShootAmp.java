@@ -5,12 +5,9 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
-import edu.wpi.first.wpilibj.Timer;
 
 public class ShootAmp extends Command {
     private final Shooter shooter;
-    //private Timer timer = new Timer();
-    //private double startTime;
     private final LightStrip lightStrip;
 
     public ShootAmp(Shooter shooter, LightStrip lightStrip) {
@@ -21,7 +18,6 @@ public class ShootAmp extends Command {
 
     @Override
     public void initialize() {
-        //startTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -31,10 +27,8 @@ public class ShootAmp extends Command {
 
     @Override
     public void execute() {
+        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
         shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-        //if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET ) {
-            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_AMP_SPEED);
-        //}
         if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_AMP_SPEED, Constants.SHOOTER_MOTOR_AMP_SPEED)){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
