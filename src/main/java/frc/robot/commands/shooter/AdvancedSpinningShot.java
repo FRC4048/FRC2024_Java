@@ -23,7 +23,6 @@ public class AdvancedSpinningShot extends Command {
     private static final ShooterSpeed leftShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED, Constants.SHOOTER_MOTOR_HIGH_SPEED);
     private static final ShooterSpeed rightShooterSpeed = new ShooterSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED);;
     private Timer timer = new Timer();
-    private double startTime;
 
     public AdvancedSpinningShot(Shooter shooter, LightStrip lightStrip, Supplier<Pose2d> curentPoseSupplier, Supplier<Alignable> alignableSupplier) {
         this.shooter = shooter;
