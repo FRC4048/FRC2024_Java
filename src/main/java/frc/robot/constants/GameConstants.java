@@ -10,7 +10,6 @@ public class GameConstants {
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
     public static final boolean RAMP_DEBUG = true;
-    public static final boolean RAMP_PID_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
@@ -124,7 +123,7 @@ public class GameConstants {
     //Limelight
     public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y = -17;
     public static final double LIMELIGHT_MOVE_TO_PIECE_DESIRED_X = -10; //Put Gampeiece in middle to get offset
-    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 30;
+    public static final double LIMELIGHT_PIECE_NOT_SEEN_COUNT = 10;
     public static final double MOVE_TO_GAMEPIECE_THRESHOLD = 1;
     public static final double MOVE_TO_GAMEPIECE_TIMEOUT = 5;
     public static final String LIMELIGHT_IP_ADDRESS = "10.40.48.36";
@@ -152,6 +151,9 @@ public class GameConstants {
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double TIMED_FEEDER_EXIT = 0.5;
+    public static final double RAMP_PID_P = .0000055;
+    public static final double RAMP_PID_FAR_FF = 0.00031;
+    public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
     public static final double RAMP_RADIUS = 0;//0.5715
     public static final double ROBOT_FROM_GROUND = 0.2032;
