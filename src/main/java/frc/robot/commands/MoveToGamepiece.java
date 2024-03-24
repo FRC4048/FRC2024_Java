@@ -16,7 +16,8 @@ public class MoveToGamepiece extends Command {
     private final PIDController movingPIDController;
     private double yChange;
     private double pieceNotSeenCounter = 0;
-
+    private double gamePieceX;
+    private double gamePieceY;
 
 
     public MoveToGamepiece(SwerveDrivetrain drivetrain, Vision vision) {
@@ -35,11 +36,18 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public void execute() {
-        yChange = vision.getPieceOffestAngleY() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
-        double xChange = vision.getPieceOffestAngleX() - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
-        if (yChange == 0){
+        if (vision.getTv() == 0){
             pieceNotSeenCounter++;
+            if (pieceNotSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT){
+                return;
+            }
+        } else {
+            pieceNotSeenCounter = 0;
+            gamePieceX = vision.getPieceOffestAngleX();
+            gamePieceY = vision.getPieceOffestAngleY();
         }
+        yChange = gamePieceY - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
+        double xChange = gamePieceX - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
         if (pieceNotSeenCounter < Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT && yChange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD){
             ChassisSpeeds driveStates = new ChassisSpeeds(movingPIDController.calculate(yChange), 0, turningPIDController.calculate(xChange));
             drivetrain.drive(driveStates);

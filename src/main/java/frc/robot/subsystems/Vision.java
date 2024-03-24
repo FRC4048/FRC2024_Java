@@ -53,6 +53,9 @@ public class Vision extends SubsystemBase {
   public double getPieceOffestAngleY() {
     return ty.getDouble(0);
   }
+  public double getTv(){
+    return tv.getDouble(0);
+  }
 
   @Override
   public void periodic() {
