@@ -13,7 +13,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
         this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
-        
+    }
+    public void configureMotor(){
         intakeMotor1.setInverted(false);
         intakeMotor2.setInverted(false);
 
@@ -27,6 +28,10 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor2.configPeakCurrentDuration(Constants.INTAKE_MOTOR_PEAK_CURRENT_DURATION);
         intakeMotor2.configContinuousCurrentLimit(Constants.INTAKE_MOTOR_CONTINUOUS_CURRENT_LIMIT);
         intakeMotor2.enableCurrentLimit(Constants.INTAKE_CURRENT_LIMIT_ENABLED);
+
+        intakeMotor1.setStatusFramePeriod(1,20);
+        intakeMotor1.setStatusFramePeriod(2,100);
+        intakeMotor1.setStatusFramePeriod(3,100);
     }
     
     public void setMotorSpeed(double motor1Speed, double motor2Speed) {

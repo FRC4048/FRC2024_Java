@@ -21,12 +21,16 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
 
+    configureMotor();
+  }
+
+  private void configureMotor() {
     neoPidMotorLeft.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
     neoPidMotorRight.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
 
     neoPidMotorLeft.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
     neoPidMotorRight.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
-    
+
     neoPidMotorLeft.setMinMaxVelocity(30000, 0);
     neoPidMotorRight.setMinMaxVelocity(30000, 0);
 
