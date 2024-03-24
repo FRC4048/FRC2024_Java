@@ -21,7 +21,7 @@ public class SetShooterSpeed extends Command {
   private double desiredLeftSpeedRpm;
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter;
-  private Timer timer;
+  private Timer timer = new Timer();
   public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
     this.shooter = shooter;
     this.lightStrip = lightStrip;

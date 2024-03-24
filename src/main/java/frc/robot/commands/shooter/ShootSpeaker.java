@@ -15,7 +15,7 @@ public class ShootSpeaker extends Command {
     private SwerveDrivetrain drivetrain;
     private final LightStrip lightStrip;
     private Timer timer = new Timer();
-    private double startTime;
+    private boolean activated;
 
     public ShootSpeaker(Shooter shooter, SwerveDrivetrain drivetrain, LightStrip lightStrip) {
         this.shooter = shooter;
@@ -26,12 +26,14 @@ public class ShootSpeaker extends Command {
 
     @Override
     public void initialize() {
-        startTime = Timer.getFPGATimestamp();
+        timer.reset();
+        timer.start();
+        activated = false;
     }
 
     @Override 
     public boolean isFinished() {
-        return Timer.getFPGATimestamp()-startTime>5.1;
+        return (activated);
     }
 
     @Override
@@ -40,15 +42,17 @@ public class ShootSpeaker extends Command {
         if (((RobotContainer.isRedAlliance() == true) && (gyro > 180)) ||
             ((RobotContainer.isRedAlliance() == false) && (gyro < 180))) {
             shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
+            if (timer.hasElapsed(Constants.SHOOTER_MOTOR_STARTUP_OFFSET)) {
                 shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+                activated = true;
             }
             lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED,Constants.SHOOTER_MOTOR_LOW_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
         else {
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-            if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
+            if (timer.hasElapsed(Constants.SHOOTER_MOTOR_STARTUP_OFFSET)) {
                 shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+                activated = true;
             }
             lightStrip.scheduleOnTrue(()-> shooter.upToSpeed(Constants.SHOOTER_MOTOR_LOW_SPEED,Constants.SHOOTER_MOTOR_HIGH_SPEED), BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
@@ -59,5 +63,6 @@ public class ShootSpeaker extends Command {
      */
     @Override
     public void end(boolean interrupted) {
+        timer.stop();
     }
 }

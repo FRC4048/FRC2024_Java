@@ -37,7 +37,8 @@ public class AdvancedSpinningShot extends Command {
     public void initialize() {
         this.shooterSpeed = calcuateShooterSpeed();
         this.alignable = alignableSupplier.get();
-        startTime=Timer.getFPGATimestamp();
+        timer.reset();
+        timer.start();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class AdvancedSpinningShot extends Command {
         } else {
             shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
         }
-        if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
+        if (timer.hasElapsed(Constants.SHOOTER_MOTOR_STARTUP_OFFSET)) {
             if (shooterSpeed.getLeftMotorSpeed()>shooterSpeed.getRightMotorSpeed()) {
                 shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
             } else {
@@ -63,6 +64,7 @@ public class AdvancedSpinningShot extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.slowStop();
+        timer.stop();
     }
 
     @Override
@@ -78,5 +80,4 @@ public class AdvancedSpinningShot extends Command {
             return RobotContainer.isRedAlliance() ? leftShooterSpeed : rightShooterSpeed;
         }
     }
-
 }

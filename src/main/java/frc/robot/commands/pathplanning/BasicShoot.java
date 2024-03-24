@@ -26,10 +26,6 @@ public class BasicShoot extends Command {
     @Override
     public void initialize() {
         timer.reset();
-        activated = true;
-        
-
-        
         timer.start();
         startTime = Timer.getFPGATimestamp();
     }
@@ -39,6 +35,8 @@ public class BasicShoot extends Command {
         shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
         if (Timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET){
             shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            // Activated to let us know we've started the second motor
+            activated = true;
         }
         if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED)){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
@@ -56,7 +54,7 @@ public class BasicShoot extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.stopShooter();
+        shooter.slowStop();
         timer.stop();
         activated = false;
     }

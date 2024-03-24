@@ -39,8 +39,6 @@ public class Shooter extends SubsystemBase {
 
     neoPidMotorLeft.setIdleMode(IdleMode.kBrake);
     neoPidMotorRight.setIdleMode(IdleMode.kBrake);
-
-
   }
 
   /**
@@ -103,7 +101,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
     if (Constants.SHOOTER_DEBUG){
       leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
       rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
