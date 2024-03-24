@@ -176,7 +176,7 @@ public class VectorUtils {
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
     public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ) {
-        return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 10, 1.0 / 2);
+        return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 10, 2.0/5);
     }
 
 }
