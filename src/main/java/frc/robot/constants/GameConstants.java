@@ -146,8 +146,6 @@ public class GameConstants {
     public static final double RAMP_DIP_AUTO_SHOOT = 6;
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
-    public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
-    public static final double RAMP_X_OFFSET = 0.3; //meters, tip of ramp offset from center of robot
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double TIMED_FEEDER_EXIT = 0.5;
@@ -155,7 +153,6 @@ public class GameConstants {
     public static final double RAMP_PID_FAR_FF = 0.00031;
     public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
-    public static final double RAMP_RADIUS = 0;//0.5715
     public static final double ROBOT_FROM_GROUND = 0.2032;
     public static final double RAMP_FROM_CENTER = 0.1778;
 
