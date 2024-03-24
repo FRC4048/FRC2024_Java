@@ -117,7 +117,7 @@ public class Ramp extends SubsystemBase {
 
     public static double encoderToAngle(double encoderValue){
         //y=mx+b
-        return 2.48 * encoderValue + 28.5;//needs be to measured again and put in constants
+        return Constants.RAMP_ENCODER_TO_ANGLE_SLOPE * encoderValue + Constants.RAMP_ENCODER_TO_ANGLE_Y_INTERCEPT;
     }
 
     public boolean isShootCloseAngle(){
@@ -133,7 +133,7 @@ public class Ramp extends SubsystemBase {
     }
     public static double angleToEncoder(double angle){
         //(y-b)/m=x
-        return (angle - 30.5) / 2.5;//needs be to measured again and put in constants
+        return (angle - Constants.RAMP_ENCODER_TO_ANGLE_Y_INTERCEPT) / Constants.RAMP_ENCODER_TO_ANGLE_SLOPE;
     }
 
     public void setAngle(Rotation2d angleFromGround) {

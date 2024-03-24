@@ -148,6 +148,8 @@ public class GameConstants {
 
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
+    public static final double RAMP_ENCODER_TO_ANGLE_SLOPE = 2.5;
+    public static final double RAMP_ENCODER_TO_ANGLE_Y_INTERCEPT = 2.5;
     public static final double TIMED_FEEDER_EXIT = 0.5;
     public static final double RAMP_PID_P = .0000055;
     public static final double RAMP_PID_FAR_FF = 0.00031;

@@ -38,14 +38,14 @@ public class AutoAlignment {
      */
     @Deprecated
     private static Rotation2d calcRampAngle(double x, double z, double vel) {
-        VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, true);
+        VelocityVector velocityVector = VectorUtils.fromVelAndDist(vel, x, z, 1.0/2);
         return (velocityVector == null) ? new Rotation2d(0) : velocityVector.getAngle();
     }
 
     /**
      * Calculates the desired ramp angle for shooting into the speaker given an initial velocity, and the robots position
      *
-     * @param totalVelocity the velocity of the piece the distance (unsigned) from the speaker on the xy plane
+     * @param robotVelocityX the velocity of the robot in the x direction
      * @param robotX        the robot's center x position
      * @param robotY        the robot's center y position
      * @param robotZ        distance robot is off the ground (include base of robot)
