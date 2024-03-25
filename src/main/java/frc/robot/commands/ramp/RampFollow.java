@@ -67,7 +67,7 @@ public class RampFollow extends Command {
                 return;
             }
             double xyDistToSpeaker = Math.hypot(rampPose.getX() - Alignable.SPEAKER.getX(), rampPose.getY() - Alignable.SPEAKER.getY());
-            boolean errorSafe = VectorUtils.isErrorSafe(shooting, Rotation2d.fromDegrees(1), xyDistToSpeaker, alignableNow.getZ(), 0.0635);
+            boolean errorSafe = VectorUtils.isErrorSafe(shooting, Rotation2d.fromDegrees(1), xyDistToSpeaker, alignableNow.getZ(), 0.13);
             if (errorSafe){
                 double clamp = MathUtil.clamp(shooting.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
                 ramp.setAngle(Rotation2d.fromDegrees(clamp));
