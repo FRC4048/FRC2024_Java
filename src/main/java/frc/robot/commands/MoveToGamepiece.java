@@ -36,7 +36,7 @@ public class MoveToGamepiece extends Command {
 
     @Override
     public void execute() {
-        if (vision.isPieceSeen() == 0){
+        if (!vision.isPieceSeen()){
             pieceNotSeenCounter++;
             if (pieceNotSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT){
                 return;

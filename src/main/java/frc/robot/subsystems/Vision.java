@@ -53,8 +53,8 @@ public class Vision extends SubsystemBase {
   public double getPieceOffestAngleY() {
     return ty.getDouble(0);
   }
-  public double isPieceSeen(){
-    return tv.getDouble(0);
+  public boolean isPieceSeen(){
+    return tv.getDouble(0) != 0;
   }
 
   @Override
