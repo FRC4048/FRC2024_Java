@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.utils.Alignable;
 import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -12,7 +16,7 @@ public class Ramp extends SubsystemBase {
     private final String baseLogName = "/robot/ramp/";
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
-
+    private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
         configureMotor();
@@ -138,5 +142,9 @@ public class Ramp extends SubsystemBase {
 
     public void setAngle(Rotation2d angleFromGround) {
         setRampPos(angleToEncoder(angleFromGround.getDegrees()));
+    }
+
+    public double calcPose(Pose2d pose2d, Alignable alignable) {
+        return rampAngleMap.get(pose2d.getTranslation().getDistance(new Translation2d(alignable.getX(), alignable.getY())));
     }
 }
