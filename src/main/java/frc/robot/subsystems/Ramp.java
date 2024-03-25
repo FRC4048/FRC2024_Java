@@ -22,6 +22,11 @@ public class Ramp extends SubsystemBase {
         configureMotor();
         resetEncoder();
         neoPidMotor.enableDiagnostics("Ramp", true, true);
+        rampAngleMap.put(58.8,3.0);
+        rampAngleMap.put(71.14,5.0);
+        rampAngleMap.put(71.14,5.0);
+        rampAngleMap.put(45+49.0,7.56);
+        rampAngleMap.put(103.0,7.9);
     }
 
     private void configureMotor() {
@@ -32,6 +37,9 @@ public class Ramp extends SubsystemBase {
     }
 
     public void periodic() {
+        SmartShuffleboard.put("Ramp","60", String.valueOf(rampAngleMap.get(60.0)));
+        SmartShuffleboard.put("Ramp","80", String.valueOf(rampAngleMap.get(80.0)));
+        SmartShuffleboard.put("Ramp","70", String.valueOf(rampAngleMap.get(70.0)));
         if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD){
             neoPidMotor.getPidController().setFF(NeoPidMotor.DEFAULT_FF);
         }else{
@@ -52,7 +60,6 @@ public class Ramp extends SubsystemBase {
 //            if (pidFF != neoPidMotor.getPidController().getFF()) neoPidMotor.getPidController().setFF(pidFF);
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
-
         }
 
         Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);

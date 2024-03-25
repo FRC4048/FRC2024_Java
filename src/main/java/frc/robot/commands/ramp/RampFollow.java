@@ -1,6 +1,7 @@
 package frc.robot.commands.ramp;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Ramp;
 import frc.robot.utils.Alignable;
@@ -27,11 +28,13 @@ public class RampFollow extends Command {
 
     @Override
     public void execute() {
-        ramp.setRampPos(ramp.calcPose(pose2dSupplier.get(), alignableSupplier.get()));
+        double v = ramp.calcPose(pose2dSupplier.get(), alignable);
+        SmartDashboard.putNumber("v", v);
+        ramp.setRampPos(v);
     }
 
     @Override
     public boolean isFinished() {
-        return alignable == null || alignableSupplier.get() == null || !alignable.equals(alignableSupplier.get());
+        return false;
     }
 }
