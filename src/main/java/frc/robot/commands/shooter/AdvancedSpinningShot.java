@@ -7,7 +7,6 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.ShooterSpeed;
 
 import java.util.function.Supplier;
@@ -40,9 +39,6 @@ public class AdvancedSpinningShot extends Command {
     public void execute() {
         shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
         shooter.setShooterMotorRightRPM(shooterSpeed.getRightMotorSpeed());
-        if (shooter.upToSpeed(shooterSpeed.getLeftMotorSpeed(),shooterSpeed.getRightMotorSpeed())){
-            lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-        }
     }
 
     @Override

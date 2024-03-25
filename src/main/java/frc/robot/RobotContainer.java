@@ -225,7 +225,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
-                new RampFollow(ramp, drivetrain),
+                new RampFollow(ramp, drivetrain, lightStrip),
                 new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));

@@ -1,6 +1,7 @@
 package frc.robot.utils.math;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 
 /**
@@ -179,4 +180,18 @@ public class VectorUtils {
         return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 10, 2.0/5);
     }
 
+    public static boolean isErrorSafe(VelocityVector velocityVector, Rotation2d angleError, double destX, double destZ, double maxErrorZ) {
+        double highY = getYAtX(new VelocityVector(velocityVector.getVelocity(), velocityVector.getAngle().plus(angleError)), destX);
+        double lowY = getYAtX(new VelocityVector(velocityVector.getVelocity(), velocityVector.getAngle().minus(angleError)), destX);
+        SmartDashboard.putNumber("maxDifY", highY - destZ);
+        SmartDashboard.putNumber("minDifY", destZ - lowY);
+        return highY < destZ + maxErrorZ && lowY > destZ - maxErrorZ;
+    }
+    public static double getYAtX(VelocityVector velocityVector, double x){
+        double time = getTimeForXDist(velocityVector, x);
+        return velocityVector.getYSpeed() * time + (Constants.GRAVITY * 0.5 * Math.pow(time,2));
+    }
+    public static double getTimeForXDist(VelocityVector velocityVector, double x){
+        return x / velocityVector.getXSpeed();
+    }
 }
