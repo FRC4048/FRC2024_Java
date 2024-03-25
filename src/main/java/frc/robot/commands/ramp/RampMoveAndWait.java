@@ -7,8 +7,6 @@ import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Ramp;
 import frc.robot.utils.TimeoutCounter;
 
-import java.util.function.DoubleSupplier;
-
 public class RampMoveAndWait extends Command{
 
     private final Ramp ramp;
@@ -17,10 +15,10 @@ public class RampMoveAndWait extends Command{
     private final TimeoutCounter timeoutCounter;
     private boolean movingUp;
 
-    public RampMoveAndWait(Ramp ramp, LightStrip lightStrip, DoubleSupplier encoderValueSupplier) {
+    public RampMoveAndWait(Ramp ramp, LightStrip lightStrip, double encoderValueSupplier) {
         this.ramp = ramp;
         this.timeoutCounter = new TimeoutCounter("Wait Ramp", lightStrip);
-        this.targetValue = encoderValueSupplier.getAsDouble();
+        this.targetValue = encoderValueSupplier;
         addRequirements(this.ramp);
 
     }
