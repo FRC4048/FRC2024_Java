@@ -2,40 +2,34 @@ package frc.robot.utils;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import java.util.concurrent.Phaser;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ThreadedGyro extends Thread{
+public class ThreadedGyro {
     private final AHRS gyro;
     private final AtomicBoolean shouldReset = new AtomicBoolean(false);
-    private final Phaser phaser;
     private volatile double lastGyro;
     private volatile double angleAdjustment;
     private boolean enabled = false;
+    private final ScheduledExecutorService executor;
 
-    public ThreadedGyro(AHRS gyro, Phaser phaser) {
+    public ThreadedGyro(AHRS gyro) {
         this.gyro = gyro;
-        this.phaser = phaser;
         this.angleAdjustment = gyro.getAngleAdjustment();
-
+        this.executor = Executors.newScheduledThreadPool(1);
     }
 
-    @Override
-    public void start() {
-        enabled = true;
-    }
-
-    @Override
-    public void run() {
-       while (enabled){
-           phaser.arriveAndAwaitAdvance();
-           gyro.setAngleAdjustment(getAngleAdjustment());
-           if (shouldReset.get()) {
-               gyro.reset();
-               shouldReset.set(false);
-           }
-           updateGyro();
-       }
+    public void execute(){
+        executor.scheduleAtFixedRate(() -> {
+            gyro.setAngleAdjustment(getAngleAdjustment());
+            if (shouldReset.get()) {
+                gyro.reset();
+                shouldReset.set(false);
+            }
+            updateGyro();
+        },0,10, TimeUnit.MILLISECONDS);
     }
 
     private void updateGyro() {
@@ -44,9 +38,6 @@ public class ThreadedGyro extends Thread{
 
     public double getGyroValue(){
         return lastGyro;
-    }
-    public void disable(){
-        enabled = false;
     }
 
     public void updateIfDisabled() {

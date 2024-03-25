@@ -23,11 +23,8 @@ import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import java.util.concurrent.Phaser;
-
 public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
-    private static final Phaser phaser = new Phaser();
     private Command autonomousCommand;
     private double loopTime = 0;
     private double aliveTics = 0;
@@ -37,13 +34,8 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private Command autoCommand;
 
-    public static Phaser getSchedulerLock() {
-        return phaser;
-    }
-
     @Override
     public void robotInit() {
-        phaser.register();
         if (Constants.ENABLE_LOGGING) {
             DataLogManager.start();
             DriverStation.startDataLog(DataLogManager.getLog(), true);
@@ -57,7 +49,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        phaser.arrive();
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
         Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
