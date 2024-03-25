@@ -26,7 +26,7 @@ public class StartIntakeAndFeeder extends SequentialLoggingCommand {
                 CommandUtil.parallel("First",
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new LowerDeployer(deployer, lightStrip),
-                        new RampMoveAndWait(ramp,lightStrip ,() -> GameConstants.RAMP_POS_STOW)
+                        new RampMoveAndWait(ramp,lightStrip, GameConstants.RAMP_POS_STOW)
                 ), new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
                 new RaiseDeployer(deployer, lightStrip)
         );

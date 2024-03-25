@@ -178,7 +178,7 @@ public class RobotContainer {
         }
         if (Constants.RAMP_DEBUG) {
             SmartShuffleboard.put("Ramp", "myTargetPos", 0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp, () -> SmartShuffleboard.getDouble("Ramp", "myTargetPos", 0))));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp, SmartShuffleboard.getDouble("Ramp", "myTargetPos", 0))));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 15 )));
 //            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", CommandUtil.logged(new RampMove(ramp, 500)));
             SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp, lightStrip)));
@@ -238,12 +238,12 @@ public class RobotContainer {
 
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
+                new RampMove(ramp, GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot Speaker AWAY - X
         controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new RampMove(ramp, GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Cancell all - B
@@ -254,21 +254,21 @@ public class RobotContainer {
                 new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+                new RampMove(ramp, GameConstants.RAMP_POS_STOW)));
 
         //Driver Shoot
         joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
                 new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
                 new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
+                new RampMove(ramp, GameConstants.RAMP_POS_STOW))
         );
 
         // start intaking a note
         Command lowerIntake = CommandUtil.parallel("lowerIntake",
                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                 new LowerDeployer(deployer, lightStrip),
-                new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW));
+                new RampMoveAndWait(ramp, lightStrip ,GameConstants.RAMP_POS_STOW));
         Command endIntake = CommandUtil.parallel("endIntake",
                 new RaiseDeployer(deployer, lightStrip));
         controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
