@@ -74,9 +74,11 @@ public class Deployer extends SubsystemBase{
                     .withPosition(0, 2)
                     .withSize(2, 2);
         }
+        if (Constants.LOG_LIMIT_SWITCHES) {
+            Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+            Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+        }
 
-        Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
-        Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
     }
 
     //Spin deployer motor

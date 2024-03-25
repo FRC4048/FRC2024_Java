@@ -6,8 +6,7 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
@@ -15,7 +14,7 @@ import java.util.function.BooleanSupplier;
 public class LightStrip extends SubsystemBase {
     private final Spark colorSensorPort;
     private final AtomicReference<BlinkinPattern> pattern = new AtomicReference<>(BlinkinPattern.BLACK);
-    private final Map<BooleanSupplier, BlinkinPattern> predicateLightEvents = new HashMap<>();
+    private final ConcurrentHashMap<BooleanSupplier, BlinkinPattern> predicateLightEvents = new ConcurrentHashMap<>();
     private final AtomicBoolean running = new AtomicBoolean(true);
     public LightStrip(int port) {
         this.colorSensorPort = new Spark(port);

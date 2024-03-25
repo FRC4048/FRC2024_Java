@@ -70,20 +70,22 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         gyroValue = getGyro();
-        frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
-        totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
-        totalCurrent = totalSteerCurrent + totalDriveCurrent;
-        Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
+        if (Constants.DRIVE_CURRENT_DEBUG){
+            frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+            frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+            backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+            backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+            frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+            frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+            backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+            backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+            totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
+            totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
+            totalCurrent = totalSteerCurrent + totalDriveCurrent;
+            Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
+        }
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));

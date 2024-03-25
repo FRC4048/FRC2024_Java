@@ -29,15 +29,6 @@ public class Ramp extends SubsystemBase {
     }
 
     public void periodic() {
-        if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD){
-            if (neoModerFF != NeoPidMotor.DEFAULT_FF){
-                neoModerFF = NeoPidMotor.DEFAULT_FF;
-                neoPidMotor.getPidController().setFF(neoModerFF);
-            }
-        } else if (neoModerFF != Constants.RAMP_PID_FAR_FF){
-            neoModerFF = Constants.RAMP_PID_FAR_FF;
-            neoPidMotor.getPidController().setFF(neoModerFF);
-        }
         if (Constants.RAMP_DEBUG){
             SmartShuffleboard.put("Ramp", "Encoder Value", getRampPos());
             SmartShuffleboard.put("Ramp", "Desired pos", rampPos);
@@ -55,13 +46,12 @@ public class Ramp extends SubsystemBase {
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
             Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
+            Logger.logDouble(baseLogName + "DesiredPos", rampPos, Constants.ENABLE_LOGGING);
         }
-
-        Logger.logDouble(baseLogName + "DesiredPos", rampPos, Constants.ENABLE_LOGGING);
-        Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
-        Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);
-
-
+        if (Constants.LOG_LIMIT_SWITCHES){
+            Logger.logBoolean(baseLogName + "FWD LMT", getForwardSwitchState(), Constants.ENABLE_LOGGING);
+            Logger.logBoolean(baseLogName + "REV LMT", getReversedSwitchState(), Constants.ENABLE_LOGGING);
+        }
     }
 
     public void setRampPos(double targetPosition) {
@@ -133,5 +123,23 @@ public class Ramp extends SubsystemBase {
 
     public void setAngle(Rotation2d angleFromGround) {
         setRampPos(angleToEncoder(angleFromGround.getDegrees()));
+    }
+
+    public void setFF(double feedForward) {
+        neoPidMotor.getPidController().setFF(feedForward);
+        neoModerFF = feedForward;
+    }
+    public double getFF(){
+        return neoModerFF;
+    }
+
+    public void updateFF() {
+        if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD) {
+            if (getFF() != NeoPidMotor.DEFAULT_FF) {
+                setFF(NeoPidMotor.DEFAULT_FF);
+            }
+        } else if (getFF() != Constants.RAMP_PID_FAR_FF) {
+            setFF(Constants.RAMP_PID_FAR_FF);
+        }
     }
 }

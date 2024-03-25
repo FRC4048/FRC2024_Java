@@ -21,6 +21,9 @@ public class GameConstants {
     public static final boolean ENABLE_VISION = true;
     public static final boolean LED_DEBUG = false;
     public static final boolean RELY_COLOR_SENSOR = false;
+    public static final boolean LOG_LIMIT_SWITCHES = true;
+    public static final boolean DRIVE_CURRENT_DEBUG = false;
+
 
     //AMP
     public static final double SHOOT_AMP_MOTOR_SPEED = 0.2;//0.2
@@ -153,5 +156,7 @@ public class GameConstants {
     public static final double RAMP_PID_FAR_FF = 0.00031;
     public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
+    public static final double RAMP_MOVE_THRESHOLD = 0.001;
+    public static final double RAMP_MOVE_TIMEOUT = 5;
 
 }
