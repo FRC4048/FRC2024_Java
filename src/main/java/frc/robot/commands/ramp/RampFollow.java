@@ -15,7 +15,6 @@ import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.logging.Logger;
-import frc.robot.utils.math.VectorUtils;
 import frc.robot.utils.math.VelocityVector;
 
 import java.time.Instant;
@@ -54,7 +53,7 @@ public class RampFollow extends Command {
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND)
                     .plus(new Translation3d(RobotContainer.isRedAlliance() ? -Constants.RAMP_FROM_CENTER : Constants.RAMP_FROM_CENTER, 0,0));
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
-            shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/4).minus(shooting.getAngle()));
+            shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
             boolean canReach = shooting.getAngle().getDegrees() != 90;
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", shooting.getAngle().getDegrees());
@@ -66,19 +65,11 @@ public class RampFollow extends Command {
                 lightStrip.setPattern(BlinkinPattern.BLACK);
                 return;
             }
-            double xyDistToSpeaker = Math.hypot(rampPose.getX() - Alignable.SPEAKER.getX(), rampPose.getY() - Alignable.SPEAKER.getY());
-            boolean errorSafe = VectorUtils.isErrorSafe(shooting, Rotation2d.fromDegrees(1), xyDistToSpeaker, alignableNow.getZ(), 0.13);
-            if (errorSafe){
-                double clamp = MathUtil.clamp(shooting.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
+            double clamp = MathUtil.clamp(shooting.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
                 ramp.setAngle(Rotation2d.fromDegrees(clamp));
-            }
-            boolean isInThresh = Math.abs(ramp.getRampPos() - ramp.getDesiredPosition()) < 0.01;
+            boolean isInThresh = Math.abs(ramp.getRampPos() - ramp.getDesiredPosition()) < 0.05;
             if (isInThresh){
-                if (errorSafe){
-                    lightStrip.setPattern(BlinkinPattern.VIOLET);
-                }else {
-                    lightStrip.setPattern(BlinkinPattern.WHITE);
-                }
+                lightStrip.setPattern(BlinkinPattern.VIOLET);
             } else {
                 lightStrip.setPattern(BlinkinPattern.BLACK);
             }
