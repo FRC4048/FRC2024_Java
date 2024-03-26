@@ -13,17 +13,24 @@ public class Shooter extends SubsystemBase {
   private final String baseLogName = "/robot/shooter/";
   private final NeoPidMotor neoPidMotorLeft;
   private final NeoPidMotor neoPidMotorRight;
+  private double leftCurrent;
+  private double rightCurrent;
+  private double totalCurrent;
 
   public Shooter() {
     neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
     neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
 
+    configureMotor();
+  }
+
+  private void configureMotor() {
     neoPidMotorLeft.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
     neoPidMotorRight.setPid(GameConstants.SHOOTER_PID_P, GameConstants.SHOOTER_PID_I, GameConstants.SHOOTER_PID_D, GameConstants.SHOOTER_PID_FF);
 
     neoPidMotorLeft.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
     neoPidMotorRight.setMaxAccel(Constants.SHOOTER_MAX_RPM_ACCELERATION);
-    
+
     neoPidMotorLeft.setMinMaxVelocity(30000, 0);
     neoPidMotorRight.setMinMaxVelocity(30000, 0);
 
@@ -86,14 +93,30 @@ public class Shooter extends SubsystemBase {
     neoPidMotorLeft.setPidSpeed(0);
     neoPidMotorRight.setPidSpeed(0);
   }
+  
+  public void slowStop() {
+    neoPidMotorLeft.getNeoMotor().set(0);
+    neoPidMotorRight.getNeoMotor().set(0);
+  }
 
   @Override
   public void periodic() {
     if (Constants.SHOOTER_DEBUG){
+      leftCurrent = neoPidMotorLeft.getNeoMotor().getOutputCurrent();
+      rightCurrent = neoPidMotorRight.getNeoMotor().getOutputCurrent();
+      totalCurrent = leftCurrent + rightCurrent;
+      Logger.logDouble(baseLogName + "leftCurrent", leftCurrent, Constants.ENABLE_LOGGING);
+      Logger.logDouble(baseLogName + "rightCurrent", rightCurrent, Constants.ENABLE_LOGGING);
+      Logger.logDouble(baseLogName + "totalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
       SmartShuffleboard.put("Shooter", "Left Shooter Motor RPM", getShooterMotorLeftRPM());
       SmartShuffleboard.put("Shooter", "Right Shooter Motor RPM", getShooterMotorRightRPM());
     }
     Logger.logDouble(baseLogName + "motorLeftRPM", getShooterMotorLeftRPM(), Constants.ENABLE_LOGGING);
     Logger.logDouble(baseLogName + "motorRightRPM", getShooterMotorRightRPM(), Constants.ENABLE_LOGGING);
+  }
+
+  public boolean upToSpeed(double leftSpeed, double rightSpeed) {
+    return ((getShooterMotorLeftRPM() / leftSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD) &&
+            ((getShooterMotorRightRPM() / rightSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD);
   }
 }

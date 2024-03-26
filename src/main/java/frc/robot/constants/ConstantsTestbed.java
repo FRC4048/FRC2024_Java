@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 public class ConstantsTestbed extends GameConstants {
@@ -15,10 +16,11 @@ public class ConstantsTestbed extends GameConstants {
     //Servo
     public static final int LEFT_SERVO_ID = 19;
     public static final int RIGHT_SERVO_ID = 18;
+    public static final int LED_PWM_ID = 7;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_LEFT = 44;
-    public static final int SHOOTER_MOTOR_RIGHT = 45;
+    public static final int SHOOTER_MOTOR_LEFT = 144;
+    public static final int SHOOTER_MOTOR_RIGHT = 145;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
@@ -56,6 +58,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final double DRIVE_PID_D = 0;
     public static final double DRIVE_PID_FF_S = 1;
     public static final double DRIVE_PID_FF_V = 2.8;
+    //Current Caps
+    public static final int DRIVE_SMART_LIMIT = 30;
+    public static final int DRIVE_SECONDARY_LIMIT = 40;
+    public static final double DRIVE_RAMP_RATE_LIMIT = 0.25;
 
     public static final double STEER_PID_P = 0.3;
     public static final double STEER_PID_I = 0;
@@ -76,6 +82,15 @@ public class ConstantsTestbed extends GameConstants {
     public static final double BACK_LEFT_ABS_ENCODER_ZERO = 306.29;
     public static final double FRONT_RIGHT_ABS_ENCODER_ZERO = 119.35;
 
+    //Limelight
+    public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.02;
+    public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
+    public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.06;
+
+    //Vision
+    public static final double  CAMERA_OFFSET_FROM_CENTER_X = Units.inchesToMeters(0);
+    public static final double  CAMERA_OFFSET_FROM_CENTER_Y = Units.inchesToMeters(0);
+
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 30;
@@ -83,8 +98,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_LEFT = 144;
-    public static final int CLIMBER_RIGHT = 145;
+    public static final int CLIMBER_LEFT = 44;
+    public static final int CLIMBER_RIGHT = 45;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 211;

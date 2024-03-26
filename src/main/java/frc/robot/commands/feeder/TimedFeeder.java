@@ -7,43 +7,41 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.BlinkinPattern;
 
-public class StartFeeder extends Command {
-
+public class TimedFeeder extends Command {
     private final Feeder feeder;
+    private final Timer timer = new Timer();
     private final LightStrip lightStrip;
-    private double startTime;
+    private final double motorRunTime; // temporary until  done testing
 
-    public StartFeeder(Feeder feeder, LightStrip lightStrip) {
+    public TimedFeeder(Feeder feeder, LightStrip lightStrip, double motorRunTime) {
         this.feeder = feeder;
         this.lightStrip = lightStrip;
+        this.motorRunTime = motorRunTime;
         addRequirements(feeder);
     }
 
     @Override
     public void initialize() {
-        startTime = Timer.getFPGATimestamp();
+        feeder.switchFeederBeamState(false);
+        timer.reset();
+        timer.start();
+        if (feeder.pieceSeen(false)){
+            lightStrip.setPattern(BlinkinPattern.BLACK);
+        }
     }
 
     @Override
     public void execute() {
-        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_ENTER_SPEED);
+        feeder.setFeederMotorSpeed(Constants.FEEDER_MOTOR_SPEAKER_SPEED);
     }
 
     @Override
     public void end(boolean interrupted) {
         feeder.stopFeederMotor();
-        lightStrip.setPattern(BlinkinPattern.ORANGE);
-        
     }
 
     @Override
     public boolean isFinished() {
-//        if (feeder.pieceSeen(true)) {
-//            return true;
-//        }
-        if (Timer.getFPGATimestamp() - startTime > Constants.START_FEEDER_TIMEOUT) {
-            return true;
-        }
-        return false;
+        return timer.hasElapsed(motorRunTime);
     }
 }

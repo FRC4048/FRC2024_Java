@@ -1,16 +1,16 @@
-package frc.robot.commands.pathplanning;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class TimedIntake extends Command {
+public class SpoolIntake extends Command {
     private final IntakeSubsystem intakeSubsystem;
     private final Timer timer = new Timer();
-    private final int motorRunTime; // temporary until  done testing
+    private final double motorRunTime; // temporary until  done testing
 
-    public TimedIntake(IntakeSubsystem intakeSubsystem, int motorRunTime) {
+    public SpoolIntake(IntakeSubsystem intakeSubsystem, double motorRunTime) {
         addRequirements(intakeSubsystem);
         this.intakeSubsystem = intakeSubsystem;
         this.motorRunTime = motorRunTime;
@@ -29,7 +29,9 @@ public class TimedIntake extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.stopMotors();
+        if (interrupted){
+            intakeSubsystem.stopMotors();
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.utils.logging.Logger;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -45,6 +46,21 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
+    private double frontLeftDriveCurrent;
+    private double frontRightDriveCurrent;
+    private double backLeftDriveCurrent;
+    private double backRightDriveCurrent;
+    private double frontLeftSteerCurrent;
+    private double frontRightSteerCurrent;
+    private double backLeftSteerCurrent;
+    private double backRightSteerCurrent;
+    private double totalCurrent;
+    private double totalSteerCurrent;
+    private double totalDriveCurrent;
+
+
+
+
     private DriveMode driveMode = DriveMode.FIELD_CENTRIC;
 
     private double getGyro() {
@@ -53,6 +69,20 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
+        totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
+        totalCurrent = totalSteerCurrent + totalDriveCurrent;
+        Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
@@ -62,10 +92,13 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+
+            SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
+            SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
+            SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
         }
-
-
-
+        
+        
         gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
             poseEstimator.updatePositionWithVis(gyroValue);
@@ -234,12 +267,50 @@ public class SwerveDrivetrain extends SubsystemBase {
     public PIDController getAlignableTurnPid() {
         return alignableTurnPid;
     }
-
+    public double getFrontLeftDriveCurrent() {
+        return frontLeftDriveCurrent;
+    }
+    public double getFrontRightDriveCurrent() {
+        return frontRightDriveCurrent;
+    }
+    public double getBackLeftDriveCurrent() {
+        return backLeftDriveCurrent;
+    }
+    public double getBackRightDriveCurrent() {
+        return backRightDriveCurrent;
+    }
+    public double getFrontLeftSteerCurrent() {
+        return frontLeftSteerCurrent;
+    }
+    public double getFrontRightSteerCurrent() {
+        return frontRightSteerCurrent;
+    }
+    public double getBackLeftSteerCurrent() {
+        return backLeftSteerCurrent;
+    }
+    public double getBackRightSteerCurrent() {
+        return backRightSteerCurrent;
+    }
+    public double getTotalDriveCurrent() {
+        return totalDriveCurrent;
+    }
+    public double getTotalSteerCurrent() {
+        return totalSteerCurrent;
+    }
+    public double getTotalCurrent() {
+        return totalCurrent;
+    }
     public DriveMode getDriveMode() {
         return driveMode;
     }
 
     public void setDriveMode(DriveMode driveMode) {
         this.driveMode = driveMode;
+    }
+    public ChassisSpeeds getChassisSpeeds(){
+        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
+    }
+    public ChassisSpeeds getFieldChassisSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());
     }
 }

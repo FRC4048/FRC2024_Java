@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
@@ -22,10 +24,15 @@ public class Feeder extends SubsystemBase {
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
-
+        configureMotor();
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
+    }
+    public void configureMotor(){
+        this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        feederMotor.setStatusFramePeriod(2,100);
+        feederMotor.setStatusFramePeriod(3,100);
     }
 
     public void setFeederMotorSpeed(double speed) {
@@ -48,9 +55,12 @@ public class Feeder extends SubsystemBase {
     }
 
     public boolean pieceSeen(boolean incoming) {
-        ColorMatchResult latestResult = colorSensor.getMatchedColor();
-        double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
-        return latestResult.confidence > confidence;
+        if (Constants.RELY_COLOR_SENSOR){
+            ColorMatchResult latestResult = colorSensor.getMatchedColor();
+            double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
+            return latestResult.confidence > confidence;
+        }
+        return this.getForwardSwitchTripped();
     }
 
     @Override
@@ -69,9 +79,22 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
 
+        /*
         SmartShuffleboard.put("Driver", "Has Game Piece?", pieceSeen(false))
             .withPosition(0, 0)
             .withSize(2, 2);
+        */
         Logger.logDouble(baseLogName + "FeederMotorSpeed",getFeederMotorSpeed(),Constants.ENABLE_LOGGING);
+    }
+
+    public boolean getForwardSwitchTripped() {
+        return feederMotor.isFwdLimitSwitchClosed() == 1;
+    }
+    public void switchFeederBeamState(boolean enable) {
+        if (enable){
+            this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        }else {
+            this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.Disabled);
+        }
     }
 }
