@@ -2,6 +2,7 @@ package frc.robot.utils.math;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 
 /**
@@ -138,10 +139,10 @@ public class VectorUtils {
      *                           For example if you have to hit your target from bottom, you can constrain the parabola to only be acceptable in the first third of the parabola.
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
-    public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ, double degreeThreshold, int maxIterations, double maxFractionalRange) {
+    public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ,double distOffset ,double degreeThreshold, int maxIterations, double maxFractionalRange) {
         double xDist = destX - startX;
         double yDist = destY - startY;
-        double xyDist = Math.hypot(xDist, yDist);
+        double xyDist = Math.hypot(xDist, yDist) + distOffset;
         double deltaZ = Math.abs(destZ - startZ);
         VelocityVector lastVel = null;
         VelocityVector currVel = null;
@@ -177,7 +178,7 @@ public class VectorUtils {
      * @return a {@link VelocityVector} with the calculated target angle between 0 and 90 degrees.<br> <b>Impossible parameters will produce a null result</b>
      */
     public static VelocityVector fromDestAndCompoundVel(double speed, double startX, double startY, double startZ, double driveSpeedX, double destX, double destY, double destZ) {
-        return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, 0.01, 10, 2.0/5);
+        return fromDestAndCompoundVel(speed, startX, startY, startZ, driveSpeedX, destX, destY, destZ, (RobotContainer.isRedAlliance() ? -Constants.RAMP_FROM_CENTER : Constants.RAMP_FROM_CENTER) ,0.01, 10, 2.0/5);
     }
 
     public static boolean isErrorSafe(VelocityVector velocityVector, Rotation2d angleError, double destX, double destZ, double maxErrorZ) {
