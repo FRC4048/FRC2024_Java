@@ -45,8 +45,7 @@ public class RampFollow extends Command {
         if (alignableNow != null) {
             double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? 1 : -1);
             Pose2d pose = drivetrain.getPose();
-            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND)
-                    .plus(new Translation3d(RobotContainer.isRedAlliance() ? -Constants.RAMP_FROM_CENTER : Constants.RAMP_FROM_CENTER, 0,0));
+            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
             boolean canReach = shooting.getAngle().getDegrees() != 90;
@@ -62,7 +61,7 @@ public class RampFollow extends Command {
             }
             double clamp = MathUtil.clamp(shooting.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
                 ramp.setAngle(Rotation2d.fromDegrees(clamp));
-            boolean isInThresh = Math.abs(ramp.getRampPos() - ramp.getDesiredPosition()) < 0.05;
+            boolean isInThresh = Math.abs(ramp.getRampPos() - ramp.getDesiredPosition()) < Constants.RAMP_AT_POS_THRESHOLD;
             if (isInThresh){
                 lightStrip.setPattern(BlinkinPattern.VIOLET);
             } else {

@@ -156,5 +156,7 @@ public class GameConstants {
     public static final int LIGHTSTRIP_PORT = 7;
     public static final double ROBOT_FROM_GROUND = 0.2032;
     public static final double RAMP_FROM_CENTER = 0.1778;
+    public static final double RAMP_AT_POS_THRESHOLD = 0.1;
+
 
 }
