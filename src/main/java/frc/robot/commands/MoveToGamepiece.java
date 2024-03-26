@@ -38,9 +38,6 @@ public class MoveToGamepiece extends Command {
     public void execute() {
         if (!vision.isPieceSeen()){
             pieceNotSeenCounter++;
-            if (pieceNotSeenCounter >= Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT){
-                return;
-            }
         } else {
             pieceNotSeenCounter = 0;
             gamePieceX = vision.getPieceOffestAngleX();
