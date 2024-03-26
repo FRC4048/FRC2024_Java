@@ -22,11 +22,10 @@ public class Ramp extends SubsystemBase {
         configureMotor();
         resetEncoder();
         neoPidMotor.enableDiagnostics("Ramp", true, true);
-        rampAngleMap.put(58.8,3.0);
-        rampAngleMap.put(71.14,5.0);
-        rampAngleMap.put(71.14,5.0);
-        rampAngleMap.put(45+49.0,7.56);
-        rampAngleMap.put(103.0,7.9);
+        rampAngleMap.put(1.49352, 3.0);
+        rampAngleMap.put(1.806956, 5.0);
+        rampAngleMap.put(2.3876, 7.56);
+        rampAngleMap.put(2.6162, 7.9);
     }
 
     private void configureMotor() {
