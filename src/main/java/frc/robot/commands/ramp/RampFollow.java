@@ -14,11 +14,7 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
-import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.VelocityVector;
-
-import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 public class RampFollow extends Command {
     private final Ramp ramp;
@@ -45,7 +41,6 @@ public class RampFollow extends Command {
 
     @Override
     public void execute() {
-        Instant startTime = Instant.now();
         Alignable alignableNow = drivetrain.getAlignable();
         if (alignableNow != null) {
             double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? 1 : -1);
@@ -73,8 +68,6 @@ public class RampFollow extends Command {
             } else {
                 lightStrip.setPattern(BlinkinPattern.BLACK);
             }
-            int elapsedTime = (int) TimeUnit.NANOSECONDS.toMillis(Instant.now().getNano() - startTime.getNano());
-            Logger.logInteger("/robot/rampFollowExecutionTime", elapsedTime, Constants.ENABLE_LOGGING);
         }
 
     }

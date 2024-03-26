@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = true;
+    public static final boolean RAMP_DEBUG = false;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
@@ -19,8 +19,6 @@ public class GameConstants {
     public static final boolean PATHPLANNER_DEBUG = false;
     public static final boolean ENABLE_LOGGING = true;
     public static final boolean ENABLE_VISION = true;
-    public static final boolean SHOOT_WHILE_MOVING = true;
-
     public static final boolean LED_DEBUG = false;
     public static final boolean RELY_COLOR_SENSOR = false;
 
