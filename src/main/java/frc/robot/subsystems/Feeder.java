@@ -30,7 +30,7 @@ public class Feeder extends SubsystemBase {
         configureMotor();
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "FwdLimitSwitch", feederMotor, Direction.FORWARD));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Feeder", "Beam Limit Switch", feederMotor, Direction.FORWARD));
 
     }
     public void configureMotor(){
