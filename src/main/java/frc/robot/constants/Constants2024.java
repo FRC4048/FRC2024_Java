@@ -74,7 +74,7 @@ public class Constants2024 extends GameConstants {
     public static final double MAX_ANGULAR_SPEED = Math.PI * 6;
     public static final double ROBOT_WIDTH = 0.8636;
     public static final double ROBOT_LENGTH = 0.8636;
-    public static final double AUTO_ALIGN_THRESHOLD = 2; //degrees
+    public static final double AUTO_ALIGN_THRESHOLD = 2.3; //degrees
 
     public static final double BACK_RIGHT_ABS_ENCODER_ZERO = 261.56;
     public static final double FRONT_LEFT_ABS_ENCODER_ZERO = 190.28;
@@ -109,7 +109,7 @@ public class Constants2024 extends GameConstants {
     //Deployer
     public static final int DEPLOYER_MOTOR_ID = 10;
 
-    public static final double ALIGNABLE_PID_P = 0.015;
-    public static final double ALIGNABLE_PID_I = 0;
-    public static final double ALIGNABLE_PID_D = 0.0015;
+    public static final double ALIGNABLE_PID_P = 0.007;
+    public static final double ALIGNABLE_PID_I = 0.0008;
+    public static final double ALIGNABLE_PID_D = 0.0001;
 }

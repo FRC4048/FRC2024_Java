@@ -52,11 +52,12 @@ public class RampFollow extends Command {
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
             //generate future position
-            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.25);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.5);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, diveTrainXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
                 lightStrip.setPattern(BlinkinPattern.BLACK);
+                ramp.updateFF();
                 return;
             };
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
@@ -71,11 +72,12 @@ public class RampFollow extends Command {
             if (!canReach){
                 lightStrip.setPattern(BlinkinPattern.BLACK);
                 ramp.setAngle(Rotation2d.fromDegrees(Constants.RAMP_MAX_ANGLE));
+                ramp.updateFF();
                 return;
             }
             double clamp = MathUtil.clamp(shootingFuture.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
             ramp.setAngle(Rotation2d.fromDegrees(clamp));
-            double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shooting.getAngle().getDegrees());
+            double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shootingFuture.getAngle().getDegrees());
             boolean isInThresh = Math.abs(threshold) < Constants.RAMP_AT_POS_THRESHOLD;
             SmartDashboard.putNumber("DEST DIFF", threshold);
             if (isInThresh){
@@ -83,6 +85,7 @@ public class RampFollow extends Command {
             } else {
                 lightStrip.setPattern(BlinkinPattern.BLACK);
             }
+            ramp.updateFF();
         }
 
     }
