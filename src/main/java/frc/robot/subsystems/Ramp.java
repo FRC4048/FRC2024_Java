@@ -36,8 +36,6 @@ public class Ramp extends SubsystemBase {
     }
 
     public void periodic() {
-        SmartShuffleboard.put("Ramp","80", String.valueOf(rampAngleMap.get(80.0)));
-        SmartShuffleboard.put("Ramp","70", String.valueOf(rampAngleMap.get(70.0)));
         if (Math.abs(getRampPos() - getDesiredPosition()) <= Constants.RAMP_ELIM_FF_THRESHOLD){
             neoPidMotor.getPidController().setFF(NeoPidMotor.DEFAULT_FF);
         }else{
