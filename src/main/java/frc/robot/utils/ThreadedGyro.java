@@ -1,6 +1,7 @@
 package frc.robot.utils;
 
 import com.kauailabs.navx.frc.AHRS;
+import frc.robot.constants.Constants;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,7 +36,7 @@ public class ThreadedGyro {
                 shouldReset.set(false);
             }
             updateGyro();
-        },0,10, TimeUnit.MILLISECONDS);
+        },0, Constants.GYRO_THREAD_RATE_MS, TimeUnit.MILLISECONDS);
     }
 
     private void updateGyro() {
