@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 public class ConstantsTestbed extends GameConstants {
@@ -18,8 +19,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final int LED_PWM_ID = 7;
 
     //Shooter
-    public static final int SHOOTER_MOTOR_LEFT = 44;
-    public static final int SHOOTER_MOTOR_RIGHT = 45;
+    public static final int SHOOTER_MOTOR_LEFT = 144;
+    public static final int SHOOTER_MOTOR_RIGHT = 145;
 
     public static final int SHOOTER_SENSOR_ID_1 = 3;
     public static final int SHOOTER_SENSOR_ID_2 = 4;
@@ -86,6 +87,10 @@ public class ConstantsTestbed extends GameConstants {
     public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
     public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.06;
 
+    //Vision
+    public static final double  CAMERA_OFFSET_FROM_CENTER_X = Units.inchesToMeters(0);
+    public static final double  CAMERA_OFFSET_FROM_CENTER_Y = Units.inchesToMeters(0);
+
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;
     public static final int FEEDER_SENSOR_ID = 30;
@@ -93,8 +98,8 @@ public class ConstantsTestbed extends GameConstants {
     public static final double ARM_SEPERATION_DISTANCE = 5.00;
     public static final int OUTTAKE_MOTOR1_ID = 880;
     public static final int OUTTAKE_MOTOR2_ID = 890;
-    public static final int CLIMBER_LEFT = 144;
-    public static final int CLIMBER_RIGHT = 145;
+    public static final int CLIMBER_LEFT = 44;
+    public static final int CLIMBER_RIGHT = 45;
 
     //Intake
     public static final int INTAKE_MOTOR_1_ID = 211;

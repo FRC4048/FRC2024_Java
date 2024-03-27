@@ -6,6 +6,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
+import edu.wpi.first.wpilibj.Timer;
 
 public class BasicShoot extends Command {
     private final Shooter shooter;
@@ -13,6 +14,7 @@ public class BasicShoot extends Command {
     private boolean activated = false;
     private final double time;
     private final LightStrip lightStrip;
+    private double startTime;
 
     public BasicShoot(Shooter shooter, LightStrip lightStrip, double time) {
         this.shooter = shooter;
@@ -24,14 +26,18 @@ public class BasicShoot extends Command {
     @Override
     public void initialize() {
         timer.reset();
-        activated = true;
-        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
-        shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
         timer.start();
+        startTime = Timer.getFPGATimestamp();
     }
 
     @Override
     public void execute() {
+        shooter.setShooterMotorLeftRPM(Constants.SHOOTER_MOTOR_HIGH_SPEED);
+        if (Timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET){
+            shooter.setShooterMotorRightRPM(Constants.SHOOTER_MOTOR_LOW_SPEED);
+            // Activated to let us know we've started the second motor
+            activated = true;
+        }
         if (shooter.upToSpeed(Constants.SHOOTER_MOTOR_HIGH_SPEED, Constants.SHOOTER_MOTOR_LOW_SPEED)){
             lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
@@ -48,7 +54,7 @@ public class BasicShoot extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.stopShooter();
+        shooter.slowStop();
         timer.stop();
         activated = false;
     }
