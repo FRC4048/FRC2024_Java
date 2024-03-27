@@ -14,25 +14,23 @@ public class ThreadedGyro {
     private final AtomicBoolean shouldReset = new AtomicBoolean(false);
     private final AtomicBoolean shouldOffset = new AtomicBoolean(false);
     private final AtomicLong lastGyro;
-    private final AtomicLong angleAdjustment;
     private final AtomicLong gyroOffset = new AtomicLong();
     private final ScheduledExecutorService executor;
 
     public ThreadedGyro(AHRS gyro) {
         this.gyro = gyro;
-        this.angleAdjustment = new AtomicLong(Double.doubleToLongBits(0));
-        this.lastGyro = new AtomicLong((Double.doubleToLongBits(getGyroValue())));
+        this.lastGyro = new AtomicLong((Double.doubleToLongBits(0)));
         this.executor = Executors.newScheduledThreadPool(1);
     }
 
     public void start(){
         executor.scheduleAtFixedRate(() -> {
-            if (shouldOffset.get()){
-                gyro.setAngleAdjustment(Double.longBitsToDouble(angleAdjustment.get()));
-                shouldReset.set(false);
-            }
             if (shouldReset.get()) {
                 gyro.reset();
+                shouldReset.set(false);
+            }
+            if (shouldOffset.get()){
+                gyro.setAngleAdjustment(Double.longBitsToDouble(gyroOffset.get()));
                 shouldReset.set(false);
             }
             updateGyro();
