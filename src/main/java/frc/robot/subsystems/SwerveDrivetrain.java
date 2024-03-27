@@ -70,7 +70,9 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("DELTA X", Units.Inch.convertFrom(getPose().getTranslation().getDistance(new Translation2d(Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY())),Units.Meter));
+        if (Constants.RAMP_DEBUG) {
+            SmartDashboard.putNumber("DELTA X", Units.Inch.convertFrom(getPose().getTranslation().getDistance(new Translation2d(Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY())),Units.Meter));
+        }
         frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
