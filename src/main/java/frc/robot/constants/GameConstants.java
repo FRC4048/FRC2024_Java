@@ -145,6 +145,7 @@ public class GameConstants {
     public static final double RAMP_DIP_AUTO_SHOOT = 6;
     public static final int TIMED_INTAKE_AUTO_TIMEOUT = 2;
 
+    public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
     public static final double RAMP_ENCODER_TO_ANGLE_SLOPE = 2.5;
@@ -158,5 +159,6 @@ public class GameConstants {
     public static final double RAMP_FROM_CENTER = 0.1778;
     public static final double RAMP_AT_POS_THRESHOLD = 0.1;
 
+    public static final long GYRO_THREAD_RATE_MS = 10;
 
 }
