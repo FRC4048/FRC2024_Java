@@ -47,6 +47,7 @@ public class RampFollow extends Command {
             Pose2d pose = drivetrain.getPose();
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
+            if (shooting == null) return;
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
             boolean canReach = shooting.getAngle().getDegrees() != 90;
             if (Constants.RAMP_DEBUG) {
