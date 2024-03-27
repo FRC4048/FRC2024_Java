@@ -46,9 +46,19 @@ public class MoveToGamepiece extends Command {
         }
         yChange = gamePieceY - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_Y;
         double xChange = gamePieceX - Constants.LIMELIGHT_MOVE_TO_PIECE_DESIRED_X;
+        Logger.logDouble("/Vision/YError", yChange, Constants.ENABLE_LOGGING);
+        Logger.logDouble("/Vision/XError", xChange, Constants.ENABLE_LOGGING);
         if (pieceNotSeenCounter < Constants.LIMELIGHT_PIECE_NOT_SEEN_COUNT && yChange > Constants.MOVE_TO_GAMEPIECE_THRESHOLD){
-            ChassisSpeeds driveStates = new ChassisSpeeds(movingPIDController.calculate(yChange), 0, turningPIDController.calculate(xChange));
+            double forwardSpeed = movingPIDController.calculate(yChange);
+            double turningSpeed = movingPIDController.calculate(xChange);
+            Logger.logDouble("/Vision/" + getName() + "/ForwardSpeed", forwardSpeed, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Vision/" + getName() + "/TurningSpeed", turningSpeed, Constants.ENABLE_LOGGING);
+            ChassisSpeeds driveStates = new ChassisSpeeds(forwardSpeed, 0, turningSpeed);
             drivetrain.drive(driveStates);
+        }
+        else {
+            Logger.logDouble("/Vision/" + getName() + "/ForwardSpeed", 0.0, Constants.ENABLE_LOGGING);
+            Logger.logDouble("/Vision/" + getName() + "/TurningSpeed", 0.0, Constants.ENABLE_LOGGING);
         }
     }
 
