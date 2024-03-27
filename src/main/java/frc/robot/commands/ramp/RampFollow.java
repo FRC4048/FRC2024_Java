@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
@@ -47,7 +48,11 @@ public class RampFollow extends Command {
             Pose2d pose = drivetrain.getPose();
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
-            if (shooting == null) return;
+            if (shooting == null) {
+                DriverStation.reportError("Invalid Odometry Can not shoot", true);
+                lightStrip.setPattern(BlinkinPattern.BLACK);
+                return;
+            };
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
             boolean canReach = shooting.getAngle().getDegrees() != 90;
             if (Constants.RAMP_DEBUG) {

@@ -156,7 +156,7 @@ public class VectorUtils {
             double appliedSpeed = Math.hypot(xySpeed, zSpeed);
             currVel = fromVelAndDist(appliedSpeed, xyDist, deltaZ, maxFractionalRange);
         } while (i < maxIterations && (lastVel == null || currVel == null || Math.abs(lastVel.getAngle().getDegrees() - currVel.getAngle().getDegrees()) > degreeThreshold));
-        return currVel;
+        return currVel == null ? new VelocityVector(Constants.SHOOTER_VELOCITY, new Rotation2d()) : currVel;
     }
 
     /**
