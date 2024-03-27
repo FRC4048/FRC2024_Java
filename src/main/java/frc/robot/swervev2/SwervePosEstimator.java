@@ -5,6 +5,7 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -13,10 +14,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.Constants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 
 /**
@@ -79,11 +82,16 @@ public class SwervePosEstimator{
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
     public void updatePositionWithVis(double gyroValueDeg){
+
         if (DriverStation.isTeleop()){
-            double[] visionArray = subscriber.get();
-            Pose2d visionPose = new Pose2d(visionArray[0], visionArray[1], new Rotation2d(Units.degreesToRadians(visionArray[2])).rotateBy(new Rotation2d(Math.PI)));
-            if (visionArray[0] != -1 && visionArray[1] != -1 && visionArray[2] != -1) {
-                SmartDashboard.putNumberArray("VISION_TRANSFORM", new double[]{visionPose.getX(),visionPose.getY(),visionPose.getRotation().minus(new Rotation2d(Math.PI)).getDegrees()});
+            TimestampedDoubleArray visionArray = subscriber.getAtomic();
+
+            Pose2d visionPose = new Pose2d(visionArray.value[0],
+                    visionArray.value[1],
+                    new Rotation2d(Units.degreesToRadians(visionArray.value[2]))
+                        .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
+                        .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
+            if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
                 poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
             }
         }

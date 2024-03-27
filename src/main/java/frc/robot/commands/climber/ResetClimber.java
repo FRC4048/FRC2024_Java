@@ -4,16 +4,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class ResetClimber extends Command {
   /** Creates a new ResetRamp. */
   private final Climber climber;
   private double startTime;
-  private final TimeoutCounter timeoutCounter = new TimeoutCounter("Reset Climber");
+  private final TimeoutCounter timeoutCounter;
 
-  public ResetClimber(Climber climber) {
+  public ResetClimber(Climber climber, LightStrip lightStrip) {
     this.climber = climber;
+    timeoutCounter = new TimeoutCounter("Reset Climber", lightStrip);
     addRequirements(climber);
   }
 

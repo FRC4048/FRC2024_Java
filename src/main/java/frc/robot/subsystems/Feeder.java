@@ -24,10 +24,15 @@ public class Feeder extends SubsystemBase {
 
     public Feeder() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
-        this.feederMotor.setNeutralMode(NeutralMode.Brake);
-        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        configureMotor();
         colorSensor = new ColorSensor(i2cPort);
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", colorSensor));
+    }
+    public void configureMotor(){
+        this.feederMotor.setNeutralMode(NeutralMode.Brake);
+        this.feederMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        feederMotor.setStatusFramePeriod(2,100);
+        feederMotor.setStatusFramePeriod(3,100);
     }
 
     public void setFeederMotorSpeed(double speed) {
@@ -74,9 +79,11 @@ public class Feeder extends SubsystemBase {
             SmartShuffleboard.put("Feeder", "Piece Seen Reverse", pieceSeen(false));
         }
 
+        /*
         SmartShuffleboard.put("Driver", "Has Game Piece?", pieceSeen(false))
             .withPosition(0, 0)
             .withSize(2, 2);
+        */
         Logger.logDouble(baseLogName + "FeederMotorSpeed",getFeederMotorSpeed(),Constants.ENABLE_LOGGING);
     }
 

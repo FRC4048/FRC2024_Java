@@ -1,5 +1,6 @@
 package frc.robot.swervev2.components;
 
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,6 +41,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
         driveEncoder.setPositionConversionFactor(drivePosFactor);
         steerEncoder.setPositionConversionFactor(steerPosFactor);
         steerEncoder.setVelocityConversionFactor(steerPosFactor/60);
+        absEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData,50);
     }
 
     @Override

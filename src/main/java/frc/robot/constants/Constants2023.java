@@ -1,5 +1,6 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
 public class Constants2023 extends GameConstants {
@@ -19,6 +20,7 @@ public class Constants2023 extends GameConstants {
     public static final int LEFT_SERVO_DISENGAGED = 180;
     public static final int LEFT_SERVO_ID = 0;
     public static final int RIGHT_SERVO_ID = 1;
+    public static final int LED_PWM_ID = 2;
     //Shooter
     public static final int SHOOTER_MOTOR_LEFT = 4400; //needs to be changed
     public static final int SHOOTER_MOTOR_RIGHT = 4500; //needs to be changed
@@ -81,6 +83,10 @@ public class Constants2023 extends GameConstants {
     public static final double MOVE_TO_GAMEPIECE_TURNING_P = 0.015;
     public static final double MOVE_TO_GAMEPIECE_TURNING_D = 0.00015;
     public static final double MOVE_TO_GAMEPIECE_MOVING_P = 0.06;
+
+    //Vision
+    public static final double  CAMERA_OFFSET_FROM_CENTER_X = Units.inchesToMeters(0);
+    public static final double  CAMERA_OFFSET_FROM_CENTER_Y = Units.inchesToMeters(0);
 
     //Feeder
     public static final int FEEDER_MOTOR_ID = 111;
