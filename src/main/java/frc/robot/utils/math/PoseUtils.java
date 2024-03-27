@@ -1,0 +1,45 @@
+package frc.robot.utils.math;
+
+import edu.wpi.first.math.geometry.*;
+
+public class PoseUtils {
+    public static Pose2d getFieldEstimatedFuturePose(Pose2d pose, double vx, double vy, double time) {
+        return getFieldEstimatedFuturePose(pose, vx, vy, 0.0, time);
+    }
+
+    public static Transform2d getFieldEstimatedFuturePose(Transform2d pose, double vx, double vy, double time) {
+        return getFieldEstimatedFuturePose(pose, vx, vy, 0.0, time);
+    }
+
+    public static Translation2d getFieldEstimatedFuturePose(Translation2d pose, double vx, double vy, double time) {
+        return pose.plus(new Translation2d(vx * time, vy * time));
+    }
+
+    public static Pose3d getFieldEstimatedFuturePose(Pose3d pose, double vx, double vy, double vz, double time) {
+        return getFieldEstimatedFuturePose(pose, vx, vy, vz, 0.0, 0.0, 0.0, time);
+    }
+
+    public static Transform3d getFieldEstimatedFuturePose(Transform3d pose, double vx, double vy, double vz, double time) {
+        return getFieldEstimatedFuturePose(pose, vx, vy, vz, 0.0, 0.0, 0.0, time);
+    }
+
+    public static Translation3d getFieldEstimatedFuturePose(Translation3d pose, double vx, double vy, double vz, double time) {
+        return pose.plus(new Translation3d(vx * time, vy * time, vz * time));
+    }
+
+    public static Pose2d getFieldEstimatedFuturePose(Pose2d pose, double vx, double vy, double vYaw, double time) {
+        return pose.transformBy(new Transform2d(vx * time, vy * time, new Rotation2d(vYaw * time)));
+    }
+
+    public static Transform2d getFieldEstimatedFuturePose(Transform2d pose, double vx, double vy, double vYaw, double time) {
+        return pose.plus(new Transform2d(vx * time, vy * time, Rotation2d.fromDegrees(vYaw * time)));
+    }
+
+    public static Pose3d getFieldEstimatedFuturePose(Pose3d pose, double vx, double vy, double vz, double vYaw, double vRoll, double vPitch, double time) {
+        return pose.transformBy(new Transform3d(vx * time, vy * time, vz * time, new Rotation3d(vRoll * time, vPitch * time, vYaw * time)));
+    }
+
+    public static Transform3d getFieldEstimatedFuturePose(Transform3d pose, double vx, double vy, double vz, double vYaw, double vRoll, double vPitch, double time) {
+        return pose.plus(new Transform3d(vx * time, vy * time, vz * time, new Rotation3d(vRoll * time, vPitch * time, vYaw * time)));
+    }
+}

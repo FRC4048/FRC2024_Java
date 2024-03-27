@@ -15,6 +15,8 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.math.AngleUtils;
+import frc.robot.utils.math.PoseUtils;
 import frc.robot.utils.math.VelocityVector;
 
 public class RampFollow extends Command {
@@ -50,8 +52,7 @@ public class RampFollow extends Command {
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
             //generate future position
-            Translation3d deltaPose = new Translation3d(diveTrainXVel * 0.25,diveTrainYVel * 0.25,0);
-            Translation3d futurePose = rampPose.plus(deltaPose);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.25);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, diveTrainXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
@@ -59,7 +60,7 @@ public class RampFollow extends Command {
                 return;
             };
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
-            shootingFuture = new VelocityVector(shootingFuture.getVelocity(), new Rotation2d(Math.PI/2).minus(shootingFuture.getAngle()));
+            shootingFuture = new VelocityVector(shootingFuture.getVelocity(), AngleUtils.compliment(shootingFuture.getAngle()));
             boolean canReach = shootingFuture.getAngle().getDegrees() != 90 && shootingFuture.getAngle().getDegrees() < Constants.RAMP_MAX_ANGLE;
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", shooting.getAngle().getDegrees());
