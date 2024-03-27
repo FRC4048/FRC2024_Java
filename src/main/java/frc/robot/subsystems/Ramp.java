@@ -1,8 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.utils.Alignable;
 import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -12,6 +16,7 @@ public class Ramp extends SubsystemBase {
     private final String baseLogName = "/robot/ramp/";
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
+    private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
     private double neoModerFF = Constants.RAMP_PID_FAR_FF;
 
     public Ramp() {
@@ -19,6 +24,10 @@ public class Ramp extends SubsystemBase {
         configureMotor();
         resetEncoder();
         neoPidMotor.enableDiagnostics("Ramp", true, true);
+        rampAngleMap.put(1.49352, 3.0);
+        rampAngleMap.put(1.806956, 5.0);
+        rampAngleMap.put(2.3876, 7.56);
+        rampAngleMap.put(2.6162, 7.9);
     }
 
     private void configureMotor() {
@@ -44,7 +53,6 @@ public class Ramp extends SubsystemBase {
 //            if (pidFF != neoPidMotor.getPidController().getFF()) neoPidMotor.getPidController().setFF(pidFF);
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
             SmartShuffleboard.put("Ramp", "Forward Switch Tripped", getForwardSwitchState());
-
         }
 
         Logger.logDouble(baseLogName + "EncoderValue", getRampPos(), Constants.ENABLE_LOGGING);
@@ -152,5 +160,9 @@ public class Ramp extends SubsystemBase {
         } else if (getFF() != Constants.RAMP_PID_FAR_FF) {
             setFF(Constants.RAMP_PID_FAR_FF);
         }
+    }
+
+    public double calcPose(Pose2d pose2d, Alignable alignable) {
+        return rampAngleMap.get(pose2d.getTranslation().getDistance(new Translation2d(alignable.getX(), alignable.getY())));
     }
 }
