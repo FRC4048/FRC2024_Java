@@ -6,6 +6,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
@@ -20,6 +21,7 @@ public class SetShooterSpeed extends Command {
   private double desiredLeftSpeedRpm;
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter;
+  private Timer timer = new Timer();
   public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
     this.shooter = shooter;
     this.lightStrip = lightStrip;
@@ -42,7 +44,9 @@ public class SetShooterSpeed extends Command {
   @Override
   public void execute() {
     shooter.setShooterMotorLeftRPM(desiredLeftSpeedRpm);
-    shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    if (timer.getFPGATimestamp() - startTime > Constants.SHOOTER_MOTOR_STARTUP_OFFSET) {
+      shooter.setShooterMotorRightRPM(desiredRightSpeedRpm);
+    }
     if (shooter.upToSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
       lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
     }
@@ -51,8 +55,7 @@ public class SetShooterSpeed extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.setShooterMotorLeftRPM(0.0);
-    shooter.setShooterMotorRightRPM(0.0);
+    shooter.slowStop();
   }
 
   // Returns true when the command should end.
