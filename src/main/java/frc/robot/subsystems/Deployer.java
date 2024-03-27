@@ -70,15 +70,15 @@ public class Deployer extends SubsystemBase{
             SmartShuffleboard.put("Deployer", "encoder", getEncoder());
             SmartShuffleboard.put("Deployer", "Fwd Limt", isDeployerForwardLimitSwitchClosed());
             SmartShuffleboard.put("Deployer", "Rev Limit", isDeployerReverseLimitSwitchClosed());
+            SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", isDeployerForwardLimitSwitchClosed())
+                    .withPosition(0, 2)
+                    .withSize(2, 2);
         }
-        
-        /*
-        SmartShuffleboard.put("Driver", "Is Intake Deployer Raised?", isDeployerForwardLimitSwitchClosed())
-            .withPosition(0, 2)
-            .withSize(2, 2);
-        */
-        Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
-        Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+        if (Constants.LOG_LIMIT_SWITCHES) {
+            Logger.logBoolean(baseLogName + "FWD LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+            Logger.logBoolean(baseLogName + "REV LMT", isDeployerForwardLimitSwitchClosed(), Constants.ENABLE_LOGGING);
+        }
+
     }
 
     //Spin deployer motor

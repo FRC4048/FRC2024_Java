@@ -46,6 +46,7 @@ public class RampFollow extends Command {
             }
             ramp.setAngle(targetAngle);
         }
+        ramp.updateFF();
     }
 
     @Override

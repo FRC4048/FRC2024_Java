@@ -118,7 +118,11 @@ public class Climber extends SubsystemBase {
 
             SmartShuffleboard.put("Climber", "Left Encoder", climberLeft.getEncoder().getPosition());
             SmartShuffleboard.put("Climber", "Right Encoder", climberRight.getEncoder().getPosition());
+            Logger.logBoolean(baseLogName + "climber/engaged",ratchetEngaged, Constants.ENABLE_LOGGING);
         }
-        Logger.logBoolean(baseLogName + "climber/engaged",ratchetEngaged, Constants.ENABLE_LOGGING);
+        if (Constants.LOG_LIMIT_SWITCHES){
+            Logger.logBoolean(baseLogName + "climber/isRevLeftLmt",isLeftReverseLimitSwitchPressed(), Constants.ENABLE_LOGGING);
+            Logger.logBoolean(baseLogName + "climber/isRevRightLmt",isRightReverseLimitSwitchPressed(), Constants.ENABLE_LOGGING);
+        }
     }
 }
