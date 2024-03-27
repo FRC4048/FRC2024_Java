@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -60,6 +61,9 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (Constants.RAMP_DEBUG) {
+            SmartDashboard.putNumber("DELTA X", Units.Inch.convertFrom(getPose().getTranslation().getDistance(new Translation2d(Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY())),Units.Meter));
+        }
         frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
