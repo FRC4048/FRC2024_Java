@@ -24,6 +24,7 @@ public class ThreadedGyro {
     }
 
     public void start(){
+        updateGyro();
         executor.scheduleAtFixedRate(() -> {
             if (shouldReset.get()) {
                 gyro.reset();
@@ -31,7 +32,7 @@ public class ThreadedGyro {
             }
             if (shouldOffset.get()){
                 gyro.setAngleAdjustment(Double.longBitsToDouble(gyroOffset.get()));
-                shouldReset.set(false);
+                shouldOffset.set(false);
             }
             updateGyro();
         },0, Constants.GYRO_THREAD_RATE_MS, TimeUnit.MILLISECONDS);
