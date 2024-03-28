@@ -165,4 +165,8 @@ public class Ramp extends SubsystemBase {
     public double calcPose(Pose2d pose2d, Alignable alignable) {
         return rampAngleMap.get(pose2d.getTranslation().getDistance(new Translation2d(alignable.getX(), alignable.getY())));
     }
+
+    public void restorePid() {
+        neoPidMotor.setPid(NeoPidMotor.DEFAULT_P, NeoPidMotor.DEFAULT_I, NeoPidMotor.DEFAULT_FF);
+    }
 }
