@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -20,6 +20,7 @@ import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.PathPlannerUtils;
+import frc.robot.utils.ThreadedGyro;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.logging.Logger;
@@ -41,9 +42,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
-    private final AHRS gyro;
+    private final ThreadedGyro gyro;
     private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
-    private double gyroValue = 0;
     private boolean faceingTarget = false;
     private Alignable alignable = null;
     private double frontLeftDriveCurrent;
@@ -57,19 +57,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     private double totalCurrent;
     private double totalSteerCurrent;
     private double totalDriveCurrent;
-
-
-
-
     private DriveMode driveMode = DriveMode.FIELD_CENTRIC;
-
-    private double getGyro() {
-        return (gyro.getAngle() % 360)  * -1;
-    }
 
     @Override
     public void periodic() {
-        gyroValue = getGyro();
         if (Constants.DRIVE_CURRENT_DEBUG){
             frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
             frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
@@ -102,16 +93,19 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }
         
-        
+
         if (Constants.ENABLE_VISION){
-            poseEstimator.updatePositionWithVis(gyroValue);
+            poseEstimator.updatePositionWithVis(gyro.getGyroValue());
         }else {
-            poseEstimator.updatePosition(gyroValue);
+            poseEstimator.updatePosition(gyro.getGyroValue());
+        }
+        if (Constants.SWERVE_DEBUG) {
+            SmartShuffleboard.put("GYRO", "Gyro Angle", gyro.getGyroValue());
         }
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
-                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
+                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, ThreadedGyro gyro)
     {
         this.gyro = gyro;
         EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
@@ -127,7 +121,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
-        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,gyro.getGyroValue());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
@@ -153,7 +147,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
         return driveMode.equals(DriveMode.FIELD_CENTRIC)
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyroValue)))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyro.getGyroValue())))
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
 
@@ -201,7 +195,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void resetGyro() {
-        gyro.reset();
+       gyro.resetGyro();
     }
 
     public GenericSwerveModule getFrontLeft() {
@@ -235,7 +229,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public Rotation2d getGyroAngle() {
-        return new Rotation2d(Math.toRadians(gyroValue));
+        return new Rotation2d(Math.toRadians(gyro.getGyroValue()));
     }
 
     /**

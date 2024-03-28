@@ -156,6 +156,7 @@ public class GameConstants {
     public static final double RAMP_PID_FAR_FF = 0.00031;
     public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
+    public static final long GYRO_THREAD_RATE_MS = 10;
     public static final double RAMP_MOVE_THRESHOLD = 0.001;
     public static final double RAMP_MOVE_TIMEOUT = 5;
 

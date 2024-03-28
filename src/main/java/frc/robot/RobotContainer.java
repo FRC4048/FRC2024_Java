@@ -38,7 +38,7 @@ import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
-import frc.robot.commands.ramp.RampFollow;
+import frc.robot.commands.ramp.BoringRampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -53,10 +53,7 @@ import frc.robot.subsystems.*;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.utils.Alignable;
-import frc.robot.utils.DriveMode;
-import frc.robot.utils.Gain;
-import frc.robot.utils.PID;
+import frc.robot.utils.*;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -166,7 +163,8 @@ public class RobotContainer {
 
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
-        AHRS navxGyro = new AHRS();
+        ThreadedGyro navxGyro = new ThreadedGyro(new AHRS());
+        navxGyro.start();
         this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
     }
 
@@ -225,7 +223,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
-                new RampFollow(ramp, ()-> drivetrain.getAlignable(), ()-> drivetrain.getPose()),
+                new BoringRampFollow(ramp, drivetrain),
                 new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
