@@ -53,7 +53,7 @@ public class RampFollow extends Command {
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
             //generate future position
-            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.2);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.1);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, diveTrainXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
