@@ -46,13 +46,14 @@ public class RampFollow extends Command {
     public void execute() {
         Alignable alignableNow = drivetrain.getAlignable();
         if (alignableNow != null) {
-            double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? 1 : -1);
-            double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond * (RobotContainer.isRedAlliance() ? 1 : -1);
+            double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
+            double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
+            SmartDashboard.putNumber("VEL IMPORTANT",drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
             Pose2d pose = drivetrain.getPose();
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
             //generate future position
-            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.5);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.2);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, diveTrainXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
@@ -77,7 +78,7 @@ public class RampFollow extends Command {
             }
             double clamp = MathUtil.clamp(shootingFuture.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
             ramp.setAngle(Rotation2d.fromDegrees(clamp));
-            double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shootingFuture.getAngle().getDegrees());
+            double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shooting.getAngle().getDegrees());
             boolean isInThresh = Math.abs(threshold) < Constants.RAMP_AT_POS_THRESHOLD;
             SmartDashboard.putNumber("DEST DIFF", threshold);
             if (isInThresh){

@@ -109,7 +109,7 @@ public class Constants2024 extends GameConstants {
     //Deployer
     public static final int DEPLOYER_MOTOR_ID = 10;
 
-    public static final double ALIGNABLE_PID_P = 0.007;
-    public static final double ALIGNABLE_PID_I = 0.0008;
-    public static final double ALIGNABLE_PID_D = 0.0001;
+    public static final double ALIGNABLE_PID_P = 0.01;
+    public static final double ALIGNABLE_PID_I = 0.003;
+    public static final double ALIGNABLE_PID_D = 0.0004;
 }
