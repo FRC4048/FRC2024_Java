@@ -15,6 +15,7 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.AngleUtils;
 import frc.robot.utils.math.PoseUtils;
 import frc.robot.utils.math.VelocityVector;
@@ -40,6 +41,7 @@ public class RampFollow extends Command {
     @Override
     public void end(boolean interrupted) {
         lightStrip.setPattern(BlinkinPattern.BLACK);
+        ramp.setRampPos(Constants.RAMP_POS_STOW);
     }
 
     @Override
@@ -48,7 +50,6 @@ public class RampFollow extends Command {
         if (alignableNow != null) {
             double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
             double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
-            SmartDashboard.putNumber("VEL IMPORTANT",drivetrain.getFieldChassisSpeeds().vxMetersPerSecond);
             Pose2d pose = drivetrain.getPose();
             Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
@@ -63,7 +64,10 @@ public class RampFollow extends Command {
             };
             shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
             shootingFuture = new VelocityVector(shootingFuture.getVelocity(), AngleUtils.compliment(shootingFuture.getAngle()));
-            boolean canReach = shootingFuture.getAngle().getDegrees() != 90 && shootingFuture.getAngle().getDegrees() < Constants.RAMP_MAX_ANGLE;
+            boolean canReach = shootingFuture.getAngle().getDegrees() != 90 &&
+                    shooting.getAngle().getDegrees() != 90 &&
+                    shootingFuture.getAngle().getDegrees() < Constants.RAMP_MAX_ANGLE &&
+                    shooting.getAngle().getDegrees() < Constants.RAMP_MAX_ANGLE;
             if (Constants.RAMP_DEBUG) {
                 SmartDashboard.putNumber("RAMP_TARGET_ANGLE", shooting.getAngle().getDegrees());
                 SmartDashboard.putBoolean("CAN_AUTO_SHOOT", canReach);
@@ -80,7 +84,10 @@ public class RampFollow extends Command {
             ramp.setAngle(Rotation2d.fromDegrees(clamp));
             double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shooting.getAngle().getDegrees());
             boolean isInThresh = Math.abs(threshold) < Constants.RAMP_AT_POS_THRESHOLD;
-            SmartDashboard.putNumber("DEST DIFF", threshold);
+            if (Constants.RAMP_DEBUG){
+                SmartDashboard.putNumber("DEST DIFF", threshold);
+            }
+            Logger.logDouble("/robot/ramp/diffFromTarget", threshold, Constants.ENABLE_LOGGING);
             if (isInThresh){
                 lightStrip.setPattern(BlinkinPattern.VIOLET);
             } else {

@@ -53,10 +53,6 @@ public class AdvancedSpinningShot extends Command {
                 shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
             }
         }
-        if (shooter.upToSpeed(shooterSpeed.getLeftMotorSpeed(),shooterSpeed.getRightMotorSpeed())){
-//            lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-        }
-
     }
 
     @Override
