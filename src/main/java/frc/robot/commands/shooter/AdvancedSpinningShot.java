@@ -1,15 +1,14 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.Alignable;
-import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.ShooterSpeed;
-import edu.wpi.first.wpilibj.Timer;
 
 import java.util.function.Supplier;
 
@@ -54,10 +53,6 @@ public class AdvancedSpinningShot extends Command {
                 shooter.setShooterMotorLeftRPM(shooterSpeed.getLeftMotorSpeed());
             }
         }
-        if (shooter.upToSpeed(shooterSpeed.getLeftMotorSpeed(),shooterSpeed.getRightMotorSpeed())){
-            lightStrip.setPattern(BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-        }
-        
     }
 
     @Override

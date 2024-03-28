@@ -43,6 +43,7 @@ public class RampMoveAndWait extends Command{
 
     @Override
     public void execute() {
+        ramp.updateFF();
     }
 
     @Override

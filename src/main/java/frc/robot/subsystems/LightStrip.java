@@ -30,7 +30,9 @@ public class LightStrip extends SubsystemBase {
                 .ifPresent(c -> {
                     setPattern(predicateLightEvents.get(c));
                     predicateLightEvents.remove(c);
-                    Logger.logInteger(baseLogName + "predicateSize", predicateLightEvents.size(), Constants.ENABLE_LOGGING);
+                    if (Constants.LED_DEBUG){
+                        Logger.logInteger(baseLogName + "predicateSize", predicateLightEvents.size(), Constants.ENABLE_LOGGING);
+                    }
                 }
         );
     }
@@ -38,9 +40,12 @@ public class LightStrip extends SubsystemBase {
     public void setPattern(BlinkinPattern pattern) {
         this.pattern = pattern;
         colorSensorPort.set(pattern.getPwm());
-        SmartDashboard.putString("PATTERN",pattern.toString());
-        Logger.logDouble(baseLogName + "pwmSignal", pattern.getPwm(), Constants.ENABLE_LOGGING);
-        Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
+        if (Constants.LED_DEBUG){
+            SmartDashboard.putString("PATTERN",pattern.toString());
+            Logger.logDouble(baseLogName + "pwmSignal", pattern.getPwm(), Constants.ENABLE_LOGGING);
+            Logger.logString(baseLogName + "pwmName", pattern.toString(), Constants.ENABLE_LOGGING);
+        }
+
     }
 
     public BlinkinPattern getPattern() {
