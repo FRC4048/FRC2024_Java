@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -90,7 +89,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
-            SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
+            SmartShuffleboard.put("GYRO", "Gyro Angle", gyro.getGyroValue());
         }
         
 
