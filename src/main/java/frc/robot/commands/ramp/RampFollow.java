@@ -1,7 +1,6 @@
 package frc.robot.commands.ramp;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -50,19 +49,18 @@ public class RampFollow extends Command {
         if (alignableNow != null) {
             double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
             double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
-            Pose2d pose = drivetrain.getPose();
-            Translation3d rampPose = new Translation3d(pose.getX(), pose.getY(), Constants.ROBOT_FROM_GROUND);
-            VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, diveTrainXVel);
-            //generate future position
+            Translation3d rampPose = PoseUtils.addDimension(drivetrain.getPose().getTranslation(), Constants.ROBOT_FROM_GROUND);
+            double speakerRelativeXVel = diveTrainXVel * -1;
+            VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, speakerRelativeXVel);
             Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.1);
-            VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, diveTrainXVel);
+            VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, speakerRelativeXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
                 lightStrip.setPattern(BlinkinPattern.BLACK);
                 ramp.updateFF();
                 return;
             };
-            shooting = new VelocityVector(shooting.getVelocity(), new Rotation2d(Math.PI/2).minus(shooting.getAngle()));
+            shooting = new VelocityVector(shooting.getVelocity(), AngleUtils.compliment(shooting.getAngle()));
             shootingFuture = new VelocityVector(shootingFuture.getVelocity(), AngleUtils.compliment(shootingFuture.getAngle()));
             boolean canReach = shootingFuture.getAngle().getDegrees() != 90 &&
                     shooting.getAngle().getDegrees() != 90 &&
@@ -82,7 +80,7 @@ public class RampFollow extends Command {
             }
             double clamp = MathUtil.clamp(shootingFuture.getAngle().getDegrees(), Constants.RAMP_MIN_ANGLE, Constants.RAMP_MAX_ANGLE);
             ramp.setAngle(Rotation2d.fromDegrees(clamp));
-            double threshold = ramp.getRampPos() - Ramp.angleToEncoder(shooting.getAngle().getDegrees());
+            double threshold = Ramp.angleToEncoder(shooting.getAngle().getDegrees()) - ramp.getRampPos();
             boolean isInThresh = Math.abs(threshold) < Constants.RAMP_AT_POS_THRESHOLD;
             if (Constants.RAMP_DEBUG){
                 SmartDashboard.putNumber("DEST DIFF", threshold);

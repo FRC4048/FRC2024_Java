@@ -145,4 +145,35 @@ public class PoseUtils {
     public static Transform3d getFieldEstimatedFuturePose(Transform3d pose, double vx, double vy, double vz, double vYaw, double vRoll, double vPitch, double time) {
         return pose.plus(new Transform3d(vx * time, vy * time, vz * time, new Rotation3d(vRoll * time, vPitch * time, vYaw * time)));
     }
+
+
+    /**
+     * @param pose to modify
+     * @param z to add
+     * @param pitch to add
+     * @param roll to add
+     * @return 3D pose that inherits 2D attributes
+     */
+    public static Pose3d addDimension(Pose2d pose, double z, double pitch, double roll) {
+        return new Pose3d(addDimension(pose.getTranslation(), z), addDimension(pose.getRotation(), pitch, roll));
+    }
+
+    /**
+     * @param pose to modify
+     * @param z to add
+     * @return 3D pose that inherits 2D attributes
+     */
+    public static Translation3d addDimension(Translation2d pose, double z) {
+        return new Translation3d(pose.getX(), pose.getY(), z);
+    }
+
+    /**
+     * @param rotation to modify
+     * @param pitch to add
+     * @param roll to add
+     * @return 3D rotation that inherits yaw of 2D rotation
+     */
+    public static Rotation3d addDimension(Rotation2d rotation, double pitch, double roll) {
+        return new Rotation3d(roll, pitch, rotation.getRadians());
+    }
 }
