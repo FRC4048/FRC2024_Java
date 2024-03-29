@@ -44,15 +44,18 @@ public class DebugableString extends Debugable<String> {
 
     @Override
     protected void sendUpdates(NetworkTableEvent event) {
-        String data = event.valueData.value.getString();
-        List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
-        Class<Consumer<String>> tConsumerCLass = getTConsumerCLass();
-        for (Consumer<?> consumer : callback) {
-            if (consumer.getClass().isAssignableFrom(tConsumerCLass)) {
-                Consumer<String> c2 = (tConsumerCLass).cast(consumer);
-                c2.accept(data);
+        if (!event.valueData.value.getValue().equals(lastValue.get())) {
+            String data = event.valueData.value.getString();
+            List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
+            Class<Consumer<String>> tConsumerCLass = getTConsumerCLass();
+            for (Consumer<?> consumer : callback) {
+                if (consumer.getClass().isAssignableFrom(tConsumerCLass)) {
+                    Consumer<String> c2 = (tConsumerCLass).cast(consumer);
+                    c2.accept(data);
+                }
             }
         }
+
     }
     @SuppressWarnings("unchecked")
     private Class<Consumer<String>> getTConsumerCLass() {
