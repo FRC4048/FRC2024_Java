@@ -169,4 +169,8 @@ public class Ramp extends SubsystemBase {
     public void restorePid() {
         neoPidMotor.setPid(NeoPidMotor.DEFAULT_P, NeoPidMotor.DEFAULT_I, NeoPidMotor.DEFAULT_FF);
     }
+
+    public void setTelopPid() {
+        neoPidMotor.setPid(Constants.RAMP_PID_P, NeoPidMotor.DEFAULT_I, Constants.RAMP_PID_FAR_FF);
+    }
 }
