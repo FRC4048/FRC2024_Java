@@ -16,7 +16,7 @@ public abstract class Debugable<T> {
 
     public Debugable(String tab, String fieldName, T defaultValue) {
         NetworkTable table = instance.getTable(tab);
-        this.setCurrentValue(defaultValue);
+        this.setValue(defaultValue);
         this.setLastValue(defaultValue);
         this.entry = table.getEntry(fieldName);
         this.entry.setDefaultValue(defaultValue);
@@ -33,14 +33,16 @@ public abstract class Debugable<T> {
     protected List<Consumer<?>> getCallback(Topic topic){
         return callbacks.get(topic);
     }
-    protected List<Consumer<?>> addCallback(Topic topic){
-        return callbacks.get(topic);
+    public void addCallback(Topic topic, Consumer<T> consumer){
+        List<Consumer<?>> list = callbacks.getOrDefault(topic, new ArrayList<>());
+        list.add(consumer);
+        callbacks.put(topic, list);
     }
 
     protected abstract void sendUpdates(NetworkTableEvent event);
 
     protected abstract void setLastValue(T defaultValue);
 
-    protected abstract void setCurrentValue(T defaultValue);
-    public abstract void getCurrentValue();
+    protected abstract void setValue(T defaultValue);
+    public abstract void getValue();
 }

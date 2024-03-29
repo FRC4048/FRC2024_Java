@@ -31,12 +31,12 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
     }
 
     @Override
-    protected void setCurrentValue(T defaultValue) {
+    protected void setValue(T defaultValue) {
         value.set(defaultValue);
     }
 
     @Override
-    public void getCurrentValue() {
+    public void getValue() {
         value.get();
     }
     @Override

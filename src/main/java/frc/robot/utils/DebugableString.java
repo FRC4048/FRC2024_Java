@@ -33,12 +33,12 @@ public class DebugableString extends Debugable<String> {
     }
 
     @Override
-    protected void setCurrentValue(String defaultValue) {
+    protected void setValue(String defaultValue) {
         value.set(defaultValue);
     }
 
     @Override
-    public void getCurrentValue() {
+    public void getValue() {
         value.get();
     }
 
