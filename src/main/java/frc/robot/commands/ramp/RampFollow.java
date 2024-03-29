@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Ramp;
@@ -47,12 +46,12 @@ public class RampFollow extends Command {
     public void execute() {
         Alignable alignableNow = drivetrain.getAlignable();
         if (alignableNow != null) {
-            double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
-            double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond * (RobotContainer.isRedAlliance() ? -1 : 1);
+            double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond;
+            double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond;
             Translation3d rampPose = PoseUtils.addDimension(drivetrain.getPose().getTranslation(), Constants.ROBOT_FROM_GROUND);
             double speakerRelativeXVel = diveTrainXVel * -1;
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, speakerRelativeXVel);
-            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.1);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.05);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, speakerRelativeXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
