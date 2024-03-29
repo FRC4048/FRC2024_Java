@@ -13,13 +13,9 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
     private final AtomicReference<T> lastValue = new AtomicReference<>();
     public DebugableNumber(String tab, String fieldName, T defaultValue) {
         super(tab,fieldName,defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
     }
     public DebugableNumber(String tab, String fieldName, T defaultValue, Consumer<T> callback) {
         super(tab,fieldName,defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
         callback.accept(defaultValue);
         if (Constants.ENABLE_DEVELOPMENT){
             addListener(callback);

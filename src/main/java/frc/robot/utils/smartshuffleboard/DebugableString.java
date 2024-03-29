@@ -14,14 +14,10 @@ public class DebugableString extends Debugable<String> {
 
     public DebugableString(String tab, String fieldName, String defaultValue) {
         super(tab, fieldName, defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
     }
 
     public DebugableString(String tab, String fieldName, String defaultValue, Consumer<String> callback) {
         super(tab, fieldName, defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
         callback.accept(defaultValue);
         if (Constants.ENABLE_DEVELOPMENT) {
             addListener(callback);

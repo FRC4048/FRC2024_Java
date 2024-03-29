@@ -14,14 +14,10 @@ public class DebugableBoolean extends Debugable<Boolean> {
 
     public DebugableBoolean(String tab, String fieldName, boolean defaultValue) {
         super(tab, fieldName, defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
     }
 
     public DebugableBoolean(String tab, String fieldName, Boolean defaultValue, Consumer<Boolean> callback) {
         super(tab, fieldName, defaultValue);
-        this.value.set(defaultValue);
-        this.lastValue.set(defaultValue);
         callback.accept(defaultValue);
         if (Constants.ENABLE_DEVELOPMENT) {
             addListener(callback);
