@@ -16,7 +16,7 @@ public class DebugableNumber<T extends Number> {
     private final AtomicReference<T> value = new AtomicReference<>();
     private final AtomicReference<T> lastValue = new AtomicReference<>(null);
     private final NetworkTableEntry entry;
-    public DebugableNumber(String tab, String fieldName, T defaultValue, Class<T> classZ) {
+    public DebugableNumber(String tab, String fieldName, T defaultValue) {
         NetworkTable table = instance.getTable(tab);
         this.value.set(defaultValue);
         this.lastValue.set(defaultValue);
@@ -26,7 +26,7 @@ public class DebugableNumber<T extends Number> {
             instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
         }
     }
-    public DebugableNumber(String tab, String fieldName, T defaultValue, Consumer<T> callback ,Class<T> classZ) {
+    public DebugableNumber(String tab, String fieldName, T defaultValue, Consumer<T> callback) {
         NetworkTable table = instance.getTable(tab);
         this.value.set(defaultValue);
         this.lastValue.set(defaultValue);
