@@ -1,7 +1,8 @@
-package frc.robot.utils;
+package frc.robot.utils.smartshuffleboard;
 
 import edu.wpi.first.networktables.*;
 import frc.robot.constants.Constants;
+import frc.robot.utils.CachedCallback;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

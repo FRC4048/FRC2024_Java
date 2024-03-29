@@ -1,7 +1,8 @@
-package frc.robot.utils;
+package frc.robot.utils.smartshuffleboard;
 
 import edu.wpi.first.networktables.NetworkTableEvent;
 import frc.robot.constants.Constants;
+import frc.robot.utils.CachedCallback;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;

@@ -17,11 +17,11 @@ import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
-import frc.robot.utils.Debugable;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.smartshuffleboard.Debugable;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class Robot extends TimedRobot {
