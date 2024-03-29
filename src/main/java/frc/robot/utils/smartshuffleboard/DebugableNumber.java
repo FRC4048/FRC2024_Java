@@ -47,6 +47,8 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
             Class<T> typeClass = getTypeClass();
             if (typeClass.isInstance(v)) {
                 T cast = typeClass.cast(event.valueData.value.getValue());
+                lastValue.set(value.get());
+                value.set(cast);
                 List<Consumer<?>> consumers = getCallback(event.topicInfo.getTopic());
                 Class<Consumer<T>> tConsumer = getTConsumerCLass();
                 for (Consumer<?> consumer : consumers) {

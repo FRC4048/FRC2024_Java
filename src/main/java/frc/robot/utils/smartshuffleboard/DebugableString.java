@@ -47,6 +47,8 @@ public class DebugableString extends Debugable<String> {
     protected CachedCallback<String> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             String data = event.valueData.value.getString();
+            lastValue.set(value.get());
+            value.set(data);
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
             Class<Consumer<String>> tConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
