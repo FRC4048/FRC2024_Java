@@ -7,6 +7,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.DebugableNumber;
 import frc.robot.utils.NeoPidMotor;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -17,8 +18,14 @@ public class Ramp extends SubsystemBase {
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
     private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
+    private final DebugableNumber<Double> rampP;
+    private final DebugableNumber<Double> rampI;
+    private final DebugableNumber<Double> rampD;
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
+        rampP = new DebugableNumber<>("Ramp", "Pid P", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setP(p));
+        rampI = new DebugableNumber<>("Ramp", "Pid I", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setI(p));
+        rampD = new DebugableNumber<>("Ramp", "Pid D", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setD(p));
         configureMotor();
         resetEncoder();
         neoPidMotor.enableDiagnostics("Ramp", true, true);
