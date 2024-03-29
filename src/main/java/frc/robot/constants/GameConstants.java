@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 public class GameConstants {
+    public static final boolean ENABLE_DEVELOPMENT = false;
     //JOYSTICKS
     public static final int LEFT_JOYSICK_ID = 0;
     public static final int RIGHT_JOYSTICK_ID = 1;

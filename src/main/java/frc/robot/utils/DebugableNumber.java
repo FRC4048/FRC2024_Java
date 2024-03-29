@@ -1,30 +1,77 @@
 package frc.robot.utils;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableEvent;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import edu.wpi.first.networktables.*;
+import frc.robot.constants.Constants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public abstract class DebugableNumber<T extends Number> {
-    private static final Map<DebugableNumber<?>, List<Consumer<NetworkTableEvent>>> callbacks = new HashMap<>();
     private static final NetworkTableInstance instance = NetworkTableInstance.getDefault();
-    protected T value;
+    private static final ConcurrentHashMap<Topic, List<Consumer<? extends Number>>> callbacks = new ConcurrentHashMap<>();
+    private final AtomicReference<T> value = new AtomicReference<>();
+    private final AtomicReference<T> lastValue = new AtomicReference<>(null);
+    private final NetworkTableEntry entry;
+    private final Class<T> classZ;
 
-    public DebugableNumber(String tag, String fieldName, T defaultValue) {
-        this.value = defaultValue;
-        NetworkTableEntry networkTableEntry = new NetworkTableEntry(instance, SmartShuffleboard.put(tag, fieldName, defaultValue).getEntry().getHandle());
-        instance.addListener(networkTableEntry, EnumSet.of(NetworkTableEvent.Kind.kPublish), networkTableEvent -> callbacks.get(this).forEach(c -> c.accept(networkTableEvent)));
+    public DebugableNumber(String tab, String fieldName, T defaultValue, Class<T> classZ) {
+        NetworkTable table = instance.getTable(tab);
+        this.value.set(defaultValue);
+        this.lastValue.set(defaultValue);
+        this.entry = table.getEntry(fieldName);
+        this.entry.setDefaultValue(defaultValue);
+        this.classZ = classZ;
+        if (Constants.ENABLE_DEVELOPMENT){
+            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
+        }
+    }
+    public DebugableNumber(String tab, String fieldName, T defaultValue, Consumer<T> callback ,Class<T> classZ) {
+        NetworkTable table = instance.getTable(tab);
+        this.value.set(defaultValue);
+        this.lastValue.set(defaultValue);
+        this.entry = table.getEntry(fieldName);
+        this.entry.setDefaultValue(defaultValue);
+        this.classZ = classZ;
+        if (Constants.ENABLE_DEVELOPMENT){
+            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
+            addListener(callback);
+        }
     }
 
-    public void onChange(Consumer<NetworkTableEvent> consumer){
-        List<Consumer<NetworkTableEvent>> list = callbacks.getOrDefault(this, new ArrayList<>());
+    private void sendUpdates(NetworkTableEvent event) {
+        if (!event.valueData.value.getValue().equals(lastValue.get())) {
+            Object value = event.valueData.value.getValue();
+            if (classZ.isInstance(value)) {
+                T cast = classZ.cast(event.valueData.value.getValue());
+                List<Consumer<? extends Number>> consumers = callbacks.get(event.topicInfo.getTopic());
+                Class<Consumer<T>> tConsumer = getTConsumerCLass();
+                for (Consumer<? extends Number> consumer : consumers) {
+                    if (consumer.getClass().isAssignableFrom(tConsumer)) {
+                        Consumer<T> c2 = tConsumer.cast(consumer);
+                        c2.accept(cast);
+                    }
+                }
+            }
+        }
+    }
+
+    public void addListener(Consumer<T> consumer) {
+        List<Consumer<? extends Number>> list = callbacks.getOrDefault(entry.getTopic(), new ArrayList<>());
         list.add(consumer);
-        callbacks.put(this, list);
+        callbacks.put(entry.getTopic(), list);
     }
-    public T getValue(){
-        return value;
+
+    public T getValue() {
+        return value.get();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Class<Consumer<T>> getTConsumerCLass() {
+        Consumer<T> tConsumer = t -> {};
+        return (Class<Consumer<T>>) tConsumer.getClass();
     }
 }
