@@ -16,15 +16,12 @@ public class DebugableNumber<T extends Number> {
     private final AtomicReference<T> value = new AtomicReference<>();
     private final AtomicReference<T> lastValue = new AtomicReference<>(null);
     private final NetworkTableEntry entry;
-    private final Class<T> classZ;
-
     public DebugableNumber(String tab, String fieldName, T defaultValue, Class<T> classZ) {
         NetworkTable table = instance.getTable(tab);
         this.value.set(defaultValue);
         this.lastValue.set(defaultValue);
         this.entry = table.getEntry(fieldName);
         this.entry.setDefaultValue(defaultValue);
-        this.classZ = classZ;
         if (Constants.ENABLE_DEVELOPMENT){
             instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
         }
@@ -35,7 +32,6 @@ public class DebugableNumber<T extends Number> {
         this.lastValue.set(defaultValue);
         this.entry = table.getEntry(fieldName);
         this.entry.setDefaultValue(defaultValue);
-        this.classZ = classZ;
         if (Constants.ENABLE_DEVELOPMENT){
             instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
             addListener(callback);
@@ -44,9 +40,10 @@ public class DebugableNumber<T extends Number> {
 
     private void sendUpdates(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
-            Object value = event.valueData.value.getValue();
-            if (classZ.isInstance(value)) {
-                T cast = classZ.cast(event.valueData.value.getValue());
+            Object v = event.valueData.value.getValue();
+            Class<T> typeClass = getTypeClass();
+            if (typeClass.isInstance(v)) {
+                T cast = typeClass.cast(event.valueData.value.getValue());
                 List<Consumer<? extends Number>> consumers = callbacks.get(event.topicInfo.getTopic());
                 Class<Consumer<T>> tConsumer = getTConsumerCLass();
                 for (Consumer<? extends Number> consumer : consumers) {
@@ -73,5 +70,9 @@ public class DebugableNumber<T extends Number> {
     private Class<Consumer<T>> getTConsumerCLass() {
         Consumer<T> tConsumer = t -> {};
         return (Class<Consumer<T>>) tConsumer.getClass();
+    }
+    @SuppressWarnings("unchecked")
+    private Class<T> getTypeClass() {
+        return (Class<T>) value.get().getClass();
     }
 }
