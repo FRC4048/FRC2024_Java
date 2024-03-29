@@ -36,8 +36,8 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
     }
 
     @Override
-    public void getValue() {
-        value.get();
+    public T getValue() {
+        return value.get();
     }
     @Override
     protected void sendUpdates(NetworkTableEvent event) {

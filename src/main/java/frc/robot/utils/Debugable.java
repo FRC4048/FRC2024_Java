@@ -44,5 +44,5 @@ public abstract class Debugable<T> {
     protected abstract void setLastValue(T defaultValue);
 
     protected abstract void setValue(T defaultValue);
-    public abstract void getValue();
+    public abstract T getValue();
 }

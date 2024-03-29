@@ -38,8 +38,8 @@ public class DebugableString extends Debugable<String> {
     }
 
     @Override
-    public void getValue() {
-        value.get();
+    public String getValue() {
+        return value.get();
     }
 
     @Override
