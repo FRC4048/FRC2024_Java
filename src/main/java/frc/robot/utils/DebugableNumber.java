@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-public abstract class DebugableNumber<T extends Number> {
+public class DebugableNumber<T extends Number> {
     private static final NetworkTableInstance instance = NetworkTableInstance.getDefault();
     private static final ConcurrentHashMap<Topic, List<Consumer<? extends Number>>> callbacks = new ConcurrentHashMap<>();
     private final AtomicReference<T> value = new AtomicReference<>();
