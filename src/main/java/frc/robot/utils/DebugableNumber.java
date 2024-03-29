@@ -32,6 +32,7 @@ public class DebugableNumber<T extends Number> {
         this.lastValue.set(defaultValue);
         this.entry = table.getEntry(fieldName);
         this.entry.setDefaultValue(defaultValue);
+        callback.accept(defaultValue);
         if (Constants.ENABLE_DEVELOPMENT){
             instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
             addListener(callback);

@@ -21,11 +21,13 @@ public class Ramp extends SubsystemBase {
     private final DebugableNumber<Double> rampP;
     private final DebugableNumber<Double> rampI;
     private final DebugableNumber<Double> rampD;
+    private final DebugableNumber<Double> rampFF;
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
-        rampP = new DebugableNumber<>("Ramp", "Pid P", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setP(p));
-        rampI = new DebugableNumber<>("Ramp", "Pid I", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setI(p));
-        rampD = new DebugableNumber<>("Ramp", "Pid D", NeoPidMotor.DEFAULT_P, p -> neoPidMotor.getPidController().setD(p));
+        rampP = new DebugableNumber<>("Ramp", "Pid P", Constants.RAMP_PID_P, p -> neoPidMotor.getPidController().setP(p));
+        rampI = new DebugableNumber<>("Ramp", "Pid I", NeoPidMotor.DEFAULT_I, p -> neoPidMotor.getPidController().setI(p));
+        rampD = new DebugableNumber<>("Ramp", "Pid D", NeoPidMotor.DEFAULT_D, p -> neoPidMotor.getPidController().setD(p));
+        rampFF = new DebugableNumber<>("Ramp", "Pid FF", Constants.RAMP_PID_FAR_FF, p -> neoPidMotor.getPidController().setFF(p));
         configureMotor();
         resetEncoder();
         neoPidMotor.enableDiagnostics("Ramp", true, true);
@@ -38,8 +40,6 @@ public class Ramp extends SubsystemBase {
     private void configureMotor() {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
-        neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
-        neoPidMotor.getPidController().setFF(Constants.RAMP_PID_FAR_FF);
     }
 
     public void periodic() {
