@@ -73,6 +73,10 @@ public abstract class Debugable<T> {
             callbackCache.add(callback);
         }
     }
+    @SuppressWarnings("unchecked")
+    protected Consumer<T> narrowConsumer(Consumer<?> consumer){
+        return (Consumer<T>) consumer;
+    }
 
     protected abstract CachedCallback<T> getUpdate(NetworkTableEvent event);
 

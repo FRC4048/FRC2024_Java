@@ -46,19 +46,11 @@ public class DebugableString extends Debugable<String> {
             setLastValue(value.get());
             setValue(data);
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
-            Class<Consumer<String>> tConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
-                if (consumer.getClass().equals(tConsumerCLass)) {
-                    Consumer<String> c2 = (tConsumerCLass).cast(consumer);
-                    return new CachedCallback<>(c2, data);
-                }
+                Consumer<String> c2 = narrowConsumer(consumer);
+                return new CachedCallback<>(c2, data);
             }
         }
         return null;
-    }
-    @SuppressWarnings("unchecked")
-    private Class<Consumer<String>> getTConsumerCLass() {
-        Consumer<String> sConsumer = s -> {};
-        return (Class<Consumer<String>>) sConsumer.getClass();
     }
 }

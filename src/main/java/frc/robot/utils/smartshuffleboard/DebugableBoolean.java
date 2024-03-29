@@ -46,19 +46,11 @@ public class DebugableBoolean extends Debugable<Boolean> {
             setLastValue(value.get());
             setValue(data);
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
-            Class<Consumer<Boolean>> bConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
-                if (consumer.getClass().equals(bConsumerCLass)) {
-                    Consumer<Boolean> c2 = (bConsumerCLass).cast(consumer);
-                    return new CachedCallback<>(c2, data);
-                }
+                Consumer<Boolean> c2 = narrowConsumer(consumer);
+                return new CachedCallback<>(c2, data);
             }
         }
         return null;
-    }
-    @SuppressWarnings("unchecked")
-    private Class<Consumer<Boolean>> getTConsumerCLass() {
-        Consumer<Boolean> bConsumer = s -> {};
-        return (Class<Consumer<Boolean>>) bConsumer.getClass();
     }
 }

@@ -46,23 +46,15 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
                 setLastValue(value.get());
                 setValue(cast);
                 List<Consumer<?>> consumers = getCallback(event.topicInfo.getTopic());
-                Class<Consumer<T>> tConsumer = getTConsumerCLass();
                 for (Consumer<?> consumer : consumers) {
-                    if (consumer.getClass().equals(tConsumer)) {
-                        Consumer<T> c2 = tConsumer.cast(consumer);
-                        return new CachedCallback<>(c2,cast);
-                    }
+                    Consumer<T> c2 = narrowConsumer(consumer);
+                    return new CachedCallback<>(c2,cast);
                 }
             }
         }
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    private Class<Consumer<T>> getTConsumerCLass() {
-        Consumer<T> tConsumer = t -> {};
-        return (Class<Consumer<T>>) tConsumer.getClass();
-    }
     @SuppressWarnings("unchecked")
     private Class<T> getTypeClass() {
         return (Class<T>) value.get().getClass();
