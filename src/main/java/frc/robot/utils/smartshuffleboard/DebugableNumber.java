@@ -39,12 +39,12 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
     @Override
     protected CachedCallback<T> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
-            Object v = event.valueData.value.getValue();
+            Object rawValue = event.valueData.value.getValue();
             Class<T> typeClass = getTypeClass();
-            if (typeClass.isInstance(v)) {
-                T cast = typeClass.cast(event.valueData.value.getValue());
-                lastValue.set(value.get());
-                value.set(cast);
+            if (typeClass.isInstance(rawValue)) {
+                T cast = typeClass.cast(rawValue);
+                setLastValue(value.get());
+                setValue(cast);
                 List<Consumer<?>> consumers = getCallback(event.topicInfo.getTopic());
                 Class<Consumer<T>> tConsumer = getTConsumerCLass();
                 for (Consumer<?> consumer : consumers) {

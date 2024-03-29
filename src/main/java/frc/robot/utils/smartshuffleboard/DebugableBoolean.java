@@ -43,8 +43,8 @@ public class DebugableBoolean extends Debugable<Boolean> {
     protected CachedCallback<Boolean> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             Boolean data = event.valueData.value.getBoolean();
-            lastValue.set(value.get());
-            value.set(data);
+            setLastValue(value.get());
+            setValue(data);
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
             Class<Consumer<Boolean>> bConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
