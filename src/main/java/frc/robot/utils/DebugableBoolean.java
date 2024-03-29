@@ -43,7 +43,7 @@ public class DebugableBoolean extends Debugable<Boolean> {
     }
 
     @Override
-    protected void sendUpdates(NetworkTableEvent event) {
+    protected CachedCallback<Boolean> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             Boolean data = event.valueData.value.getBoolean();
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
@@ -51,10 +51,11 @@ public class DebugableBoolean extends Debugable<Boolean> {
             for (Consumer<?> consumer : callback) {
                 if (consumer.getClass().isAssignableFrom(bConsumerCLass)) {
                     Consumer<Boolean> c2 = (bConsumerCLass).cast(consumer);
-                    c2.accept(data);
+                    return new CachedCallback<>(c2, data);
                 }
             }
         }
+        return null;
     }
     @SuppressWarnings("unchecked")
     private Class<Consumer<Boolean>> getTConsumerCLass() {

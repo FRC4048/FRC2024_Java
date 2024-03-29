@@ -40,7 +40,7 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
         return value.get();
     }
     @Override
-    protected void sendUpdates(NetworkTableEvent event) {
+    protected CachedCallback<T> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             Object v = event.valueData.value.getValue();
             Class<T> typeClass = getTypeClass();
@@ -51,11 +51,12 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
                 for (Consumer<?> consumer : consumers) {
                     if (consumer.getClass().isAssignableFrom(tConsumer)) {
                         Consumer<T> c2 = tConsumer.cast(consumer);
-                        c2.accept(cast);
+                        return new CachedCallback<>(c2,cast);
                     }
                 }
             }
         }
+        return null;
     }
 
     @SuppressWarnings("unchecked")

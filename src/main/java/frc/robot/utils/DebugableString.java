@@ -43,7 +43,7 @@ public class DebugableString extends Debugable<String> {
     }
 
     @Override
-    protected void sendUpdates(NetworkTableEvent event) {
+    protected CachedCallback<String> getUpdate(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             String data = event.valueData.value.getString();
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
@@ -51,11 +51,11 @@ public class DebugableString extends Debugable<String> {
             for (Consumer<?> consumer : callback) {
                 if (consumer.getClass().isAssignableFrom(tConsumerCLass)) {
                     Consumer<String> c2 = (tConsumerCLass).cast(consumer);
-                    c2.accept(data);
+                    return new CachedCallback<>(c2, data);
                 }
             }
         }
-
+        return null;
     }
     @SuppressWarnings("unchecked")
     private Class<Consumer<String>> getTConsumerCLass() {

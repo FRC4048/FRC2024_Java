@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 public abstract class Debugable<T> {
     private static final NetworkTableInstance instance = NetworkTableInstance.getDefault();
     private static final ConcurrentHashMap<Topic, List<Consumer<?>>> callbacks = new ConcurrentHashMap<>();
+    private static final ConcurrentLinkedQueue<CachedCallback<?>> callbackCache = new ConcurrentLinkedQueue<>();
     private final NetworkTableEntry entry;
+    private final T defaultValue;
 
     public Debugable(String tab, String fieldName, T defaultValue) {
         NetworkTable table = instance.getTable(tab);
@@ -20,8 +23,9 @@ public abstract class Debugable<T> {
         this.setLastValue(defaultValue);
         this.entry = table.getEntry(fieldName);
         this.entry.setDefaultValue(defaultValue);
+        this.defaultValue = defaultValue;
         if (Constants.ENABLE_DEVELOPMENT) {
-            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
+            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), (event -> addToCache(getUpdate(event))));
         }
     }
     public void addListener(Consumer<T> consumer) {
@@ -38,8 +42,27 @@ public abstract class Debugable<T> {
         list.add(consumer);
         callbacks.put(topic, list);
     }
+    public static void flushCache(){
+        CachedCallback<?> poll = callbackCache.poll();
+        while (poll != null){
+            poll.call();
+            poll = callbackCache.poll();
+        }
+    }
 
-    protected abstract void sendUpdates(NetworkTableEvent event);
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+    public void resetValue(){
+        entry.setValue(defaultValue);
+    }
+
+    protected void addToCache(CachedCallback<T> callback){
+        if (callback != null){
+            callbackCache.add(callback);
+        }
+    }
+    protected abstract CachedCallback<T> getUpdate(NetworkTableEvent event);
 
     protected abstract void setLastValue(T defaultValue);
 

@@ -17,6 +17,7 @@ import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.Debugable;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
         if (ledEndgameTimer.hasElapsed(130)){
             robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
         }
+        Debugable.flushCache();
     }
 
     @Override
