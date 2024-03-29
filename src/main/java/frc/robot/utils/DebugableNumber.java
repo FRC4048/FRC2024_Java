@@ -1,53 +1,54 @@
 package frc.robot.utils;
 
-import edu.wpi.first.networktables.*;
+import edu.wpi.first.networktables.NetworkTableEvent;
 import frc.robot.constants.Constants;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-public class DebugableNumber<T extends Number> {
-    private static final NetworkTableInstance instance = NetworkTableInstance.getDefault();
-    private static final ConcurrentHashMap<Topic, List<Consumer<? extends Number>>> callbacks = new ConcurrentHashMap<>();
+public class DebugableNumber<T extends Number> extends Debugable<T> {
     private final AtomicReference<T> value = new AtomicReference<>();
-    private final AtomicReference<T> lastValue = new AtomicReference<>(null);
-    private final NetworkTableEntry entry;
+    private final AtomicReference<T> lastValue = new AtomicReference<>();
     public DebugableNumber(String tab, String fieldName, T defaultValue) {
-        NetworkTable table = instance.getTable(tab);
+        super(tab,fieldName,defaultValue);
         this.value.set(defaultValue);
         this.lastValue.set(defaultValue);
-        this.entry = table.getEntry(fieldName);
-        this.entry.setDefaultValue(defaultValue);
-        if (Constants.ENABLE_DEVELOPMENT){
-            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
-        }
     }
     public DebugableNumber(String tab, String fieldName, T defaultValue, Consumer<T> callback) {
-        NetworkTable table = instance.getTable(tab);
+        super(tab,fieldName,defaultValue);
         this.value.set(defaultValue);
         this.lastValue.set(defaultValue);
-        this.entry = table.getEntry(fieldName);
-        this.entry.setDefaultValue(defaultValue);
         callback.accept(defaultValue);
         if (Constants.ENABLE_DEVELOPMENT){
-            instance.addListener(entry, EnumSet.of(NetworkTableEvent.Kind.kPublish), this::sendUpdates);
             addListener(callback);
         }
     }
 
-    private void sendUpdates(NetworkTableEvent event) {
+    @Override
+    protected void setLastValue(T defaultValue) {
+        lastValue.set(defaultValue);
+    }
+
+    @Override
+    protected void setCurrentValue(T defaultValue) {
+        value.set(defaultValue);
+    }
+
+    @Override
+    public void getCurrentValue() {
+        value.get();
+    }
+    @Override
+    protected void sendUpdates(NetworkTableEvent event) {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             Object v = event.valueData.value.getValue();
             Class<T> typeClass = getTypeClass();
             if (typeClass.isInstance(v)) {
                 T cast = typeClass.cast(event.valueData.value.getValue());
-                List<Consumer<? extends Number>> consumers = callbacks.get(event.topicInfo.getTopic());
+                List<Consumer<?>> consumers = getCallback(event.topicInfo.getTopic());
                 Class<Consumer<T>> tConsumer = getTConsumerCLass();
-                for (Consumer<? extends Number> consumer : consumers) {
+                for (Consumer<?> consumer : consumers) {
                     if (consumer.getClass().isAssignableFrom(tConsumer)) {
                         Consumer<T> c2 = tConsumer.cast(consumer);
                         c2.accept(cast);
@@ -55,16 +56,6 @@ public class DebugableNumber<T extends Number> {
                 }
             }
         }
-    }
-
-    public void addListener(Consumer<T> consumer) {
-        List<Consumer<? extends Number>> list = callbacks.getOrDefault(entry.getTopic(), new ArrayList<>());
-        list.add(consumer);
-        callbacks.put(entry.getTopic(), list);
-    }
-
-    public T getValue() {
-        return value.get();
     }
 
     @SuppressWarnings("unchecked")
