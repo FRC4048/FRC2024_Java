@@ -48,7 +48,7 @@ public class DebugableString extends Debugable<String> {
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
             Class<Consumer<String>> tConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
-                if (consumer.getClass().isAssignableFrom(tConsumerCLass)) {
+                if (consumer.getClass().equals(tConsumerCLass)) {
                     Consumer<String> c2 = (tConsumerCLass).cast(consumer);
                     return new CachedCallback<>(c2, data);
                 }

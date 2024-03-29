@@ -41,14 +41,14 @@ public class DebugableNumber<T extends Number> extends Debugable<T> {
         if (!event.valueData.value.getValue().equals(lastValue.get())) {
             Object rawValue = event.valueData.value.getValue();
             Class<T> typeClass = getTypeClass();
-            if (typeClass.isInstance(rawValue)) {
+            if (typeClass.equals(rawValue.getClass())) {
                 T cast = typeClass.cast(rawValue);
                 setLastValue(value.get());
                 setValue(cast);
                 List<Consumer<?>> consumers = getCallback(event.topicInfo.getTopic());
                 Class<Consumer<T>> tConsumer = getTConsumerCLass();
                 for (Consumer<?> consumer : consumers) {
-                    if (consumer.getClass().isAssignableFrom(tConsumer)) {
+                    if (consumer.getClass().equals(tConsumer)) {
                         Consumer<T> c2 = tConsumer.cast(consumer);
                         return new CachedCallback<>(c2,cast);
                     }

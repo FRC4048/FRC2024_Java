@@ -48,7 +48,7 @@ public class DebugableBoolean extends Debugable<Boolean> {
             List<Consumer<?>> callback = getCallback(event.topicInfo.getTopic());
             Class<Consumer<Boolean>> bConsumerCLass = getTConsumerCLass();
             for (Consumer<?> consumer : callback) {
-                if (consumer.getClass().isAssignableFrom(bConsumerCLass)) {
+                if (consumer.getClass().equals(bConsumerCLass)) {
                     Consumer<Boolean> c2 = (bConsumerCLass).cast(consumer);
                     return new CachedCallback<>(c2, data);
                 }
