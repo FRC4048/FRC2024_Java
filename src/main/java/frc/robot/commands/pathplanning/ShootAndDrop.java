@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.feeder.TimedFeeder;
+import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.Feeder;
@@ -16,7 +17,8 @@ public class ShootAndDrop extends ParallelDeadlineGroup {
         super(new BasicShoot(shooter, lightStrip,1),
                 new SequentialCommandGroup(
                         new WaitCommand(0.5),
-                        new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT)
+                        new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
+                        new StopShooter(shooter)
                 ),
                 new LowerDeployer(deployer, lightStrip));
     }
