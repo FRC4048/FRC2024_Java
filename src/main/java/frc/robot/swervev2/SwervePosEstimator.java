@@ -16,11 +16,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class to estimate the current position of the robot,
@@ -84,15 +85,16 @@ public class SwervePosEstimator{
     public void updatePositionWithVis(double gyroValueDeg){
 
         if (DriverStation.isTeleop()){
-            TimestampedDoubleArray visionArray = subscriber.getAtomic();
-
-            Pose2d visionPose = new Pose2d(visionArray.value[0],
-                    visionArray.value[1],
-                    new Rotation2d(Units.degreesToRadians(visionArray.value[2]))
-                        .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
+            TimestampedDoubleArray[] queue = subscriber.readQueue();
+            for (TimestampedDoubleArray mesurement : queue){
+                Pose2d visionPose = new Pose2d(mesurement.value[0],
+                        mesurement.value[1],
+                        new Rotation2d(Units.degreesToRadians(mesurement.value[2]))
+                                .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
                         .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
-            if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
-                poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+                if (mesurement.value[0] != -1 && mesurement.value[1] != -1 && mesurement.value[2] != -1) {
+                    poseEstimator.addVisionMeasurement(visionPose, TimeUnit.MICROSECONDS.toSeconds(mesurement.timestamp));
+                }
             }
         }
         updatePosition(gyroValueDeg);
