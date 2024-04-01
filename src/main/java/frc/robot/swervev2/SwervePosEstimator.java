@@ -22,7 +22,6 @@ import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class to estimate the current position of the robot,
@@ -83,7 +82,7 @@ public class SwervePosEstimator{
 
             };
             estimatedPos = poseEstimator.update(gyroAngle,modulePositions);
-            poseBuffer.addSample(Timer.getFPGATimestamp(),estimatedPos);
+            poseBuffer.addSample(Timer.getFPGATimestamp(), estimatedPos);
         }
         field.setRobotPose(estimatedPos);
     }
@@ -93,9 +92,9 @@ public class SwervePosEstimator{
             TimestampedDoubleArray[] queue = subscriber.readQueue();
             for (TimestampedDoubleArray measurement : queue){
                 Pose2d visionPose = getVisionPose(measurement);
-                long latency = TimeUnit.MICROSECONDS.toSeconds(measurement.timestamp);
-                if (validAprilTagPose(measurement) && (withinThreshold(visionPose, latency) || distanceToTagOverride())){
-                    poseEstimator.addVisionMeasurement(visionPose, latency);
+                double latencyInSec = (double) measurement.serverTime / 1000000;
+                if (validAprilTagPose(measurement) && (withinThreshold(visionPose, latencyInSec) || distanceToTagOverride())){
+                    poseEstimator.addVisionMeasurement(visionPose, latencyInSec);
                 }
             }
         }
