@@ -20,9 +20,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
+import frc.robot.utils.PrecisionTime;
 
 import java.util.Optional;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Class to estimate the current position of the robot,
@@ -44,6 +47,7 @@ public class SwervePosEstimator{
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
     private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.7, 0.7, 0.3);
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(GameConstants.POSE_BUFFER_STORAGE_TIME);
+    private final AtomicReference<Pose2d> estimatedPose;
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -61,10 +65,23 @@ public class SwervePosEstimator{
                 new Pose2d(),
                 stateStdDevs,
                 visionMeasurementStdDevs);
+        estimatedPose = new AtomicReference<>(poseEstimator.getEstimatedPosition());
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
         subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1}, PubSubOption.pollStorage(5), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
         SmartDashboard.putData(field);
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+            if (DriverStation.isTeleop()){
+                TimestampedDoubleArray[] queue = subscriber.readQueue();
+                for (TimestampedDoubleArray measurement: queue){
+                    Pose2d visionPose = getVisionPose(measurement);
+                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime);
+                    if (validAprilTagPose(measurement) && (withinThreshold(visionPose, latencyInSec) || distanceToTagOverride())){
+                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec);
+                    }
+                }
+            }
+        },0,10, TimeUnit.MILLISECONDS);
     }
     /**
      * updates odometry, should be called in periodic
@@ -72,7 +89,7 @@ public class SwervePosEstimator{
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
     public void updatePosition(double gyroValueDeg){
-        Pose2d estimatedPos = poseEstimator.getEstimatedPosition();
+        estimatedPose.set(poseEstimator.getEstimatedPosition());
         if (DriverStation.isEnabled()){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
@@ -82,23 +99,16 @@ public class SwervePosEstimator{
                     backRightMotor.getPosition(),
 
             };
-            estimatedPos = poseEstimator.update(gyroAngle,modulePositions);
-            poseBuffer.addSample(Timer.getFPGATimestamp(),estimatedPos);
+            estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
+            synchronized (poseBuffer){
+                poseBuffer.addSample(Timer.getFPGATimestamp(), estimatedPose.get());
+            }
         }
-        field.setRobotPose(estimatedPos);
+        field.setRobotPose(estimatedPose.get());
     }
     public void updatePositionWithVis(double gyroValueDeg){
         updatePosition(gyroValueDeg);
-        if (DriverStation.isTeleop()){
-            TimestampedDoubleArray[] queue = subscriber.readQueue();
-            for (TimestampedDoubleArray measurement : queue){
-                Pose2d visionPose = getVisionPose(measurement);
-                long latency = TimeUnit.MICROSECONDS.toSeconds(measurement.timestamp);
-                if (validAprilTagPose(measurement) && (withinThreshold(visionPose, latency) || distanceToTagOverride())){
-                    poseEstimator.addVisionMeasurement(visionPose, latency);
-                }
-            }
-        }
+
     }
 
     //TODO this is a temporary method to account for distance from april tag.
@@ -107,8 +117,12 @@ public class SwervePosEstimator{
     }
 
     private boolean withinThreshold(Pose2d visionPose, double timeStampSeconds) {
-        boolean withinTime = poseBuffer.getInternalBuffer().lastEntry().getKey() - timeStampSeconds <= GameConstants.POSE_BUFFER_STORAGE_TIME;
-        Optional<Pose2d> sample = poseBuffer.getSample(timeStampSeconds);
+        boolean withinTime;
+        Optional<Pose2d> sample;
+        synchronized (poseBuffer){
+            withinTime = poseBuffer.getInternalBuffer().lastEntry().getKey() - timeStampSeconds <= GameConstants.POSE_BUFFER_STORAGE_TIME;
+            sample = poseBuffer.getSample(timeStampSeconds);
+        }
         boolean withinDistance = sample.isPresent() && sample.get().getTranslation().getDistance(visionPose.getTranslation()) <= 1;
         return withinTime && withinDistance;
     }
@@ -140,7 +154,7 @@ public class SwervePosEstimator{
                 },new Pose2d(translation2d,new Rotation2d(radians)));
     }
     public Pose2d getEstimatedPose(){
-        return field.getRobotPose();
+        return estimatedPose.get();
     }
 
     public Field2d getField() {
