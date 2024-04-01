@@ -90,7 +90,7 @@ public class SwervePosEstimator{
      */
     public void updatePosition(double gyroValueDeg){
         estimatedPose.set(poseEstimator.getEstimatedPosition());
-        if (DriverStation.isEnabled()){
+        if (DriverStation.isEnabled() && Constants.ENABLE_VISION){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
                     frontLeftMotor.getPosition(),
@@ -105,10 +105,6 @@ public class SwervePosEstimator{
             }
         }
         field.setRobotPose(estimatedPose.get());
-    }
-    public void updatePositionWithVis(double gyroValueDeg){
-        updatePosition(gyroValueDeg);
-
     }
 
     //TODO this is a temporary method to account for distance from april tag.
