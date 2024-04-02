@@ -14,15 +14,16 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.*;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
+import frc.robot.utils.RobotMode;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
@@ -87,7 +88,7 @@ public class SwervePosEstimator{
         }
         SmartDashboard.putData(field);
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-            if (DriverStation.isTeleop()){
+            if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
                 TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
                 TimestampedInteger[] aprilTagIds = null;
                 if (!Constants.MULTI_CAMERA){
@@ -138,7 +139,7 @@ public class SwervePosEstimator{
      */
     public void updatePosition(double gyroValueDeg){
         estimatedPose.set(poseEstimator.getEstimatedPosition());
-        if (DriverStation.isEnabled() && Constants.ENABLE_VISION){
+        if (!Robot.getMode().equals(RobotMode.DISABLED)){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
                     frontLeftMotor.getPosition(),
