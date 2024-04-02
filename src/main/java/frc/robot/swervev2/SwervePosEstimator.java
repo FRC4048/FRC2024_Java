@@ -126,8 +126,8 @@ public class SwervePosEstimator {
         ).start();
         new Thread(() -> {
             while (true){
-                if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                    try {
+                try {
+                    if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
                         VisionMeasurements take = visionQueue.take();
                         if (!validAprilTagPose(take.measurement)){
                             return;
@@ -137,15 +137,11 @@ public class SwervePosEstimator {
                         if (withinThreshold(visionPose, latencyInSec)) {
                             poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(take.tagId, visionPose));
                         }
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }else{
-                    try {
+                    }else {
                         Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
                     }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -216,16 +212,9 @@ public class SwervePosEstimator {
                 getEstimatedPose().getRotation())
                 .plus(camTransform);
     }
-    private Pose2d getVisionPose(TimestampedDoubleArray measurement){
-        return getVisionPose(measurement, Apriltag.of((int) measurement.value[3]));
-    }
 
     private boolean validAprilTagPose(TimestampedDoubleArray measurement) {
-        if (Constants.MULTI_CAMERA){
-            return measurement.value.length == 4 && measurement.value[3] != -1 && ArrayUtils.allMatch(measurement.value, -1);
-        } else {
-            return measurement.value.length == 3 && !ArrayUtils.allMatch(measurement.value,-1.0);
-        }
+        return !ArrayUtils.allMatch(measurement.value,-1.0);
     }
 
     /**
