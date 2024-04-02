@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.Deployer;
 import frc.robot.subsystems.LightStrip;
+import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 
 public class RaiseDeployer extends Command {
@@ -13,10 +14,12 @@ public class RaiseDeployer extends Command {
     private Timer timer = new Timer();
     private final double MOTOR_RUN_TIME = Constants.DEPLOYER_LOWER_TIMEOUT;
     private final TimeoutCounter timeoutCounter;
+    private LightStrip lightStrip;
 
     public RaiseDeployer(Deployer deployer, LightStrip lightStrip) {
         this.deployer = deployer;
         this.timeoutCounter = new TimeoutCounter("Raise Deployer", lightStrip);
+        this.lightStrip = lightStrip;
         addRequirements(deployer);
     }
 
@@ -24,6 +27,7 @@ public class RaiseDeployer extends Command {
     public void initialize() {
         //Reset and start timers
         deployer.setDeployerMotorSpeed(Constants.DEPLOYER_LOWER_SPEED);
+        lightStrip.setPattern(BlinkinPattern.BLACK);
         timer.reset();
         timer.start();
     }
