@@ -97,7 +97,6 @@ public class SwerveDrivetrain extends SubsystemBase {
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyro.getGyroValue());
         }
-        poseEstimator.logErrors();
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
