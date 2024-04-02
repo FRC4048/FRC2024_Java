@@ -1,5 +1,6 @@
 package frc.robot.swervev2;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -10,8 +11,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -20,7 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
+import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
+import frc.robot.utils.math.PoseUtils;
 
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -45,7 +48,9 @@ public class SwervePosEstimator{
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.7, 0.7, 0.3);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.7, 0.7, 0.5);
+    private static final Transform2d cameraOneTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
+    private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(GameConstants.POSE_BUFFER_STORAGE_TIME);
     private final AtomicReference<Pose2d> estimatedPose;
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
@@ -68,21 +73,37 @@ public class SwervePosEstimator{
         estimatedPose = new AtomicReference<>(poseEstimator.getEstimatedPosition());
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
-        subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1}, PubSubOption.pollStorage(5), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
+        subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
         SmartDashboard.putData(field);
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
             if (DriverStation.isTeleop()){
                 TimestampedDoubleArray[] queue = subscriber.readQueue();
                 for (TimestampedDoubleArray measurement: queue){
+                    if (!validAprilTagPose(measurement)){
+                        return;
+                    }
                     Pose2d visionPose = getVisionPose(measurement);
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime);
-                    if (validAprilTagPose(measurement) && (withinThreshold(visionPose, latencyInSec) || distanceToTagOverride())){
-                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec);
+                    int tagId = (int) measurement.value[3];
+                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros(600));
+                    if (withinThreshold(visionPose, latencyInSec)){
+                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of(tagId),visionPose));
                     }
                 }
             }
         },0,10, TimeUnit.MILLISECONDS);
     }
+
+    private Matrix<N3, N1> calcStdDev(Apriltag tag, Pose2d visionPose) {
+        double distance = tag.getPose().toTranslation2d().getDistance(visionPose.getTranslation());
+        // dist vs Std
+        // (0.01, 0.02)
+        // (1.5, 0.05)
+        // (2.1, 0.2)
+        // (3, 1.5)
+        double stdXY = 0.00472 * Math.exp(1.91 * distance);
+        return VecBuilder.fill(stdXY,stdXY,0.5);
+    }
+
     /**
      * updates odometry, should be called in periodic
      * @param gyroValueDeg current gyro value (angle of robot)
@@ -107,11 +128,6 @@ public class SwervePosEstimator{
         field.setRobotPose(estimatedPose.get());
     }
 
-    //TODO this is a temporary method to account for distance from april tag.
-    private boolean distanceToTagOverride() {
-        return false;
-    }
-
     private boolean withinThreshold(Pose2d visionPose, double timeStampSeconds) {
         boolean withinTime;
         Optional<Pose2d> sample;
@@ -124,15 +140,26 @@ public class SwervePosEstimator{
     }
 
     private Pose2d getVisionPose(TimestampedDoubleArray measurement){
+        Translation2d visionPose = new Translation2d(measurement.value[0], measurement.value[1]);
+        Apriltag tag = Apriltag.of((int) measurement.value[3]);
+        Pose2d estPose = estimatedPose.get();
+        double slope = PoseUtils.slope(tag.getPose().toTranslation2d(),new Translation2d(visionPose.getX(), visionPose.getY()));
+        Rotation2d facingAngle = new Rotation2d(Math.atan(slope) - Math.PI);
+        Transform2d camTransform;
+        if (Math.abs(facingAngle.getDegrees() - estPose.getRotation().getDegrees()) < 90){
+            camTransform = cameraOneTransform;
+        } else {
+            camTransform = cameraTwoTransform;
+        }
         return new Pose2d(measurement.value[0],
                 measurement.value[1],
-                new Rotation2d(Units.degreesToRadians(measurement.value[2]))
-                        .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
-                .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d()));
+                getEstimatedPose().getRotation())
+                .plus(camTransform);
     }
 
     private boolean validAprilTagPose(TimestampedDoubleArray measurement) {
-        return (measurement.value[0] != -1 && measurement.value[1] != -1 && measurement.value[2] != -1);
+        return measurement.value.length >= 4 && measurement.value[3] != -1 &&
+                (measurement.value[0] != -1 || measurement.value[1] != -1 || measurement.value[2] != -1);
     }
 
     /**
