@@ -30,7 +30,7 @@ import frc.robot.utils.math.PoseUtils;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,15 +39,17 @@ import java.util.concurrent.atomic.AtomicReference;
  * given the serve wheel encoders (through swerve model states)
  * and the initial position of the robot
  */
-public class SwervePosEstimator{
+public class SwervePosEstimator {
+    public record VisionMeasurements(TimestampedDoubleArray measurement, Apriltag tagId){}
+    private final LinkedTransferQueue<VisionMeasurements> visionQueue = new LinkedTransferQueue<>();
+    private final LinkedTransferQueue<TimestampedInteger> idQueue = new LinkedTransferQueue<>();
+    private final LinkedTransferQueue<TimestampedDoubleArray> tagQueue = new LinkedTransferQueue<>();
     private final Field2d field = new Field2d();
     private final GenericEncodedSwerve frontLeftMotor;
     private final GenericEncodedSwerve frontRightMotor;
     private final GenericEncodedSwerve backLeftMotor;
     private final GenericEncodedSwerve backRightMotor;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private final DoubleArraySubscriber visionMeasurementSubscriber;
-    private final IntegerSubscriber apriltagIdSubscriber;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
@@ -59,7 +61,6 @@ public class SwervePosEstimator{
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(GameConstants.POSE_BUFFER_STORAGE_TIME);
     private final AtomicReference<Pose2d> estimatedPose;
     private final ConcurrentLinkedQueue<Double> errorTimeStampLog = new ConcurrentLinkedQueue<>();
-    private int lastTagId = -1;
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -80,46 +81,76 @@ public class SwervePosEstimator{
         estimatedPose = new AtomicReference<>(poseEstimator.getEstimatedPosition());
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
-        if (Constants.MULTI_CAMERA){
-            visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
-            apriltagIdSubscriber = null;
-        }else{
-            visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
-            apriltagIdSubscriber = table.getIntegerTopic("apriltag_id").subscribe(-1);
-
-        }
-        SmartDashboard.putData(field);
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
-            if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
-                if (!Constants.MULTI_CAMERA){
-                    int t = (int) apriltagIdSubscriber.get();
-                    if (t != lastTagId){
-                        lastTagId = t;
-                        errorTimeStampLog.add(Timer.getFPGATimestamp());
-                        return;
+        IntegerSubscriber apriltagId = table.getIntegerTopic("apriltag_id").subscribe(-1, PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
+        DoubleArraySubscriber visionMeasureSub = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
+        new Thread(
+                () -> {
+                    while (true){
+                        TimestampedInteger[] queue = apriltagId.readQueue();
+                        for (TimestampedInteger id : queue){
+                            idQueue.offer(id,10, TimeUnit.MILLISECONDS);
+                        }
+                        try {
+                            Thread.sleep(5);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
-                for (TimestampedDoubleArray measurement : queue) {
-                    if (!validAprilTagPose(measurement)) {
-                        return;
+        ).start();
+        new Thread(
+                () -> {
+                    while (true){
+                        TimestampedDoubleArray[] queue = visionMeasureSub.readQueue();
+                        for (TimestampedDoubleArray m : queue){
+                            tagQueue.offer(m,10, TimeUnit.MILLISECONDS);
+                        }
+                        try {
+                            Thread.sleep(5);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                    int tagId;
-                    Pose2d visionPose;
-                    if (Constants.MULTI_CAMERA) {
-                        tagId = (int) measurement.value[3];
-                        visionPose = getVisionPose(measurement);
-                    } else {
-                        tagId = lastTagId;
-                        visionPose = getVisionPose(measurement, Apriltag.of(tagId));
+                }
+        ).start();
+        new Thread(
+                () -> {
+                    while (true){
+                        try {
+                            visionQueue.add(new VisionMeasurements(tagQueue.take(), Apriltag.of((int) idQueue.take().value)));
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros(600));
-                    if (withinThreshold(visionPose, latencyInSec)) {
-                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of(tagId), visionPose));
+                }
+        ).start();
+        new Thread(() -> {
+            while (true){
+                if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
+                    try {
+                        VisionMeasurements take = visionQueue.take();
+                        if (!validAprilTagPose(take.measurement)){
+                            return;
+                        }
+                        Pose2d visionPose = getVisionPose(take.measurement, take.tagId);
+                        double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, take.measurement.serverTime - TimeUnit.MILLISECONDS.toMicros(600));
+                        if (withinThreshold(visionPose, latencyInSec)) {
+                            poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(take.tagId, visionPose));
+                        }
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
-        },0,10, TimeUnit.MILLISECONDS);
+        }).start();
+        SmartDashboard.putData(field);
+
     }
 
     private Matrix<N3, N1> calcStdDev(Apriltag tag, Pose2d visionPose) {
