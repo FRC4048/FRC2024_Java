@@ -144,9 +144,10 @@ public class SwervePosEstimator{
         Apriltag tag = Apriltag.of((int) measurement.value[3]);
         Pose2d estPose = estimatedPose.get();
         double slope = PoseUtils.slope(tag.getPose().toTranslation2d(),new Translation2d(visionPose.getX(), visionPose.getY()));
-        Rotation2d facingAngle = new Rotation2d(Math.atan(slope) - Math.PI);
+        Rotation2d facingAngle = new Rotation2d(Math.atan(slope));
         Transform2d camTransform;
-        if (Math.abs(facingAngle.getDegrees() - estPose.getRotation().getDegrees()) < 90){
+        double visionCentricAngle = (estPose.getRotation().getDegrees() + Math.PI) % 360;
+        if (Math.abs(facingAngle.getDegrees() - visionCentricAngle) < 90){
             camTransform = cameraOneTransform;
         } else {
             camTransform = cameraTwoTransform;
