@@ -59,6 +59,7 @@ public class SwervePosEstimator{
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(GameConstants.POSE_BUFFER_STORAGE_TIME);
     private final AtomicReference<Pose2d> estimatedPose;
     private final ConcurrentLinkedQueue<Double> errorTimeStampLog = new ConcurrentLinkedQueue<>();
+    private int lastTagId = -1;
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -84,37 +85,37 @@ public class SwervePosEstimator{
             apriltagIdSubscriber = null;
         }else{
             visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
-            apriltagIdSubscriber = table.getIntegerTopic("apriltag_id").subscribe(-1, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
+            apriltagIdSubscriber = table.getIntegerTopic("apriltag_id").subscribe(-1);
+
         }
         SmartDashboard.putData(field);
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
             if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
                 TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
-                TimestampedInteger[] aprilTagIds = null;
                 if (!Constants.MULTI_CAMERA){
-                    aprilTagIds = apriltagIdSubscriber.readQueue();
-                    if (aprilTagIds.length != queue.length){
+                    int t = (int) apriltagIdSubscriber.get();
+                    if (t != lastTagId){
+                        lastTagId = t;
                         errorTimeStampLog.add(Timer.getFPGATimestamp());
                         return;
                     }
                 }
-                for (int i = 0; i < queue.length; i++) {
-                    TimestampedDoubleArray measurement = queue[i];
-                    if (!validAprilTagPose(measurement)){
+                for (TimestampedDoubleArray measurement : queue) {
+                    if (!validAprilTagPose(measurement)) {
                         return;
                     }
                     int tagId;
                     Pose2d visionPose;
-                    if (Constants.MULTI_CAMERA){
+                    if (Constants.MULTI_CAMERA) {
                         tagId = (int) measurement.value[3];
                         visionPose = getVisionPose(measurement);
-                    }else{
-                        tagId = (int) aprilTagIds[i].value;
+                    } else {
+                        tagId = lastTagId;
                         visionPose = getVisionPose(measurement, Apriltag.of(tagId));
                     }
                     double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros(600));
-                    if (withinThreshold(visionPose, latencyInSec)){
-                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of(tagId),visionPose));
+                    if (withinThreshold(visionPose, latencyInSec)) {
+                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of(tagId), visionPose));
                     }
                 }
             }
