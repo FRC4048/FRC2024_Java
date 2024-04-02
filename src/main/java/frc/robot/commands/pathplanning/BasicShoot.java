@@ -6,7 +6,6 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.LightStrip;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.BlinkinPattern;
-import edu.wpi.first.wpilibj.Timer;
 
 public class BasicShoot extends Command {
     private final Shooter shooter;
@@ -54,7 +53,6 @@ public class BasicShoot extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-        shooter.slowStop();
         timer.stop();
         activated = false;
     }

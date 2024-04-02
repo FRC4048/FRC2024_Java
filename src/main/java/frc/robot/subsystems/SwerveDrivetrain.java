@@ -87,7 +87,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
-
+            SmartDashboard.putNumber("DRIVE_X_VEL",getFieldChassisSpeeds().vxMetersPerSecond);
             SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
