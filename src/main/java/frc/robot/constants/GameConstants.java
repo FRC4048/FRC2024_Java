@@ -160,6 +160,7 @@ public class GameConstants {
     public static final double RAMP_AT_POS_THRESHOLD = 0.1;
 
     public static final long GYRO_THREAD_RATE_MS = 10;
-    public static final long POSE_BUFFER_STORAGE_TIME = 1;
+    public static final long POSE_BUFFER_STORAGE_TIME = 2;
+    public static final boolean MULTI_CAMERA = false;
 
 }

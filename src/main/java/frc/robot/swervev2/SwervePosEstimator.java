@@ -23,9 +23,12 @@ import frc.robot.constants.GameConstants;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
+import frc.robot.utils.logging.Logger;
+import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
 
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,7 +45,8 @@ public class SwervePosEstimator{
     private final GenericEncodedSwerve backLeftMotor;
     private final GenericEncodedSwerve backRightMotor;
     private final SwerveDrivePoseEstimator poseEstimator;
-    private final DoubleArraySubscriber subscriber;
+    private final DoubleArraySubscriber visionMeasurementSubscriber;
+    private final IntegerSubscriber apriltagIdSubscriber;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
@@ -53,6 +57,7 @@ public class SwervePosEstimator{
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(GameConstants.POSE_BUFFER_STORAGE_TIME);
     private final AtomicReference<Pose2d> estimatedPose;
+    private final ConcurrentLinkedQueue<Double> errorTimeStampLog = new ConcurrentLinkedQueue<>();
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -73,17 +78,39 @@ public class SwervePosEstimator{
         estimatedPose = new AtomicReference<>(poseEstimator.getEstimatedPosition());
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
-        subscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
+        if (Constants.MULTI_CAMERA){
+            visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(false));
+            apriltagIdSubscriber = null;
+        }else{
+            visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
+            apriltagIdSubscriber = table.getIntegerTopic("apriltag_id").subscribe(-1, PubSubOption.pollStorage(10), PubSubOption.sendAll(true), PubSubOption.keepDuplicates(true));
+        }
         SmartDashboard.putData(field);
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
             if (DriverStation.isTeleop()){
-                TimestampedDoubleArray[] queue = subscriber.readQueue();
-                for (TimestampedDoubleArray measurement: queue){
+                TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
+                TimestampedInteger[] aprilTagIds = null;
+                if (!Constants.MULTI_CAMERA){
+                    aprilTagIds = apriltagIdSubscriber.readQueue();
+                    if (aprilTagIds.length != queue.length){
+                        errorTimeStampLog.add(Timer.getFPGATimestamp());
+                        return;
+                    }
+                }
+                for (int i = 0; i < queue.length; i++) {
+                    TimestampedDoubleArray measurement = queue[i];
                     if (!validAprilTagPose(measurement)){
                         return;
                     }
-                    Pose2d visionPose = getVisionPose(measurement);
-                    int tagId = (int) measurement.value[3];
+                    int tagId;
+                    Pose2d visionPose;
+                    if (Constants.MULTI_CAMERA){
+                        tagId = (int) measurement.value[3];
+                        visionPose = getVisionPose(measurement);
+                    }else{
+                        tagId = (int) aprilTagIds[i].value;
+                        visionPose = getVisionPose(measurement, Apriltag.of(tagId));
+                    }
                     double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros(600));
                     if (withinThreshold(visionPose, latencyInSec)){
                         poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of(tagId),visionPose));
@@ -139,9 +166,8 @@ public class SwervePosEstimator{
         return withinTime && withinDistance;
     }
 
-    private Pose2d getVisionPose(TimestampedDoubleArray measurement){
+    private Pose2d getVisionPose(TimestampedDoubleArray measurement, Apriltag tag){
         Translation2d visionPose = new Translation2d(measurement.value[0], measurement.value[1]);
-        Apriltag tag = Apriltag.of((int) measurement.value[3]);
         Pose2d estPose = estimatedPose.get();
         double slope = PoseUtils.slope(tag.getPose().toTranslation2d(),new Translation2d(visionPose.getX(), visionPose.getY()));
         Rotation2d facingAngle = new Rotation2d(Math.atan(slope));
@@ -157,10 +183,16 @@ public class SwervePosEstimator{
                 getEstimatedPose().getRotation())
                 .plus(camTransform);
     }
+    private Pose2d getVisionPose(TimestampedDoubleArray measurement){
+        return getVisionPose(measurement, Apriltag.of((int) measurement.value[3]));
+    }
 
     private boolean validAprilTagPose(TimestampedDoubleArray measurement) {
-        return measurement.value.length >= 4 && measurement.value[3] != -1 &&
-                (measurement.value[0] != -1 || measurement.value[1] != -1 || measurement.value[2] != -1);
+        if (Constants.MULTI_CAMERA){
+            return measurement.value.length == 4 && measurement.value[3] != -1 && ArrayUtils.allMatch(measurement.value, -1);
+        } else {
+            return measurement.value.length == 3 && !ArrayUtils.allMatch(measurement.value,-1.0);
+        }
     }
 
     /**
@@ -183,6 +215,13 @@ public class SwervePosEstimator{
 
     public Field2d getField() {
         return field;
+    }
+    public void logErrors(){
+        Double poll = errorTimeStampLog.poll();
+        while (poll != null){
+            Logger.logDouble("/robot/poseEstimator/queueSizeError", poll, Constants.ENABLE_LOGGING);
+            poll = errorTimeStampLog.poll();
+        }
     }
 
 }
