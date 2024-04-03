@@ -8,11 +8,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -24,16 +26,21 @@ import frc.robot.utils.RobotMode;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
 
+import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class to estimate the current position of the robot,
  * given the serve wheel encoders (through swerve model states)
  * and the initial position of the robot
  */
-public class SwervePosEstimator{
+public class SwervePosEstimator {
+    public record VisionMeasurement(TimestampedDoubleArray measurement, Apriltag tag, double timeOfMeasurement){}
     private final Field2d field = new Field2d();
     private final GenericEncodedSwerve frontLeftMotor;
     private final GenericEncodedSwerve frontRightMotor;
@@ -47,10 +54,13 @@ public class SwervePosEstimator{
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.7, 0.7, 0.5);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.3, 0.3, 0.5);
     private static final Transform2d cameraOneTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final AtomicReference<Pose2d> estimatedPose;
+    private final TimeInterpolatableBuffer<Pose2d> robotPoses = TimeInterpolatableBuffer.createBuffer(Constants.POSE_BUFFER_STORAGE_TIME);
+    private final ConcurrentLinkedQueue<VisionMeasurement> visionPoses = new ConcurrentLinkedQueue<>();
+    private final ReentrantLock poseUpdateLock = new ReentrantLock(true);
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -74,22 +84,55 @@ public class SwervePosEstimator{
         visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true));
         apriltagIdSubscriber = table.getIntegerArrayTopic("apriltag_id").subscribe(new long[]{-1,-1});
         SmartDashboard.putData(field);
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(() -> {
+        ScheduledExecutorService visionService = Executors.newScheduledThreadPool(3);
+        visionService.scheduleAtFixedRate(() -> {
             if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
                 long[] tagData = apriltagIdSubscriber.get();
-                SmartDashboard.putNumber("SIZE", tagData.length);
-                for (TimestampedDoubleArray measurement : queue) {
-                    if (!validAprilTagPose(measurement)) {
-                        SmartDashboard.putBoolean("INVALID",true);
+                TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
+                for (TimestampedDoubleArray measurement : queue){
+                    if (validAprilTagPose(measurement)){
+                        double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
+                        visionPoses.add(new VisionMeasurement(measurement, Apriltag.of((int) tagData[0]), latencyInSec));
+                    }
+                }
+            }
+        },0,10, TimeUnit.MILLISECONDS);
+        visionService.scheduleAtFixedRate(() -> {
+            if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
+                while (visionPoses.size() >= 2){
+                    VisionMeasurement m1 = visionPoses.poll();
+                    VisionMeasurement m2 = visionPoses.poll();
+                    Optional<Pose2d> odomPoseAtVis1;
+                    Optional<Pose2d> odomPoseAtVis2;
+                    Pose2d vision1Pose;
+                    Pose2d vision2Pose;
+                    if (m1 == null || m2 == null){
                         return;
                     }
-                    SmartDashboard.putBoolean("INVALID",false);
-                    Pose2d visionPose;
-                    visionPose = getVisionPose(measurement, Apriltag.of((int) tagData[0]));
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
-                    synchronized (poseEstimator){
-                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of((int) tagData[0]), visionPose));
+                    poseUpdateLock.lock();
+                    try {
+                        odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
+                        odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
+                    }finally {
+                        poseUpdateLock.unlock();
+                    }
+                    if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
+                        return;
+                    }
+                    vision1Pose = getVisionPose(m1.measurement, m1.tag);
+                    vision2Pose = getVisionPose(m2.measurement, m2.tag);
+                    double odomDiff = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
+                    double visionDiff = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
+                    SmartDashboard.putNumber("ODOM DIFF", odomDiff);
+                    SmartDashboard.putNumber("VISION DIFF", visionDiff);
+                    if (Math.abs(odomDiff - visionDiff) <= 0.5){
+                        poseUpdateLock.lock();
+                        try {
+                            poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
+                            poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
+                        }finally {
+                            poseUpdateLock.unlock();
+                        }
                     }
                 }
             }
@@ -97,8 +140,8 @@ public class SwervePosEstimator{
     }
 
     //TODO make robot pose
-    private Matrix<N3, N1> calcStdDev(Apriltag tag, Pose2d visionPose) {
-        double distance = new Translation2d(tag.getX(),tag.getY()).getDistance(visionPose.getTranslation());
+    private Matrix<N3, N1> calcStdDev(Apriltag tag) {
+        double distance = new Translation2d(tag.getX(),tag.getY()).getDistance(getEstimatedPose().getTranslation());
         // dist vs Std
         // (0.01, 0.02)
         // (1.5, 0.05)
@@ -127,10 +170,13 @@ public class SwervePosEstimator{
                     frontRightMotor.getPosition(),
                     backLeftMotor.getPosition(),
                     backRightMotor.getPosition(),
-
             };
-            synchronized (poseEstimator){
+            poseUpdateLock.lock();
+            try {
                 estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
+                robotPoses.addSample(Timer.getFPGATimestamp(), estimatedPose.get());
+            } finally {
+                poseUpdateLock.unlock();
             }
         }
         field.setRobotPose(estimatedPose.get());
