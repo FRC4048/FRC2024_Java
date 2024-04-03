@@ -78,28 +78,37 @@ public class SwervePosEstimator{
             if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
                 TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
                 long[] tagData = apriltagIdSubscriber.get();
+                SmartDashboard.putNumber("SIZE", tagData.length);
                 for (TimestampedDoubleArray measurement : queue) {
                     if (!validAprilTagPose(measurement)) {
+                        SmartDashboard.putBoolean("INVALID",true);
                         return;
                     }
+                    SmartDashboard.putBoolean("INVALID",false);
                     Pose2d visionPose;
                     visionPose = getVisionPose(measurement, Apriltag.of((int) tagData[0]));
                     double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
-                    poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of((int) tagData[0]), visionPose));
+                    synchronized (poseEstimator){
+                        poseEstimator.addVisionMeasurement(visionPose, latencyInSec, calcStdDev(Apriltag.of((int) tagData[0]), visionPose));
+                    }
                 }
             }
-        },0,10, TimeUnit.MILLISECONDS);
+        },0,20, TimeUnit.MILLISECONDS);
     }
 
+    //TODO make robot pose
     private Matrix<N3, N1> calcStdDev(Apriltag tag, Pose2d visionPose) {
-        double distance = tag.getPose().toTranslation2d().getDistance(visionPose.getTranslation());
+        double distance = new Translation2d(tag.getX(),tag.getY()).getDistance(visionPose.getTranslation());
         // dist vs Std
         // (0.01, 0.02)
         // (1.5, 0.05)
         // (2.1, 0.2)
         // (3, 1.5)
+        SmartDashboard.putNumber("DIST", distance);
         double stdXY = 0.00472 * Math.exp(1.91 * distance);
-        return VecBuilder.fill(stdXY,stdXY,0.5);
+        Vector<N3> fill = VecBuilder.fill(stdXY, stdXY, 0.5);
+        SmartDashboard.putNumber("VARIANCE", stdXY);
+        return fill;
     }
 
     /**
@@ -108,7 +117,9 @@ public class SwervePosEstimator{
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
     public void updatePosition(double gyroValueDeg){
-        estimatedPose.set(poseEstimator.getEstimatedPosition());
+        synchronized (poseEstimator){
+            estimatedPose.set(poseEstimator.getEstimatedPosition());
+        }
         if (!Robot.getMode().equals(RobotMode.DISABLED)){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
@@ -118,7 +129,9 @@ public class SwervePosEstimator{
                     backRightMotor.getPosition(),
 
             };
-            estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
+            synchronized (poseEstimator){
+                estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
+            }
         }
         field.setRobotPose(estimatedPose.get());
     }
@@ -154,13 +167,15 @@ public class SwervePosEstimator{
      * @see SwerveDrivePoseEstimator#resetPosition(Rotation2d, SwerveModulePosition[], Pose2d)
      */
     public void resetOdometry(double radians, Translation2d translation2d){
-        this.poseEstimator.resetPosition(new Rotation2d(radians),
-                new SwerveModulePosition[] {
-                        frontLeftMotor.getPosition(),
-                        frontRightMotor.getPosition(),
-                        backLeftMotor.getPosition(),
-                        backRightMotor.getPosition(),
-                },new Pose2d(translation2d,new Rotation2d(radians)));
+        synchronized (poseEstimator){
+            this.poseEstimator.resetPosition(new Rotation2d(radians),
+                    new SwerveModulePosition[] {
+                            frontLeftMotor.getPosition(),
+                            frontRightMotor.getPosition(),
+                            backLeftMotor.getPosition(),
+                            backRightMotor.getPosition(),
+                    },new Pose2d(translation2d,new Rotation2d(radians)));
+        }
     }
     public Pose2d getEstimatedPose(){
         return estimatedPose.get();
