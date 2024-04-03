@@ -39,11 +39,11 @@ public class Drive extends Command {
     @Override
     public void execute() {
         Alignable alignable = drivetrain.getAlignable();
-        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble(),0.1)* Constants.MAX_VELOCITY;
-        double str = MathUtil.applyDeadband(strSupplier.getAsDouble(), 0.1) * Constants.MAX_VELOCITY;
+        double fwd = MathUtil.applyDeadband(fwdSupplier.getAsDouble(),0.05)* Constants.MAX_VELOCITY;
+        double str = MathUtil.applyDeadband(strSupplier.getAsDouble(), 0.05) * Constants.MAX_VELOCITY;
         ChassisSpeeds driveStates;
         if (alignable == null){
-            double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble(), 0.1) * Constants.MAX_VELOCITY;
+            double rcw = MathUtil.applyDeadband(rtSupplier.getAsDouble(), 0.05) * Constants.MAX_VELOCITY;
             drivetrain.setFacingTarget(false);
             driveStates = drivetrain.createChassisSpeeds(fwd * (shouldFlip ? 1 : -1), str * (shouldFlip ? 1 : -1), -rcw, driveMode.get());
         } else {
