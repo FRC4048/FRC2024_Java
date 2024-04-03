@@ -12,7 +12,7 @@ public class SetTelopPid extends Command {
 
     @Override
     public void initialize() {
-        ramp.setTelopPid();
+        ramp.setFarFF();
     }
 
     @Override

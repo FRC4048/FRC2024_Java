@@ -33,6 +33,6 @@ public class AngleUtils {
      * @return normalized angle
      */
     public static Rotation2d normalize(Rotation2d angle) {
-        return new Rotation2d(Math.asin(Math.sin(angle.getRadians())));
+        return new Rotation2d(Math.asin(Math.sin(angle.getRadians()))); //can be simplified (reduce(angle+PI) - PI
     }
 }

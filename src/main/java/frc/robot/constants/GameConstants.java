@@ -162,5 +162,6 @@ public class GameConstants {
     public static final long GYRO_THREAD_RATE_MS = 10;
     public static final long POSE_BUFFER_STORAGE_TIME = 2;
     public static final boolean MULTI_CAMERA = false;
+    public static final double APRILTAG_SPEAKER_OFFSET = 0.234809;
 
 }

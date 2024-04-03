@@ -13,7 +13,7 @@ public class SetAutoRampPid extends Command {
 
     @Override
     public void initialize() {
-        ramp.restorePid();
+        ramp.setDefaultFF();
     }
 
     @Override

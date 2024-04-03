@@ -17,7 +17,7 @@ public class Ramp extends SubsystemBase {
     private final NeoPidMotor neoPidMotor;
     private double rampPos = Constants.RAMP_POS;
     private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
-    private double neoModerFF = Constants.RAMP_PID_FAR_FF;
+    private double neoMotorFF = Constants.RAMP_PID_FAR_FF;
 
     public Ramp() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
@@ -34,7 +34,7 @@ public class Ramp extends SubsystemBase {
         neoPidMotor.setSmartMotionAllowedClosedLoopError(Constants.RAMP_ERROR_RANGE);
         neoPidMotor.setMaxAccel(Constants.RAMP_MAX_RPM_ACCELERATION);
         neoPidMotor.getPidController().setP(Constants.RAMP_PID_P);
-        neoPidMotor.getPidController().setFF(neoModerFF);
+        neoPidMotor.getPidController().setFF(neoMotorFF);
     }
 
     public void periodic() {
@@ -144,12 +144,12 @@ public class Ramp extends SubsystemBase {
         setRampPos(angleToEncoder(angleFromGround.getDegrees()));
     }
 
-    public void setFF(double feedForward) {
+    private void setFF(double feedForward) {
         neoPidMotor.getPidController().setFF(feedForward);
-        neoModerFF = feedForward;
+        neoMotorFF = feedForward;
     }
     public double getFF(){
-        return neoModerFF;
+        return neoMotorFF;
     }
 
     public void updateFF() {
@@ -166,11 +166,11 @@ public class Ramp extends SubsystemBase {
         return rampAngleMap.get(pose2d.getTranslation().getDistance(new Translation2d(alignable.getX(), alignable.getY())));
     }
 
-    public void restorePid() {
+    public void setDefaultFF() {
         neoPidMotor.setPid(NeoPidMotor.DEFAULT_P, NeoPidMotor.DEFAULT_I, NeoPidMotor.DEFAULT_FF);
     }
 
-    public void setTelopPid() {
+    public void setFarFF() {
         neoPidMotor.setPid(Constants.RAMP_PID_P, NeoPidMotor.DEFAULT_I, Constants.RAMP_PID_FAR_FF);
     }
 }

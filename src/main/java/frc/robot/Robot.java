@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
         mode.set(RobotMode.AUTONOMOUS);
         ledEndgameTimer.restart();
         robotContainer.getLEDStrip().setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
-        CommandUtil.logged(new SetAutoRampPid(robotContainer.getRamp())).schedule();
+        robotContainer.getRamp().setDefaultFF();
         autonomousCommand = robotContainer.getAutoCommand();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
         }
         CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip())).schedule();
         CommandUtil.parallel("Reset Climber and Ramp", new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).schedule();
-        CommandUtil.logged(new SetTelopPid(robotContainer.getRamp())).schedule();
+        robotContainer.getRamp().setFarFF();
     }
 
     @Override

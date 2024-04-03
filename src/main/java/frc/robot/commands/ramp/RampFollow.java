@@ -46,12 +46,12 @@ public class RampFollow extends Command {
     public void execute() {
         Alignable alignableNow = drivetrain.getAlignable();
         if (alignableNow != null) {
-            double diveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond;
-            double diveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond;
+            double driveTrainXVel = drivetrain.getFieldChassisSpeeds().vxMetersPerSecond;
+            double driveTrainYVel = drivetrain.getFieldChassisSpeeds().vyMetersPerSecond;
             Translation3d rampPose = PoseUtils.addDimension(drivetrain.getPose().getTranslation(), Constants.ROBOT_FROM_GROUND);
-            double speakerRelativeXVel = diveTrainXVel * -1;
+            double speakerRelativeXVel = driveTrainXVel * -1;
             VelocityVector shooting = AutoAlignment.getYaw(alignable, rampPose, speakerRelativeXVel);
-            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, diveTrainXVel, diveTrainYVel, 0.0, 0.05);
+            Translation3d futurePose = PoseUtils.getFieldEstimatedFuturePose(rampPose, driveTrainXVel, driveTrainYVel, 0.0, 0.05);
             VelocityVector shootingFuture = AutoAlignment.getYaw(alignable, futurePose, speakerRelativeXVel);
             if (shooting == null || shootingFuture == null) {
                 DriverStation.reportError("Invalid Odometry Can not shoot", true);
