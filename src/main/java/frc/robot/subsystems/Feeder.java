@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatchResult;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -90,6 +89,7 @@ public class Feeder extends SubsystemBase {
             .withSize(2, 2);
         */
         Logger.logDouble(baseLogName + "FeederMotorSpeed",getFeederMotorSpeed(),Constants.ENABLE_LOGGING);
+        Logger.logDouble(baseLogName + "FeederCurrent",feederMotor.getStatorCurrent(),Constants.ENABLE_LOGGING);
     }
 
     public boolean getForwardSwitchTripped() {

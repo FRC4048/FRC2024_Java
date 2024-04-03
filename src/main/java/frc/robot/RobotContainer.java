@@ -38,7 +38,7 @@ import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
-import frc.robot.commands.ramp.BoringRampFollow;
+import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
@@ -83,9 +83,7 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final PowerMonitor powerMonitor = new PowerMonitor();
     private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
-
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
@@ -223,7 +221,7 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         Command rampMoveAndSpin = CommandUtil.race(
                 "AdvancedAutoShoot",
-                new BoringRampFollow(ramp, drivetrain),
+                new RampFollow(ramp, drivetrain, lightStrip),
                 new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
         );
         joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));

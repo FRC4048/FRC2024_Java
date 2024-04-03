@@ -65,7 +65,7 @@ public class GameConstants {
     public static final double SHOOTER_MOTOR_1_RPM = 12000;
     public static final double SHOOTER_MOTOR_2_RPM = 12000;
     public static final double SHOOTER_TIME_AFTER_TRIGGER = 3;
-    public static final double SHOOTER_VELOCITY = 8.9;//m/s @ 5500rpm, 3500rpm
+    public static final double SHOOTER_VELOCITY = 10.56;//m/s @ 5500rpm, 3500rpm // 8.9 or 8.1 or 10.65 or
     public static final double ADVANCED_SPINNING_SHOT_TIMEOUT = 15;
     public static final double SHOOTER_PID_P = 0.000058;
     public static final double SHOOTER_PID_I = 0.0;
@@ -148,11 +148,18 @@ public class GameConstants {
     public static final double HIGHT_OF_RAMP = 0.66; // needs to be measured
     public static final double RAMP_MIN_ANGLE = 31; //degrees
     public static final double RAMP_MAX_ANGLE = 52; //degrees
+    public static final double RAMP_ENCODER_TO_ANGLE_SLOPE = 2.5;
+    public static final double RAMP_ENCODER_TO_ANGLE_Y_INTERCEPT = 30.5;
     public static final double TIMED_FEEDER_EXIT = 0.5;
     public static final double RAMP_PID_P = .0000055;
     public static final double RAMP_PID_FAR_FF = 0.00031;
     public static final double RAMP_ELIM_FF_THRESHOLD = 0.075;
     public static final int LIGHTSTRIP_PORT = 7;
+    public static final double ROBOT_FROM_GROUND = 0.2032;
+    public static final double RAMP_FROM_CENTER = 0.17;
+    public static final double RAMP_AT_POS_THRESHOLD = 0.1;
+
     public static final long GYRO_THREAD_RATE_MS = 10;
+    public static final double APRILTAG_SPEAKER_OFFSET = 0.234809;
 
 }
