@@ -196,7 +196,7 @@ public class SwervePosEstimator {
         }
         return new Pose2d(measurement.value[0],
                 measurement.value[1],
-                getEstimatedPose().getRotation())
+                Rotation2d.fromDegrees(measurement.value[2]))
                 .plus(camTransform);
     }
     private Pose2d getVisionPose(TimestampedDoubleArray measurement){
