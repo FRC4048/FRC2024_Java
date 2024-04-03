@@ -51,10 +51,10 @@ public class SwervePosEstimator {
     private final IntegerArraySubscriber apriltagIdSubscriber;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
-    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.001);
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.3, 0.3, 0.5);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.4, 0.4, 0.5);
     private static final Transform2d cameraOneTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final AtomicReference<Pose2d> estimatedPose;
