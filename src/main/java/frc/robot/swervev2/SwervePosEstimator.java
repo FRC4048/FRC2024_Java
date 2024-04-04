@@ -100,13 +100,10 @@ public class SwervePosEstimator {
                 while (visionPoses.size() >= 2){
                     VisionMeasurement m1 = visionPoses.poll();
                     VisionMeasurement m2 = visionPoses.poll();
-//                    VisionMeasurement m3 = visionPoses.poll();
                     Optional<Pose2d> odomPoseAtVis1;
                     Optional<Pose2d> odomPoseAtVis2;
-//                    Optional<Pose2d> odomPoseAtVis3;
                     Pose2d vision1Pose;
                     Pose2d vision2Pose;
-//                    Pose2d vision3Pose;
                     if (m1 == null || m2 == null){
                         return;
                     }
@@ -114,7 +111,6 @@ public class SwervePosEstimator {
                     try {
                         odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
                         odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
-//                        odomPoseAtVis3 = robotPoses.getSample(m3.timeOfMeasurement);
                     }finally {
                         poseUpdateLock.unlock();
                     }
@@ -123,28 +119,18 @@ public class SwervePosEstimator {
                     }
                     vision1Pose = getVisionPose(m1.measurement, m1.tag);
                     vision2Pose = getVisionPose(m2.measurement, m2.tag);
-//                    vision3Pose = getVisionPose(m3.measurement, m3.tag);
 
                     double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
-//                    double odomDiff2To3 = odomPoseAtVis2.get().getTranslation().getDistance(odomPoseAtVis3.get().getTranslation());
-//                    double odomDiff3To1 = odomPoseAtVis3.get().getTranslation().getDistance(odomPoseAtVis1.get().getTranslation());
 
                     double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
-//                    double visionDiff2To3 = vision2Pose.getTranslation().getDistance(vision3Pose.getTranslation());
-//                    double visionDiff3To1 = vision3Pose.getTranslation().getDistance(vision1Pose.getTranslation());
 
-                    double diff1To2 = Math.abs(odomDiff1To2 - visionDiff1To2);
-//                    double diff2To3 =  Math.abs(odomDiff2To3 - visionDiff2To3);
-//                    double diff3To1 = Math.abs(odomDiff3To1 - visionDiff3To1);
-//                    double diff = Math.max(Math.max(diff1To2, diff2To3), diff3To1);
-                    double diff = diff1To2;
-
-                    if (Math.abs(diff) <= 0.2){
+                    double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
+                    SmartDashboard.putNumber("TEST", diff);
+                    if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
                         poseUpdateLock.lock();
                         try {
                             poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
                             poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
-//                            poseEstimator.addVisionMeasurement(vision3Pose, m3.timeOfMeasurement);
                         } finally {
                             poseUpdateLock.unlock();
                         }
