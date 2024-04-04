@@ -24,7 +24,6 @@ import frc.robot.utils.RobotMode;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
 
-import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -86,41 +85,13 @@ public class SwervePosEstimator {
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
     public void updatePosition(double gyroValueDeg){
-        if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-            long[] tagData = apriltagIdSubscriber.get();
+        if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION) {
             TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
-            for (TimestampedDoubleArray measurement : queue){
-                if (validAprilTagPose(measurement)){
+            long[] tagData = apriltagIdSubscriber.get();
+            for (TimestampedDoubleArray measurement : queue) {
+                if (validAprilTagPose(measurement)) {
                     double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
-                    visionPoses.add(new VisionMeasurement(measurement, Apriltag.of((int) tagData[0]), latencyInSec));
-                }
-            }
-            while (visionPoses.size() >= 2){
-                VisionMeasurement m1 = visionPoses.poll();
-                VisionMeasurement m2 = visionPoses.poll();
-                Optional<Pose2d> odomPoseAtVis1;
-                Optional<Pose2d> odomPoseAtVis2;
-                Pose2d vision1Pose;
-                Pose2d vision2Pose;
-                if (m1 == null || m2 == null){
-                    return;
-                }
-                odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
-                odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
-                if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
-                    return;
-                }
-                vision1Pose = getVisionPose(m1.measurement, m1.tag);
-                vision2Pose = getVisionPose(m2.measurement, m2.tag);
-
-                double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
-
-                double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
-
-                double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
-                if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
-                    poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
-                    poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
+                    poseEstimator.addVisionMeasurement(getVisionPose(measurement, Apriltag.of((int) tagData[0])),latencyInSec);
                 }
             }
         }
