@@ -17,7 +17,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
 
     public AutoChooser2024(IntakeSubsystem intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
-        commandMap = Map.ofEntries(
+        this.commandMap = Map.ofEntries(
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand()),
@@ -31,8 +31,12 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("ForkAuto")),
                 Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("SmartForkAuto")),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
-                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip)))
+                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip))),
+                Map.entry(new AutoEvent(AutoAction.SHOOT, FieldLocation.SpeakerLeft), new ShootAndDrop(shooter,feeder,deployer,lightStrip)),
+                Map.entry(new AutoEvent(AutoAction.SHOOT, FieldLocation.SpeakerRight), new ShootAndDrop(shooter,feeder,deployer,lightStrip)),
+                Map.entry(new AutoEvent(AutoAction.SHOOT, FieldLocation.SpeakFront), new ShootAndDrop(shooter,feeder,deployer,lightStrip))
         );
+
     }
 
 
