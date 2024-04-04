@@ -156,9 +156,9 @@ public class SwervePosEstimator {
                 estimatedPose.get().getRotation())
                 .plus(camTransform);
     }
-    private Pose2d getVisionPose(TimestampedDoubleArray measurement){
-        return getVisionPose(measurement, Apriltag.of((int) measurement.value[3]));
-    }
+    // private Pose2d getVisionPose(TimestampedDoubleArray measurement){
+    //     return getVisionPose(measurement, Apriltag.of((int) measurement.value[3]));
+    // }
 
     private boolean validAprilTagPose(TimestampedDoubleArray measurement) {
         return !ArrayUtils.allMatch(measurement.value,-1.0);
