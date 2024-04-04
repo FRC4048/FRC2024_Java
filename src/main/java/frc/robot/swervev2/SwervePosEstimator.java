@@ -50,7 +50,7 @@ public class SwervePosEstimator {
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
-    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.25, 0.25, 0.5);
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.4, 0.4, 0.5);
     private static final Transform2d cameraOneTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final AtomicReference<Pose2d> estimatedPose;
@@ -104,12 +104,12 @@ public class SwervePosEstimator {
                 Pose2d vision1Pose;
                 Pose2d vision2Pose;
                 if (m1 == null || m2 == null){
-                    return;
+                    continue;
                 }
                 odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
                 odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
                 if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
-                    return;
+                    continue;
                 }
                 vision1Pose = getVisionPose(m1.measurement, m1.tag);
                 vision2Pose = getVisionPose(m2.measurement, m2.tag);

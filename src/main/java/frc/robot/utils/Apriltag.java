@@ -52,6 +52,9 @@ public enum Apriltag {
      * @return AprilTag
      */
     public static Apriltag of(int num){
+        if (num <= 0){
+            return values()[0];
+        }
         // Index -1 to translate to 0-indexed enum
         return values()[num-1];
     }
