@@ -82,7 +82,7 @@ public class SwervePosEstimator {
         visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true));
         apriltagIdSubscriber = table.getIntegerArrayTopic("apriltag_id").subscribe(new long[]{-1,-1});
         SmartDashboard.putData(field);
-        ScheduledExecutorService visionService = Executors.newScheduledThreadPool(3);
+        ScheduledExecutorService visionService = Executors.newScheduledThreadPool(2);
         visionService.scheduleAtFixedRate(() -> {
             if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
                 long[] tagData = apriltagIdSubscriber.get();
