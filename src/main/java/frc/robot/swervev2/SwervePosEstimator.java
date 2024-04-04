@@ -26,11 +26,8 @@ import frc.robot.utils.math.PoseUtils;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class to estimate the current position of the robot,
@@ -58,7 +55,6 @@ public class SwervePosEstimator {
     private final AtomicReference<Pose2d> estimatedPose;
     private final TimeInterpolatableBuffer<Pose2d> robotPoses = TimeInterpolatableBuffer.createBuffer(Constants.POSE_BUFFER_STORAGE_TIME);
     private final ConcurrentLinkedQueue<VisionMeasurement> visionPoses = new ConcurrentLinkedQueue<>();
-    private final ReentrantLock poseUpdateLock = new ReentrantLock(true);
     public SwervePosEstimator(GenericEncodedSwerve frontLeftMotor, GenericEncodedSwerve frontRightMotor, GenericEncodedSwerve backLeftMotor, GenericEncodedSwerve backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
@@ -82,62 +78,6 @@ public class SwervePosEstimator {
         visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true));
         apriltagIdSubscriber = table.getIntegerArrayTopic("apriltag_id").subscribe(new long[]{-1,-1});
         SmartDashboard.putData(field);
-        ScheduledExecutorService visionService = Executors.newScheduledThreadPool(2);
-        visionService.scheduleAtFixedRate(() -> {
-            if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                long[] tagData = apriltagIdSubscriber.get();
-                TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
-                for (TimestampedDoubleArray measurement : queue){
-                    if (validAprilTagPose(measurement)){
-                        double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
-                        visionPoses.add(new VisionMeasurement(measurement, Apriltag.of((int) tagData[0]), latencyInSec));
-                    }
-                }
-            }
-        },0,10, TimeUnit.MILLISECONDS);
-        visionService.scheduleAtFixedRate(() -> {
-            if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                while (visionPoses.size() >= 2){
-                    VisionMeasurement m1 = visionPoses.poll();
-                    VisionMeasurement m2 = visionPoses.poll();
-                    Optional<Pose2d> odomPoseAtVis1;
-                    Optional<Pose2d> odomPoseAtVis2;
-                    Pose2d vision1Pose;
-                    Pose2d vision2Pose;
-                    if (m1 == null || m2 == null){
-                        return;
-                    }
-                    poseUpdateLock.lock();
-                    try {
-                        odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
-                        odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
-                    }finally {
-                        poseUpdateLock.unlock();
-                    }
-                    if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
-                        return;
-                    }
-                    vision1Pose = getVisionPose(m1.measurement, m1.tag);
-                    vision2Pose = getVisionPose(m2.measurement, m2.tag);
-
-                    double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
-
-                    double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
-
-                    double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
-                    SmartDashboard.putNumber("TEST", diff);
-                    if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
-                        poseUpdateLock.lock();
-                        try {
-                            poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
-                            poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
-                        } finally {
-                            poseUpdateLock.unlock();
-                        }
-                    }
-                }
-            }
-        },0,20, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -146,6 +86,44 @@ public class SwervePosEstimator {
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
     public void updatePosition(double gyroValueDeg){
+        if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
+            long[] tagData = apriltagIdSubscriber.get();
+            TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
+            for (TimestampedDoubleArray measurement : queue){
+                if (validAprilTagPose(measurement)){
+                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
+                    visionPoses.add(new VisionMeasurement(measurement, Apriltag.of((int) tagData[0]), latencyInSec));
+                }
+            }
+            while (visionPoses.size() >= 2){
+                VisionMeasurement m1 = visionPoses.poll();
+                VisionMeasurement m2 = visionPoses.poll();
+                Optional<Pose2d> odomPoseAtVis1;
+                Optional<Pose2d> odomPoseAtVis2;
+                Pose2d vision1Pose;
+                Pose2d vision2Pose;
+                if (m1 == null || m2 == null){
+                    return;
+                }
+                odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
+                odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
+                if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
+                    return;
+                }
+                vision1Pose = getVisionPose(m1.measurement, m1.tag);
+                vision2Pose = getVisionPose(m2.measurement, m2.tag);
+
+                double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
+
+                double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
+
+                double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
+                if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
+                    poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
+                    poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
+                }
+            }
+        }
         if (!Robot.getMode().equals(RobotMode.DISABLED)){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
@@ -154,13 +132,8 @@ public class SwervePosEstimator {
                     backLeftMotor.getPosition(),
                     backRightMotor.getPosition(),
             };
-            poseUpdateLock.lock();
-            try {
-                estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
-                robotPoses.addSample(Timer.getFPGATimestamp(), estimatedPose.get());
-            } finally {
-                poseUpdateLock.unlock();
-            }
+            estimatedPose.set(poseEstimator.update(gyroAngle, modulePositions));
+            robotPoses.addSample(Timer.getFPGATimestamp(), estimatedPose.get());
         }
         field.setRobotPose(estimatedPose.get());
     }
@@ -197,19 +170,14 @@ public class SwervePosEstimator {
      * @see SwerveDrivePoseEstimator#resetPosition(Rotation2d, SwerveModulePosition[], Pose2d)
      */
     public void resetOdometry(double radians, Translation2d translation2d){
-        poseUpdateLock.lock();
-        try {
-            this.poseEstimator.resetPosition(new Rotation2d(radians),
-                    new SwerveModulePosition[]{
-                            frontLeftMotor.getPosition(),
-                            frontRightMotor.getPosition(),
-                            backLeftMotor.getPosition(),
-                            backRightMotor.getPosition(),
-                    }, new Pose2d(translation2d, new Rotation2d(radians)));
-            estimatedPose.set(new Pose2d(translation2d, new Rotation2d(radians)));
-        } finally {
-            poseUpdateLock.unlock();
-        }
+        this.poseEstimator.resetPosition(new Rotation2d(radians),
+                new SwerveModulePosition[]{
+                        frontLeftMotor.getPosition(),
+                        frontRightMotor.getPosition(),
+                        backLeftMotor.getPosition(),
+                        backRightMotor.getPosition(),
+                }, new Pose2d(translation2d, new Rotation2d(radians)));
+        estimatedPose.set(new Pose2d(translation2d, new Rotation2d(radians)));
     }
     public Pose2d getEstimatedPose(){
         return estimatedPose.get();
