@@ -21,6 +21,7 @@ import frc.robot.swervev2.components.GenericEncodedSwerve;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
 import frc.robot.utils.RobotMode;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
 

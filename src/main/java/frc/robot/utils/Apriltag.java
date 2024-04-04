@@ -45,7 +45,17 @@ public enum Apriltag {
     public Translation3d getPose(){
         return new Translation3d(x,y,z);
     }
+
+    /**
+     * Get the position of an AprilTag based on the tag ID (1-16)
+     * @param num
+     * @return AprilTag
+     */
     public static Apriltag of(int num){
-        return values()[num];
+        if (num <= 0){
+            return values()[0];
+        }
+        // Index -1 to translate to 0-indexed enum
+        return values()[num-1];
     }
 }

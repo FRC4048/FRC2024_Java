@@ -13,10 +13,12 @@ public class RaiseDeployer extends Command {
     private Timer timer = new Timer();
     private final double MOTOR_RUN_TIME = Constants.DEPLOYER_LOWER_TIMEOUT;
     private final TimeoutCounter timeoutCounter;
+    private final LightStrip lightStrip;
 
     public RaiseDeployer(Deployer deployer, LightStrip lightStrip) {
         this.deployer = deployer;
         this.timeoutCounter = new TimeoutCounter("Raise Deployer", lightStrip);
+        this.lightStrip = lightStrip;
         addRequirements(deployer);
     }
 
