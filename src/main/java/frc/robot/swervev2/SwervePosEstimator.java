@@ -185,6 +185,7 @@ public class SwervePosEstimator {
         Rotation2d facingAngle = new Rotation2d(Math.atan(slope));
         Transform2d camTransform;
         double visionCentricAngle = (estPose.getRotation().getDegrees() + Math.PI) % 360;
+        //this would be used if we had another camera that was mounted 180 degrees from current camera
         if (Math.abs(facingAngle.getDegrees() - visionCentricAngle) < 90){
             camTransform = cameraOneTransform;
         } else {
