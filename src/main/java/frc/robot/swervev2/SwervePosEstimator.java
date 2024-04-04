@@ -1,6 +1,5 @@
 package frc.robot.swervev2;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -11,7 +10,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.Timer;
@@ -99,38 +97,55 @@ public class SwervePosEstimator {
         },0,10, TimeUnit.MILLISECONDS);
         visionService.scheduleAtFixedRate(() -> {
             if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-                while (visionPoses.size() >= 2){
+                while (visionPoses.size() >= 3){
                     VisionMeasurement m1 = visionPoses.poll();
                     VisionMeasurement m2 = visionPoses.poll();
+                    VisionMeasurement m3 = visionPoses.poll();
                     Optional<Pose2d> odomPoseAtVis1;
                     Optional<Pose2d> odomPoseAtVis2;
+                    Optional<Pose2d> odomPoseAtVis3;
                     Pose2d vision1Pose;
                     Pose2d vision2Pose;
-                    if (m1 == null || m2 == null){
+                    Pose2d vision3Pose;
+                    if (m1 == null || m2 == null || m3 == null){
                         return;
                     }
                     poseUpdateLock.lock();
                     try {
                         odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement);
                         odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement);
+                        odomPoseAtVis3 = robotPoses.getSample(m3.timeOfMeasurement);
                     }finally {
                         poseUpdateLock.unlock();
                     }
-                    if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty()){
+                    if (odomPoseAtVis1.isEmpty() || odomPoseAtVis2.isEmpty() || odomPoseAtVis3.isEmpty()){
                         return;
                     }
                     vision1Pose = getVisionPose(m1.measurement, m1.tag);
                     vision2Pose = getVisionPose(m2.measurement, m2.tag);
-                    double odomDiff = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
-                    double visionDiff = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
-                    SmartDashboard.putNumber("ODOM DIFF", odomDiff);
-                    SmartDashboard.putNumber("VISION DIFF", visionDiff);
-                    if (Math.abs(odomDiff - visionDiff) <= 0.5){
+                    vision3Pose = getVisionPose(m3.measurement, m3.tag);
+
+                    double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
+                    double odomDiff2To3 = odomPoseAtVis2.get().getTranslation().getDistance(odomPoseAtVis3.get().getTranslation());
+                    double odomDiff3To1 = odomPoseAtVis3.get().getTranslation().getDistance(odomPoseAtVis1.get().getTranslation());
+
+                    double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
+                    double visionDiff2To3 = vision2Pose.getTranslation().getDistance(vision3Pose.getTranslation());
+                    double visionDiff3To1 = vision3Pose.getTranslation().getDistance(vision1Pose.getTranslation());
+
+                    double diff1To2 = Math.abs(odomDiff1To2 - visionDiff1To2);
+                    double diff2To3 =  Math.abs(odomDiff2To3 - visionDiff2To3);
+                    double diff3To1 = Math.abs(odomDiff3To1 - visionDiff3To1);
+                    double diff = Math.max(Math.max(diff1To2, diff2To3), diff3To1);
+
+                    SmartDashboard.putNumber("DIFF DIFF", diff);
+                    if (Math.abs(diff) <= 0.2){
                         poseUpdateLock.lock();
                         try {
                             poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
                             poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
-                        }finally {
+                            poseEstimator.addVisionMeasurement(vision3Pose, m3.timeOfMeasurement);
+                        } finally {
                             poseUpdateLock.unlock();
                         }
                     }
@@ -139,30 +154,12 @@ public class SwervePosEstimator {
         },0,20, TimeUnit.MILLISECONDS);
     }
 
-    //TODO make robot pose
-    private Matrix<N3, N1> calcStdDev(Apriltag tag) {
-        double distance = new Translation2d(tag.getX(),tag.getY()).getDistance(getEstimatedPose().getTranslation());
-        // dist vs Std
-        // (0.01, 0.02)
-        // (1.5, 0.05)
-        // (2.1, 0.2)
-        // (3, 1.5)
-        SmartDashboard.putNumber("DIST", distance);
-        double stdXY = 0.00472 * Math.exp(1.91 * distance);
-        Vector<N3> fill = VecBuilder.fill(stdXY, stdXY, 0.5);
-        SmartDashboard.putNumber("VARIANCE", stdXY);
-        return fill;
-    }
-
     /**
      * updates odometry, should be called in periodic
      * @param gyroValueDeg current gyro value (angle of robot)
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
     public void updatePosition(double gyroValueDeg){
-        synchronized (poseEstimator){
-            estimatedPose.set(poseEstimator.getEstimatedPosition());
-        }
         if (!Robot.getMode().equals(RobotMode.DISABLED)){
             Rotation2d gyroAngle = new Rotation2d(Math.toRadians(gyroValueDeg));
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[] {
@@ -196,7 +193,7 @@ public class SwervePosEstimator {
         }
         return new Pose2d(measurement.value[0],
                 measurement.value[1],
-                Rotation2d.fromDegrees(measurement.value[2]))
+                estimatedPose.get().getRotation())
                 .plus(camTransform);
     }
     private Pose2d getVisionPose(TimestampedDoubleArray measurement){
@@ -213,14 +210,18 @@ public class SwervePosEstimator {
      * @see SwerveDrivePoseEstimator#resetPosition(Rotation2d, SwerveModulePosition[], Pose2d)
      */
     public void resetOdometry(double radians, Translation2d translation2d){
-        synchronized (poseEstimator){
+        poseUpdateLock.lock();
+        try {
             this.poseEstimator.resetPosition(new Rotation2d(radians),
-                    new SwerveModulePosition[] {
+                    new SwerveModulePosition[]{
                             frontLeftMotor.getPosition(),
                             frontRightMotor.getPosition(),
                             backLeftMotor.getPosition(),
                             backRightMotor.getPosition(),
-                    },new Pose2d(translation2d,new Rotation2d(radians)));
+                    }, new Pose2d(translation2d, new Rotation2d(radians)));
+            estimatedPose.set(new Pose2d(translation2d, new Rotation2d(radians)));
+        } finally {
+            poseUpdateLock.unlock();
         }
     }
     public Pose2d getEstimatedPose(){
