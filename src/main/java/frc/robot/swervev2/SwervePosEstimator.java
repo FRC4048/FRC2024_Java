@@ -21,6 +21,7 @@ import frc.robot.swervev2.components.GenericEncodedSwerve;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
 import frc.robot.utils.RobotMode;
+import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
 
@@ -118,6 +119,7 @@ public class SwervePosEstimator {
                 double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
 
                 double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
+                Logger.logDouble("/robot/odom/diff", diff, Constants.ENABLE_LOGGING);
                 if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
                     poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement);
                     poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement);
