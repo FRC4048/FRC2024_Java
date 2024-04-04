@@ -138,7 +138,6 @@ public class SwervePosEstimator {
                     double diff3To1 = Math.abs(odomDiff3To1 - visionDiff3To1);
                     double diff = Math.max(Math.max(diff1To2, diff2To3), diff3To1);
 
-                    SmartDashboard.putNumber("DIFF DIFF", diff);
                     if (Math.abs(diff) <= 0.2){
                         poseUpdateLock.lock();
                         try {
