@@ -9,7 +9,7 @@ public class GameConstants {
     public static final double AUTO_SPOOL_AND_SHOOT_TIME = 4;
     //DEBUGS
     public static final boolean SHOOTER_DEBUG = false;
-    public static final boolean RAMP_DEBUG = false;
+    public static final boolean RAMP_DEBUG = true;
     public static final boolean SWERVE_DEBUG = false;
     public static final boolean FEEDER_DEBUG = false;
     public static final boolean CLIMBER_DEBUG = false;
@@ -48,8 +48,9 @@ public class GameConstants {
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
     public static final double RAMP_POS_STOW = 0.5;
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
-    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
+    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.4; //when about 44" away from the speaker
     public static final double RAMP_POS_SHOOT_AMP = 7.0;
+    public static final double RAMP_POS_SKIP = 18.0;
 
     //SERVO
     public static final int RIGHT_SERVO_ENGAGED = 0;
