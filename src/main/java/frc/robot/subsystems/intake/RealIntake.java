@@ -45,6 +45,8 @@ public class RealIntake implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeInputs inputs) {
+        inputs.intakeMotor1Speed = intakeMotor1.get();
+        inputs.intakeMotor2Speed = intakeMotor2.get();
         inputs.intakeMotor1Current = intakeMotor1.getStatorCurrent();
     }
 }
