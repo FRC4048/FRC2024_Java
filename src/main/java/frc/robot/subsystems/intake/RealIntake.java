@@ -1,18 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-public class IntakeSubsystem extends SubsystemBase {
-    private final String baseLogName = "/robot/intake/";
+public class RealIntake implements IntakeIO {
     private final WPI_TalonSRX intakeMotor1;
     private final WPI_TalonSRX intakeMotor2;
 
-    public IntakeSubsystem() {
+    public RealIntake() {
         this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
         this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
+        configureMotor();
     }
     public void configureMotor(){
         intakeMotor1.setInverted(false);
@@ -33,36 +31,22 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor1.setStatusFramePeriod(2,100);
         intakeMotor1.setStatusFramePeriod(3,100);
     }
-    
-    public void setMotorSpeed(double motor1Speed, double motor2Speed) {
-        intakeMotor1.set(motor1Speed);
-        intakeMotor2.set(motor2Speed);
-    }
-
-    public double getMotor1Speed() {
-        return intakeMotor1.get();
-    }
-
-    public double getMotor2Speed() {
-        return intakeMotor2.get();
-    }
-
-    public void stopMotors() {
-        intakeMotor1.set(0);
-        intakeMotor2.set(0);
+    @Override
+    public void setMotorSpeeds(double m1Speed, double m2Speed) {
+        intakeMotor1.set(m1Speed);
+        intakeMotor2.set(m2Speed);
     }
 
     @Override
-    public void periodic() {
-        if (Constants.INTAKE_DEBUG){
-            SmartShuffleboard.put("Intake", "Intake Motor 1 Speed", getMotor1Speed());
-            SmartShuffleboard.put("Intake", "Intake Motor 2 Speed", getMotor2Speed());
-            SmartShuffleboard.put("Intake", "Intake Motor 1 current", intakeMotor1.getStatorCurrent());
-            SmartShuffleboard.put("Intake", "Intake Motor 2 current", intakeMotor2.getStatorCurrent());
-        }
+    public void stopMotors() {
+        intakeMotor1.stopMotor();
+        intakeMotor2.stopMotor();
     }
 
-    public double getMotor1StatorCurrent() {
-        return intakeMotor1.getStatorCurrent();
+    @Override
+    public void updateInputs(IntakeInputs inputs) {
+        inputs.intakeMotor1Speed = intakeMotor1.get();
+        inputs.intakeMotor2Speed = intakeMotor2.get();
+        inputs.intakeMotor1Current = intakeMotor1.getStatorCurrent();
     }
 }

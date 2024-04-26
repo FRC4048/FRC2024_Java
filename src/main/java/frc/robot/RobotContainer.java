@@ -49,7 +49,15 @@ import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
@@ -82,7 +90,7 @@ public class RobotContainer {
     private final Ramp ramp = new Ramp();
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();
-    private final IntakeSubsystem intake = new IntakeSubsystem();
+    private final Intake intake = new Intake();
     private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
@@ -318,7 +326,7 @@ public class RobotContainer {
         return autoChooser;
     }
 
-    public IntakeSubsystem getIntake() {
+    public Intake getIntake() {
         return intake;
     }
 

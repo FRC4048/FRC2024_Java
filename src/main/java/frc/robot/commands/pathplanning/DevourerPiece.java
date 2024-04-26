@@ -10,11 +10,16 @@ import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.DriveMode;
 
 public class DevourerPiece extends SequentialCommandGroup {
-    public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, IntakeSubsystem intake, Feeder feeder, Deployer deployer, LightStrip lightStrip) {
+    public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, Intake intake, Feeder feeder, Deployer deployer, LightStrip lightStrip) {
         super(
                 new ParallelRaceGroup(
                         new SequentialCommandGroup(

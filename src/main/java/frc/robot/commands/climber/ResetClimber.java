@@ -3,8 +3,8 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.LightStrip;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class ResetClimber extends Command {

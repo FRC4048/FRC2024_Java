@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class ShootAndDrop extends ParallelDeadlineGroup {
     public ShootAndDrop(Shooter shooter, Feeder feeder, Deployer deployer, LightStrip lightStrip) {

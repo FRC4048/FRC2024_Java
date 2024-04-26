@@ -1,8 +1,7 @@
 package frc.robot.commands.feeder;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.feeder.Feeder;
 
 public class StopFeeder extends Command {
     private final Feeder feeder;

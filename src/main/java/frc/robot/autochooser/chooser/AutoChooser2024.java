@@ -8,14 +8,19 @@ import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
 import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 
 import java.util.Map;
 
 public class AutoChooser2024 extends Nt4AutoValidationChooser {
     private final Map<AutoEvent, Command> commandMap;
 
-    public AutoChooser2024(IntakeSubsystem intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
+    public AutoChooser2024(Intake intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
         commandMap = Map.ofEntries(
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand()),

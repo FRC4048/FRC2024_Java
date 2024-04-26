@@ -7,7 +7,11 @@ import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.SequentialLoggingCommand;
 
@@ -21,7 +25,7 @@ public class StartIntakeAndFeeder extends SequentialLoggingCommand {
         super.execute();
     }
 
-    public StartIntakeAndFeeder(Feeder feeder, IntakeSubsystem intake, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
+    public StartIntakeAndFeeder(Feeder feeder, Intake intake, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
         super("StartIntakeAndFeeder",
                 CommandUtil.parallel("First",
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),

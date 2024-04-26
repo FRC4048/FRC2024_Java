@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 
 public class SpoolExitAndShootAtSpeed extends ParallelCommandGroup {
     public SpoolExitAndShootAtSpeed(Shooter shooter, Feeder feeder, LightStrip lightStrip) {

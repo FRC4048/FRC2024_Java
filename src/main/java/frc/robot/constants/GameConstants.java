@@ -52,10 +52,10 @@ public class GameConstants {
     public static final double RAMP_POS_SHOOT_AMP = 7.0;
 
     //SERVO
-    public static final int RIGHT_SERVO_ENGAGED = 0;
-    public static final int RIGHT_SERVO_DISENGAGED = 180;
-    public static final int LEFT_SERVO_ENGAGED = 0;
-    public static final int LEFT_SERVO_DISENGAGED = 180;
+    public static final int RIGHT_SERVO_ENGAGED = 180;
+    public static final int RIGHT_SERVO_DISENGAGED = 0;
+    public static final int LEFT_SERVO_ENGAGED = 180;
+    public static final int LEFT_SERVO_DISENGAGED = 0;
 
     //SHOOTER
     public static final double SHOOTER_MOTOR_SPEED_TRESHOLD = 100; //TODO: Refine This Number

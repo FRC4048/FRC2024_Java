@@ -3,8 +3,8 @@ package frc.robot.commands.deployer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.LightStrip;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.TimeoutCounter;
 
 public class LowerDeployer extends Command {
