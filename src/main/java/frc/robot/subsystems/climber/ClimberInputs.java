@@ -9,6 +9,8 @@ public class ClimberInputs implements LoggableInputs {
     public double rightServoSetpoint;
     public double leftClimberEnc;
     public double rightClimberEnc;
+    public double leftTargetSpeed;
+    public double rightTargetSpeed;
     public boolean atLeftClimberLimit;
     public boolean atRightClimberLimit;
 
@@ -18,6 +20,8 @@ public class ClimberInputs implements LoggableInputs {
         table.put("rightServoSetpoint", rightServoSetpoint);
         table.put("leftClimberEnc", leftClimberEnc);
         table.put("rightClimberEnc", rightClimberEnc);
+        table.put("leftTargetSpeed", leftTargetSpeed);
+        table.put("rightTargetSpeed", rightTargetSpeed);
         table.put("atLeftClimberLimit", atLeftClimberLimit);
         table.put("atRightClimberLimit", atRightClimberLimit);
     }
@@ -28,6 +32,8 @@ public class ClimberInputs implements LoggableInputs {
         rightServoSetpoint = table.get("rightServoSetpoint", rightServoSetpoint);
         leftClimberEnc = table.get("leftClimberEnc", leftClimberEnc);
         rightClimberEnc = table.get("rightClimberEnc", rightClimberEnc);
+        leftTargetSpeed = table.get("leftTargetSpeed", leftTargetSpeed);
+        rightTargetSpeed = table.get("rightTargetSpeed", rightTargetSpeed);
         atLeftClimberLimit = table.get("atLeftClimberLimit", atLeftClimberLimit);
         atRightClimberLimit = table.get("atRightClimberLimit", atRightClimberLimit);
     }

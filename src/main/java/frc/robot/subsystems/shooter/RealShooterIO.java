@@ -57,5 +57,7 @@ public class RealShooterIO implements ShooterIO {
     public void updateInputs(ShooterInputs inputs) {
         inputs.shooterMotorLeftRPM = neoPidMotorLeft.getCurrentSpeed();
         inputs.shooterMotorRightRPM = neoPidMotorRight.getCurrentSpeed();
+        inputs.shooterMotorLeftTargetRPM = neoPidMotorLeft.getSetSpeed();
+        inputs.shooterMotorRightTargetRPM = neoPidMotorRight.getSetSpeed();
     }
 }
