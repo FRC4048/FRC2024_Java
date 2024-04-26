@@ -21,6 +21,7 @@ import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
@@ -37,27 +38,27 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         if (Constants.ENABLE_LOGGING) {
-            org.littletonrobotics.junction.Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
-            org.littletonrobotics.junction.Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+            Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
+            Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
             if (isReal()) {
-                org.littletonrobotics.junction.Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+                Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
             } else {
                 setUseTiming(false); // Run as fast as possible
                 String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-                org.littletonrobotics.junction.Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-                org.littletonrobotics.junction.Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+                Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
             }
-            org.littletonrobotics.junction.Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+            Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
             DataLogManager.start();
             // Log active commands
             CommandScheduler.getInstance().onCommandInitialize(command -> {
-                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), true);
+                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), true);
             });
             CommandScheduler.getInstance().onCommandFinish(command -> {
-                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
             });
             CommandScheduler.getInstance().onCommandInterrupt(command -> {
-                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
             });
         }
         diagnostics = new Diagnostics();
