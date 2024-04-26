@@ -14,14 +14,6 @@ public class Intake extends SubsystemBase {
         intakeIO.setMotorSpeeds(motor1Speed, motor2Speed);
     }
 
-    public double getMotor1Speed() {
-        return inputs.intakeMotor1Speed;
-    }
-
-    public double getMotor2Speed() {
-        return inputs.intakeMotor2Speed;
-    }
-
     public void stopMotors() {
         intakeIO.stopMotors();
     }
