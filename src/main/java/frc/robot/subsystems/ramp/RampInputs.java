@@ -10,7 +10,6 @@ public class RampInputs implements LoggableInputs {
     public double rampD;
     public double rampFF;
     public double rampTargetPos;
-    public double rampSpeed;
     public boolean fwdTripped;
     public boolean revTripped;
     public double encoderPosition;
@@ -22,7 +21,6 @@ public class RampInputs implements LoggableInputs {
         table.put("rampD", rampD);
         table.put("rampFF", rampFF);
         table.put("rampTargetPos", rampTargetPos);
-        table.put("rampSpeed", rampSpeed);
         table.put("encoderPosition", encoderPosition);
         table.put("fwdTripped", fwdTripped);
         table.put("revTripped", revTripped);
@@ -35,7 +33,6 @@ public class RampInputs implements LoggableInputs {
         rampD = table.get("rampD", rampD);
         rampFF = table.get("rampFF", rampFF);
         rampTargetPos = table.get("rampTargetPos", rampTargetPos);
-        rampSpeed = table.get("rampSpeed", rampSpeed);
         encoderPosition = table.get("encoderPosition", encoderPosition);
         fwdTripped = table.get("fwdTripped", fwdTripped);
         revTripped = table.get("revTripped", revTripped);

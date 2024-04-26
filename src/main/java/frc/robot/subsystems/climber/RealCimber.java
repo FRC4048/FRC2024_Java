@@ -72,16 +72,11 @@ public class RealCimber implements ClimberIO {
     }
 
     @Override
-    public void engageRatchet() {
-        leftServo.set(Constants.LEFT_SERVO_ENGAGED);
-        rightServo.set(Constants.RIGHT_SERVO_ENGAGED);
+    public void setRatchetPos(double servo1Pos, double servo2Pos) {
+        leftServo.setPosition(servo1Pos);
+        rightServo.setPosition(servo2Pos);
     }
 
-    @Override
-    public void disengageRatchet() {
-        leftServo.set(Constants.LEFT_SERVO_DISENGAGED);
-        rightServo.set(Constants.RIGHT_SERVO_DISENGAGED);
-    }
 
     @Override
     public void updateInputs(ClimberInputs inputs) {

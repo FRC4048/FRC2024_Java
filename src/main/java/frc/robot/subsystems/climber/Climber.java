@@ -48,11 +48,11 @@ public class Climber extends SubsystemBase {
     }
 
     public void engageRatchet() {
-        climberIO.engageRatchet();
+        climberIO.setRatchetPos(Constants.LEFT_SERVO_ENGAGED, Constants.RIGHT_SERVO_ENGAGED);
     }
 
     public void disengageRatchet() {
-        climberIO.disengageRatchet();
+        climberIO.setRatchetPos(Constants.LEFT_SERVO_DISENGAGED, Constants.RIGHT_SERVO_DISENGAGED);
     }
 
     public boolean isLeftReverseLimitSwitchPressed() {

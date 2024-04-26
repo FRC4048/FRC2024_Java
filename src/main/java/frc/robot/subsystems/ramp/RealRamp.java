@@ -78,7 +78,6 @@ public class RealRamp implements RampIO {
         inputs.fwdTripped = neoPidMotor.forwardLimitSwitchIsPressed();
         inputs.revTripped = neoPidMotor.reversedLimitSwitchIsPressed();
         inputs.rampTargetPos = neoPidMotor.getSetPosition();
-        inputs.rampSpeed = neoPidMotor.getNeoMotor().get();
         inputs.encoderPosition = neoPidMotor.getCurrentPosition();
     }
 }
