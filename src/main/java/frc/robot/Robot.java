@@ -71,7 +71,7 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
 
-//        Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
+//        Logger.logDouble("/robot/loopTime", time);
 //        if (ledEndgameTimer.hasElapsed(130)){
 //            robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
 //        }

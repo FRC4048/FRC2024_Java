@@ -23,7 +23,6 @@ import frc.robot.utils.PathPlannerUtils;
 import frc.robot.utils.ThreadedGyro;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
-import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 
@@ -75,9 +74,9 @@ public class SwerveDrivetrain extends SubsystemBase {
         totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
         totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
         totalCurrent = totalSteerCurrent + totalDriveCurrent;
-        Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
-        Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
+//        Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent);
+//        Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent);
+//        Logger.logDouble("/Robot/TotalCurrent", totalCurrent);
         if (Constants.PATHPLANNER_DEBUG){
             SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
             SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
