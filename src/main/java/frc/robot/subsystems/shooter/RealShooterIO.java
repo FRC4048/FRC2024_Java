@@ -5,11 +5,11 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.utils.NeoPidMotor;
 
-public class RealShooter implements ShooterIO {
+public class RealShooterIO implements ShooterIO {
     private final NeoPidMotor neoPidMotorLeft;
     private final NeoPidMotor neoPidMotorRight;
 
-    public RealShooter() {
+    public RealShooterIO() {
         neoPidMotorLeft = new NeoPidMotor(Constants.SHOOTER_MOTOR_LEFT);
         neoPidMotorRight = new NeoPidMotor(Constants.SHOOTER_MOTOR_RIGHT);
         configureMotor();

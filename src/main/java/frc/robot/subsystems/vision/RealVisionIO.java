@@ -13,12 +13,12 @@ import frc.robot.utils.diag.DiagLimelight;
 
 import java.util.Map;
 
-public class RealVision implements VisionIO {
+public class RealVisionIO implements VisionIO {
     private final NetworkTableEntry tv;
     private final NetworkTableEntry tx;
     private final NetworkTableEntry ty;
 
-    public RealVision() {
+    public RealVisionIO() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         tv = table.getEntry("tv");
         tx = table.getEntry("tx");

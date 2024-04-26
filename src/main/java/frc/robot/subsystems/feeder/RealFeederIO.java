@@ -11,12 +11,12 @@ import frc.robot.utils.ColorSensor;
 import frc.robot.utils.diag.DiagColorSensor;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
 
-public class RealFeeder implements FeederIO {
+public class RealFeederIO implements FeederIO {
     private final WPI_TalonSRX feederMotor;
     private final ColorSensor colorSensor;
     private boolean areBeamsEnabled;
 
-    public RealFeeder() {
+    public RealFeederIO() {
         this.feederMotor = new WPI_TalonSRX(Constants.FEEDER_MOTOR_ID);
         configureMotor();
         I2C.Port i2cPort = I2C.Port.kMXP;

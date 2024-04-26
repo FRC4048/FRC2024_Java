@@ -51,12 +51,28 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.MockClimberIO;
+import frc.robot.subsystems.climber.RealCimberIO;
 import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.deployer.MockDeployerIO;
+import frc.robot.subsystems.deployer.RealDeployerIO;
 import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.feeder.MockFeederIO;
+import frc.robot.subsystems.feeder.RealFeederIO;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
 import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.lightstrip.MockLightStripIO;
+import frc.robot.subsystems.lightstrip.RealLightStripIO;
+import frc.robot.subsystems.ramp.MockRampIO;
 import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.subsystems.ramp.RealRampIO;
+import frc.robot.subsystems.shooter.MockShooterIO;
+import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.MockVisionIO;
+import frc.robot.subsystems.vision.RealVisionIO;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
@@ -84,14 +100,14 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
     private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
     private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
-    private final Shooter shooter = new Shooter();
-    private final Deployer deployer = new Deployer();
-    private final Feeder feeder = new Feeder();
-    private final Ramp ramp = new Ramp();
-    private final Climber climber = new Climber();
-    private final Vision vision = new Vision();
-    private final Intake intake = new Intake();
-    private final LightStrip lightStrip = new LightStrip();
+    private final Shooter shooter;
+    private final Deployer deployer;
+    private final Feeder feeder;
+    private final Ramp ramp;
+    private final Climber climber;
+    private final Vision vision;
+    private final Intake intake;
+    private final LightStrip lightStrip;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
@@ -100,6 +116,25 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        if (Robot.isReal()){
+            shooter = new Shooter(new RealShooterIO());
+            deployer = new Deployer(new RealDeployerIO());
+            feeder = new Feeder(new RealFeederIO());
+            ramp = new Ramp(new RealRampIO());
+            climber = new Climber(new RealCimberIO());
+            vision = new Vision(new RealVisionIO());
+            intake = new Intake(new RealIntakeIO());
+            lightStrip = new LightStrip(new RealLightStripIO());
+        }else{
+            shooter = new Shooter(new MockShooterIO());
+            deployer = new Deployer(new MockDeployerIO());
+            feeder = new Feeder(new MockFeederIO());
+            ramp = new Ramp(new MockRampIO());
+            climber = new Climber(new MockClimberIO());
+            vision = new Vision(new MockVisionIO());
+            intake = new Intake(new MockIntakeIO());
+            lightStrip = new LightStrip(new MockLightStripIO());
+        }
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlanning();

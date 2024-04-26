@@ -7,8 +7,8 @@ public class Climber extends SubsystemBase {
     private final ClimberIO climberIO;
     private final ClimberInputs inputs = new ClimberInputs();
 
-    public Climber() {
-        this.climberIO = new RealCimber();
+    public Climber(ClimberIO io) {
+        this.climberIO = io;
     }
 
     /**

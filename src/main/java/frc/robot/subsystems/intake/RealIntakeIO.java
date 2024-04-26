@@ -3,11 +3,11 @@ package frc.robot.subsystems.intake;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.constants.Constants;
 
-public class RealIntake implements IntakeIO {
+public class RealIntakeIO implements IntakeIO {
     private final WPI_TalonSRX intakeMotor1;
     private final WPI_TalonSRX intakeMotor2;
 
-    public RealIntake() {
+    public RealIntakeIO() {
         this.intakeMotor1 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_1_ID);
         this.intakeMotor2 = new WPI_TalonSRX(Constants.INTAKE_MOTOR_2_ID);
         configureMotor();

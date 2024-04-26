@@ -15,8 +15,8 @@ public class Ramp extends SubsystemBase {
     private final RampInputs inputs = new RampInputs();
     private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
 
-    public Ramp() {
-        rampIO = new RealRamp();
+    public Ramp(RampIO io) {
+        rampIO = io;
         rampAngleMap.put(1.49352, 3.0);
         rampAngleMap.put(1.806956, 5.0);
         rampAngleMap.put(2.3876, 7.56);

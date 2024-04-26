@@ -8,8 +8,8 @@ public class Feeder extends SubsystemBase {
     private final FeederIO feederIO;
     private final FeederInputs inputs = new FeederInputs();
 
-    public Feeder() {
-        this.feederIO = new RealFeeder();
+    public Feeder(FeederIO io) {
+        this.feederIO = io;
     }
 
     public void setFeederMotorSpeed(double speed) {

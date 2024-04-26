@@ -9,7 +9,7 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.DiagSparkMaxLimit;
 
-public class RealCimber implements ClimberIO {
+public class RealCimberIO implements ClimberIO {
     private final CANSparkMax climberLeft;
     private final CANSparkMax climberRight; //invert this motor
     private final Servo leftServo;
@@ -19,7 +19,7 @@ public class RealCimber implements ClimberIO {
     private final SparkLimitSwitch rightExtendedLimit;
     private final SparkLimitSwitch leftExtendedLimit;
 
-    public RealCimber() {
+    public RealCimberIO() {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
         this.climberRight = new CANSparkMax(Constants.CLIMBER_RIGHT, CANSparkMax.MotorType.kBrushless);
         this.leftServo = new Servo(Constants.LEFT_SERVO_ID);

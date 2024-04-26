@@ -3,7 +3,7 @@ package frc.robot.subsystems.ramp;
 import frc.robot.constants.Constants;
 import frc.robot.utils.NeoPidMotor;
 
-public class RealRamp implements RampIO {
+public class RealRampIO implements RampIO {
 
     private final NeoPidMotor neoPidMotor;
     private double p;
@@ -11,7 +11,7 @@ public class RealRamp implements RampIO {
     private double d;
     private double ff;
 
-    public RealRamp() {
+    public RealRampIO() {
         neoPidMotor = new NeoPidMotor(Constants.RAMP_ID);
         configureMotor();
         resetEncoder();

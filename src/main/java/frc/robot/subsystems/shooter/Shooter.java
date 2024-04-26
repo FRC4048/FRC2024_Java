@@ -8,8 +8,8 @@ public class Shooter extends SubsystemBase {
     private final ShooterIO shooterIO;
     private final ShooterInputs inputs = new ShooterInputs();
 
-    public Shooter() {
-        shooterIO = new RealShooter();
+    public Shooter(ShooterIO io) {
+        shooterIO = io;
     }
 
 

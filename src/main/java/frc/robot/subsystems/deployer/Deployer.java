@@ -6,8 +6,8 @@ public class Deployer extends SubsystemBase{
     private final DeployerIO deployerIO;
     private final DeployerInputs inputs = new DeployerInputs();
 
-    public Deployer() {
-        deployerIO = new RealDeployer();
+    public Deployer(DeployerIO io) {
+        deployerIO = io;
     }
 
     public void stop() {

@@ -6,8 +6,8 @@ public class Intake extends SubsystemBase {
     private final IntakeIO intakeIO;
     private final IntakeInputs inputs = new IntakeInputs();
 
-    public Intake() {
-        this.intakeIO = new RealIntake();
+    public Intake(IntakeIO io) {
+        this.intakeIO = io;
     }
 
     public void setMotorSpeed(double motor1Speed, double motor2Speed) {

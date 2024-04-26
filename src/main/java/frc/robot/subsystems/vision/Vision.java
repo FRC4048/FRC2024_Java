@@ -11,8 +11,8 @@ public class Vision extends SubsystemBase {
   private final VisionIO visionIO;
   private final VisionInputs inputs = new VisionInputs();
   
-  public Vision() {
-    visionIO = new RealVision();
+  public Vision(VisionIO io) {
+    visionIO = io;
   }
 
   /**

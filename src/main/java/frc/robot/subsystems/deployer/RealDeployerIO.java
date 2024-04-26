@@ -9,10 +9,10 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
 
-public class RealDeployer implements DeployerIO {
+public class RealDeployerIO implements DeployerIO {
     private final WPI_TalonSRX motor;
 
-    public RealDeployer() {
+    public RealDeployerIO() {
         motor = new WPI_TalonSRX(Constants.DEPLOYER_MOTOR_ID);
         configureMotor();
         Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxSwitch("Deployer", "Forward switch", motor, DiagTalonSrxSwitch.Direction.FORWARD));

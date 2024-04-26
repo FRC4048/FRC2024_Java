@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 public class LightStrip extends SubsystemBase {
-    private final LightstripIO lightstripIO;
+    private final LightStripIO lightstripIO;
     private final LightStripInputs inputs = new LightStripInputs();
     private final Map<BooleanSupplier, BlinkinPattern> predicateLightEvents = new HashMap<>();
 
-    public LightStrip() {
-        this.lightstripIO = new RealLightStrip();
+    public LightStrip(LightStripIO io) {
+        this.lightstripIO = io;
     }
 
     @Override

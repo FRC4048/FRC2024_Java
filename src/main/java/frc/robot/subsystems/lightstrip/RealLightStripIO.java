@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 
-public class RealLightStrip implements LightstripIO {
+public class RealLightStripIO implements LightStripIO {
 
     private final Spark colorSensorPort;
 
-    public RealLightStrip() {
+    public RealLightStripIO() {
         colorSensorPort = new Spark(Constants.LIGHTSTRIP_PORT);
     }
 
