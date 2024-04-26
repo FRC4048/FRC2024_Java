@@ -4,10 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
@@ -16,58 +18,60 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
-import frc.robot.utils.logging.CommandUtil;
-import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
     private double loopTime = 0;
     private double aliveTics = 0;
-    private Timer ledCycleTimer = new Timer();
-    private Timer ledEndgameTimer = new Timer();
+    private final Timer ledCycleTimer = new Timer();
+    private final Timer ledEndgameTimer = new Timer();
 
     private RobotContainer robotContainer;
-    private Command autoCommand;
 
     @Override
     public void robotInit() {
         if (Constants.ENABLE_LOGGING) {
-            org.littletonrobotics.junction.Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+            org.littletonrobotics.junction.Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
             org.littletonrobotics.junction.Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-
             if (isReal()) {
                 org.littletonrobotics.junction.Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
-                org.littletonrobotics.junction.Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-                new PowerDistribution(1, PowerDistribution.ModuleType.kRev); // Enables power distribution logging
             } else {
-//                setUseTiming(false); // Run as fast as possible
+                setUseTiming(false); // Run as fast as possible
                 String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
                 org.littletonrobotics.junction.Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
                 org.littletonrobotics.junction.Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
             }
-            // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the "Understanding Data Flow" page
             org.littletonrobotics.junction.Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
             DataLogManager.start();
-            DriverStation.startDataLog(DataLogManager.getLog(), false);
-            CommandScheduler.getInstance().onCommandInterrupt(command -> Logger.logInterruption(command.getName(), true));
+            // Log active commands
+            CommandScheduler.getInstance().onCommandInitialize(command -> {
+                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), true);
+            });
+            CommandScheduler.getInstance().onCommandFinish(command -> {
+                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+            });
+            CommandScheduler.getInstance().onCommandInterrupt(command -> {
+                org.littletonrobotics.junction.Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+            });
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
-        CommandUtil.logged(new WheelAlign(robotContainer.getDrivetrain())).schedule();
-        CommandUtil.logged(new ResetGyro(robotContainer.getDrivetrain(), 2)).schedule();
+        new WheelAlign(robotContainer.getDrivetrain()).schedule();
+        new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
-        Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
+
+//        Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
 //        if (ledEndgameTimer.hasElapsed(130)){
 //            robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
 //        }
@@ -107,8 +111,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip())).schedule();
-        CommandUtil.parallel("Reset Climber and Ramp", new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).schedule();
+        new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
+        new ParallelCommandGroup(new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).withName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }
 

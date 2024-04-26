@@ -1,5 +1,7 @@
 package frc.robot.commands.sequences;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SpoolIntake;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -12,22 +14,15 @@ import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.ramp.Ramp;
-import frc.robot.utils.logging.CommandUtil;
-import frc.robot.utils.logging.SequentialLoggingCommand;
 
 /**
  * Sequence to start intaking, this takes care of the lowering/raising the deployer,
  * as well as starting/stopping the intake and feeder.
  */
-public class StartIntakeAndFeeder extends SequentialLoggingCommand {
-    @Override
-    public void execute() {
-        super.execute();
-    }
+public class StartIntakeAndFeeder extends SequentialCommandGroup {
 
     public StartIntakeAndFeeder(Feeder feeder, Intake intake, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
-        super("StartIntakeAndFeeder",
-                CommandUtil.parallel("First",
+        super(new ParallelCommandGroup(
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new LowerDeployer(deployer, lightStrip),
                         new RampMoveAndWait(ramp,lightStrip ,() -> GameConstants.RAMP_POS_STOW)

@@ -13,7 +13,6 @@ import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
-import frc.robot.utils.logging.Logger;
 import frc.robot.utils.math.AngleUtils;
 import frc.robot.utils.math.PoseUtils;
 import frc.robot.utils.math.VelocityVector;
@@ -84,7 +83,7 @@ public class RampFollow extends Command {
             if (Constants.RAMP_DEBUG){
                 SmartDashboard.putNumber("DEST DIFF", threshold);
             }
-            Logger.logDouble("/robot/ramp/diffFromTarget", threshold, Constants.ENABLE_LOGGING);
+            org.littletonrobotics.junction.Logger.recordOutput("ramp/diffFromTarget", threshold);
             if (isInThresh){
                 lightStrip.setPattern(BlinkinPattern.VIOLET);
             } else {
