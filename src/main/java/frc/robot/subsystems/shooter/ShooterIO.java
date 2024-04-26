@@ -5,5 +5,5 @@ public interface ShooterIO {
     void stop();
     void setShooterLeftRPM(double rpm);
     void setShooterRightRPM(double rpm);
-    void updateInputs(ShooterInput input);
+    void updateInputs(ShooterInputs inputs);
 }

@@ -1,8 +1,8 @@
 package frc.robot.commands.ramp;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.Alignable;
 
 public class BoringRampFollow extends Command {

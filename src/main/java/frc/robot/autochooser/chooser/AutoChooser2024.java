@@ -8,11 +8,11 @@ import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
 import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
 
 import java.util.Map;

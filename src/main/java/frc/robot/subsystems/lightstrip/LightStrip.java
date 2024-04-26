@@ -9,7 +9,7 @@ import java.util.function.BooleanSupplier;
 
 public class LightStrip extends SubsystemBase {
     private final LightstripIO lightstripIO;
-    private final LightStripInputs input = new LightStripInputs();
+    private final LightStripInputs inputs = new LightStripInputs();
     private final Map<BooleanSupplier, BlinkinPattern> predicateLightEvents = new HashMap<>();
 
     public LightStrip() {
@@ -18,8 +18,8 @@ public class LightStrip extends SubsystemBase {
 
     @Override
     public void periodic() {
-        lightstripIO.updateInputs(input);
-        org.littletonrobotics.junction.Logger.processInputs("lightStripInput", input);
+        lightstripIO.updateInputs(inputs);
+        org.littletonrobotics.junction.Logger.processInputs("lightStripInput", inputs);
         predicateLightEvents.keySet()
                 .stream()
                 .filter(BooleanSupplier::getAsBoolean)
@@ -36,7 +36,7 @@ public class LightStrip extends SubsystemBase {
     }
 
     public BlinkinPattern getPattern() {
-        return input.pattern;
+        return inputs.pattern;
     }
 
     public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {

@@ -7,8 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Ramp;
 import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utils.BlinkinPattern;
 

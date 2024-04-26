@@ -6,7 +6,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO shooterIO;
-    private final ShooterInput input = new ShooterInput();
+    private final ShooterInputs inputs = new ShooterInputs();
 
     public Shooter() {
         shooterIO = new RealShooter();
@@ -44,13 +44,13 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        shooterIO.updateInputs(input);
-        org.littletonrobotics.junction.Logger.processInputs("ShooterInputs", input);
+        shooterIO.updateInputs(inputs);
+        org.littletonrobotics.junction.Logger.processInputs("ShooterInputs", inputs);
     }
 
     @AutoLogOutput(key = "/robot/shooter")
     public boolean upToSpeed(double leftSpeed, double rightSpeed) {
-        return ((input.shooterMotorLeftRPM / leftSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD) &&
-                ((input.shooterMotorRightRPM / rightSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD);
+        return ((inputs.shooterMotorLeftRPM / leftSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD) &&
+                ((inputs.shooterMotorRightRPM / rightSpeed) * 100 > Constants.SHOOTER_UP_TO_SPEED_THRESHOLD);
     }
 }

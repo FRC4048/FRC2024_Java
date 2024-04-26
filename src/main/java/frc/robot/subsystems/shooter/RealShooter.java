@@ -54,8 +54,8 @@ public class RealShooter implements ShooterIO {
     }
 
     @Override
-    public void updateInputs(ShooterInput input) {
-        input.shooterMotorLeftRPM = neoPidMotorLeft.getCurrentSpeed();
-        input.shooterMotorRightRPM = neoPidMotorRight.getCurrentSpeed();
+    public void updateInputs(ShooterInputs inputs) {
+        inputs.shooterMotorLeftRPM = neoPidMotorLeft.getCurrentSpeed();
+        inputs.shooterMotorRightRPM = neoPidMotorRight.getCurrentSpeed();
     }
 }

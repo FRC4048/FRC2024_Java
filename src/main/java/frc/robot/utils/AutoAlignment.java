@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.math.VectorUtils;
 import frc.robot.utils.math.VelocityVector;
 

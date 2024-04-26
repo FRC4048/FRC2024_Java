@@ -1,7 +1,7 @@
 package frc.robot.commands.ramp;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.ramp.Ramp;
 
 public class SetAutoRampPid extends Command {
 

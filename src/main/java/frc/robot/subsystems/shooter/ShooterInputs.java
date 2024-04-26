@@ -3,7 +3,7 @@ package frc.robot.subsystems.shooter;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ShooterInput implements LoggableInputs {
+public class ShooterInputs implements LoggableInputs {
     double shooterMotorLeftRPM;
     double shooterMotorRightRPM;
     @Override
