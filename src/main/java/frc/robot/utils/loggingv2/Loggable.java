@@ -1,5 +1,9 @@
 package frc.robot.utils.loggingv2;
 
+import edu.wpi.first.wpilibj2.command.Command;
+
 public interface Loggable {
-    String getLoggableName();
+    String getBasicName();
+    Command asCommand();
+    void setParent(Loggable loggable);
 }

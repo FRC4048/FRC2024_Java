@@ -1,9 +1,5 @@
 package frc.robot.commands.pathplanning;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SpoolIntake;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.deployer.LowerDeployer;
@@ -17,27 +13,31 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.utils.DriveMode;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
+import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
+import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
+import frc.robot.utils.loggingv2.LoggableWaitCommand;
 
-public class DevourerPiece extends SequentialCommandGroup {
+public class DevourerPiece extends LoggableSequentialCommandGroup {
     public DevourerPiece(SwerveDrivetrain drivetrain, Vision vision, Intake intake, Feeder feeder, Deployer deployer, LightStrip lightStrip) {
         super(
-                new ParallelRaceGroup(
-                        new SequentialCommandGroup(
-                                new ParallelCommandGroup(
+                new LoggableRaceCommandGroup(
+                        new LoggableSequentialCommandGroup(
+                                new LoggableParallelCommandGroup(
                                     new LowerDeployer(deployer, lightStrip),
                                     new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME)
                                 ),
-                                new ParallelRaceGroup(
+                                new LoggableRaceCommandGroup(
                                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                                        new WaitCommand(7)
+                                        new LoggableWaitCommand(7)
                                 )
                         ),
-                        new SequentialCommandGroup(
+                        new LoggableSequentialCommandGroup(
                                 new MoveToGamepiece(drivetrain, vision),
-                                new ParallelRaceGroup(
+                                new LoggableRaceCommandGroup(
                                         new Drive(drivetrain, () -> -0.4, () -> 0, () -> 0, ()->DriveMode.ROBOT_CENTRIC),
-                                        new WaitCommand(0.7)
-                                ), new WaitCommand(5)
+                                        new LoggableWaitCommand(0.7)
+                                ), new LoggableWaitCommand(5)
                         )
                 )
         );

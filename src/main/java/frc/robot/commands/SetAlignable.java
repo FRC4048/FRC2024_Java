@@ -1,10 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SetAlignable extends Command {
+public class SetAlignable extends LoggableCommand {
     private final Alignable alignable;
     private final SwerveDrivetrain drivetrain;
 

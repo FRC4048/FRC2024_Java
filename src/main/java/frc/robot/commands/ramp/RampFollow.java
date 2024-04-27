@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.lightstrip.LightStrip;
@@ -13,11 +12,12 @@ import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.AutoAlignment;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.loggingv2.LoggableCommand;
 import frc.robot.utils.math.AngleUtils;
 import frc.robot.utils.math.PoseUtils;
 import frc.robot.utils.math.VelocityVector;
 
-public class RampFollow extends Command {
+public class RampFollow extends LoggableCommand {
     private final Ramp ramp;
     private final SwerveDrivetrain drivetrain;
     private final LightStrip lightStrip;

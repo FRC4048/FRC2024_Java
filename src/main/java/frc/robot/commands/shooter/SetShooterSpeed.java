@@ -10,7 +10,6 @@ import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
-import frc.robot.utils.loggingv2.Loggable;
 import frc.robot.utils.loggingv2.LoggableCommand;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
@@ -25,16 +24,6 @@ public class SetShooterSpeed extends LoggableCommand {
   private Timer timer = new Timer();
 
   public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
-    this.shooter = shooter;
-    this.lightStrip = lightStrip;
-    SmartShuffleboard.put("Shooter", "Desired Left Speed", 0.0);
-    SmartShuffleboard.put("Shooter", "Desired Right Speed", 0.0);
-    timeoutCounter = new TimeoutCounter(getName(), lightStrip);
-    addRequirements(shooter);
-  }
-
-  public SetShooterSpeed(Loggable parent, Shooter shooter, LightStrip lightStrip) {
-    super(parent);
     this.shooter = shooter;
     this.lightStrip = lightStrip;
     SmartShuffleboard.put("Shooter", "Desired Left Speed", 0.0);

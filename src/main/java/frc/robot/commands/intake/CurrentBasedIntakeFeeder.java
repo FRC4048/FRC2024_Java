@@ -1,14 +1,14 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class CurrentBasedIntakeFeeder extends Command {
+public class CurrentBasedIntakeFeeder extends LoggableCommand {
     private final Feeder feeder;
     private final LightStrip lightStrip;
     private final Intake intake;

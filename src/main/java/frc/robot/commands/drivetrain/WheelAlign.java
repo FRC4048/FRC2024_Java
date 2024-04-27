@@ -1,10 +1,10 @@
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class WheelAlign extends Command {
+public class WheelAlign extends LoggableCommand {
     private final SwerveDrivetrain drivetrain;
     public WheelAlign(SwerveDrivetrain drivetrain){
         this.drivetrain = drivetrain;

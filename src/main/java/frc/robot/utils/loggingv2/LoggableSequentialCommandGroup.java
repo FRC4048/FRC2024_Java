@@ -3,20 +3,34 @@ package frc.robot.utils.loggingv2;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class LoggableSequentialCommandGroup extends SequentialCommandGroup implements Loggable {
-    private final String parentName;
+import java.util.Arrays;
 
-    public LoggableSequentialCommandGroup(Loggable parent, Command... commands) {
-        addCommands(commands);
-        this.parentName = parent.getLoggableName();
-    }
-    public LoggableSequentialCommandGroup(Command... commands) {
-        addCommands(commands);
+public class LoggableSequentialCommandGroup extends SequentialCommandGroup implements Loggable {
+    private String parentName;
+
+    public LoggableSequentialCommandGroup(Loggable... commands) {
+        Arrays.stream(commands).forEach(c -> c.setParent(this));
+        addCommands(Arrays.stream(commands).map(Loggable::asCommand).toList().toArray(Command[]::new));
         this.parentName = "";
     }
 
     @Override
-    public String getLoggableName(){
-        return parentName + getName() + "_" + Integer.toHexString(hashCode());
+    public String getBasicName(){
+        return getClass().getName();
+    }
+
+    @Override
+    public String getName() {
+        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+    }
+
+    @Override
+    public Command asCommand() {
+        return this;
+    }
+
+    @Override
+    public void setParent(Loggable loggable) {
+        this.parentName = loggable.getBasicName();
     }
 }

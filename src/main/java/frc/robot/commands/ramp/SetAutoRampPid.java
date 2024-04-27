@@ -1,9 +1,9 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SetAutoRampPid extends Command {
+public class SetAutoRampPid extends LoggableCommand {
 
     private final Ramp ramp;
 

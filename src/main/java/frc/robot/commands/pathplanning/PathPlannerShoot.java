@@ -13,8 +13,9 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 
-public class PathPlannerShoot extends ParallelCommandGroup {
+public class PathPlannerShoot extends LoggableParallelCommandGroup {
     public PathPlannerShoot(Shooter shooter, Feeder feeder, Ramp ramp, Intake intake, LightStrip lightStrip) {
         addCommands(
                 new BasicShoot(shooter, lightStrip,1),

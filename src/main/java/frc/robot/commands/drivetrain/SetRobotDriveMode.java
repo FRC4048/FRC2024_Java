@@ -1,10 +1,10 @@
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utils.DriveMode;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SetRobotDriveMode extends Command {
+public class SetRobotDriveMode extends LoggableCommand {
     private final SwerveDrivetrain drivetrain;
     private final DriveMode driveMode;
 

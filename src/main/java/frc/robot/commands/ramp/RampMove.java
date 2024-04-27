@@ -1,11 +1,11 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
 import java.util.function.DoubleSupplier;
 
-public class RampMove extends Command{
+public class RampMove extends LoggableCommand {
     
     private final Ramp ramp;
     private final DoubleSupplier encoderValue;

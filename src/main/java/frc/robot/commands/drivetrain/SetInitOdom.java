@@ -1,10 +1,10 @@
 package frc.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SetInitOdom extends Command {
+public class SetInitOdom extends LoggableCommand {
     private final SwerveDrivetrain drivetrain;
     private final AutoChooser chooser;
 

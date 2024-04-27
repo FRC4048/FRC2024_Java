@@ -1,13 +1,13 @@
 package frc.robot.commands.pathplanning;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class BasicShoot extends Command {
+public class BasicShoot extends LoggableCommand {
     private final Shooter shooter;
     private final Timer timer = new Timer();
     private boolean activated = false;

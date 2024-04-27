@@ -1,9 +1,9 @@
 package frc.robot.commands.feeder;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class StopFeeder extends Command {
+public class StopFeeder extends LoggableCommand {
     private final Feeder feeder;
 
     public StopFeeder(Feeder feeder) {

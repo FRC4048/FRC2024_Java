@@ -1,16 +1,19 @@
 package frc.robot.utils.loggingv2;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 import java.util.Arrays;
 
-public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Loggable {
+public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
     private String parentName;
 
-    public LoggableRaceCommandGroup(Loggable... commands) {
-        Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(Arrays.stream(commands).map(Loggable::asCommand).toList().toArray(Command[]::new));
+    public LoggableDeadlineCommandGroup(Loggable deadline, Loggable... others) {
+        super(new Command(){});
+        Arrays.stream(others).forEach(c -> c.setParent(this));
+        deadline.setParent(this);
+        setDeadline(deadline.asCommand());
+        addCommands(Arrays.stream(others).map(Loggable::asCommand).toList().toArray(Command[]::new));
     }
 
     @Override

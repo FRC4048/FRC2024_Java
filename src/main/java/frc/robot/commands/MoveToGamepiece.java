@@ -3,12 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class MoveToGamepiece extends Command {
+public class MoveToGamepiece extends LoggableCommand {
     private final SwerveDrivetrain drivetrain;
     private final Vision vision;
     private double startTime;

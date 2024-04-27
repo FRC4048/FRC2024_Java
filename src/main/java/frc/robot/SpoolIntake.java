@@ -1,11 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SpoolIntake extends Command {
+public class SpoolIntake extends LoggableCommand {
     private final Intake intake;
     private final Timer timer = new Timer();
     private final double motorRunTime; // temporary until  done testing
