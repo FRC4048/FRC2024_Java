@@ -52,13 +52,13 @@ public class Robot extends LoggedRobot {
             DataLogManager.start();
             // Log active commands
             CommandScheduler.getInstance().onCommandInitialize(command -> {
-                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), true);
+                Logger.recordOutput(command.getName(), true);
             });
             CommandScheduler.getInstance().onCommandFinish(command -> {
-                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+                Logger.recordOutput(command.getName(), false);
             });
             CommandScheduler.getInstance().onCommandInterrupt(command -> {
-                Logger.recordOutput(command.getName() + "_" + Integer.toHexString(command.hashCode()), false);
+                Logger.recordOutput(command.getName(), false);
             });
         }
         diagnostics = new Diagnostics();
