@@ -16,11 +16,6 @@ public class LoggableCommand extends Command implements Loggable {
     }
 
     @Override
-    public Command asCommand() {
-        return this;
-    }
-
-    @Override
     public void setParent(Loggable loggable) {
         this.parentName = loggable.getBasicName();
     }

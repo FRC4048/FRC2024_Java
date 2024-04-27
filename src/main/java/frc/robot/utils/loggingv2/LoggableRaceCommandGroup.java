@@ -10,7 +10,7 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
 
     public LoggableRaceCommandGroup(Loggable... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(Arrays.stream(commands).map(Loggable::asCommand).toList().toArray(Command[]::new));
+        addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
     }
 
     @Override
@@ -21,11 +21,6 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
     @Override
     public String getName() {
         return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
-    }
-
-    @Override
-    public Command asCommand() {
-        return this;
     }
 
     @Override

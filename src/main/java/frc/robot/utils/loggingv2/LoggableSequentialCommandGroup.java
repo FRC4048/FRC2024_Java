@@ -10,8 +10,7 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
 
     public LoggableSequentialCommandGroup(Loggable... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(Arrays.stream(commands).map(Loggable::asCommand).toList().toArray(Command[]::new));
-        this.parentName = "";
+        addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
     }
 
     @Override
@@ -22,11 +21,6 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
     @Override
     public String getName() {
         return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
-    }
-
-    @Override
-    public Command asCommand() {
-        return this;
     }
 
     @Override
