@@ -9,7 +9,8 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
     private String basicName = getClass().getName();
     private String parentName;
 
-    public LoggableParallelCommandGroup(Loggable... commands) {
+    @SafeVarargs
+    public <T extends Command & Loggable>LoggableParallelCommandGroup(T... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
         addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
     }

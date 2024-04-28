@@ -9,7 +9,8 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
     private String basicName = getClass().getName();
     private String parentName;
 
-    public LoggableDeadlineCommandGroup(Loggable deadline, Loggable... others) {
+    @SafeVarargs
+    public <T extends Command & Loggable>LoggableDeadlineCommandGroup(T deadline, T... others) {
         super(new Command(){});
         Arrays.stream(others).forEach(c -> c.setParent(this));
         deadline.setParent(this);

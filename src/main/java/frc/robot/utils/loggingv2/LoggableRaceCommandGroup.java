@@ -9,7 +9,8 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
     private String basicName = getClass().getName();
     private String parentName;
 
-    public LoggableRaceCommandGroup(Loggable... commands) {
+    @SafeVarargs
+    public <T extends Command & Loggable>LoggableRaceCommandGroup(T... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
         addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
     }
