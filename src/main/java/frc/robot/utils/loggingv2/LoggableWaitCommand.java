@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class LoggableWaitCommand extends WaitCommand implements Loggable {
     private String basicName = getClass().getName();
-    private Command parent;
+    private Command parent = new BlankCommand();
+
 
     public LoggableWaitCommand(double seconds) {
         super(seconds);

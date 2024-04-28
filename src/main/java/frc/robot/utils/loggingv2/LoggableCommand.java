@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class LoggableCommand extends Command implements Loggable {
     private String basicName = getClass().getName();
-    private Command parent;
+    private Command parent = new BlankCommand();
 
     @Override
     public String getBasicName() {

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class LoggableParallelCommandGroup extends ParallelCommandGroup implements Loggable {
     private String basicName = getClass().getName();
-    private Command parent;
+    private Command parent = new BlankCommand();
 
     @SafeVarargs
     public <T extends Command & Loggable>LoggableParallelCommandGroup(T... commands) {
