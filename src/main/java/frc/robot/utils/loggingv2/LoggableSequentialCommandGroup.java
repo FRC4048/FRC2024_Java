@@ -29,7 +29,7 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
         this.parentName = loggable.getBasicName();
     }
 
-    public Command withBasicName(String name){
+    public LoggableSequentialCommandGroup withBasicName(String name){
         this.basicName = name;
         return this;
     }

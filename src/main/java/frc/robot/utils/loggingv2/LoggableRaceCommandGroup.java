@@ -30,7 +30,7 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
         parentName = loggable.getBasicName();
     }
 
-    public Command withBasicName(String name){
+    public LoggableRaceCommandGroup withBasicName(String name){
         this.basicName = name;
         return this;
     }

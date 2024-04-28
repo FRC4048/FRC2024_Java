@@ -21,7 +21,7 @@ public class LoggableCommand extends Command implements Loggable {
         this.parentName = loggable.getBasicName();
     }
 
-    public Command withBasicName(String name){
+    public LoggableCommand withBasicName(String name){
         basicName = name;
         return this;
     }

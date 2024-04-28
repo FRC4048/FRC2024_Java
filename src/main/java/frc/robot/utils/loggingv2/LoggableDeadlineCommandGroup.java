@@ -33,7 +33,7 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
         parentName = loggable.getBasicName();
     }
 
-    public Command withBasicName(String name){
+    public LoggableDeadlineCommandGroup withBasicName(String name){
         basicName = name;
         return this;
     }
