@@ -11,7 +11,7 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
 
     public <T extends Command & Loggable>LoggableSequentialCommandGroup(T... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
+        addCommands(commands);
     }
 
     @Override

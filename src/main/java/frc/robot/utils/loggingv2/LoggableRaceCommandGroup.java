@@ -12,7 +12,7 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
     @SafeVarargs
     public <T extends Command & Loggable>LoggableRaceCommandGroup(T... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(Arrays.stream(commands).map(l -> (Command) l).toList().toArray(Command[]::new));
+        addCommands(commands);
     }
 
     @Override

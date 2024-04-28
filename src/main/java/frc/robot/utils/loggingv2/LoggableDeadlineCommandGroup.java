@@ -14,8 +14,8 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
         super(new Command(){});
         Arrays.stream(others).forEach(c -> c.setParent(this));
         deadline.setParent(this);
-        setDeadline((Command) deadline);
-        addCommands(Arrays.stream(others).map(l -> (Command) l).toList().toArray(Command[]::new));
+        setDeadline(deadline);
+        addCommands(others);
     }
 
     @Override
