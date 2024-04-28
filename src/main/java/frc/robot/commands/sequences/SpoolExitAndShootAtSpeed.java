@@ -17,7 +17,7 @@ public class SpoolExitAndShootAtSpeed extends LoggableParallelCommandGroup {
                 new LoggableSequentialCommandGroup(
                         new LoggableWaitCommand(Constants.SPOOL_TIME),
                         new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT)
-                ).withBasicName("test")
+                )
         );
     }
 }
