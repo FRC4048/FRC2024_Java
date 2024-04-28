@@ -14,6 +14,8 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.utils.loggingv2.LoggableCommandWrapper;
+import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
 
 import java.util.Map;
 
@@ -27,17 +29,32 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerRight), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakerLeft), new PlaceHolderCommand()),
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.ZERO), new PlaceHolderCommand()),
-                Map.entry(new AutoEvent(AutoAction.ShootTwoDip, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2AndDip")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip))),
-                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossRight")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip))),
-                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip))),
-                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip))),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), AutoBuilder.buildAuto("FourPieceLeft")),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), AutoBuilder.buildAuto("FourPieceCenter")),
-                Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("ForkAuto")),
-                Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), AutoBuilder.buildAuto("SmartForkAuto")),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right"))),
-                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")).beforeStarting(new ShootAndDrop(shooter,feeder,deployer,lightStrip)))
-        );
+                Map.entry(new AutoEvent(AutoAction.ShootTwoDip, FieldLocation.SpeakerLeft), new LoggableSequentialCommandGroup(
+                        new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2AndDip"))))
+                ),
+                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerRight), new LoggableSequentialCommandGroup(
+                        new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossRight"))))
+                ),
+                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakerLeft), new LoggableSequentialCommandGroup(
+                                new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                                LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossLeft"))))
+                ),
+                Map.entry(new AutoEvent(AutoAction.ShootAndCross, FieldLocation.SpeakFront), new LoggableSequentialCommandGroup(
+                                new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                                LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid"))))
+                ),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("FourPieceLeft"))),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("FourPieceCenter"))),
+                Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("ForkAuto"))),
+                Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("SmartForkAuto"))),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right")))),
+                Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), new LoggableSequentialCommandGroup(
+                        new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot2Left")))
+                )
+        ));
     }
 
 

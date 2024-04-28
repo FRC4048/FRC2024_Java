@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
+import frc.robot.utils.loggingv2.LoggableCommandWrapper;
 
 import java.util.List;
 
@@ -26,8 +27,8 @@ public class PathPlannerUtils {
         path.preventFlipping = true;
         return path;
     }
-    public static Command autoFromPath(PathPlannerPath path){
-        return AutoBuilder.followPath(path);
+    public static LoggableCommandWrapper autoFromPath(PathPlannerPath path){
+        return LoggableCommandWrapper.wrap(AutoBuilder.followPath(path));
     }
     public static Command pathToPose(Pose2d targetPos, double endVelocity){
         return AutoBuilder.pathfindToPose(targetPos, defualtPathConstraints,endVelocity);
