@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class LoggableSequentialCommandGroup extends SequentialCommandGroup implements Loggable {
     private String basicName = getClass().getName();
-    private String parentName;
+    private Command parent;
 
     public <T extends Command & Loggable>LoggableSequentialCommandGroup(T... commands) {
         Arrays.stream(commands).forEach(c -> c.setParent(this));
@@ -21,12 +21,12 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
 
     @Override
     public String getName() {
-        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
     }
 
     @Override
-    public void setParent(Loggable loggable) {
-        this.parentName = loggable.getBasicName();
+    public void setParent(Command loggable) {
+        this.parent = loggable;
     }
 
     public LoggableSequentialCommandGroup withBasicName(String name){

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
     private String basicName = getClass().getName();
-    private String parentName;
+    private Command parent;
 
     @SafeVarargs
     public <T extends Command & Loggable>LoggableDeadlineCommandGroup(T deadline, T... others) {
@@ -25,12 +25,12 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
 
     @Override
     public String getName() {
-        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
     }
 
     @Override
-    public void setParent(Loggable loggable) {
-        parentName = loggable.getBasicName();
+    public void setParent(Command loggable) {
+        parent = loggable;
     }
 
     public LoggableDeadlineCommandGroup withBasicName(String name){

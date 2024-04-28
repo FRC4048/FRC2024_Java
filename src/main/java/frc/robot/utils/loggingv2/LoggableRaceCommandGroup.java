@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Loggable {
     private String basicName = getClass().getName();
-    private String parentName;
+    private Command parent;
 
     @SafeVarargs
     public <T extends Command & Loggable>LoggableRaceCommandGroup(T... commands) {
@@ -22,12 +22,12 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
 
     @Override
     public String getName() {
-        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
     }
 
     @Override
-    public void setParent(Loggable loggable) {
-        parentName = loggable.getBasicName();
+    public void setParent(Command loggable) {
+        parent = loggable;
     }
 
     public LoggableRaceCommandGroup withBasicName(String name){

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class LoggableCommand extends Command implements Loggable {
     private String basicName = getClass().getName();
-    private String parentName;
+    private Command parent;
 
     @Override
     public String getBasicName() {
@@ -13,12 +13,12 @@ public class LoggableCommand extends Command implements Loggable {
 
     @Override
     public String getName() {
-        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
     }
 
     @Override
-    public void setParent(Loggable loggable) {
-        this.parentName = loggable.getBasicName();
+    public void setParent(Command loggable) {
+        this.parent = loggable;
     }
 
     public LoggableCommand withBasicName(String name){

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class LoggableParallelCommandGroup extends ParallelCommandGroup implements Loggable {
     private String basicName = getClass().getName();
-    private String parentName;
+    private Command parent;
 
     @SafeVarargs
     public <T extends Command & Loggable>LoggableParallelCommandGroup(T... commands) {
@@ -22,12 +22,12 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
 
     @Override
     public String getName() {
-        return parentName + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
     }
 
     @Override
-    public void setParent(Loggable loggable) {
-        parentName = loggable.getBasicName();
+    public void setParent(Command loggable) {
+        parent = loggable;
     }
 
     public LoggableParallelCommandGroup withBasicName(String name){
