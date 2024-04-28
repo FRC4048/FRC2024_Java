@@ -30,7 +30,7 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
         parentName = loggable.getBasicName();
     }
 
-    public Command withBasicName(String name){
+    public LoggableParallelCommandGroup withBasicName(String name){
         this.basicName = name;
         return this;
     }
