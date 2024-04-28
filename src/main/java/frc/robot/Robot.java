@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
@@ -18,6 +17,7 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -113,7 +113,9 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
         new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
-        new ParallelCommandGroup(new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).withName("Reset Climber and Ramp").schedule();
+        new LoggableParallelCommandGroup(
+                new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
+        ).withBasicName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }
 

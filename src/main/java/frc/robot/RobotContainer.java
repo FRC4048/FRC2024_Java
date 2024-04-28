@@ -13,7 +13,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
@@ -76,6 +76,10 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.*;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
+import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
+import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
+import frc.robot.utils.loggingv2.LoggableWaitCommand;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
@@ -150,21 +154,21 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", new ParallelRaceGroup(
+        NamedCommands.registerCommand("SlurpWithRamp", new LoggableParallelCommandGroup(
                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                        new SequentialCommandGroup(
+                        new LoggableSequentialCommandGroup(
                                 new ResetRamp(ramp, lightStrip),
-                                new WaitCommand(2)).withName("ResetRampPostIntake")
-        ).withName("SlurpWithRamp"));
+                                new LoggableWaitCommand(2)).withBasicName("ResetRampPostIntake")
+        ).withBasicName("SlurpWithRamp"));
         NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake, lightStrip));
         NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder, lightStrip));
         NamedCommands.registerCommand("FeederGamepieceUntilLeave", new TimedFeeder(feeder, lightStrip ,Constants.TIMED_FEEDER_EXIT));
         NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter, feeder, deployer, lightStrip));
         NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder, lightStrip));
         NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp, lightStrip));
-        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT)); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT)); // first and third
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT).withBasicName("RampShootComboCenter"));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT).withBasicName("RampShootComboSide2")); // first and third
         NamedCommands.registerCommand("MoveToGamePiece", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
     }
 
@@ -225,10 +229,10 @@ public class RobotContainer {
         }
         if (Constants.INTAKE_DEBUG) {
             SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intake, 5));
-            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", new SequentialCommandGroup(
+            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", new LoggableSequentialCommandGroup(
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip)
-                    ).withName("IntakeFeederCurrentCombo")
+                    ).withBasicName("IntakeFeederCurrentCombo")
             );
         }
         if (Constants.SWERVE_DEBUG) {
@@ -248,10 +252,10 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
-        Command rampMoveAndSpin = new ParallelRaceGroup(
+        Command rampMoveAndSpin = new LoggableRaceCommandGroup(
                 new RampFollow(ramp, drivetrain, lightStrip),
                 new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
-        ).withName("AdvancedAutoShoot");
+        ).withBasicName("AdvancedAutoShoot");
         joyLeftButton1.onTrue(new SetAlignable(drivetrain, Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain, null));
         joyLeftButton3.onTrue(rampMoveAndSpin);
         joyRightButton1.onTrue(new SetAlignable(drivetrain, Alignable.AMP)).onFalse(new SetAlignable(drivetrain, null));
@@ -261,57 +265,58 @@ public class RobotContainer {
         climber.setDefaultCommand(leftClimbCmd);
 
         // Set up to shoot Speaker CLOSE - Y
-        controller.y().onTrue(new ParallelCommandGroup(
+        controller.y().onTrue(new LoggableParallelCommandGroup(
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)
-        ).withName("Setup Speaker Shot (CLOSE)"));
+        ).withBasicName("Setup Speaker Shot (CLOSE)"));
 
         // Set up to shoot Speaker AWAY - X
-        controller.x().onTrue(new ParallelCommandGroup(
+        controller.x().onTrue(new LoggableParallelCommandGroup(
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)
-        ).withName("Setup Speaker Shot (AWAY)"));
+        ).withBasicName("Setup Speaker Shot (AWAY)"));
 
         // Cancell all - B
         controller.b().onTrue(new CancelAll(ramp, shooter, lightStrip));
 
         // Shoot - Right Trigger
-        controller.rightTrigger(0.5).onTrue(new SequentialCommandGroup(
+        controller.rightTrigger(0.5).onTrue(new LoggableSequentialCommandGroup(
                 new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+                new LoggableWaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-        ).withName("Operator Shoot"));
+        ).withBasicName("Operator Shoot"));
 
         //Driver Shoot
-        joyRightButton2.onTrue(new SequentialCommandGroup(new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
+        joyRightButton2.onTrue(new LoggableSequentialCommandGroup(
+                new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
+                new LoggableWaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
                 new StopShooter(shooter),
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-        ).withName("Driver Shoot"));
+        ).withBasicName("Driver Shoot"));
 
         // start intaking a note
-        Command lowerIntake = new ParallelCommandGroup(
+        LoggableParallelCommandGroup lowerIntake = new LoggableParallelCommandGroup(
                 new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                 new LowerDeployer(deployer, lightStrip),
                 new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW)
-        ).withName("lowerIntake");
-        Command endIntake = new RaiseDeployer(deployer, lightStrip);
+        ).withBasicName("lowerIntake");
+        RaiseDeployer endIntake = new RaiseDeployer(deployer, lightStrip);
 
-        controller.povDown().onTrue(new SequentialCommandGroup(
+        controller.povDown().onTrue(new LoggableSequentialCommandGroup(
                 lowerIntake,
                 new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
                 endIntake
-        ).withName("Intake a Note"));
+        ).withBasicName("Intake a Note"));
 
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder, lightStrip));
 
         // stop intake
-        controller.povUp().onTrue(new ParallelCommandGroup(
+        controller.povUp().onTrue(new LoggableParallelCommandGroup(
                 new RaiseDeployer(deployer, lightStrip),
                 new StopFeeder(feeder),
                 new StopIntake(intake)
-        ).withName("stop intake"));
+        ).withBasicName("stop intake"));
 
         joyRightButton3.onTrue(new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT));
     }
