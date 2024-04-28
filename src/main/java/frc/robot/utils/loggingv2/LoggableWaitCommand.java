@@ -1,8 +1,10 @@
 package frc.robot.utils.loggingv2;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class LoggableWaitCommand extends WaitCommand implements Loggable {
+    private String basicName = getClass().getName();
     private String parentName;
 
     public LoggableWaitCommand(double seconds) {
@@ -11,7 +13,7 @@ public class LoggableWaitCommand extends WaitCommand implements Loggable {
 
     @Override
     public String getBasicName() {
-        return getClass().getName();
+        return basicName;
     }
 
     @Override
@@ -22,5 +24,10 @@ public class LoggableWaitCommand extends WaitCommand implements Loggable {
     @Override
     public void setParent(Loggable loggable) {
         parentName = loggable.getBasicName();
+    }
+
+    public Command withBasicName(String name){
+        this.basicName = name;
+        return this;
     }
 }

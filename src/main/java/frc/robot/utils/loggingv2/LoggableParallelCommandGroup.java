@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import java.util.Arrays;
 
 public class LoggableParallelCommandGroup extends ParallelCommandGroup implements Loggable {
+    private String basicName = getClass().getName();
     private String parentName;
 
     public LoggableParallelCommandGroup(Loggable... commands) {
@@ -15,7 +16,7 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
 
     @Override
     public String getBasicName(){
-        return getClass().getName();
+        return basicName;
     }
 
     @Override
@@ -26,5 +27,10 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
     @Override
     public void setParent(Loggable loggable) {
         parentName = loggable.getBasicName();
+    }
+
+    public Command withBasicName(String name){
+        this.basicName = name;
+        return this;
     }
 }

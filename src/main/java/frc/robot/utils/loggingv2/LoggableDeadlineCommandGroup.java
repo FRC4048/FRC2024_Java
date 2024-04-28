@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import java.util.Arrays;
 
 public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
+    private String basicName = getClass().getName();
     private String parentName;
 
     public LoggableDeadlineCommandGroup(Loggable deadline, Loggable... others) {
@@ -18,7 +19,7 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
 
     @Override
     public String getBasicName(){
-        return getClass().getName();
+        return basicName;
     }
 
     @Override
@@ -29,5 +30,10 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
     @Override
     public void setParent(Loggable loggable) {
         parentName = loggable.getBasicName();
+    }
+
+    public Command withBasicName(String name){
+        basicName = name;
+        return this;
     }
 }

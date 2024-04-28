@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import java.util.Arrays;
 
 public class LoggableSequentialCommandGroup extends SequentialCommandGroup implements Loggable {
+    private String basicName = getClass().getName();
     private String parentName;
 
     public LoggableSequentialCommandGroup(Loggable... commands) {
@@ -26,5 +27,10 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
     @Override
     public void setParent(Loggable loggable) {
         this.parentName = loggable.getBasicName();
+    }
+
+    public Command withBasicName(String name){
+        this.basicName = name;
+        return this;
     }
 }
