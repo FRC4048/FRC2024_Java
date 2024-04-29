@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gyro;
 
 public interface GyroIO {
-    default void setAngleOffset(double offset) {}
-    default void updateInputs(GyroInputs inputs){}
+    void setAngleOffset(double offset);
+    void resetGyro();
+    void updateInputs(GyroInputs inputs);
 }

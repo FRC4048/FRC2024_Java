@@ -198,7 +198,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void resetGyro() {
-       gyro.resetGyro();
+       gyroIO.resetGyro();
     }
 
     public GenericSwerveModule getFrontLeft() {

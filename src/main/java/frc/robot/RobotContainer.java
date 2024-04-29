@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -57,6 +56,9 @@ import frc.robot.subsystems.deployer.RealDeployerIO;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.feeder.MockFeederIO;
 import frc.robot.subsystems.feeder.RealFeederIO;
+import frc.robot.subsystems.gyro.GyroIO;
+import frc.robot.subsystems.gyro.MockGyroIO;
+import frc.robot.subsystems.gyro.RealGyroIO;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
@@ -75,7 +77,10 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.utils.*;
+import frc.robot.utils.Alignable;
+import frc.robot.utils.DriveMode;
+import frc.robot.utils.Gain;
+import frc.robot.utils.PID;
 import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
 import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
@@ -110,6 +115,7 @@ public class RobotContainer {
     private final Intake intake;
     private final LightStrip lightStrip;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
+    private final GyroIO gyroIO;
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
 
@@ -126,6 +132,7 @@ public class RobotContainer {
             vision = new Vision(new RealVisionIO());
             intake = new Intake(new RealIntakeIO());
             lightStrip = new LightStrip(new RealLightStripIO());
+            gyroIO = new RealGyroIO();
         }else{
             shooter = new Shooter(new MockShooterIO());
             deployer = new Deployer(new MockDeployerIO());
@@ -135,6 +142,7 @@ public class RobotContainer {
             vision = new Vision(new MockVisionIO());
             intake = new Intake(new MockIntakeIO());
             lightStrip = new LightStrip(new MockLightStripIO());
+            gyroIO = new MockGyroIO();
         }
         setupDriveTrain();
         registerPathPlanableCommands();
@@ -190,7 +198,6 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
-
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -204,9 +211,7 @@ public class RobotContainer {
 
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
-        ThreadedGyro navxGyro = new ThreadedGyro(new AHRS());
-        navxGyro.start();
-        this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
+        this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, gyroIO);
     }
 
     public void putShuffleboardCommands() {

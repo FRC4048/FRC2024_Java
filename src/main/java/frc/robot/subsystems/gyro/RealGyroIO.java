@@ -10,14 +10,19 @@ public class RealGyroIO implements GyroIO {
     private final ThreadedGyro gyro;
     private double angleOffset = 0;
 
-
     public RealGyroIO() {
         this.gyro = new ThreadedGyro(new AHRS());
+        gyro.start();
     }
 
     @Override
     public void setAngleOffset(double offset) {
         this.angleOffset = offset;
+    }
+
+    @Override
+    public void resetGyro() {
+        gyro.resetGyro();
     }
 
     @Override
