@@ -14,16 +14,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.gyro.GyroIO;
+import frc.robot.subsystems.gyro.GyroInputs;
 import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.PathPlannerUtils;
-import frc.robot.utils.ThreadedGyro;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import org.littletonrobotics.junction.Logger;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -41,7 +43,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     private final SwervePosEstimator poseEstimator;
-    private final ThreadedGyro gyro;
+    private final GyroIO gyroIO;
+    private final GyroInputs gyroInputs = new GyroInputs();
     private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
     private boolean faceingTarget = false;
     private Alignable alignable = null;
@@ -60,6 +63,8 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
+        gyroIO.updateInputs(gyroInputs);
+        Logger.processInputs("gyroInputs", gyroInputs);
         if (Constants.RAMP_DEBUG) {
             SmartDashboard.putNumber("DELTA X", Units.Inch.convertFrom(getPose().getTranslation().getDistance(new Translation2d(Alignable.SPEAKER.getX(), Alignable.SPEAKER.getY())),Units.Meter));
         }
@@ -91,21 +96,21 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
         }
-
+        //TODO multi thread wheel odom and make use of more than one gyro measurement
         if (Constants.ENABLE_VISION){
-            poseEstimator.updatePositionWithVis(gyro.getGyroValue());
+            poseEstimator.updatePositionWithVis(getGyroAngle().getDegrees());
         }else {
-            poseEstimator.updatePosition(gyro.getGyroValue());
+            poseEstimator.updatePosition(getGyroAngle().getDegrees());
         }
         if (Constants.SWERVE_DEBUG) {
-            SmartShuffleboard.put("GYRO", "Gyro Angle", gyro.getGyroValue());
+            SmartShuffleboard.put("GYRO", "Gyro Angle", getGyroAngle().getDegrees());
         }
     }
 
     public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
-                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, ThreadedGyro gyro)
+                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, GyroIO gyro)
     {
-        this.gyro = gyro;
+        this.gyroIO = gyro;
         EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
         EncodedSwerveSparkMax encodedSwerveSparkMaxBL = new EncodedSwerveMotorBuilder(backLeftConfig, conversionConfig).build();
@@ -119,7 +124,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
-        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,gyro.getGyroValue());
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyroAngle().getDegrees());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
@@ -145,7 +150,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
         return driveMode.equals(DriveMode.FIELD_CENTRIC)
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, new Rotation2d(Math.toRadians(gyro.getGyroValue())))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotation, getGyroAngle())
                 : new ChassisSpeeds(xSpeed, ySpeed, rotation);
     }
 
@@ -223,11 +228,12 @@ public class SwerveDrivetrain extends SubsystemBase {
         resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
     }
     public void setGyroOffset(double degrees) {
-        gyro.setAngleAdjustment(degrees);
+        gyroIO.setAngleOffset(degrees);
     }
 
     public Rotation2d getGyroAngle() {
-        return new Rotation2d(Math.toRadians(gyro.getGyroValue()));
+        if (gyroInputs.anglesInDeg.length == 0) return new Rotation2d();
+        return Rotation2d.fromDegrees(gyroInputs.anglesInDeg[gyroInputs.anglesInDeg.length-1]);
     }
 
     /**
