@@ -8,11 +8,13 @@ import java.util.Arrays;
 public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
     private String basicName = getClass().getSimpleName();
     private Command parent = new BlankCommand();
+    private Loggable deadline;
+    private Loggable[] children;
 
 
     @SafeVarargs
-    public <T extends Command & Loggable>LoggableDeadlineCommandGroup(T deadline, T... others) {
-        super(new Command(){});
+    public <T extends Command & Loggable> LoggableDeadlineCommandGroup(T deadline, T... others) {
+        super(new Command() {});
         Arrays.stream(others).forEach(c -> c.setParent(this));
         deadline.setParent(this);
         setDeadline(deadline);
@@ -20,21 +22,25 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
     }
 
     @Override
-    public String getBasicName(){
+    public String getBasicName() {
         return basicName;
     }
 
     @Override
     public String getName() {
-        return parent.getName() +"/" +getBasicName();
+        String prefix = parent.getName();
+        if (!prefix.isBlank()){
+            prefix += "/";
+        }
+        return prefix + getBasicName();
     }
 
     @Override
     public void setParent(Command loggable) {
-        parent = loggable;
+        this.parent = loggable == null ? new BlankCommand() : loggable;
     }
 
-    public LoggableDeadlineCommandGroup withBasicName(String name){
+    public LoggableDeadlineCommandGroup withBasicName(String name) {
         basicName = name;
         return this;
     }

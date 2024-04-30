@@ -16,17 +16,21 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
 
     @Override
     public String getBasicName(){
-        return getClass().getName();
+        return basicName;
     }
 
     @Override
     public String getName() {
-        return parent.getName() +"/" + getBasicName();
+        String prefix = parent.getName();
+        if (!prefix.isBlank()){
+            prefix += "/";
+        }
+        return prefix + getBasicName();
     }
 
     @Override
     public void setParent(Command loggable) {
-        this.parent = loggable;
+        this.parent = loggable == null ? new BlankCommand() : loggable;
     }
 
     public LoggableSequentialCommandGroup withBasicName(String name){

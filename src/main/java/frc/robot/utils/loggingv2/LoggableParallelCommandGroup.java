@@ -22,12 +22,16 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
 
     @Override
     public String getName() {
-        return parent.getName() +"/" + getBasicName();
+        String prefix = parent.getName();
+        if (!prefix.isBlank()){
+            prefix += "/";
+        }
+        return prefix + getBasicName();
     }
 
     @Override
     public void setParent(Command loggable) {
-        parent = loggable;
+        this.parent = loggable == null ? new BlankCommand() : loggable;
     }
 
     public LoggableParallelCommandGroup withBasicName(String name){

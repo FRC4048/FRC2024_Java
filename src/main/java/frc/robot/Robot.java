@@ -50,13 +50,13 @@ public class Robot extends LoggedRobot {
             Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
             // Log active commands
             CommandScheduler.getInstance().onCommandInitialize(command -> {
-                Logger.recordOutput(command.getName(), true);
+                Logger.recordOutput("Command/" + command.getName(), true);
             });
             CommandScheduler.getInstance().onCommandFinish(command -> {
-                Logger.recordOutput(command.getName(), false);
+                Logger.recordOutput("Command/" + command.getName(), false);
             });
             CommandScheduler.getInstance().onCommandInterrupt(command -> {
-                Logger.recordOutput(command.getName(), false);
+                Logger.recordOutput("Command/" + command.getName(), false);
             });
         }
         diagnostics = new Diagnostics();
@@ -111,7 +111,8 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
         new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
-        new LoggableParallelCommandGroup(new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
+        new LoggableParallelCommandGroup(
+                new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
         ).withBasicName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }

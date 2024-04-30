@@ -13,15 +13,19 @@ public class LoggableCommand extends Command implements Loggable {
 
     @Override
     public String getName() {
-        return parent.getName() +"/"+ getBasicName();
+        String prefix = parent.getName();
+        if (!prefix.isBlank()){
+            prefix += "/";
+        }
+        return prefix + getBasicName();
     }
 
     @Override
     public void setParent(Command loggable) {
-        this.parent = loggable;
+        this.parent = loggable == null ? new BlankCommand() : loggable;
     }
 
-    public LoggableCommand withBasicName(String name){
+    public LoggableCommand withBasicName(String name) {
         basicName = name;
         return this;
     }

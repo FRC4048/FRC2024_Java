@@ -13,7 +13,8 @@ public class LoggableCommandWrapper extends Command implements Loggable {
     public LoggableCommandWrapper(Command toWrap) {
         this.wrap = toWrap;
     }
-    public static LoggableCommandWrapper wrap(Command toWrap){
+
+    public static LoggableCommandWrapper wrap(Command toWrap) {
         return new LoggableCommandWrapper(toWrap);
     }
 
@@ -24,15 +25,19 @@ public class LoggableCommandWrapper extends Command implements Loggable {
 
     @Override
     public String getName() {
-        return parent.getName() +"/" + getBasicName();
+        String prefix = parent.getName();
+        if (!prefix.isBlank()){
+            prefix += "/";
+        }
+        return prefix + getBasicName();
     }
 
     @Override
     public void setParent(Command loggable) {
-        this.parent = loggable;
+        this.parent = loggable == null ? new BlankCommand() : loggable;
     }
 
-    public LoggableCommandWrapper withBasicName(String name){
+    public LoggableCommandWrapper withBasicName(String name) {
         basicName = name;
         return this;
     }
