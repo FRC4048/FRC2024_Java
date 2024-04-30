@@ -30,7 +30,8 @@ public class RealGyroIO implements GyroIO {
         List<TimedGyroMeasurement> measurementList = gyro.flushRecentMeasurements();
         double[] anglesInDeg = new double[measurementList.size()];
         double[] anglesTimeStamps = new double[measurementList.size()];
-        for (int i = 0; i < measurementList.size(); i++) {
+        for (int i = 0; i < measurementList.size() ; i++) {
+//            DriverStation.reportWarning(measurementList.size() + ":" + i,false);
             anglesInDeg[i] = measurementList.get(i).angle();
             anglesTimeStamps[i] = measurementList.get(i).time();
         }

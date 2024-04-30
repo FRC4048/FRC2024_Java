@@ -3,7 +3,7 @@ package frc.robot.utils.loggingv2;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class LoggableCommand extends Command implements Loggable {
-    private String basicName = getClass().getName();
+    private String basicName = getClass().getSimpleName();
     private Command parent = new BlankCommand();
 
     @Override
@@ -13,7 +13,7 @@ public class LoggableCommand extends Command implements Loggable {
 
     @Override
     public String getName() {
-        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() +"/"+ getBasicName();
     }
 
     @Override

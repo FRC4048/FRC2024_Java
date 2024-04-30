@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.Set;
 
 public class LoggableCommandWrapper extends Command implements Loggable {
-    private String basicName = getClass().getName();
+    private String basicName = getClass().getSimpleName();
     private Command parent = new BlankCommand();
     private final Command wrap;
 
@@ -24,7 +24,7 @@ public class LoggableCommandWrapper extends Command implements Loggable {
 
     @Override
     public String getName() {
-        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() +"/" + getBasicName();
     }
 
     @Override

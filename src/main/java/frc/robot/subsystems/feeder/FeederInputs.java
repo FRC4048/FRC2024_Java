@@ -7,10 +7,10 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class FeederInputs implements LoggableInputs {
 
-    public double feederSpeed;
-    public ColorMatchResult colorMatchResult;
-    public boolean isFwdTripped;
-    public boolean areBeamsEnabled;
+    public double feederSpeed = 0 ;
+    public ColorMatchResult colorMatchResult = new ColorMatchResult(Color.kCoral,0);
+    public boolean isFwdTripped = false;
+    public boolean areBeamsEnabled = false;
 
     @Override
     public void toLog(LogTable table) {

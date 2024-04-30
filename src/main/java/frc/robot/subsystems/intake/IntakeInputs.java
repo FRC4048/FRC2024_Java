@@ -4,9 +4,9 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class IntakeInputs implements LoggableInputs {
-    public double intakeMotor1Speed;
-    public double intakeMotor2Speed;
-    public double intakeMotor1Current;
+    public double intakeMotor1Speed = 0;
+    public double intakeMotor2Speed = 0;
+    public double intakeMotor1Current = 0;
 
     @Override
     public void toLog(LogTable table) {

@@ -62,8 +62,8 @@ public class ThreadedGyro {
         List<TimedGyroMeasurement> measurementList = new ArrayList<>();
         TimedGyroMeasurement measurement = lastGyroMeasurements.poll();
         while (measurement != null){
-            measurement = lastGyroMeasurements.poll();
             measurementList.add(measurement);
+            measurement = lastGyroMeasurements.poll();
         }
         return measurementList;
     }

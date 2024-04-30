@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import java.util.Arrays;
 
 public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Loggable {
-    private String basicName = getClass().getName();
+    private String basicName = getClass().getSimpleName();
     private Command parent = new BlankCommand();
 
     @SafeVarargs
@@ -22,7 +22,7 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
 
     @Override
     public String getName() {
-        return parent.getName() + getBasicName() + "_" + Integer.toHexString(hashCode());
+        return parent.getName() +"/"+ getBasicName();
     }
 
     @Override

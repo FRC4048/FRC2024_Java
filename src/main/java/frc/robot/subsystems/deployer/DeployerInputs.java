@@ -5,8 +5,8 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class DeployerInputs implements LoggableInputs {
 
-    public double deployerSpeed;
-    public boolean revLimit;
+    public double deployerSpeed = 0;
+    public boolean revLimit = false;
     public boolean fwdLimit;
 
     @Override

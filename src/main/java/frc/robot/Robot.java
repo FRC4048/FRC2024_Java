@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,7 +48,6 @@ public class Robot extends LoggedRobot {
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
             }
             Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
-            DataLogManager.start();
             // Log active commands
             CommandScheduler.getInstance().onCommandInitialize(command -> {
                 Logger.recordOutput(command.getName(), true);
@@ -113,8 +111,7 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
         new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
-        new LoggableParallelCommandGroup(
-                new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
+        new LoggableParallelCommandGroup(new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
         ).withBasicName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }
