@@ -8,9 +8,6 @@ import java.util.Arrays;
 public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
     private String basicName = getClass().getSimpleName();
     private Command parent = new BlankCommand();
-    private Loggable deadline;
-    private Loggable[] children;
-
 
     @SafeVarargs
     public <T extends Command & Loggable> LoggableDeadlineCommandGroup(T deadline, T... others) {
