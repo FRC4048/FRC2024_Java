@@ -24,7 +24,7 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
     }
 
     @Override
-    public String getName() {
+    public String toString() {
         String prefix = parent.getName();
         if (!prefix.isBlank()){
             prefix += "/";

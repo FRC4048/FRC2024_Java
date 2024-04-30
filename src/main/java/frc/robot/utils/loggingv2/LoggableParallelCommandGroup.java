@@ -21,7 +21,7 @@ public class LoggableParallelCommandGroup extends ParallelCommandGroup implement
     }
 
     @Override
-    public String getName() {
+    public String toString() {
         String prefix = parent.getName();
         if (!prefix.isBlank()){
             prefix += "/";

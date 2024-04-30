@@ -21,7 +21,7 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
     }
 
     @Override
-    public String getName() {
+    public String toString() {
         String prefix = parent.getName();
         if (!prefix.isBlank()){
             prefix += "/";

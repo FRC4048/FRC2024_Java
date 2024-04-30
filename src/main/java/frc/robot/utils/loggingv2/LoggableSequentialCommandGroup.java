@@ -20,7 +20,7 @@ public class LoggableSequentialCommandGroup extends SequentialCommandGroup imple
     }
 
     @Override
-    public String getName() {
+    public String toString() {
         String prefix = parent.getName();
         if (!prefix.isBlank()){
             prefix += "/";

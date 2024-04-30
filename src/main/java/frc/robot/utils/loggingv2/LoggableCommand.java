@@ -12,7 +12,7 @@ public class LoggableCommand extends Command implements Loggable {
     }
 
     @Override
-    public String getName() {
+    public String toString() {
         String prefix = parent.getName();
         if (!prefix.isBlank()){
             prefix += "/";

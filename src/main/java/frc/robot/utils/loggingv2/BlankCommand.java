@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class BlankCommand extends Command {
     @Override
-    public String getName() {
+    public String toString() {
         return "";
     }
 }
