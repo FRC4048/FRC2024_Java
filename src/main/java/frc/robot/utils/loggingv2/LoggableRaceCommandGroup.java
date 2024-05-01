@@ -2,8 +2,7 @@ package frc.robot.utils.loggingv2;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-
-import java.util.Arrays;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
 public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Loggable {
     private String basicName = getClass().getSimpleName();
@@ -11,8 +10,12 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
 
     @SafeVarargs
     public <T extends Command & Loggable>LoggableRaceCommandGroup(T... commands) {
-        Arrays.stream(commands).forEach(c -> c.setParent(this));
-        addCommands(commands);
+        ProxyCommand[] proxyCommands = new ProxyCommand[commands.length];
+        for (int i = 0; i < commands.length; i++) {
+            commands[i].setParent(this);
+            proxyCommands[i] = commands[i].asProxy();
+        }
+        addCommands(proxyCommands);
     }
 
     @Override
@@ -22,11 +25,11 @@ public class LoggableRaceCommandGroup extends ParallelRaceGroup implements Logga
 
     @Override
     public String toString() {
-        String prefix = parent.getName();
+        String prefix = parent.toString();
         if (!prefix.isBlank()){
             prefix += "/";
         }
-        return prefix + getBasicName();
+        return prefix + getBasicName() + "/inst";
     }
 
     @Override

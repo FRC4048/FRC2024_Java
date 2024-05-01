@@ -16,7 +16,6 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
-import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -50,13 +49,13 @@ public class Robot extends LoggedRobot {
             Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
             // Log active commands
             CommandScheduler.getInstance().onCommandInitialize(command -> {
-                Logger.recordOutput("Command/" + command.getName(), true);
+                Logger.recordOutput("Command/" + command.toString(), true);
             });
             CommandScheduler.getInstance().onCommandFinish(command -> {
-                Logger.recordOutput("Command/" + command.getName(), false);
+                Logger.recordOutput("Command/" + command.toString(), false);
             });
             CommandScheduler.getInstance().onCommandInterrupt(command -> {
-                Logger.recordOutput("Command/" + command.getName(), false);
+                Logger.recordOutput("Command/" + command.toString(), false);
             });
         }
         diagnostics = new Diagnostics();
@@ -111,9 +110,7 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
         new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
-        new LoggableParallelCommandGroup(
-                new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())
-        ).withBasicName("Reset Climber and Ramp").schedule();
+        new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip()).withBasicName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }
 

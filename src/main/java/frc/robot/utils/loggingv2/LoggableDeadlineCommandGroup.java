@@ -2,8 +2,7 @@ package frc.robot.utils.loggingv2;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-
-import java.util.Arrays;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 
 public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implements Loggable {
     private String basicName = getClass().getSimpleName();
@@ -12,10 +11,14 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
     @SafeVarargs
     public <T extends Command & Loggable> LoggableDeadlineCommandGroup(T deadline, T... others) {
         super(new Command() {});
-        Arrays.stream(others).forEach(c -> c.setParent(this));
+        ProxyCommand[] proxyCommands = new ProxyCommand[others.length];
+        for (int i = 0; i < others.length; i++) {
+            others[i].setParent(this);
+            proxyCommands[i] = others[i].asProxy();
+        }
+        addCommands(proxyCommands);
         deadline.setParent(this);
-        setDeadline(deadline);
-        addCommands(others);
+        setDeadline(deadline.asProxy());
     }
 
     @Override
@@ -25,11 +28,11 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
 
     @Override
     public String toString() {
-        String prefix = parent.getName();
+        String prefix = parent.toString();
         if (!prefix.isBlank()){
             prefix += "/";
         }
-        return prefix + getBasicName();
+        return prefix + getBasicName() + "/inst";
     }
 
     @Override
@@ -41,4 +44,5 @@ public class LoggableDeadlineCommandGroup extends ParallelDeadlineGroup implemen
         basicName = name;
         return this;
     }
+
 }

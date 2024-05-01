@@ -25,11 +25,11 @@ public class LoggableCommandWrapper extends Command implements Loggable {
 
     @Override
     public String toString() {
-        String prefix = parent.getName();
+        String prefix = parent.toString();
         if (!prefix.isBlank()){
             prefix += "/";
         }
-        return prefix + getBasicName();
+        return prefix + getBasicName() + "/inst";
     }
 
     @Override
@@ -76,4 +76,5 @@ public class LoggableCommandWrapper extends Command implements Loggable {
     public boolean runsWhenDisabled() {
         return wrap.runsWhenDisabled();
     }
+
 }
