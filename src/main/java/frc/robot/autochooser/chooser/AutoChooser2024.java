@@ -8,6 +8,7 @@ import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
 import frc.robot.commands.pathplanning.ShootAndDrop;
+import frc.robot.commands.pathplanning.autos.FourPieceCenter;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
@@ -46,7 +47,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                                 LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootAndCrossMid"))))
                 ),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("FourPieceLeft"))),
-                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("FourPieceCenter"))),
+                Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), new FourPieceCenter(intake, shooter, feeder, deployer, ramp, lightStrip)),
                 Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("ForkAuto"))),
                 Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("SmartForkAuto"))),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right")))),
