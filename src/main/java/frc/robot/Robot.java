@@ -16,12 +16,17 @@ import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
+import frc.robot.utils.loggingv2.CommandLogger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 
 public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
@@ -32,6 +37,7 @@ public class Robot extends LoggedRobot {
     private final Timer ledEndgameTimer = new Timer();
 
     private RobotContainer robotContainer;
+    private Map<Command, Queue<Boolean>> toLogCommandStatus = new HashMap<>();
 
     @Override
     public void robotInit() {
@@ -48,15 +54,7 @@ public class Robot extends LoggedRobot {
             }
             Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
             // Log active commands
-            CommandScheduler.getInstance().onCommandInitialize(command -> {
-                Logger.recordOutput("Command/" + command.toString(), true);
-            });
-            CommandScheduler.getInstance().onCommandFinish(command -> {
-                Logger.recordOutput("Command/" + command.toString(), false);
-            });
-            CommandScheduler.getInstance().onCommandInterrupt(command -> {
-                Logger.recordOutput("Command/" + command.toString(), false);
-            });
+            CommandLogger.get().init();
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
@@ -67,12 +65,9 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
-
-//        Logger.logDouble("/robot/loopTime", time);
-//        if (ledEndgameTimer.hasElapsed(130)){
-//            robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
-//        }
+        if (Constants.ENABLE_LOGGING){
+            CommandLogger.get().log();
+        }
     }
 
     @Override
