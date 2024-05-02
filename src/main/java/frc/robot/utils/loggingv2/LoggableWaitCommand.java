@@ -22,6 +22,7 @@ public class LoggableWaitCommand extends WaitCommand implements Loggable {
     public String toString() {
         String prefix = parent.toString();
         if (!prefix.isBlank()){
+            prefix = prefix.substring(0,prefix.length() - 5);
             prefix += "/";
         }
         return prefix + getBasicName() + "/inst";
