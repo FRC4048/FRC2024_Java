@@ -23,29 +23,29 @@ public class FourPieceCenter extends LoggableSequentialCommandGroup {
         super(
                 new ShootAndDrop(shooter,feeder,deployer,lightStrip),
                 new LoggableParallelCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("initCenter"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("initCenter"))).withBasicName("FollowInitCenter"),
                         new SlurpWithRamp(intake,feeder,lightStrip,ramp)
                 ),
                 new LoggableDeadlineCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("CenterShootRight"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("CenterShootRight"))).withBasicName("FollowCenterShootRight"),
                         new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")
                 ),
                 new ComboShot(shooter, feeder, lightStrip),
                 new LoggableParallelCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("RightShotPick"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("RightShotPick"))).withBasicName("FollowRightShotPick"),
                         new SlurpWithRamp(intake,feeder,lightStrip,ramp)
                 ),
                 new LoggableDeadlineCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("StrafeL2C"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("StrafeL2C"))).withBasicName("FollowStrafeL2C"),
                         new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT).withBasicName("RampShootComboCenter")
                 ),
                 new ComboShot(shooter, feeder, lightStrip),
                 new LoggableParallelCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Center2Right"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Center2Right"))).withBasicName("FollowCenter2Right"),
                         new SlurpWithRamp(intake,feeder,lightStrip,ramp)
                 ),
                 new LoggableDeadlineCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootRightCenter"))),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("ShootRightCenter"))).withBasicName("FollowShootRightCenter"),
                         new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")
                 ),
                 new ShootAndDrop(shooter, feeder, deployer, lightStrip)

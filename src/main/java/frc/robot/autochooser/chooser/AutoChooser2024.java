@@ -9,12 +9,15 @@ import frc.robot.autochooser.PlaceHolderCommand;
 import frc.robot.autochooser.event.AutoEvent;
 import frc.robot.commands.pathplanning.ShootAndDrop;
 import frc.robot.commands.pathplanning.autos.FourPieceCenter;
+import frc.robot.commands.pathplanning.autos.SmartForkDouble;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.utils.loggingv2.LoggableCommandWrapper;
 import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
 
@@ -23,7 +26,7 @@ import java.util.Map;
 public class AutoChooser2024 extends Nt4AutoValidationChooser {
     private final Map<AutoEvent, Command> commandMap;
 
-    public AutoChooser2024(Intake intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip) {
+    public AutoChooser2024(SwerveDrivetrain drivetrain, Intake intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip, Vision vision) {
         super(AutoAction.DoNothing, FieldLocation.SpeakFront);
         commandMap = Map.ofEntries(
                 Map.entry(new AutoEvent(AutoAction.DoNothing, FieldLocation.SpeakFront), new PlaceHolderCommand()),
@@ -49,7 +52,7 @@ public class AutoChooser2024 extends Nt4AutoValidationChooser {
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerLeft), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("FourPieceLeft"))),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakFront), new FourPieceCenter(intake, shooter, feeder, deployer, ramp, lightStrip)),
                 Map.entry(new AutoEvent(AutoAction.Fork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("ForkAuto"))),
-                Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.buildAuto("SmartForkAuto"))),
+                Map.entry(new AutoEvent(AutoAction.SmartFork, FieldLocation.SpeakerRight), new SmartForkDouble(drivetrain,intake,shooter,feeder,deployer,ramp,lightStrip,vision)),
                 Map.entry(new AutoEvent(AutoAction.ShootFour, FieldLocation.SpeakerRight), LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Shoot4Right")))),
                 Map.entry(new AutoEvent(AutoAction.ShootTwo, FieldLocation.SpeakerLeft), new LoggableSequentialCommandGroup(
                         new ShootAndDrop(shooter,feeder,deployer,lightStrip),
