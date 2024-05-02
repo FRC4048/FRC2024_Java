@@ -24,10 +24,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-
 public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
@@ -35,9 +31,7 @@ public class Robot extends LoggedRobot {
     private double aliveTics = 0;
     private final Timer ledCycleTimer = new Timer();
     private final Timer ledEndgameTimer = new Timer();
-
     private RobotContainer robotContainer;
-    private Map<Command, Queue<Boolean>> toLogCommandStatus = new HashMap<>();
 
     @Override
     public void robotInit() {
