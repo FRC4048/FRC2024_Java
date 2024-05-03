@@ -1,6 +1,6 @@
 package frc.robot.commands.sequences;
 
-import frc.robot.SpoolIntake;
+import frc.robot.commands.SpoolIntake;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;

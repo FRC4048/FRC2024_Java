@@ -14,6 +14,7 @@ import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.RobotMode;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.loggingv2.CommandLogger;
@@ -24,6 +25,8 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
@@ -32,6 +35,12 @@ public class Robot extends LoggedRobot {
     private final Timer ledCycleTimer = new Timer();
     private final Timer ledEndgameTimer = new Timer();
     private RobotContainer robotContainer;
+
+    private static final AtomicReference<RobotMode> mode = new AtomicReference<>(RobotMode.DISABLED);
+
+    public static RobotMode getMode(){
+        return mode.get();
+    }
 
     @Override
     public void robotInit() {

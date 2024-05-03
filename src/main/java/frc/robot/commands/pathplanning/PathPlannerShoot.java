@@ -1,6 +1,6 @@
 package frc.robot.commands.pathplanning;
 
-import frc.robot.SpoolIntake;
+import frc.robot.commands.SpoolIntake;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.ramp.ResetRamp;

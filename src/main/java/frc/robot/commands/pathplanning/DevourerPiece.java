@@ -1,7 +1,7 @@
 package frc.robot.commands.pathplanning;
 
-import frc.robot.SpoolIntake;
 import frc.robot.commands.MoveToGamepiece;
+import frc.robot.commands.SpoolIntake;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;

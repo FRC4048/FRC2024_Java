@@ -1,9 +1,9 @@
-package frc.robot;
+package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class SetTelopPid extends Command {
+public class SetTelopPid extends LoggableCommand {
     private final Ramp ramp;
 
     public SetTelopPid(Ramp ramp) {
