@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.lightstrip.LightStrip;
-import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.loggingv2.LoggableCommand;
 
@@ -27,7 +26,6 @@ public class RaiseDeployer extends LoggableCommand {
     public void initialize() {
         //Reset and start timers
         deployer.setDeployerMotorSpeed(Constants.DEPLOYER_LOWER_SPEED);
-        lightStrip.setPattern(BlinkinPattern.BLACK);
         timer.reset();
         timer.start();
     }

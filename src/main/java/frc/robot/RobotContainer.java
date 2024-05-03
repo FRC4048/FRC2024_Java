@@ -20,6 +20,7 @@ import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
+import frc.robot.commands.SetLedPattern;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -80,10 +81,7 @@ import frc.robot.swervev3.SwerveDrivetrain;
 import frc.robot.swervev3.io.MockModuleIO;
 import frc.robot.swervev3.io.ModuleIO;
 import frc.robot.swervev3.io.SparkMaxModuleIO;
-import frc.robot.utils.Alignable;
-import frc.robot.utils.DriveMode;
-import frc.robot.utils.Gain;
-import frc.robot.utils.PID;
+import frc.robot.utils.*;
 import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
 import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
@@ -338,7 +336,8 @@ public class RobotContainer {
         controller.povUp().onTrue(new LoggableParallelCommandGroup(
                 new RaiseDeployer(deployer, lightStrip),
                 new StopFeeder(feeder),
-                new StopIntake(intake)
+                new StopIntake(intake),
+                new SetLedPattern(lightStrip, BlinkinPattern.BLACK)
         ).withBasicName("stop intake"));
 
         joyRightButton3.onTrue(new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT));
