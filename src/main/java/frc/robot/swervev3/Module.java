@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.swervev2.SwervePidConfig;
@@ -58,5 +59,8 @@ public class Module {
     }
     public void setSteerOffset(double steerOffset){
         moduleIO.setSteerOffset(steerOffset);
+    }
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(inputs.driveEncoderPosition,new Rotation2d(inputs.steerEncoderPosition));
     }
 }

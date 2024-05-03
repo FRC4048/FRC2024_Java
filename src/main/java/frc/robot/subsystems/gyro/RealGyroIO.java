@@ -1,7 +1,6 @@
 package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.utils.ThreadedGyro;
 import frc.robot.utils.TimedGyroMeasurement;
 
 import java.util.List;
@@ -18,6 +17,7 @@ public class RealGyroIO implements GyroIO {
     @Override
     public void setAngleOffset(double offset) {
         this.angleOffset = offset;
+        gyro.setAngleAdjustment(angleOffset);
     }
 
     @Override

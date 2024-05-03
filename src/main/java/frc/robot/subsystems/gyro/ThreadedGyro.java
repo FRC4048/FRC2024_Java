@@ -1,7 +1,8 @@
-package frc.robot.utils;
+package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.constants.Constants;
+import frc.robot.utils.TimedGyroMeasurement;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class ThreadedGyro {
         gyroOffset.set(Double.doubleToLongBits(degrees));
         shouldOffset.set(true);
     }
+
     public List<TimedGyroMeasurement> flushRecentMeasurements(){
         gyroLock.lock();
         List<TimedGyroMeasurement> measurementList = new ArrayList<>();
