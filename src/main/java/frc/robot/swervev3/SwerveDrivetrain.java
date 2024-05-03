@@ -181,18 +181,16 @@ public class SwerveDrivetrain extends SubsystemBase {
         return alignableTurnPid;
     }
 
-    //TODO pose stuff
     public Pose2d getPose() {
-        return new Pose2d();
+        return poseEstimator.getEstimatedPose();
     }
 
     public void setGyroOffset(double offset) {
         gyroIO.setAngleOffset(offset);
     }
 
-    //TODO pose stuff
     public void resetOdometry(Pose2d startingPosition) {
-        return;
+        poseEstimator.resetOdometry(startingPosition.getRotation().getRadians(), startingPosition.getTranslation());
     }
 
     public Rotation2d getGyroAngle() {

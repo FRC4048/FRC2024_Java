@@ -78,7 +78,6 @@ public class PoseEstimator {
     }
     public void updateVision(){
         TimestampedDoubleArray visionArray = subscriber.getAtomic();
-
         Pose2d visionPose = new Pose2d(visionArray.value[0],
                 visionArray.value[1],
                 new Rotation2d(Units.degreesToRadians(visionArray.value[2]))
@@ -104,7 +103,7 @@ public class PoseEstimator {
                 },new Pose2d(translation2d,new Rotation2d(radians)));
     }
     public Pose2d getEstimatedPose(){
-        return field.getRobotPose();
+        return poseEstimator.getEstimatedPosition();
     }
 
     public Field2d getField() {
