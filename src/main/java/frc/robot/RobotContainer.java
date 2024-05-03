@@ -46,7 +46,6 @@ import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.MockClimberIO;
 import frc.robot.subsystems.climber.RealCimberIO;
@@ -77,6 +76,10 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev3.MockModuleIO;
+import frc.robot.swervev3.ModuleIO;
+import frc.robot.swervev3.SparkMaxModuleIO;
+import frc.robot.swervev3.SwerveDrivetrain;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.Gain;
@@ -211,7 +214,22 @@ public class RobotContainer {
 
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
-        this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, gyroIO);
+        ModuleIO frontLeft;
+        ModuleIO frontRight;
+        ModuleIO backLeft;
+        ModuleIO backRight;
+        if (Robot.isReal()){
+            frontLeft = new SparkMaxModuleIO(frontLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            frontRight = new SparkMaxModuleIO(frontRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            backLeft = new SparkMaxModuleIO(backLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            backRight = new SparkMaxModuleIO(backRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        }else{
+            frontLeft = new MockModuleIO();
+            frontRight = new MockModuleIO();
+            backLeft = new MockModuleIO();
+            backRight = new MockModuleIO();
+        }
+        this.drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, pidConfig);
     }
 
     public void putShuffleboardCommands() {

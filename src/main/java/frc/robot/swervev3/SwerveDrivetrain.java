@@ -1,6 +1,7 @@
 package frc.robot.swervev3;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -142,5 +143,30 @@ public class SwerveDrivetrain extends SubsystemBase {
     public PIDController getAlignableTurnPid() {
         return alignableTurnPid;
     }
+
+    //TODO pose stuff
+    public Pose2d getPose() {
+        return new Pose2d();
+    }
+
+    public void setGyroOffset(double offset) {
+        gyroIO.setAngleOffset(offset);
+    }
+
+    //TODO pose stuff
+    public void resetOdometry(Pose2d startingPosition) {
+        return;
+    }
+
+    public Rotation2d getGyroAngle() {
+        return Rotation2d.fromDegrees(getLastGyro());
+    }
+    public ChassisSpeeds getChassisSpeeds(){
+        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
+    }
+    public ChassisSpeeds getFieldChassisSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());
+    }
 }
+
 
