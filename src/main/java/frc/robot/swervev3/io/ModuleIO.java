@@ -1,4 +1,4 @@
-package frc.robot.swervev3;
+package frc.robot.swervev3.io;
 
 public interface ModuleIO {
     void setDriveVoltage(double volts);

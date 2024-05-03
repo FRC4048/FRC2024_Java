@@ -1,4 +1,4 @@
-package frc.robot.swervev3;
+package frc.robot.swervev3.io;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev3.bags.ModulePositionStamped;
 import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import org.littletonrobotics.junction.Logger;

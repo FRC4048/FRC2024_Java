@@ -1,4 +1,4 @@
-package frc.robot.swervev3;
+package frc.robot.swervev3.io;
 
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;

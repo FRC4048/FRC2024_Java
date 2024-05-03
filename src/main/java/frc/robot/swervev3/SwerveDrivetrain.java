@@ -12,6 +12,8 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.GyroInputs;
 import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev3.io.Module;
+import frc.robot.swervev3.io.ModuleIO;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import org.littletonrobotics.junction.Logger;
