@@ -48,16 +48,20 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         processInputs();
+        Logger.recordOutput("OdometryLockHoldEstimate", OdometryThread.getInstance().getLock().getQueueLength());
     }
 
     private void processInputs() {
+        frontLeft.updateInputs();
+        frontRight.updateInputs();
+        backLeft.updateInputs();
+        backRight.updateInputs();
         frontLeft.processInputs();
         frontRight.processInputs();
         backLeft.processInputs();
         backRight.processInputs();
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("GyroInputs", gyroInputs);
-
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
@@ -74,7 +78,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
     public ChassisSpeeds speedsFromStates() {
-        return kinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+        return kinematics.toChassisSpeeds(frontLeft.getLatestState(), frontRight.getLatestState(), backLeft.getLatestState(), backRight.getLatestState());
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -162,7 +166,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         return Rotation2d.fromDegrees(getLastGyro());
     }
     public ChassisSpeeds getChassisSpeeds(){
-        return kinematics.toChassisSpeeds(frontLeft.getState(),frontRight.getState(),backLeft.getState(),backRight.getState());
+        return kinematics.toChassisSpeeds(frontLeft.getLatestState(),frontRight.getLatestState(),backLeft.getLatestState(),backRight.getLatestState());
     }
     public ChassisSpeeds getFieldChassisSpeeds() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(),getPose().getRotation());

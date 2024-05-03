@@ -35,20 +35,24 @@ public class Module {
     }
 
     public void setState(SwerveModuleState desiredState){
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(inputs.steerEncoderPosition));
-        double driveSpeed = drivePIDController.calculate(inputs.driveEncoderVelocity,(state.speedMetersPerSecond)) + driveFeedforward.calculate(state.speedMetersPerSecond);
-        double turnSpeed = turningPIDController.calculate(inputs.steerEncoderPosition, state.angle.getRadians()) + turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getLatestSteerEncPos()));
+        double driveSpeed = drivePIDController.calculate(getLatestDriveEncVel(),(state.speedMetersPerSecond)) + driveFeedforward.calculate(state.speedMetersPerSecond);
+        double turnSpeed = turningPIDController.calculate(getLatestSteerEncPos(), state.angle.getRadians()) + turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
         moduleIO.setDriveVoltage(driveSpeed);
         moduleIO.setSteerVoltage(turnSpeed * 12);
     }
 
-    public SwerveModuleState getState() {
-        return new SwerveModuleState(inputs.driveEncoderVelocity,new Rotation2d(inputs.steerEncoderPosition));
+    public SwerveModuleState getLatestState() {
+        return new SwerveModuleState(getLatestDriveEncVel(),new Rotation2d(getLatestSteerEncPos()));
     }
-    public void processInputs(){
+    public void updateInputs(){
         moduleIO.updateInputs(inputs);
+    }
+
+    public void processInputs(){
         Logger.processInputs(loggingKey + "Inputs", inputs);
     }
+
     public void stop(){
         moduleIO.setDriveVoltage(0);
         moduleIO.setSteerVoltage(0);
@@ -60,7 +64,19 @@ public class Module {
     public void setSteerOffset(double steerOffset){
         moduleIO.setSteerOffset(steerOffset);
     }
-    public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(inputs.driveEncoderPosition,new Rotation2d(inputs.steerEncoderPosition));
+    public ModulePositionStamped[] getPositions(){
+        ModulePositionStamped[] poses = new ModulePositionStamped[inputs.measurementTimestamps.length];
+        for (int i = 0; i < inputs.measurementTimestamps.length; i++) {
+            SwerveModulePosition modPos = new SwerveModulePosition(inputs.driveEncoderPosition[i], new Rotation2d(inputs.steerEncoderPosition[i]));
+            poses[i] = new ModulePositionStamped(modPos, inputs.measurementTimestamps[i]);
+        }
+        return poses;
+    }
+    private double getLatestSteerEncPos(){
+        return inputs.steerEncoderPosition[inputs.steerEncoderPosition.length - 1];
+    }
+
+    private double getLatestDriveEncVel(){
+        return inputs.driveEncoderVelocity[inputs.steerEncoderPosition.length - 1];
     }
 }

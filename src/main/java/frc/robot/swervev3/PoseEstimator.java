@@ -16,10 +16,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class PoseEstimator {
     private final Field2d field = new Field2d();
@@ -44,10 +44,10 @@ public class PoseEstimator {
                 kinematics,
                 new Rotation2d(Math.toRadians(initGyroValueDeg)),
                 new SwerveModulePosition[] {
-                        frontLeftMotor.getPosition(),
-                        frontRightMotor.getPosition(),
-                        backLeftMotor.getPosition(),
-                        backRightMotor.getPosition(),
+                        frontLeft.getPositions()[0].modulePosition(),
+                        frontRight.getPositions()[0].modulePosition(),
+                        backLeft.getPositions()[0].modulePosition(),
+                        backRight.getPositions()[0].modulePosition(),
                 },
                 new Pose2d(),
                 stateStdDevs,
@@ -62,21 +62,19 @@ public class PoseEstimator {
      * @param gyroValueDeg current gyro value (angle of robot)
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
-    public void updatePosition(double gyroValueDeg){
+    public void updatePosition(OdometryMeasurementsStamped[] measurements){
         if (DriverStation.isEnabled()){
-            poseEstimator.update(new Rotation2d(Math.toRadians(gyroValueDeg)),
-                    new SwerveModulePosition[] {
-                            frontLeft.getPosition(),
-                            frontRight.getPosition(),
-                            backLeft.getPosition(),
-                            backRight.getPosition(),
-
-                    });
+            for (OdometryMeasurementsStamped measurement : measurements) {
+                poseEstimator.updateWithTime(
+                        measurement.timestamp(),
+                        Rotation2d.fromDegrees(measurement.gyroValueDeg()),
+                        measurement.modulePosition()
+                );
+            }
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
-    public void updatePositionWithVis(double gyroValueDeg){
-
+    public void updatePositionWithVis(OdometryMeasurementsStamped[] measurements){
         if (DriverStation.isTeleop()){
             TimestampedDoubleArray visionArray = subscriber.getAtomic();
 
@@ -86,10 +84,10 @@ public class PoseEstimator {
                             .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
                     .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
             if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
-                poseEstimator.addVisionMeasurement(visionPose, Timer.getFPGATimestamp());
+                poseEstimator.addVisionMeasurement(visionPose, Logger.getRealTimestamp());
             }
         }
-        updatePosition(gyroValueDeg);
+        updatePosition(measurements);
     }
 
     /**
@@ -100,10 +98,10 @@ public class PoseEstimator {
     public void resetOdometry(double radians, Translation2d translation2d){
         this.poseEstimator.resetPosition(new Rotation2d(radians),
                 new SwerveModulePosition[] {
-                        frontLeft.getPosition(),
-                        frontRight.getPosition(),
-                        backLeft.getPosition(),
-                        backRight.getPosition(),
+                        frontLeft.getPositions()[0].modulePosition(),
+                        frontRight.getPositions()[0].modulePosition(),
+                        backLeft.getPositions()[0].modulePosition(),
+                        backRight.getPositions()[0].modulePosition(),
                 },new Pose2d(translation2d,new Rotation2d(radians)));
     }
     public Pose2d getEstimatedPose(){

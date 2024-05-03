@@ -6,18 +6,44 @@ import frc.robot.constants.Constants;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+
 public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax driveMotor;
     private final CANSparkMax steerMotor;
     private final WPI_CANCoder absEncoder;
     private double steerOffset;
+    private Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
+    private ReentrantLock queueLock = new ReentrantLock();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
+        OdometryThread.getInstance().getLock().lock();
         driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
         steerMotor = new CANSparkMax(motorConfig.getTurnMotorId(), CANSparkMax.MotorType.kBrushless);
         absEncoder = new WPI_CANCoder(motorConfig.getCanCoderId());
         setMotorConfig(driveInverted, steerInverted);
         setConversionFactors(conversionConfig);
+        OdometryThread.getInstance().addRunnable(new Consumer<Double>() {
+            @Override
+            public void accept(Double time) {
+                OdometryThread.getInstance().getLock().lock();
+                ModuleInputsStamped input = new ModuleInputsStamped(
+                        steerMotor.getEncoder().getPosition(),
+                        driveMotor.getEncoder().getPosition(),
+                        driveMotor.getEncoder().getVelocity(),
+                        steerMotor.getEncoder().getVelocity(),
+                        time
+                );
+                queueLock.lock();
+                moduleReadingQueue.add(input);
+                queueLock.unlock();
+                OdometryThread.getInstance().getLock().unlock();
+            }
+        });
+        OdometryThread.getInstance().getLock().unlock();
     }
 
     private void setConversionFactors(KinematicsConversionConfig conversionConfig) {
@@ -39,24 +65,30 @@ public class SparkMaxModuleIO implements ModuleIO {
         driveMotor.setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
         driveMotor.setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
         driveMotor.setInverted(driveInverted);
-        steerMotor.setInverted(driveInverted);
+        steerMotor.setInverted(steerInverted);
     }
 
     @Override
     public void setDriveVoltage(double volts) {
+        OdometryThread.getInstance().getLock().lock();
         driveMotor.setVoltage(volts);
+        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void setSteerVoltage(double volts) {
+        OdometryThread.getInstance().getLock().lock();
         steerMotor.setVoltage(volts);
+        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void setSteerOffset(double zeroAbs) {
+        OdometryThread.getInstance().getLock().lock();
         steerMotor.getEncoder().setPosition(0);
         steerOffset = Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition());
         steerOffset = normalizeAngle(steerOffset);
+        OdometryThread.getInstance().getLock().unlock();
     }
 
     private double normalizeAngle(double angleInRad) {
@@ -69,18 +101,34 @@ public class SparkMaxModuleIO implements ModuleIO {
 
     @Override
     public void resetEncoder() {
+        OdometryThread.getInstance().getLock().lock();
         driveMotor.getEncoder().setPosition(0);
         steerMotor.getEncoder().setPosition(0);
+        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void updateInputs(SwerveModuleInput input) {
-        input.driveEncoderPosition = driveMotor.getEncoder().getPosition();
-        input.steerEncoderPosition = steerMotor.getEncoder().getPosition();
-        input.driveEncoderVelocity = driveMotor.getEncoder().getVelocity();
-        input.steerEncoderVelocity = steerMotor.getEncoder().getVelocity();
+        queueLock.lock();
+
+        input.steerEncoderPosition = new double[moduleReadingQueue.size()];
+        input.driveEncoderPosition = new double[moduleReadingQueue.size()];
+        input.driveEncoderVelocity = new double[moduleReadingQueue.size()];
+        input.steerEncoderVelocity = new double[moduleReadingQueue.size()];
+        input.measurementTimestamps = new double[moduleReadingQueue.size()];
+        ModuleInputsStamped poll = moduleReadingQueue.poll();
+        int i = 0;
+        while (poll !=null){
+            input.steerEncoderPosition[i] = poll.steerEncoderPosition();
+            input.driveEncoderPosition[i] = poll.driveEncoderPosition();
+            input.driveEncoderVelocity[i] = poll.driveEncoderVelocity();
+            input.steerEncoderVelocity[i] = poll.steerEncoderVelocity();
+            input.measurementTimestamps[i] = poll.measurementTimestamp();
+        }
+        OdometryThread.getInstance().getLock().lock();
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
-        input.steerEncoderPosition = steerMotor.getOutputCurrent();
         input.steerOffset = steerOffset;
+        OdometryThread.getInstance().getLock().unlock();
+        queueLock.unlock();
     }
 }
