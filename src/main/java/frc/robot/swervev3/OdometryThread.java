@@ -33,14 +33,13 @@ public class OdometryThread {
         executor.scheduleAtFixedRate(() -> {
             double startTime = Logger.getRealTimestamp();
             lock.lock();
-            List<Consumer<Double>> runnables = List.copyOf(odometryRunnables);
             CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
             double time = Logger.getRealTimestamp();
-            for (Consumer<Double> odometryRunnable : runnables) {
+            for (Consumer<Double> odometryRunnable : odometryRunnables) {
                 new Thread(() -> {
                     odometryRunnable.accept(time);
                     latch.countDown();
-                });
+                }).start();
             }
             try {
                 latch.await();

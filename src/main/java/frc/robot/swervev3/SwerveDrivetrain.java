@@ -6,17 +6,22 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.GyroInputs;
 import frc.robot.swervev2.SwervePidConfig;
+import frc.robot.swervev3.bags.ModulePositionStamped;
+import frc.robot.swervev3.bags.OdometryMeasurementsStamped;
 import frc.robot.swervev3.io.Module;
 import frc.robot.swervev3.io.ModuleIO;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import org.littletonrobotics.junction.Logger;
+
+import java.util.Arrays;
 
 public class SwerveDrivetrain extends SubsystemBase {
     private final Module frontLeft;
@@ -36,6 +41,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private boolean faceingTarget = false;
     private Alignable alignable = null;
     private DriveMode driveMode = DriveMode.FIELD_CENTRIC;
+    private final PoseEstimator poseEstimator;
 
 
     public SwerveDrivetrain(ModuleIO frontLeftIO, ModuleIO frontRightIO, ModuleIO backLeftIO, ModuleIO backRightIO, GyroIO gyroIO, SwervePidConfig pidConfig) {
@@ -45,12 +51,37 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight = new Module(backRightIO, pidConfig, "backRight");
         this.gyroIO = gyroIO;
         alignableTurnPid.enableContinuousInput(-180,180);
+        OdometryThread.getInstance().start();
+        this.poseEstimator = new PoseEstimator(frontLeft, frontRight, backLeft, backRight,kinematics, getLastGyro());
     }
 
     @Override
     public void periodic() {
         processInputs();
         Logger.recordOutput("OdometryLockHoldEstimate", OdometryThread.getInstance().getLock().getQueueLength());
+        ModulePositionStamped[] flPos = frontLeft.getPositions();
+        ModulePositionStamped[] frPos = frontLeft.getPositions();
+        ModulePositionStamped[] blPos = frontLeft.getPositions();
+        ModulePositionStamped[] brPos = frontLeft.getPositions();
+        OdometryMeasurementsStamped[] entries = new OdometryMeasurementsStamped[flPos.length];
+        boolean inSync = true;
+        for (int i = 0; i < flPos.length; i++) {
+            entries[i] = new OdometryMeasurementsStamped(
+                    new SwerveModulePosition[]{
+                            flPos[i].modulePosition(),
+                            frPos[i].modulePosition(),
+                            blPos[i].modulePosition(),
+                            brPos[i].modulePosition()
+                    },
+                    gyroInputs.anglesInDeg[i], flPos[i].timestamp()
+            );
+            if (Arrays.stream(new double[]{flPos[i].timestamp(), frPos[i].timestamp(), blPos[i].timestamp(), brPos[i].timestamp(), gyroInputs.anglesTimeStamps[i]}).distinct().count() != 1){
+                inSync = false;
+            }
+        }
+        poseEstimator.updatePosition(entries);
+        poseEstimator.updateVision();
+        Logger.recordOutput("OdomInSync", inSync);
     }
 
     private void processInputs() {

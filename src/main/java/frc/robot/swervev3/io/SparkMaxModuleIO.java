@@ -7,19 +7,19 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev3.OdometryThread;
 import frc.robot.swervev3.bags.ModuleInputsStamped;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax driveMotor;
     private final CANSparkMax steerMotor;
     private final WPI_CANCoder absEncoder;
     private double steerOffset;
-    private Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
-    private ReentrantLock queueLock = new ReentrantLock();
+    private final Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
+    private final ReentrantLock queueLock = new ReentrantLock();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
         OdometryThread.getInstance().getLock().lock();
@@ -28,22 +28,19 @@ public class SparkMaxModuleIO implements ModuleIO {
         absEncoder = new WPI_CANCoder(motorConfig.getCanCoderId());
         setMotorConfig(driveInverted, steerInverted);
         setConversionFactors(conversionConfig);
-        OdometryThread.getInstance().addRunnable(new Consumer<Double>() {
-            @Override
-            public void accept(Double time) {
-                OdometryThread.getInstance().getLock().lock();
-                ModuleInputsStamped input = new ModuleInputsStamped(
-                        steerMotor.getEncoder().getPosition(),
-                        driveMotor.getEncoder().getPosition(),
-                        driveMotor.getEncoder().getVelocity(),
-                        steerMotor.getEncoder().getVelocity(),
-                        time
-                );
-                queueLock.lock();
-                moduleReadingQueue.add(input);
-                queueLock.unlock();
-                OdometryThread.getInstance().getLock().unlock();
-            }
+        OdometryThread.getInstance().addRunnable(time -> {
+            OdometryThread.getInstance().getLock().lock();
+            ModuleInputsStamped input = new ModuleInputsStamped(
+                    steerMotor.getEncoder().getPosition(),
+                    driveMotor.getEncoder().getPosition(),
+                    driveMotor.getEncoder().getVelocity(),
+                    steerMotor.getEncoder().getVelocity(),
+                    time
+            );
+            queueLock.lock();
+            moduleReadingQueue.add(input);
+            queueLock.unlock();
+            OdometryThread.getInstance().getLock().unlock();
         });
         OdometryThread.getInstance().getLock().unlock();
     }
@@ -112,7 +109,8 @@ public class SparkMaxModuleIO implements ModuleIO {
     @Override
     public void updateInputs(SwerveModuleInput input) {
         queueLock.lock();
-
+        double size = moduleReadingQueue.size();
+        Logger.recordOutput("ModuleReadingsSize", size);
         input.steerEncoderPosition = new double[moduleReadingQueue.size()];
         input.driveEncoderPosition = new double[moduleReadingQueue.size()];
         input.driveEncoderVelocity = new double[moduleReadingQueue.size()];
@@ -126,6 +124,7 @@ public class SparkMaxModuleIO implements ModuleIO {
             input.driveEncoderVelocity[i] = poll.driveEncoderVelocity();
             input.steerEncoderVelocity[i] = poll.steerEncoderVelocity();
             input.measurementTimestamps[i] = poll.measurementTimestamp();
+            poll = moduleReadingQueue.poll();
         }
         OdometryThread.getInstance().getLock().lock();
         input.driveCurrentDraw = driveMotor.getOutputCurrent();

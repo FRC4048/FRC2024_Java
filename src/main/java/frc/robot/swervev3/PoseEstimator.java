@@ -76,20 +76,17 @@ public class PoseEstimator {
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
-    public void updatePositionWithVis(OdometryMeasurementsStamped[] measurements){
-        if (DriverStation.isTeleop()){
-            TimestampedDoubleArray visionArray = subscriber.getAtomic();
+    public void updateVision(){
+        TimestampedDoubleArray visionArray = subscriber.getAtomic();
 
-            Pose2d visionPose = new Pose2d(visionArray.value[0],
-                    visionArray.value[1],
-                    new Rotation2d(Units.degreesToRadians(visionArray.value[2]))
-                            .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
-                    .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
-            if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
-                poseEstimator.addVisionMeasurement(visionPose, Logger.getRealTimestamp());
-            }
+        Pose2d visionPose = new Pose2d(visionArray.value[0],
+                visionArray.value[1],
+                new Rotation2d(Units.degreesToRadians(visionArray.value[2]))
+                        .rotateBy(new Rotation2d(Math.PI)))   // to match WPILIB field
+                .plus(new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X,Constants.CAMERA_OFFSET_FROM_CENTER_Y,new Rotation2d())); // to offset to center of bot
+        if (visionArray.value[0] != -1 && visionArray.value[1] != -1 && visionArray.value[2] != -1) {
+            poseEstimator.addVisionMeasurement(visionPose, Logger.getRealTimestamp());
         }
-        updatePosition(measurements);
     }
 
     /**
