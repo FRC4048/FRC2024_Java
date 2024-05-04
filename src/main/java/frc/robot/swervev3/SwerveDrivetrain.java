@@ -17,6 +17,7 @@ import frc.robot.swervev3.bags.ModulePositionStamped;
 import frc.robot.swervev3.bags.OdometryMeasurementsStamped;
 import frc.robot.swervev3.io.Module;
 import frc.robot.swervev3.io.ModuleIO;
+import frc.robot.swervev3.vision.ApriltagIO;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import org.littletonrobotics.junction.Logger;
@@ -44,7 +45,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final PoseEstimator poseEstimator;
 
 
-    public SwerveDrivetrain(ModuleIO frontLeftIO, ModuleIO frontRightIO, ModuleIO backLeftIO, ModuleIO backRightIO, GyroIO gyroIO, SwervePidConfig pidConfig) {
+    public SwerveDrivetrain(ModuleIO frontLeftIO, ModuleIO frontRightIO, ModuleIO backLeftIO, ModuleIO backRightIO, GyroIO gyroIO, ApriltagIO apriltagIO, SwervePidConfig pidConfig) {
         this.frontLeft = new Module(frontLeftIO, pidConfig, "frontLeft");
         this.frontRight = new Module(frontRightIO, pidConfig, "frontRight");
         this.backLeft = new Module(backLeftIO, pidConfig, "backLeft");
@@ -52,13 +53,14 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.gyroIO = gyroIO;
         alignableTurnPid.enableContinuousInput(-180,180);
         OdometryThread.getInstance().start();
-        this.poseEstimator = new PoseEstimator(frontLeft, frontRight, backLeft, backRight,kinematics, getLastGyro());
+        this.poseEstimator = new PoseEstimator(frontLeft, frontRight, backLeft, backRight, apriltagIO, kinematics, getLastGyro());
     }
 
     @Override
     public void periodic() {
         processInputs();
         Logger.recordOutput("OdometryLockHoldEstimate", OdometryThread.getInstance().getLock().getQueueLength());
+        poseEstimator.updateInputs();
         ModulePositionStamped[] flPos = frontLeft.getPositions();
         ModulePositionStamped[] frPos = frontLeft.getPositions();
         ModulePositionStamped[] blPos = frontLeft.getPositions();

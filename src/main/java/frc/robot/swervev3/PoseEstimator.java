@@ -11,7 +11,6 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,28 +18,29 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.swervev3.bags.OdometryMeasurementsStamped;
 import frc.robot.swervev3.io.Module;
+import frc.robot.swervev3.vision.ApriltagIO;
+import frc.robot.swervev3.vision.ApriltagInputs;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
 import frc.robot.utils.RobotMode;
 import frc.robot.utils.math.ArrayUtils;
 import frc.robot.utils.math.PoseUtils;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class PoseEstimator {
-    public record VisionMeasurement(TimestampedDoubleArray measurement, Apriltag tag, double timeOfMeasurement){}
+    public record VisionMeasurement(Pose2d measurement, Apriltag tag, double timeOfMeasurement){}
     private final Field2d field = new Field2d();
     private final Module frontLeft;
     private final Module frontRight;
     private final Module backLeft;
     private final Module backRight;
+    private final ApriltagIO apriltagIO;
+    private final ApriltagInputs inputs = new ApriltagInputs();
     private final SwerveDrivePoseEstimator poseEstimator;
-    private final DoubleArraySubscriber visionMeasurementSubscriber;
-    private final IntegerArraySubscriber apriltagIdSubscriber;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
     private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.15, 0.15, 0.001);
@@ -51,11 +51,12 @@ public class PoseEstimator {
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private final TimeInterpolatableBuffer<Pose2d> robotPoses = TimeInterpolatableBuffer.createBuffer(Constants.POSE_BUFFER_STORAGE_TIME);
     private final Queue<VisionMeasurement> visionPoses = new LinkedList<>();
-    public PoseEstimator(Module frontLeftMotor, Module frontRightMotor, Module backLeftMotor, Module backRightMotor, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
+    public PoseEstimator(Module frontLeftMotor, Module frontRightMotor, Module backLeftMotor, Module backRightMotor, ApriltagIO apriltagIO, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeft = frontLeftMotor;
         this.frontRight = frontRightMotor;
         this.backLeft = backLeftMotor;
         this.backRight = backRightMotor;
+        this.apriltagIO = apriltagIO;
         this.poseEstimator =  new SwerveDrivePoseEstimator(
                 kinematics,
                 new Rotation2d(Math.toRadians(initGyroValueDeg)),
@@ -68,11 +69,11 @@ public class PoseEstimator {
                 new Pose2d(),
                 stateStdDevs,
                 visionMeasurementStdDevs);
-        NetworkTableInstance inst = NetworkTableInstance.getDefault();
-        NetworkTable table = inst.getTable("ROS");
-        visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true));
-        apriltagIdSubscriber = table.getIntegerArrayTopic("apriltag_id").subscribe(new long[]{-1,-1});
         SmartDashboard.putData(field);
+    }
+    public void updateInputs(){
+        apriltagIO.updateInputs(inputs);
+        Logger.processInputs("ApriltagInputs", inputs);
     }
     /**
      * updates odometry, should be called in periodic
@@ -91,20 +92,21 @@ public class PoseEstimator {
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
-    private boolean validAprilTagPose(TimestampedDoubleArray measurement) {
-        return !ArrayUtils.allMatch(measurement.value,-1.0);
+    private boolean validAprilTagPose(double[] measurement) {
+        return !ArrayUtils.allMatch(measurement,-1.0);
     }
     public void updateVision(){
         if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION){
-            long[] tagData = apriltagIdSubscriber.get();
-            TimestampedDoubleArray[] queue = visionMeasurementSubscriber.readQueue();
-            for (TimestampedDoubleArray measurement : queue){
-                if (validAprilTagPose(measurement)){
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, measurement.serverTime - TimeUnit.MILLISECONDS.toMicros((long) measurement.value[3]));
-                    visionPoses.add(new VisionMeasurement(measurement, Apriltag.of((int) tagData[0]), latencyInSec));
+            for (int i = 0; i < inputs.timestamp.length; i++) {
+                double[] pos = new double[]{inputs.posX[i], inputs.posY[i], inputs.rotationDeg[i]};
+                if (validAprilTagPose(new double[]{inputs.posX[i], inputs.posY[i], inputs.rotationDeg[i]})){
+                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, inputs.serverTime[i] - TimeUnit.MILLISECONDS.toMicros((long) inputs.timestamp[i]));
+                    visionPoses.add(new VisionMeasurement(new Pose2d(pos[0],pos[1], Rotation2d.fromDegrees(pos[2])), Apriltag.of(inputs.apriltagNumber[i]), latencyInSec));
                 }
             }
             if (Constants.FILTER_VISION_POSES){
+                boolean usingFuturePose = false;
+                List<Double> visionOdomDiffs = new ArrayList<>();
                 while (visionPoses.size() >= 2){
                     VisionMeasurement m1 = visionPoses.poll();
                     VisionMeasurement m2 = visionPoses.poll();
@@ -114,6 +116,12 @@ public class PoseEstimator {
                     Pose2d vision2Pose;
                     if (m1 == null || m2 == null){
                         continue;
+                    }
+                    Double lastEntry = robotPoses.getInternalBuffer().lastEntry().getKey();
+                    if (lastEntry != null){
+                        if (lastEntry < m1.timeOfMeasurement || lastEntry < m2.timeOfMeasurement){
+                            usingFuturePose = true;
+                        }
                     }
                     odomPoseAtVis1 = robotPoses.getSample(m1.timeOfMeasurement());
                     odomPoseAtVis2 = robotPoses.getSample(m2.timeOfMeasurement());
@@ -126,12 +134,14 @@ public class PoseEstimator {
                     double odomDiff1To2 = odomPoseAtVis1.get().getTranslation().getDistance(odomPoseAtVis2.get().getTranslation());
                     double visionDiff1To2 = vision1Pose.getTranslation().getDistance(vision2Pose.getTranslation());
                     double diff = Math.abs(odomDiff1To2 - visionDiff1To2);
-                    Logger.recordOutput("odometryVisionTheta", diff);
+                    visionOdomDiffs.add(diff);
                     if (Math.abs(diff) <= Constants.VISION_CONSISTANCY_THRESHOLD){
                         poseEstimator.addVisionMeasurement(vision1Pose, m1.timeOfMeasurement());
                         poseEstimator.addVisionMeasurement(vision2Pose, m2.timeOfMeasurement());
                     }
                 }
+                Logger.recordOutput("usingFuturePoseEstimation", usingFuturePose);
+                Logger.recordOutput("visionOdomDiffs", ArrayUtils.unwrap(ArrayUtils.toArray(visionOdomDiffs, Double.class)));
             }else{
                 VisionMeasurement measurement = visionPoses.poll();
                 while (measurement != null){
@@ -157,9 +167,8 @@ public class PoseEstimator {
                         backRight.getPositions()[0].modulePosition(),
                 },new Pose2d(translation2d,new Rotation2d(radians)));
     }
-    private Pose2d getVisionPose(TimestampedDoubleArray measurement, Apriltag tag){
-        Translation2d visionPose = new Translation2d(measurement.value[0], measurement.value[1]);
-        double slope = PoseUtils.slope(tag.getPose().toTranslation2d(),new Translation2d(visionPose.getX(), visionPose.getY()));
+    private Pose2d getVisionPose(Pose2d measurement, Apriltag tag){
+        double slope = PoseUtils.slope(tag.getPose().toTranslation2d(),new Translation2d(measurement.getX(), measurement.getY()));
         Rotation2d facingAngle = new Rotation2d(Math.atan(slope));
         Transform2d camTransform;
         double visionCentricAngle = (getEstimatedPose().getRotation().getDegrees() + Math.PI) % 360;
@@ -169,12 +178,10 @@ public class PoseEstimator {
         } else {
             camTransform = cameraTwoTransform;
         }
-        return new Pose2d(measurement.value[0],
-                measurement.value[1],
-                getEstimatedPose().getRotation())
-                .plus(camTransform);
+        return measurement.plus(camTransform);
     }
 
+    @AutoLogOutput
     public Pose2d getEstimatedPose(){
         return poseEstimator.getEstimatedPosition();
     }
