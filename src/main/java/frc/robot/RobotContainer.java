@@ -33,18 +33,17 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
-import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
-import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.IntakePiece;
+import frc.robot.commands.sequences.ShootPiece;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
-import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.apriltags.ApriltagIO;
@@ -262,7 +261,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder, lightStrip));
         }
         if (Constants.INTAKE_DEBUG) {
-            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intake, 5));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new frc.robot.commands.intake.StartIntake(intake, 5));
             SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", new LoggableSequentialCommandGroup(
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip)
@@ -314,37 +313,12 @@ public class RobotContainer {
         controller.b().onTrue(new CancelAll(ramp, shooter, lightStrip));
 
         // Shoot - Right Trigger
-        controller.rightTrigger(0.5).onTrue(new LoggableSequentialCommandGroup(
-                new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new LoggableWaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-        ).withBasicName("Operator Shoot"));
+        controller.rightTrigger(0.5).onTrue(new ShootPiece(shooter,feeder,ramp,lightStrip).withBasicName("Operator Shoot"));
 
         //Driver Shoot
-        joyRightButton2.onTrue(new LoggableSequentialCommandGroup(
-                new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new LoggableWaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)
-        ).withBasicName("Driver Shoot"));
-
-        // start intaking a note
-        LoggableParallelCommandGroup lowerIntake = new LoggableParallelCommandGroup(
-                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
-                new LowerDeployer(deployer, lightStrip),
-                new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW)
-        ).withBasicName("lowerIntake");
-        RaiseDeployer endIntake = new RaiseDeployer(deployer, lightStrip);
-
-        controller.povDown().onTrue(new LoggableSequentialCommandGroup(
-                lowerIntake,
-                new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                endIntake
-        ).withBasicName("Intake a Note"));
-
+        joyRightButton2.onTrue(new ShootPiece(shooter,feeder,ramp,lightStrip).withBasicName("Driver Shoot"));
+        controller.povDown().onTrue(new IntakePiece(intake,deployer,ramp,feeder,lightStrip).withBasicName("Intake a Note"));
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder, lightStrip));
-
         // stop intake
         controller.povUp().onTrue(new LoggableParallelCommandGroup(
                 new RaiseDeployer(deployer, lightStrip),

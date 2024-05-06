@@ -12,9 +12,9 @@ import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.feeder.Feeder;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.limelight.Vision;
 import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.limelight.Vision;
 import frc.robot.subsystems.swervev3.SwerveDrivetrain;
 import frc.robot.utils.loggingv2.LoggableCommandWrapper;
 import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
@@ -23,17 +23,17 @@ import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
 public class SmartForkSingle extends LoggableSequentialCommandGroup {
     public SmartForkSingle(SwerveDrivetrain drivetrain, Intake intake, Shooter shooter, Feeder feeder, Deployer deployer, Ramp ramp, LightStrip lightStrip, Vision vision) {
         super(
-                new ShootAndDrop(shooter,feeder,deployer,lightStrip),
+                new ShootAndDrop(shooter, feeder, deployer, lightStrip),
                 new LoggableParallelCommandGroup(
                         LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("DipRight"))).withBasicName("FollowDipRight"),
                         new ResetRamp(ramp, lightStrip)
                 ),
-                new DevourerPiece(drivetrain,vision, intake,feeder,deployer,lightStrip),
+                new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip),
                 new LoggableParallelCommandGroup(
                         LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("DipRight"))).withBasicName("FollowDipRight"),
                         new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT).withBasicName("RampShootComboSide2")
                 ),
-                new ComboShot(shooter, feeder,lightStrip)
+                new ComboShot(shooter, feeder, lightStrip)
         );
     }
 }
