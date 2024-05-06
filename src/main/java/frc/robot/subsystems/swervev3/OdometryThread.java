@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swervev3;
 
+import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class OdometryThread {
             lock.unlock();
             double endTime = Logger.getRealTimestamp();
             double cycleTime = (endTime - startTime) / 1000;
-            Logger.recordOutput("OdomUpdateCycleTime", cycleTime);
+            Robot.runInMainThread(()-> Logger.recordOutput("OdomUpdateCycleTime", cycleTime));
         }, 0, 10, TimeUnit.MILLISECONDS);
     }
 

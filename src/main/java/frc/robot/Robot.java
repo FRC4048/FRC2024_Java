@@ -25,16 +25,17 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
-    private double loopTime = 0;
     private double aliveTics = 0;
     private final Timer ledCycleTimer = new Timer();
     private final Timer ledEndgameTimer = new Timer();
     private RobotContainer robotContainer;
+    private static final ConcurrentLinkedQueue<Runnable> runInMainThread = new ConcurrentLinkedQueue<>();
 
     private static final AtomicReference<RobotMode> mode = new AtomicReference<>(RobotMode.DISABLED);
 
@@ -70,7 +71,18 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().run();
         if (Constants.ENABLE_LOGGING){
             CommandLogger.get().log();
+            long startTime = Logger.getRealTimestamp();
+            Runnable poll = runInMainThread.poll();
+            while (poll != null){
+                poll.run();
+                if (Logger.getRealTimestamp() - startTime <= 3000){
+                    poll = runInMainThread.poll();
+                }else {
+                    break;
+                }
+            }
         }
+
     }
 
     @Override
@@ -98,7 +110,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -114,7 +125,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -126,7 +136,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {
-        loopTime = 0;
         diagnostics.refresh();
         if (ledCycleTimer.advanceIfElapsed(0.5)){
             robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
@@ -135,10 +144,12 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     public static Diagnostics getDiagnostics() {
         return diagnostics;
+    }
+    public static void runInMainThread(Runnable r){
+        runInMainThread.add(r);
     }
 }
