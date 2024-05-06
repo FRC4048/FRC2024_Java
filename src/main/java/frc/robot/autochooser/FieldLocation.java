@@ -8,7 +8,8 @@ public enum FieldLocation {
      SpeakerLeft(0.70,6.69,Math.toRadians(-120),"Speaker Left","Speaker Right"),
      SpeakFront(1.34,5.55,Math.PI,"Speaker Front","Speaker Front"),
      SpeakerRight(0.70,4.42,Math.toRadians(120),"Speaker Right","Speaker Left"),
-     ZERO(0, 0,0,"Zero", "Zero");
+     ZERO(0, 0,0,"Zero", "Zero"),
+     INVALID(-1, -1,-1,"INVALID", "INVALID");
      private static final double RED_X_POS = 16.5; //meters
      private final double yPos;
      private final double xPose;

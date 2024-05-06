@@ -8,7 +8,8 @@ public enum AutoAction {
     ShootTwoDip("Shoot Two & Dip"),
     Fork("Fork"),
     SmartFork("Smart Fork"),
-    SHOOT("Shoot & Stop");
+    SHOOT("Shoot & Stop"),
+    INVALID("INVALID");
     private final String name;
 
     AutoAction(String name) {

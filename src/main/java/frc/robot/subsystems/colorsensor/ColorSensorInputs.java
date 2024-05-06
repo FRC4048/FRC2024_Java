@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ColorSensorInputs implements LoggableInputs {
-    public Color rawColor;
+    public Color rawColor = new Color(0,0,0);
     @Override
     public void toLog(LogTable table) {
         table.put("color", rawColor.toHexString());

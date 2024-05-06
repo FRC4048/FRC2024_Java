@@ -15,8 +15,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autochooser.AutoAction;
+import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.autochooser.event.RealAutoEventProvider;
 import frc.robot.commands.*;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
@@ -50,6 +53,9 @@ import frc.robot.subsystems.apriltags.NtApriltag;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.MockClimberIO;
 import frc.robot.subsystems.climber.RealCimberIO;
+import frc.robot.subsystems.colorsensor.ColorSensor;
+import frc.robot.subsystems.colorsensor.MockColorSensor;
+import frc.robot.subsystems.colorsensor.RealColorSensor;
 import frc.robot.subsystems.deployer.Deployer;
 import frc.robot.subsystems.deployer.MockDeployerIO;
 import frc.robot.subsystems.deployer.RealDeployerIO;
@@ -132,7 +138,7 @@ public class RobotContainer {
         if (Robot.isReal()){
             shooter = new Shooter(new RealShooterIO());
             deployer = new Deployer(new RealDeployerIO());
-            feeder = new Feeder(new RealFeederIO());
+            feeder = new Feeder(new RealFeederIO(), new ColorSensor(new RealColorSensor()));
             ramp = new Ramp(new RealRampIO());
             climber = new Climber(new RealCimberIO());
             vision = new Vision(new RealVisionIO());
@@ -143,7 +149,7 @@ public class RobotContainer {
         }else{
             shooter = new Shooter(new MockShooterIO());
             deployer = new Deployer(new MockDeployerIO());
-            feeder = new Feeder(new MockFeederIO());
+            feeder = new Feeder(new MockFeederIO(),new ColorSensor(new MockColorSensor()));
             ramp = new Ramp(new MockRampIO());
             climber = new Climber(new MockClimberIO());
             vision = new Vision(new MockVisionIO());
@@ -161,9 +167,9 @@ public class RobotContainer {
     }
 
     private void setupAutoChooser() {
-        autoChooser = new AutoChooser2024(drivetrain, intake, shooter, feeder, deployer, ramp, lightStrip, vision);
-        autoChooser.addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser));
-        autoChooser.forceRefresh();
+        autoChooser = new AutoChooser2024(new RealAutoEventProvider(AutoAction.DoNothing, FieldLocation.ZERO),drivetrain, intake, shooter, feeder, deployer, ramp, lightStrip, vision);
+        autoChooser.getProvider().addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser));
+        autoChooser.getProvider().forceRefresh();
     }
 
     /**
