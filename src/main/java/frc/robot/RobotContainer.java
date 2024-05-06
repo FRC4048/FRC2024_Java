@@ -190,7 +190,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT).withBasicName("RampShootComboCenter"));// second piece
         NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")); // first and third
         NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT).withBasicName("RampShootComboSide2")); // first and third
-        NamedCommands.registerCommand("MoveToGamePiece", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
+        NamedCommands.registerCommand("MoveToGamePiece", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
     }
 
     /**
@@ -275,11 +275,11 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, lightStrip, 0, -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
+            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
         if (Constants.VISION_DEBUG) {
             SmartShuffleboard.putCommand("Vision", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Vision", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
+            SmartShuffleboard.putCommand("Vision", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
     }
 
