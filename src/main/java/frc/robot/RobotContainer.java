@@ -78,6 +78,9 @@ import frc.robot.swervev3.SwerveDrivetrain;
 import frc.robot.swervev3.io.MockModuleIO;
 import frc.robot.swervev3.io.ModuleIO;
 import frc.robot.swervev3.io.SparkMaxModuleIO;
+import frc.robot.swervev3.vision.ApriltagIO;
+import frc.robot.swervev3.vision.MockApriltag;
+import frc.robot.swervev3.vision.NtApriltag;
 import frc.robot.utils.*;
 import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
@@ -112,6 +115,7 @@ public class RobotContainer {
     private final Vision vision;
     private final Intake intake;
     private final LightStrip lightStrip;
+    private final ApriltagIO apriltagIO;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private final GyroIO gyroIO;
     private SwerveDrivetrain drivetrain;
@@ -131,6 +135,7 @@ public class RobotContainer {
             intake = new Intake(new RealIntakeIO());
             lightStrip = new LightStrip(new RealLightStripIO());
             gyroIO = new RealGyroIO();
+            apriltagIO = new NtApriltag();
         }else{
             shooter = new Shooter(new MockShooterIO());
             deployer = new Deployer(new MockDeployerIO());
@@ -141,6 +146,7 @@ public class RobotContainer {
             intake = new Intake(new MockIntakeIO());
             lightStrip = new LightStrip(new MockLightStripIO());
             gyroIO = new MockGyroIO();
+            apriltagIO = new MockApriltag();
         }
         setupDriveTrain();
         registerPathPlanableCommands();
@@ -224,7 +230,7 @@ public class RobotContainer {
             backLeft = new MockModuleIO();
             backRight = new MockModuleIO();
         }
-        this.drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, pidConfig);
+        this.drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, apriltagIO, pidConfig);
     }
 
     public void putShuffleboardCommands() {
