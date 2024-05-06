@@ -1,4 +1,4 @@
-package frc.robot.swervev3.vision;
+package frc.robot.subsystems.apriltags;
 
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;

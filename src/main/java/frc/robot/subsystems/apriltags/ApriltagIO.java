@@ -1,4 +1,4 @@
-package frc.robot.swervev3.vision;
+package frc.robot.subsystems.apriltags;
 
 public interface ApriltagIO {
     void updateInputs(ApriltagInputs inputs);

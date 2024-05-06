@@ -1,4 +1,4 @@
-package frc.robot.swervev3;
+package frc.robot.subsystems.swervev3;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,11 +13,11 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.GyroInputs;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.swervev3.bags.ModulePositionStamped;
-import frc.robot.swervev3.bags.OdometryMeasurementsStamped;
-import frc.robot.swervev3.io.Module;
-import frc.robot.swervev3.io.ModuleIO;
-import frc.robot.swervev3.vision.ApriltagIO;
+import frc.robot.subsystems.swervev3.bags.ModulePositionStamped;
+import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
+import frc.robot.subsystems.swervev3.io.Module;
+import frc.robot.subsystems.swervev3.io.ModuleIO;
+import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
 import org.littletonrobotics.junction.Logger;

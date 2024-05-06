@@ -1,4 +1,4 @@
-package frc.robot.subsystems.vision;
+package frc.robot.subsystems.limelight;
 
 public class MockVisionIO implements VisionIO {
     @Override

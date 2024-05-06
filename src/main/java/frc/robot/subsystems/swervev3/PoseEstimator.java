@@ -1,4 +1,4 @@
-package frc.robot.swervev3;
+package frc.robot.subsystems.swervev3;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
-import frc.robot.swervev3.bags.OdometryMeasurementsStamped;
-import frc.robot.swervev3.io.Module;
-import frc.robot.swervev3.vision.ApriltagIO;
-import frc.robot.swervev3.vision.ApriltagInputs;
+import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
+import frc.robot.subsystems.swervev3.io.Module;
+import frc.robot.subsystems.apriltags.ApriltagIO;
+import frc.robot.subsystems.apriltags.ApriltagInputs;
 import frc.robot.utils.Apriltag;
 import frc.robot.utils.PrecisionTime;
 import frc.robot.utils.RobotMode;

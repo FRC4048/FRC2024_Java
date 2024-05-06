@@ -1,4 +1,4 @@
-package frc.robot.swervev3.io;
+package frc.robot.subsystems.swervev3.io;
 
 public class MockModuleIO implements ModuleIO{
     @Override

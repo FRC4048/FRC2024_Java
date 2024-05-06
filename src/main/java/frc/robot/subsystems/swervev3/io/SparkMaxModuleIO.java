@@ -1,12 +1,12 @@
-package frc.robot.swervev3.io;
+package frc.robot.subsystems.swervev3.io;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
-import frc.robot.swervev3.OdometryThread;
-import frc.robot.swervev3.bags.ModuleInputsStamped;
+import frc.robot.subsystems.swervev3.OdometryThread;
+import frc.robot.subsystems.swervev3.bags.ModuleInputsStamped;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.LinkedList;
