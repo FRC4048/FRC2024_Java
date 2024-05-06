@@ -4,13 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class CommandLogger {
-    private final Map<Command, Queue<Boolean>> toLogCommandStatus = new HashMap<>();
+    private final LinkedHashMap<Command, Queue<Boolean>> toLogCommandStatus = new LinkedHashMap<>();
     private static final CommandLogger inst = new CommandLogger();
     private boolean hasInit;
 
@@ -36,11 +33,18 @@ public class CommandLogger {
     }
 
     public void log() {
-        toLogCommandStatus.forEach((command, isRunning) -> {
-            Boolean poll = isRunning.poll();
+        Map.Entry<Command, Queue<Boolean>> entry = toLogCommandStatus.pollFirstEntry();
+        List<Map.Entry<Command,Queue<Boolean>>> entriesToAdd = new ArrayList<>();
+        while (entry != null){
+            Boolean poll = entry.getValue().poll();
             if (poll != null) {
-                Logger.recordOutput("Command/" + command.toString(), poll);
+                Logger.recordOutput("Command/" + entry.getKey().toString(), poll);
             }
-        });
+            if (entry.getValue().peek() != null){
+                entriesToAdd.add(entry);
+            }
+            entry = toLogCommandStatus.pollFirstEntry();
+        }
+        entriesToAdd.forEach(e -> toLogCommandStatus.put(e.getKey(), e.getValue()));
     }
 }
