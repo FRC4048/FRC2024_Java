@@ -5,14 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.feeder;
+package frc.robot.subsystems.colorsensor;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
-import com.revrobotics.ColorSensorV3;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Robot;
 import frc.robot.utils.ColorValue;
+import frc.robot.utils.diag.DiagColorSensor;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.Arrays;
 
@@ -20,21 +21,27 @@ import java.util.Arrays;
  * Add your docs here.
  */
 public class ColorSensor {
-    private ColorSensorV3 colorSensor;
-    private ColorMatch colorMatcher;
+    private final ColorSensorIO colorSensorIO;
+    private final ColorSensorInputs inputs = new ColorSensorInputs();
+    private final ColorMatch colorMatcher;
 
-    public ColorSensor(I2C.Port sensorPort){
-        colorSensor = new ColorSensorV3(sensorPort);
 
+    public ColorSensor(ColorSensorIO colorSensorIO){
+        this.colorSensorIO = colorSensorIO;
         colorMatcher = new ColorMatch();
         Arrays.stream(ColorValue.values()).forEach(c -> colorMatcher.addColorMatch(c.getColor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", this));
     }
 
+    public void updateInputs(){
+        colorSensorIO.updateInputs(inputs);
+        Logger.processInputs("ColorInputs", inputs);
+    }
     /**
      * @return the matched color from the sensor or null if none found
      */
     public ColorValue getColor() {
-        Color detectedColor = colorSensor.getColor();
+        Color detectedColor = inputs.rawColor;
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
         if (match == null){
@@ -44,11 +51,11 @@ public class ColorSensor {
     }
 
     public ColorMatchResult getMatchedColor() {
-        Color detectedColor = colorSensor.getColor();
+        Color detectedColor = inputs.rawColor;
         return colorMatcher.matchClosestColor(detectedColor);
     }
 
     public Color getRawColor() {
-        return colorSensor.getColor();
+        return inputs.rawColor;
     }
 }
