@@ -18,8 +18,8 @@ import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
 import frc.robot.subsystems.swervev3.io.Module;
 import frc.robot.subsystems.swervev3.io.ModuleIO;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
+import frc.robot.utils.advanced.Alignable;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.Arrays;

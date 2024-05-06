@@ -2,7 +2,7 @@ package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.subsystems.swervev3.OdometryThread;
-import frc.robot.utils.TimedGyroMeasurement;
+import frc.robot.subsystems.swervev3.bags.TimedGyroMeasurement;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.utils.TimedGyroMeasurement;
+import frc.robot.subsystems.swervev3.bags.TimedGyroMeasurement;
 
 import java.util.List;
 

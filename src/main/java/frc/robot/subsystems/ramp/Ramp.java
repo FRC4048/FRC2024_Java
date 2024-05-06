@@ -6,8 +6,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
-import frc.robot.utils.Alignable;
-import frc.robot.utils.NeoPidMotor;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.motor.NeoPidMotor;
 
 
 public class Ramp extends SubsystemBase {

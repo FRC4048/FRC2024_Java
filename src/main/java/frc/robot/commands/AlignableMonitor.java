@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.utils.Alignable;
+import frc.robot.utils.advanced.Alignable;
 import frc.robot.utils.loggingv2.LoggableCommand;
 
 import java.util.function.Supplier;

@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
-import frc.robot.utils.ColorSensor;
 import frc.robot.utils.diag.DiagColorSensor;
 import frc.robot.utils.diag.DiagTalonSrxSwitch;
 

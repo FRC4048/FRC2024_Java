@@ -1,7 +1,7 @@
 package frc.robot.subsystems.ramp;
 
 import frc.robot.constants.Constants;
-import frc.robot.utils.NeoPidMotor;
+import frc.robot.utils.motor.NeoPidMotor;
 
 public class RealRampIO implements RampIO {
 

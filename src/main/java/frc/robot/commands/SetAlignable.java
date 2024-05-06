@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.swervev3.SwerveDrivetrain;
-import frc.robot.utils.Alignable;
+import frc.robot.utils.advanced.Alignable;
 import frc.robot.utils.loggingv2.LoggableCommand;
 
 public class SetAlignable extends LoggableCommand {

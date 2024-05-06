@@ -8,7 +8,7 @@
 package frc.robot.utils.diag;
 
 import frc.robot.constants.Constants;
-import frc.robot.utils.ColorSensor;
+import frc.robot.subsystems.feeder.ColorSensor;
 
 /**
  * Add your docs here.

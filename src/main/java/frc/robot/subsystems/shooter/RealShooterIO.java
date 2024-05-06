@@ -3,7 +3,7 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.utils.NeoPidMotor;
+import frc.robot.utils.motor.NeoPidMotor;
 
 public class RealShooterIO implements ShooterIO {
     private final NeoPidMotor neoPidMotorLeft;

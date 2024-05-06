@@ -1,8 +1,7 @@
-package frc.robot.utils;
+package frc.robot.utils.motor;
 
-import com.revrobotics.*;
 import com.revrobotics.CANSparkBase.IdleMode;
-
+import com.revrobotics.*;
 import frc.robot.Robot;
 import frc.robot.utils.diag.DiagSparkMaxLimit;
 
