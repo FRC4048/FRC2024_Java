@@ -3,10 +3,10 @@ package frc.robot.subsystems.swervev3.io;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import frc.robot.constants.Constants;
-import frc.robot.swervev2.KinematicsConversionConfig;
-import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.subsystems.swervev3.OdometryThread;
 import frc.robot.subsystems.swervev3.bags.ModuleInputsStamped;
+import frc.robot.swervev2.KinematicsConversionConfig;
+import frc.robot.swervev2.SwerveIdConfig;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.LinkedList;
@@ -22,12 +22,12 @@ public class SparkMaxModuleIO implements ModuleIO {
     private final ReentrantLock queueLock = new ReentrantLock();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
-        OdometryThread.getInstance().getLock().lock();
         driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
         steerMotor = new CANSparkMax(motorConfig.getTurnMotorId(), CANSparkMax.MotorType.kBrushless);
         absEncoder = new WPI_CANCoder(motorConfig.getCanCoderId());
         setMotorConfig(driveInverted, steerInverted);
         setConversionFactors(conversionConfig);
+        OdometryThread.getInstance().getLock().lock();
         OdometryThread.getInstance().addRunnable(time -> {
             OdometryThread.getInstance().getLock().lock();
             ModuleInputsStamped input = new ModuleInputsStamped(
@@ -118,7 +118,7 @@ public class SparkMaxModuleIO implements ModuleIO {
         input.measurementTimestamps = new double[moduleReadingQueue.size()];
         ModuleInputsStamped poll = moduleReadingQueue.poll();
         int i = 0;
-        while (poll !=null){
+        while (poll != null) {
             input.steerEncoderPosition[i] = poll.steerEncoderPosition();
             input.driveEncoderPosition[i] = poll.driveEncoderPosition();
             input.driveEncoderVelocity[i] = poll.driveEncoderVelocity();

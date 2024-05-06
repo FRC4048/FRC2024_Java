@@ -20,14 +20,19 @@ public class OdometryThread {
     private final ReentrantLock lock = new ReentrantLock();
     private boolean started = false;
 
-    public static OdometryThread getInstance(){
+    public static OdometryThread getInstance() {
         return inst;
     }
 
     public OdometryThread() {
-        this.executor = Executors.newScheduledThreadPool(1);
+        this.executor = Executors.newScheduledThreadPool(1, r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        });
     }
-    public void start(){
+
+    public void start() {
         if (started) return;
         started = true;
         executor.scheduleAtFixedRate(() -> {
@@ -36,10 +41,12 @@ public class OdometryThread {
             CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
             double time = Logger.getRealTimestamp();
             for (Consumer<Double> odometryRunnable : odometryRunnables) {
-                new Thread(() -> {
+                Thread thread = new Thread(() -> {
                     odometryRunnable.accept(time);
                     latch.countDown();
-                }).start();
+                });
+                thread.setDaemon(true);
+                thread.start();
             }
             try {
                 latch.await();
@@ -48,12 +55,12 @@ public class OdometryThread {
             }
             lock.unlock();
             double endTime = Logger.getRealTimestamp();
-            double cycleTime = (endTime - startTime)  / 1000;
+            double cycleTime = (endTime - startTime) / 1000;
             Logger.recordOutput("OdomUpdateCycleTime", cycleTime);
-        },0,10, TimeUnit.MILLISECONDS);
+        }, 0, 10, TimeUnit.MILLISECONDS);
     }
 
-    public void addRunnable(Consumer<Double> runnable){
+    public void addRunnable(Consumer<Double> runnable) {
         lock.lock();
         odometryRunnables.add(runnable);
         lock.unlock();
