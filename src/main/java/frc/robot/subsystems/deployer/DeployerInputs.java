@@ -7,7 +7,7 @@ public class DeployerInputs implements LoggableInputs {
 
     public double deployerSpeed = 0;
     public boolean revLimit = false;
-    public boolean fwdLimit;
+    public boolean fwdLimit = false;
 
     @Override
     public void toLog(LogTable table) {

@@ -5,10 +5,10 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ShooterInputs implements LoggableInputs {
 
-    public double shooterMotorLeftRPM;
-    public double shooterMotorRightRPM;
-    public double shooterMotorLeftTargetRPM;
-    public double shooterMotorRightTargetRPM;
+    public double shooterMotorLeftRPM = 0;
+    public double shooterMotorRightRPM = 0;
+    public double shooterMotorLeftTargetRPM = 0;
+    public double shooterMotorRightTargetRPM = 0;
 
     @Override
     public void toLog(LogTable table) {

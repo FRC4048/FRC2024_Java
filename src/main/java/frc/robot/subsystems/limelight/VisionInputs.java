@@ -4,9 +4,9 @@ import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class VisionInputs implements LoggableInputs {
-    public double tv;
-    public double tx;
-    public double ty;
+    public double tv = 0;
+    public double tx = 0;
+    public double ty = 0;
 
     @Override
     public void toLog(LogTable table) {

@@ -5,15 +5,15 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class RampInputs implements LoggableInputs {
 
-    public double rampP;
-    public double rampI;
-    public double rampD;
-    public double rampFF;
-    public double rampTargetPos;
-    public boolean fwdTripped;
-    public boolean revTripped;
-    public double encoderPosition;
-    public double setSpeed;
+    public double rampP = 0;
+    public double rampI = 0;
+    public double rampD = 0;
+    public double rampFF = 0;
+    public double rampTargetPos = 0;
+    public boolean fwdTripped = false;
+    public boolean revTripped = false;
+    public double encoderPosition = 0;
+    public double setSpeed = 0;
 
     @Override
     public void toLog(LogTable table) {

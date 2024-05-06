@@ -5,14 +5,14 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class ClimberInputs implements LoggableInputs {
 
-    public double leftServoSetpoint;
-    public double rightServoSetpoint;
-    public double leftClimberEnc;
-    public double rightClimberEnc;
-    public double leftTargetSpeed;
-    public double rightTargetSpeed;
-    public boolean atLeftClimberLimit;
-    public boolean atRightClimberLimit;
+    public double leftServoSetpoint = 0;
+    public double rightServoSetpoint = 0;
+    public double leftClimberEnc = 0;
+    public double rightClimberEnc = 0;
+    public double leftTargetSpeed = 0;
+    public double rightTargetSpeed = 0;
+    public boolean atLeftClimberLimit = false;
+    public boolean atRightClimberLimit = false;
 
     @Override
     public void toLog(LogTable table) {
