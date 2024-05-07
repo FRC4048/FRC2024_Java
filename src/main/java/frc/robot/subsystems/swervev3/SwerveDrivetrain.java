@@ -144,7 +144,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public double getLastGyro() {
-        return gyroSystem.getInputs().anglesInDeg[gyroSystem.getInputs().anglesInDeg.length - 1];
+        int len = gyroSystem.getInputs().anglesInDeg.length - 1;
+        return len < 0 ? 0 : gyroSystem.getInputs().anglesInDeg[len];
     }
 
     public void setDriveMode(DriveMode driveMode) {

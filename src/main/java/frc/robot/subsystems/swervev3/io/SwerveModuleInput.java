@@ -5,11 +5,11 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class SwerveModuleInput implements LoggableInputs {
 
-    public double[] steerEncoderPosition = new double[0];
-    public double[] driveEncoderPosition = new double[0];
-    public double[] driveEncoderVelocity = new double[0];
-    public double[] steerEncoderVelocity = new double[0];
-    public double[] measurementTimestamps = new double[0];
+    public double[] steerEncoderPosition = new double[]{0};
+    public double[] driveEncoderPosition = new double[]{0};
+    public double[] driveEncoderVelocity = new double[]{0};
+    public double[] steerEncoderVelocity = new double[]{0};
+    public double[] measurementTimestamps = new double[]{0};
     public double driveCurrentDraw = 0;
     public double steerCurrentDraw = 0;
     public double steerOffset = 0;

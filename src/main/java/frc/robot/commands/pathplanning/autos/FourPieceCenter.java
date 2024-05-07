@@ -23,12 +23,12 @@ public class FourPieceCenter extends LoggableSequentialCommandGroup {
         super(
                 new ShootAndDrop(shooter,feeder,deployer,lightStrip),
                 new LoggableParallelCommandGroup(
-                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("initCenter"))).withBasicName("FollowInitCenter"),
+                        LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("InitCenter"))).withBasicName("FollowInitCenter"),
                         new SlurpWithRamp(intake,feeder,lightStrip,ramp)
                 ),
                 new LoggableDeadlineCommandGroup(
                         LoggableCommandWrapper.wrap(AutoBuilder.followPath(PathPlannerPath.fromPathFile("CenterShootRight"))).withBasicName("FollowCenterShootRight"),
-                        new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")
+                        new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("SpeakerFront/RampShootComboSide")
                 ),
                 new ComboShot(shooter, feeder, lightStrip),
                 new LoggableParallelCommandGroup(
