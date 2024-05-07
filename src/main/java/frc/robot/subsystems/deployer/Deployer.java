@@ -1,41 +1,40 @@
 package frc.robot.subsystems.deployer;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.LoggableSystem;
 
 public class Deployer extends SubsystemBase{
-    private final DeployerIO deployerIO;
-    private final DeployerInputs inputs = new DeployerInputs();
+    private final LoggableSystem<DeployerIO, DeployerInputs> system;
 
     public Deployer(DeployerIO io) {
-        deployerIO = io;
+        this.system = new LoggableSystem<>(io, new DeployerInputs());
     }
 
     public void stop() {
-        deployerIO.stop();
+        system.getIO().stop();
     }
 
     @Override
     public void periodic() {
-        deployerIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("climberInputs", inputs);
+        system.updateInputs();
     }
 
     //Spin deployer motor
     public void setDeployerMotorSpeed(double speed) {
-        deployerIO.setSpeed(speed);
+        system.getIO().setSpeed(speed);
     }
 
     //Get deployer motor speed
     public double getDeployerMotorSpeed() {
-        return inputs.deployerSpeed;
+        return system.getInputs().deployerSpeed;
     }
 
     public boolean isDeployerForwardLimitSwitchClosed() {
-        return inputs.fwdLimit;
+        return system.getInputs().fwdLimit;
     }
 
     public boolean isDeployerReverseLimitSwitchClosed() {
-        return inputs.revLimit;
+        return system.getInputs().revLimit;
     }
 
 }
