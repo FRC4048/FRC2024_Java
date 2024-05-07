@@ -1,5 +1,6 @@
 package frc.robot.subsystems.apriltags;
 
-public interface ApriltagIO {
-    void updateInputs(ApriltagInputs inputs);
+import frc.robot.subsystems.LoggableIO;
+
+public interface ApriltagIO extends LoggableIO<ApriltagInputs> {
 }

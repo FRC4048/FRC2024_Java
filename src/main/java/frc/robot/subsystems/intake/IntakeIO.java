@@ -1,7 +1,8 @@
 package frc.robot.subsystems.intake;
 
-public interface IntakeIO {
+import frc.robot.subsystems.LoggableIO;
+
+public interface IntakeIO extends LoggableIO<IntakeInputs> {
     void setMotorSpeeds(double m1Speed, double m2Speed);
     void stopMotors();
-    void updateInputs(IntakeInputs inputs);
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.colorsensor;
 
-public interface ColorSensorIO {
-    void updateInputs(ColorSensorInputs inputs);
+import frc.robot.subsystems.LoggableIO;
+
+public interface ColorSensorIO extends LoggableIO<ColorSensorInputs> {
 }

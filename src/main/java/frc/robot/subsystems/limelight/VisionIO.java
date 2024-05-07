@@ -1,5 +1,6 @@
 package frc.robot.subsystems.limelight;
 
-public interface VisionIO {
-    void updateInputs(VisionInputs inputs);
+import frc.robot.subsystems.LoggableIO;
+
+public interface VisionIO extends LoggableIO<VisionInputs> {
 }

@@ -1,30 +1,29 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.LoggableSystem;
 
 public class Intake extends SubsystemBase {
-    private final IntakeIO intakeIO;
-    private final IntakeInputs inputs = new IntakeInputs();
+    private final LoggableSystem<IntakeIO, IntakeInputs> system;
 
     public Intake(IntakeIO io) {
-        this.intakeIO = io;
+        this.system = new LoggableSystem<>(io, new IntakeInputs());
     }
 
     public void setMotorSpeed(double motor1Speed, double motor2Speed) {
-        intakeIO.setMotorSpeeds(motor1Speed, motor2Speed);
+        system.getIO().setMotorSpeeds(motor1Speed, motor2Speed);
     }
 
     public void stopMotors() {
-        intakeIO.stopMotors();
+        system.getIO().stopMotors();
     }
 
     @Override
     public void periodic() {
-        intakeIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("intakeInputs", inputs);
+        system.updateInputs();
     }
 
     public double getMotor1StatorCurrent() {
-        return inputs.intakeMotor1Current;
+        return system.getInputs().intakeMotor1Current;
     }
 }

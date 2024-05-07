@@ -11,9 +11,9 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Robot;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.utils.ColorValue;
 import frc.robot.utils.diag.DiagColorSensor;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.Arrays;
 
@@ -21,27 +21,25 @@ import java.util.Arrays;
  * Add your docs here.
  */
 public class ColorSensor {
-    private final ColorSensorIO colorSensorIO;
-    private final ColorSensorInputs inputs = new ColorSensorInputs();
+    private final LoggableSystem<ColorSensorIO, ColorSensorInputs> system;
     private final ColorMatch colorMatcher;
 
 
     public ColorSensor(ColorSensorIO colorSensorIO){
-        this.colorSensorIO = colorSensorIO;
+        this.system = new LoggableSystem<>(colorSensorIO, new ColorSensorInputs());
         colorMatcher = new ColorMatch();
         Arrays.stream(ColorValue.values()).forEach(c -> colorMatcher.addColorMatch(c.getColor()));
         Robot.getDiagnostics().addDiagnosable(new DiagColorSensor("Feeder", "Color Sensor", this));
     }
 
     public void updateInputs(){
-        colorSensorIO.updateInputs(inputs);
-        Logger.processInputs("ColorInputs", inputs);
+        system.updateInputs();
     }
     /**
      * @return the matched color from the sensor or null if none found
      */
     public ColorValue getColor() {
-        Color detectedColor = inputs.rawColor;
+        Color detectedColor = system.getInputs().rawColor;
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
         if (match == null){
@@ -51,11 +49,11 @@ public class ColorSensor {
     }
 
     public ColorMatchResult getMatchedColor() {
-        Color detectedColor = inputs.rawColor;
+        Color detectedColor = system.getInputs().rawColor;
         return colorMatcher.matchClosestColor(detectedColor);
     }
 
     public Color getRawColor() {
-        return inputs.rawColor;
+        return system.getInputs().rawColor;
     }
 }

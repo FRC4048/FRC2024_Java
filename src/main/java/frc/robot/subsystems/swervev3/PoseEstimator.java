@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.apriltags.ApriltagInputs;
 import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
@@ -38,8 +39,7 @@ public class PoseEstimator {
     private final Module frontRight;
     private final Module backLeft;
     private final Module backRight;
-    private final ApriltagIO apriltagIO;
-    private final ApriltagInputs inputs = new ApriltagInputs();
+    private final LoggableSystem<ApriltagIO, ApriltagInputs> apriltagSystem;
     private final SwerveDrivePoseEstimator poseEstimator;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
@@ -57,7 +57,7 @@ public class PoseEstimator {
         this.frontRight = frontRightMotor;
         this.backLeft = backLeftMotor;
         this.backRight = backRightMotor;
-        this.apriltagIO = apriltagIO;
+        this.apriltagSystem = new LoggableSystem<>(apriltagIO, new ApriltagInputs());
         this.poseEstimator = new SwerveDrivePoseEstimator(
                 kinematics,
                 new Rotation2d(Math.toRadians(initGyroValueDeg)),
@@ -74,8 +74,7 @@ public class PoseEstimator {
     }
 
     public void updateInputs() {
-        apriltagIO.updateInputs(inputs);
-        Logger.processInputs("ApriltagInputs", inputs);
+        apriltagSystem.updateInputs();
     }
 
     /**
@@ -103,11 +102,15 @@ public class PoseEstimator {
 
     public void updateVision() {
         if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION) {
-            for (int i = 0; i < inputs.timestamp.length; i++) {
-                double[] pos = new double[]{inputs.posX[i], inputs.posY[i], inputs.rotationDeg[i]};
-                if (validAprilTagPose(new double[]{inputs.posX[i], inputs.posY[i], inputs.rotationDeg[i]})) {
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, inputs.serverTime[i] - TimeUnit.MILLISECONDS.toMicros((long) inputs.timestamp[i]));
-                    visionPoses.add(new VisionMeasurement(new Pose2d(pos[0], pos[1], Rotation2d.fromDegrees(pos[2])), Apriltag.of(inputs.apriltagNumber[i]), latencyInSec));
+            for (int i = 0; i < apriltagSystem.getInputs().timestamp.length; i++) {
+                double[] pos = new double[]{
+                        apriltagSystem.getInputs().posX[i], apriltagSystem.getInputs().posY[i],
+                        apriltagSystem.getInputs().rotationDeg[i]
+                };
+                if (validAprilTagPose(pos)) {
+                    double diff = apriltagSystem.getInputs().serverTime[i] - TimeUnit.MILLISECONDS.toMicros((long) apriltagSystem.getInputs().timestamp[i]);
+                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, diff);
+                    visionPoses.add(new VisionMeasurement(new Pose2d(pos[0], pos[1], Rotation2d.fromDegrees(pos[2])), Apriltag.of(apriltagSystem.getInputs().apriltagNumber[i]), latencyInSec));
                 }
             }
             if (Constants.FILTER_VISION_POSES) {

@@ -5,37 +5,34 @@
 package frc.robot.subsystems.limelight;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.LoggableSystem;
 
 public class Vision extends SubsystemBase {
-  /** Creates a new Limelight. */
-  private final VisionIO visionIO;
-  private final VisionInputs inputs = new VisionInputs();
+  LoggableSystem<VisionIO, VisionInputs> system;
   
   public Vision(VisionIO io) {
-    visionIO = io;
+    system = new LoggableSystem<>(io, new VisionInputs());
   }
 
   /**
    * @return The piece's x offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleX() {
-    return inputs.tx;
+    return system.getInputs().tx;
   }
 
   /**
    * @return The piece's y offset angle in degrees and 0.0 if the piece isn't seen
    */
   public double getPieceOffestAngleY() {
-    return inputs.ty;
+    return system.getInputs().ty;
   }
   public boolean isPieceSeen(){
-    return inputs.tv != 0;
+    return system.getInputs().tv != 0;
   }
 
   @Override
   public void periodic() {
-    visionIO.updateInputs(inputs);
-    Logger.processInputs("VisionInputs", inputs);
+    system.updateInputs();
   }
 }

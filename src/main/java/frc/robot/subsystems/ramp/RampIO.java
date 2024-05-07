@@ -1,6 +1,8 @@
 package frc.robot.subsystems.ramp;
 
-public interface RampIO {
+import frc.robot.subsystems.LoggableIO;
+
+public interface RampIO extends LoggableIO<RampInputs> {
     void setP(double p);
     void setI(double i);
     void setD(double d);
@@ -9,5 +11,4 @@ public interface RampIO {
     void setSpeed(double spd);
     void stopMotor();
     void resetEncoder();
-    void updateInputs(RampInputs inputs);
 }

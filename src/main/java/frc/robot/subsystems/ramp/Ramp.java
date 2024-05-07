@@ -6,17 +6,17 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.utils.advanced.Alignable;
 import frc.robot.utils.motor.NeoPidMotor;
 
 
 public class Ramp extends SubsystemBase {
-    private final RampIO rampIO;
-    private final RampInputs inputs = new RampInputs();
+    private final LoggableSystem<RampIO, RampInputs> system;
     private final InterpolatingDoubleTreeMap rampAngleMap = new InterpolatingDoubleTreeMap();
 
     public Ramp(RampIO io) {
-        rampIO = io;
+        system = new LoggableSystem<>(io, new RampInputs());
         rampAngleMap.put(1.49352, 3.0);
         rampAngleMap.put(1.806956, 5.0);
         rampAngleMap.put(2.3876, 7.56);
@@ -24,12 +24,11 @@ public class Ramp extends SubsystemBase {
     }
 
     public void periodic() {
-        rampIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("rampInputs", inputs);
+        system.updateInputs();
     }
 
     public void setRampPos(double targetPosition) {
-        rampIO.setRampPos(targetPosition);
+        system.getIO().setRampPos(targetPosition);
     }
     
     /**
@@ -39,37 +38,37 @@ public class Ramp extends SubsystemBase {
      * @param speed the speed (0-1)
      */
     public void setSpeed(double speed) {
-        rampIO.setSpeed(speed);
+        system.getIO().setSpeed(speed);
     }
 
     public void stopMotor() {
-        rampIO.stopMotor();
+        system.getIO().stopMotor();
     }
 
     public double getRampPos() {
-        return inputs.encoderPosition;
+        return system.getInputs().encoderPosition;
     }
 
     /**
      * @return If the Forward Limit Switch is pressed
      */
     public boolean getForwardSwitchState() {
-        return inputs.fwdTripped;
+        return system.getInputs().fwdTripped;
     }
 
     /**
      * @return If the Reversed Limit Switch is pressed
      */
     public boolean getReversedSwitchState() {
-        return inputs.revTripped;
+        return system.getInputs().revTripped;
     }
 
     public double getDesiredPosition() {
-        return inputs.rampTargetPos;
+        return system.getInputs().rampTargetPos;
     }
 
     public void resetEncoder() {
-        rampIO.resetEncoder();
+        system.getIO().resetEncoder();
     }
 
     public static double encoderToAngle(double encoderValue){
@@ -98,10 +97,10 @@ public class Ramp extends SubsystemBase {
     }
 
     private void setFF(double feedForward) {
-        rampIO.setFF(feedForward);
+        system.getIO().setFF(feedForward);
     }
     public double getFF(){
-        return inputs.rampFF;
+        return system.getInputs().rampFF;
     }
 
     public void updateFF() {
@@ -119,12 +118,12 @@ public class Ramp extends SubsystemBase {
     }
 
     public void setDefaultFF() {
-        rampIO.setP(NeoPidMotor.DEFAULT_P);
-        rampIO.setFF(NeoPidMotor.DEFAULT_FF);
+        system.getIO().setP(NeoPidMotor.DEFAULT_P);
+        system.getIO().setFF(NeoPidMotor.DEFAULT_FF);
     }
 
     public void setFarFF() {
-        rampIO.setP(Constants.RAMP_PID_P);
-        rampIO.setFF(Constants.RAMP_PID_FAR_FF);
+        system.getIO().setP(Constants.RAMP_PID_P);
+        system.getIO().setFF(Constants.RAMP_PID_FAR_FF);
     }
 }

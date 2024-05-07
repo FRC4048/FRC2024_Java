@@ -1,6 +1,7 @@
 package frc.robot.subsystems.lightstrip;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.utils.BlinkinPattern;
 
 import java.util.HashMap;
@@ -8,18 +9,16 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 public class LightStrip extends SubsystemBase {
-    private final LightStripIO lightstripIO;
-    private final LightStripInputs inputs = new LightStripInputs();
+    private final LoggableSystem<LightStripIO, LightStripInputs> system;
     private final Map<BooleanSupplier, BlinkinPattern> predicateLightEvents = new HashMap<>();
 
     public LightStrip(LightStripIO io) {
-        this.lightstripIO = io;
+        this.system = new LoggableSystem<>(io, new LightStripInputs());
     }
 
     @Override
     public void periodic() {
-        lightstripIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("lightStripInput", inputs);
+        system.updateInputs();
         predicateLightEvents.keySet()
                 .stream()
                 .filter(BooleanSupplier::getAsBoolean)
@@ -32,11 +31,11 @@ public class LightStrip extends SubsystemBase {
     }
 
     public void setPattern(BlinkinPattern pattern) {
-        lightstripIO.setPattern(pattern);
+        system.getIO().setPattern(pattern);
     }
 
     public BlinkinPattern getPattern() {
-        return inputs.pattern;
+        return system.getInputs().pattern;
     }
 
     public void scheduleOnTrue(BooleanSupplier callable, BlinkinPattern pattern) {

@@ -3,20 +3,21 @@ package frc.robot.subsystems.feeder;
 import com.revrobotics.ColorMatchResult;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.colorsensor.ColorSensor;
 
 public class Feeder extends SubsystemBase {
-    private final FeederIO feederIO;
     private final ColorSensor colorSensor;
     private final FeederInputs inputs = new FeederInputs();
+    private final LoggableSystem<FeederIO, FeederInputs> feederSystem;
 
     public Feeder(FeederIO feederIO, ColorSensor colorSensor) {
-        this.feederIO = feederIO;
+        this.feederSystem = new LoggableSystem<>(feederIO, new FeederInputs());
         this.colorSensor = colorSensor;
     }
 
     public void setFeederMotorSpeed(double speed) {
-        feederIO.setSpeed(speed);
+        feederSystem.getIO().setSpeed(speed);
     }
 
     public double getFeederMotorSpeed() {
@@ -24,7 +25,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void stopFeederMotor() {
-        feederIO.stop();
+        feederSystem.getIO().stop();
     }
 
     public boolean pieceSeen(boolean incoming) {
@@ -38,12 +39,11 @@ public class Feeder extends SubsystemBase {
 
     @Override
     public void periodic() {
-        feederIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("feederInputs", inputs);
+        feederSystem.updateInputs();
         colorSensor.updateInputs();
     }
 
     public void switchFeederBeamState(boolean enable) {
-        feederIO.switchFeederBeamState(enable);
+        feederSystem.getIO().switchFeederBeamState(enable);
     }
 }

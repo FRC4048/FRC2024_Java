@@ -1,7 +1,8 @@
 package frc.robot.subsystems.gyro;
 
-public interface GyroIO {
+import frc.robot.subsystems.LoggableIO;
+
+public interface GyroIO extends LoggableIO<GyroInputs> {
     void setAngleOffset(double offset);
     void resetGyro();
-    void updateInputs(GyroInputs inputs);
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.GyroInputs;
@@ -34,8 +35,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2);
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, -Constants.ROBOT_WIDTH / 2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
-    private final GyroIO gyroIO;
-    private final GyroInputs gyroInputs = new GyroInputs();
+    private final LoggableSystem<GyroIO, GyroInputs> gyroSystem;
     private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P, Constants.ALIGNABLE_PID_I, Constants.ALIGNABLE_PID_D);
     private boolean faceingTarget = false;
     private Alignable alignable = null;
@@ -47,7 +47,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new Module(frontRightIO, pidConfig, "frontRight");
         this.backLeft = new Module(backLeftIO, pidConfig, "backLeft");
         this.backRight = new Module(backRightIO, pidConfig, "backRight");
-        this.gyroIO = gyroIO;
+        this.gyroSystem = new LoggableSystem<>(gyroIO, new GyroInputs());
         alignableTurnPid.enableContinuousInput(-180, 180);
         OdometryThread.getInstance().start();
         this.poseEstimator = new PoseEstimator(frontLeft, frontRight, backLeft, backRight, apriltagIO, kinematics, getLastGyro());
@@ -72,9 +72,12 @@ public class SwerveDrivetrain extends SubsystemBase {
                             blPos[i].modulePosition(),
                             brPos[i].modulePosition()
                     },
-                    gyroInputs.anglesInDeg[i], flPos[i].timestamp()
+                    gyroSystem.getInputs().anglesInDeg[i], flPos[i].timestamp()
             );
-            if (Arrays.stream(new double[]{flPos[i].timestamp(), frPos[i].timestamp(), blPos[i].timestamp(), brPos[i].timestamp(), gyroInputs.anglesTimeStamps[i]}).distinct().count() != 1) {
+            if (Arrays.stream(new double[]{
+                    flPos[i].timestamp(), frPos[i].timestamp(), blPos[i].timestamp(),
+                    brPos[i].timestamp(), gyroSystem.getInputs().anglesTimeStamps[i]
+            }).distinct().count() != 1) {
                 inSync = false;
             }
         }
@@ -88,8 +91,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         frontRight.updateInputs();
         backLeft.updateInputs();
         backRight.updateInputs();
-        gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("GyroInputs", gyroInputs);
+        gyroSystem.updateInputs();
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
@@ -138,11 +140,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void resetGyro() {
-        gyroIO.resetGyro();
+        gyroSystem.getIO().resetGyro();
     }
 
     public double getLastGyro() {
-        return gyroInputs.anglesInDeg[gyroInputs.anglesInDeg.length - 1];
+        return gyroSystem.getInputs().anglesInDeg[gyroSystem.getInputs().anglesInDeg.length - 1];
     }
 
     public void setDriveMode(DriveMode driveMode) {
@@ -186,7 +188,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public void setGyroOffset(double offset) {
-        gyroIO.setAngleOffset(offset);
+        gyroSystem.getIO().setAngleOffset(offset);
     }
 
     public void resetOdometry(Pose2d startingPosition) {

@@ -1,9 +1,10 @@
 package frc.robot.subsystems.swervev3.io;
 
-public interface ModuleIO {
+import frc.robot.subsystems.LoggableIO;
+
+public interface ModuleIO extends LoggableIO<SwerveModuleInput> {
     void setDriveVoltage(double volts);
     void setSteerVoltage(double volts);
     void setSteerOffset(double offset);
     void resetEncoder();
-    void updateInputs(SwerveModuleInput input);
 }

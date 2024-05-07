@@ -2,13 +2,13 @@ package frc.robot.subsystems.climber;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableSystem;
 
 public class Climber extends SubsystemBase {
-    private final ClimberIO climberIO;
-    private final ClimberInputs inputs = new ClimberInputs();
+    private final LoggableSystem<ClimberIO, ClimberInputs> system;
 
     public Climber(ClimberIO io) {
-        this.climberIO = io;
+        this.system = new LoggableSystem<>(io, new ClimberInputs());
     }
 
     /**
@@ -21,51 +21,50 @@ public class Climber extends SubsystemBase {
             return false;
         }
         if (spd > 0) {
-            if (inputs.rightClimberEnc < -78) {
-                climberIO.setRightSpeed(0);
+            if (system.getInputs().rightClimberEnc < -78) {
+                system.getIO().setRightSpeed(0);
             } else {
-                climberIO.setRightSpeed(-spd);
+                system.getIO().setRightSpeed(-spd);
             }
-            if (inputs.leftClimberEnc > 78) {
-                climberIO.setLeftSpeed(0);
+            if (system.getInputs().leftClimberEnc > 78) {
+                system.getIO().setLeftSpeed(0);
             } else {
-                climberIO.setLeftSpeed(spd);
+                system.getIO().setLeftSpeed(spd);
             }
         } else {
-            climberIO.setRightSpeed(-spd);
-            climberIO.setLeftSpeed(spd);
+            system.getIO().setRightSpeed(-spd);
+            system.getIO().setLeftSpeed(spd);
         }
         return true;
     }
 
     private boolean servosEngaged() {
-        return inputs.leftServoSetpoint == Constants.LEFT_SERVO_ENGAGED ||
-                inputs.rightServoSetpoint == Constants.RIGHT_SERVO_ENGAGED;
+        return system.getInputs().leftServoSetpoint == Constants.LEFT_SERVO_ENGAGED ||
+                system.getInputs().rightServoSetpoint == Constants.RIGHT_SERVO_ENGAGED;
     }
 
     public void resetEncoders() {
-        climberIO.resetEncoder();
+        system.getIO().resetEncoder();
     }
 
     public void engageRatchet() {
-        climberIO.setRatchetPos(Constants.LEFT_SERVO_ENGAGED, Constants.RIGHT_SERVO_ENGAGED);
+        system.getIO().setRatchetPos(Constants.LEFT_SERVO_ENGAGED, Constants.RIGHT_SERVO_ENGAGED);
     }
 
     public void disengageRatchet() {
-        climberIO.setRatchetPos(Constants.LEFT_SERVO_DISENGAGED, Constants.RIGHT_SERVO_DISENGAGED);
+        system.getIO().setRatchetPos(Constants.LEFT_SERVO_DISENGAGED, Constants.RIGHT_SERVO_DISENGAGED);
     }
 
     public boolean isLeftReverseLimitSwitchPressed() {
-        return inputs.atLeftClimberLimit;
+        return system.getInputs().atLeftClimberLimit;
     }
 
     public boolean isRightReverseLimitSwitchPressed() {
-        return inputs.atRightClimberLimit;
+        return system.getInputs().atRightClimberLimit;
     }
 
     @Override
     public void periodic() {
-        climberIO.updateInputs(inputs);
-        org.littletonrobotics.junction.Logger.processInputs("climberInputs", inputs);
+        system.updateInputs();
     }
 }
