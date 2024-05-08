@@ -39,22 +39,25 @@ public class OdometryThread {
         executor.scheduleAtFixedRate(() -> {
             double startTime = Logger.getRealTimestamp();
             lock.lock();
-            CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
-            double time = Logger.getRealTimestamp();
-            for (Consumer<Double> odometryRunnable : odometryRunnables) {
-                Thread thread = new Thread(() -> {
-                    odometryRunnable.accept(time);
-                    latch.countDown();
-                });
-                thread.setDaemon(true);
-                thread.start();
-            }
             try {
-                latch.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
+                double time = Logger.getRealTimestamp();
+                for (Consumer<Double> odometryRunnable : odometryRunnables) {
+                    Thread thread = new Thread(() -> {
+                        odometryRunnable.accept(time);
+                        latch.countDown();
+                    });
+                    thread.setDaemon(true);
+                    thread.start();
+                }
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } finally {
+                lock.unlock();
             }
-            lock.unlock();
             double endTime = Logger.getRealTimestamp();
             double cycleTime = (endTime - startTime) / 1000;
             Robot.runInMainThread(()-> Logger.recordOutput("OdomUpdateCycleTime", cycleTime));
