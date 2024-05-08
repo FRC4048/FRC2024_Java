@@ -6,6 +6,8 @@ import frc.robot.RobotContainer;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public enum FieldLocation {
      SpeakerLeft(0.70,6.69,Math.toRadians(-120),"Speaker Left","Speaker Right"),
@@ -19,11 +21,7 @@ public enum FieldLocation {
      private final double angle;
      private final String blueName;
      private final String redName;
-     private static final HashMap<String, FieldLocation> nameMap = new HashMap<>();
-
-     static{
-          Arrays.stream(FieldLocation.values()).forEach(v -> nameMap.put(v.getShuffleboardName(), v));
-     }
+     private static final HashMap<String, FieldLocation> nameMap = new HashMap<>(Arrays.stream(FieldLocation.values()).collect(Collectors.toMap(FieldLocation::getShuffleboardName, Function.identity())));
 
      FieldLocation(double xPos, double yPos,double angle, String blueName, String redName) {
           this.xPose = xPos;

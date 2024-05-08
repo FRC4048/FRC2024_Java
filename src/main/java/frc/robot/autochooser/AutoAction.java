@@ -2,6 +2,8 @@ package frc.robot.autochooser;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public enum AutoAction {
     DoNothing("Do Nothing"),
@@ -14,11 +16,7 @@ public enum AutoAction {
     SHOOT("Shoot & Stop"),
     INVALID("INVALID");
     private final String name;
-    private static final HashMap<String, AutoAction> nameMap = new HashMap<>();
-
-    static{
-        Arrays.stream(AutoAction.values()).forEach(v -> nameMap.put(v.getName(), v));
-    }
+    private static final HashMap<String, AutoAction> nameMap = new HashMap<>(Arrays.stream(AutoAction.values()).collect(Collectors.toMap(AutoAction::getName, Function.identity())));
 
     AutoAction(String name) {
         this.name = name;
