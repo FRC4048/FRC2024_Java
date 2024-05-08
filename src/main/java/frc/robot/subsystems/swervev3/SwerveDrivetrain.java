@@ -55,13 +55,22 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        processInputs();
-        Logger.recordOutput("OdometryLockHoldEstimate", OdometryThread.getInstance().getLock().getQueueLength());
         poseEstimator.updateInputs();
-        ModulePositionStamped[] flPos = frontLeft.getPositions();
-        ModulePositionStamped[] frPos = frontLeft.getPositions();
-        ModulePositionStamped[] blPos = frontLeft.getPositions();
-        ModulePositionStamped[] brPos = frontLeft.getPositions();
+        ModulePositionStamped[] flPos;
+        ModulePositionStamped[] frPos;
+        ModulePositionStamped[] blPos;
+        ModulePositionStamped[] brPos;
+        OdometryThread.getInstance().getLock().lock();
+        try {
+            processInputs();
+            flPos = frontLeft.getPositions();
+            frPos = frontLeft.getPositions();
+            blPos = frontLeft.getPositions();
+            brPos = frontLeft.getPositions();
+        }finally {
+            OdometryThread.getInstance().getLock().unlock();
+        }
+
         OdometryMeasurementsStamped[] entries = new OdometryMeasurementsStamped[flPos.length];
         boolean inSync = true;
         for (int i = 0; i < flPos.length; i++) {

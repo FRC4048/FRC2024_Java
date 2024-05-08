@@ -11,7 +11,6 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax driveMotor;
@@ -19,7 +18,6 @@ public class SparkMaxModuleIO implements ModuleIO {
     private final WPI_CANCoder absEncoder;
     private double steerOffset;
     private final Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
-    private final ReentrantLock queueLock = new ReentrantLock();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
         driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
@@ -35,9 +33,7 @@ public class SparkMaxModuleIO implements ModuleIO {
                     steerMotor.getEncoder().getVelocity(),
                     time
             );
-            queueLock.lock();
             moduleReadingQueue.add(input);
-            queueLock.unlock();
         });
     }
 
@@ -65,25 +61,19 @@ public class SparkMaxModuleIO implements ModuleIO {
 
     @Override
     public void setDriveVoltage(double volts) {
-        OdometryThread.getInstance().getLock().lock();
         driveMotor.setVoltage(volts);
-        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void setSteerVoltage(double volts) {
-        OdometryThread.getInstance().getLock().lock();
         steerMotor.setVoltage(volts);
-        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void setSteerOffset(double zeroAbs) {
-        OdometryThread.getInstance().getLock().lock();
         steerMotor.getEncoder().setPosition(0);
         steerOffset = Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition());
         steerOffset = normalizeAngle(steerOffset);
-        OdometryThread.getInstance().getLock().unlock();
     }
 
     private double normalizeAngle(double angleInRad) {
@@ -96,15 +86,12 @@ public class SparkMaxModuleIO implements ModuleIO {
 
     @Override
     public void resetEncoder() {
-        OdometryThread.getInstance().getLock().lock();
         driveMotor.getEncoder().setPosition(0);
         steerMotor.getEncoder().setPosition(0);
-        OdometryThread.getInstance().getLock().unlock();
     }
 
     @Override
     public void updateInputs(SwerveModuleInput input) {
-        queueLock.lock();
         double size = moduleReadingQueue.size();
         Logger.recordOutput("ModuleReadingsSize", size);
         input.steerEncoderPosition = new double[moduleReadingQueue.size()];
@@ -122,10 +109,7 @@ public class SparkMaxModuleIO implements ModuleIO {
             input.measurementTimestamps[i] = poll.measurementTimestamp();
             poll = moduleReadingQueue.poll();
         }
-        OdometryThread.getInstance().getLock().lock();
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
         input.steerOffset = steerOffset;
-        OdometryThread.getInstance().getLock().unlock();
-        queueLock.unlock();
     }
 }
