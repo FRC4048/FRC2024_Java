@@ -14,14 +14,18 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
+import frc.robot.commands.ramp.SetAutoRampPid;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.RobotMode;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
@@ -33,6 +37,11 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robotContainer;
     private Command autoCommand;
+    private static final AtomicReference<RobotMode> mode = new AtomicReference<>(RobotMode.DISABLED);
+
+    public static RobotMode getMode(){
+        return mode.get();
+    }
 
     @Override
     public void robotInit() {
@@ -59,6 +68,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
+        mode.set(RobotMode.DISABLED);
         aliveTics = 0;
         SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
     }
@@ -71,6 +81,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        mode.set(RobotMode.AUTONOMOUS);
         ledEndgameTimer.restart();
         robotContainer.getLEDStrip().setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
         robotContainer.getRamp().setDefaultFF();
@@ -87,6 +98,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        mode.set(RobotMode.TELEOP);
         diagnostics.reset();
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
@@ -103,6 +115,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        mode.set(RobotMode.TEST);
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
         ledCycleTimer.restart();
@@ -115,6 +128,11 @@ public class Robot extends TimedRobot {
         if (ledCycleTimer.advanceIfElapsed(0.5)){
             robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
         }
+    }
+
+    @Override
+    public void simulationInit() {
+        mode.set(RobotMode.SIMULATION);
     }
 
     @Override

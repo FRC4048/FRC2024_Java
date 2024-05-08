@@ -48,8 +48,9 @@ public class GameConstants {
     public static final double RAMP_POS_SAFE_AMP_DEPLOY = 15.0;
     public static final double RAMP_POS_STOW = 0.5;
     public static final double RAMP_POS_SHOOT_SPEAKER_CLOSE = 0.1;
-    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.8; //when about 44" away from the speaker
+    public static final double RAMP_POS_SHOOT_SPEAKER_AWAY = 7.4; //when about 44" away from the speaker
     public static final double RAMP_POS_SHOOT_AMP = 7.0;
+    public static final double RAMP_POS_SKIP = 18.0;
 
     //SERVO
     public static final int RIGHT_SERVO_ENGAGED = 0;
@@ -160,6 +161,9 @@ public class GameConstants {
     public static final double RAMP_AT_POS_THRESHOLD = 0.1;
 
     public static final long GYRO_THREAD_RATE_MS = 10;
+    public static final long POSE_BUFFER_STORAGE_TIME = 2;
+    public static final boolean MULTI_CAMERA = false;
     public static final double APRILTAG_SPEAKER_OFFSET = 0.234809;
+    public static final double VISION_CONSISTANCY_THRESHOLD = 0.25;
 
 }

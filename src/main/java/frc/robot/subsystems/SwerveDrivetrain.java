@@ -93,11 +93,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
         }
 
-        if (Constants.ENABLE_VISION){
-            poseEstimator.updatePositionWithVis(gyro.getGyroValue());
-        }else {
-            poseEstimator.updatePosition(gyro.getGyroValue());
-        }
+        poseEstimator.updatePosition(gyro.getGyroValue());
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyro.getGyroValue());
         }

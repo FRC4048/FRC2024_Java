@@ -176,4 +176,7 @@ public class PoseUtils {
     public static Rotation3d addDimension(Rotation2d rotation, double pitch, double roll) {
         return new Rotation3d(roll, pitch, rotation.getRadians());
     }
+    public static double slope(Translation2d startPose, Translation2d endPose){
+        return (endPose.getY() - startPose.getY()) / (endPose.getX() - startPose.getX());
+    }
 }

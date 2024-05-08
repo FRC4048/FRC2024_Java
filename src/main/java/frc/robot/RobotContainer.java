@@ -234,12 +234,16 @@ public class RobotContainer {
 
         // Set up to shoot Speaker CLOSE - Y
         controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
+                new RampMove(ramp, () -> Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Set up to shoot Speaker AWAY - X
         controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new RampMove(ramp, () -> Constants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new ShootSpeaker(shooter, drivetrain, lightStrip)));
+
+        controller.a().onTrue(CommandUtil.parallel("Setup feeder shot",
+                new RampMove(ramp, () -> Constants.RAMP_POS_SKIP),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)));
 
         // Cancell all - B
