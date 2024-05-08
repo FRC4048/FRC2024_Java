@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +15,7 @@ import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.LocalADStarAK;
 import frc.robot.utils.RobotMode;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
@@ -45,6 +47,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
+        Pathfinding.setPathfinder(new LocalADStarAK());
         if (Constants.ENABLE_LOGGING) {
             Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
             Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
