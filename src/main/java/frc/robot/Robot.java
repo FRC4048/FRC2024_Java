@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
+import frc.robot.commands.ramp.SetAutoRampPid;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
@@ -29,6 +30,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Robot extends LoggedRobot {
+
+public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
     private double aliveTics = 0;
@@ -87,6 +90,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
+        mode.set(RobotMode.DISABLED);
         aliveTics = 0;
         SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
     }
@@ -99,6 +103,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
+        mode.set(RobotMode.AUTONOMOUS);
         ledEndgameTimer.restart();
         robotContainer.getLEDStrip().setPattern(RobotContainer.isRedAlliance() ? BlinkinPattern.HEARTBEAT_RED : BlinkinPattern.HEARTBEAT_BLUE);
         robotContainer.getRamp().setDefaultFF();
@@ -114,6 +119,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        mode.set(RobotMode.TELEOP);
         diagnostics.reset();
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
@@ -129,6 +135,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
+        mode.set(RobotMode.TEST);
         CommandScheduler.getInstance().cancelAll();
         diagnostics.reset();
         ledCycleTimer.restart();
@@ -140,6 +147,11 @@ public class Robot extends LoggedRobot {
         if (ledCycleTimer.advanceIfElapsed(0.5)){
             robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
         }
+    }
+
+    @Override
+    public void simulationInit() {
+        mode.set(RobotMode.SIMULATION);
     }
 
     @Override

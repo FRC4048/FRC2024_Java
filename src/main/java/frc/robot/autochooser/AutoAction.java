@@ -14,6 +14,7 @@ public enum AutoAction {
     Fork("Fork"),
     SmartFork("Smart Fork"),
     SHOOT("Shoot & Stop"),
+    ShootWaitMove("Shoot Wait Move"),
     INVALID("INVALID");
     private final String name;
     private static final HashMap<String, AutoAction> nameMap = new HashMap<>(Arrays.stream(AutoAction.values()).collect(Collectors.toMap(AutoAction::getName, Function.identity())));
