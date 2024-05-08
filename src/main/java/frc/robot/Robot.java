@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.SetAutoRampPid;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
@@ -30,8 +29,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Robot extends LoggedRobot {
-
-public class Robot extends TimedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
     private double aliveTics = 0;
