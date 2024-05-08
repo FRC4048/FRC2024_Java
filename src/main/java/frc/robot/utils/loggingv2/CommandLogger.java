@@ -34,8 +34,8 @@ public class CommandLogger {
 
     public void log() {
         Iterator<Map.Entry<Command, Queue<Boolean>>> iterator = toLogCommandStatus.entrySet().iterator();
-        Map.Entry<Command, Queue<Boolean>> entry = iterator.next();
-        while (entry != null){
+        while (iterator.hasNext()){
+            Map.Entry<Command, Queue<Boolean>> entry = iterator.next();
             Boolean poll = entry.getValue().poll();
             if (poll != null) {
                 Logger.recordOutput("Command/" + entry.getKey().toString(), poll);
@@ -43,7 +43,6 @@ public class CommandLogger {
             if (entry.getValue().peek() == null){
                 iterator.remove();
             }
-            entry = iterator.next();
         }
     }
 }

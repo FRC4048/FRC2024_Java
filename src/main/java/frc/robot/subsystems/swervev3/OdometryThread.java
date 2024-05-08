@@ -39,16 +39,14 @@ public class OdometryThread {
         executor.scheduleAtFixedRate(() -> {
             double startTime = Logger.getRealTimestamp();
             lock.lock();
+            double time = Logger.getRealTimestamp() - startTime;
+            Robot.runInMainThread(()-> Logger.recordOutput("LockWaitTime", time));
             try {
                 CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
-                double time = Logger.getRealTimestamp();
+
                 for (Consumer<Double> odometryRunnable : odometryRunnables) {
-                    Thread thread = new Thread(() -> {
-                        odometryRunnable.accept(time);
-                        latch.countDown();
-                    });
-                    thread.setDaemon(true);
-                    thread.start();
+                    odometryRunnable.accept(time);
+                    latch.countDown();
                 }
                 try {
                     latch.await();

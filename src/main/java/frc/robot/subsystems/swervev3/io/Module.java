@@ -76,11 +76,17 @@ public class Module {
 
     @AutoLogOutput
     private double getLatestSteerEncPos() {
+        if (system.getInputs().steerEncoderPosition.length == 0){
+            return 0;
+        }
         return system.getInputs().steerEncoderPosition[system.getInputs().steerEncoderPosition.length - 1];
     }
 
     @AutoLogOutput
     private double getLatestDriveEncVel() {
+        if (system.getInputs().steerEncoderPosition.length == 0){
+            return 0;
+        }
         return system.getInputs().driveEncoderVelocity[system.getInputs().steerEncoderPosition.length - 1];
     }
 }

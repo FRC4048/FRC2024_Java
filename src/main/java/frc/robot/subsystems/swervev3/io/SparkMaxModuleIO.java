@@ -108,6 +108,7 @@ public class SparkMaxModuleIO implements ModuleIO {
             input.steerEncoderVelocity[i] = poll.steerEncoderVelocity();
             input.measurementTimestamps[i] = poll.measurementTimestamp();
             poll = moduleReadingQueue.poll();
+            i++;
         }
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
         input.steerOffset = steerOffset;
