@@ -3,7 +3,7 @@ package frc.robot.autochooser.event;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.LoggableSystem;
 
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
@@ -14,12 +14,11 @@ import java.util.function.Consumer;
  * {@link AutoAction AutoActions} and {@link FieldLocation fieldLocations}<br>
  */
 public class AutoEventProvider {
-    private final AutoEventProviderIO providerIO;
+    private final LoggableSystem<AutoEventProviderIO, AutoChooserInputs> system;
     private final BiFunction<AutoAction, FieldLocation, Boolean> validator;
-    private final AutoChooserInputs inputs = new AutoChooserInputs();
 
     public AutoEventProvider(AutoEventProviderIO providerIO, BiFunction<AutoAction, FieldLocation, Boolean> validator) {
-        this.providerIO = providerIO;
+        this.system = new LoggableSystem<>(providerIO, new AutoChooserInputs());
         this.validator = validator;
         providerIO.setOnActionChangeListener(action -> {
             if (validator.apply(action, getSelectedLocation())) {
@@ -44,38 +43,37 @@ public class AutoEventProvider {
     }
 
     public AutoAction getSelectedAction() {
-        return inputs.action == null ? inputs.defaultAction : inputs.action;
+        return system.getInputs().action == null ? system.getInputs().defaultAction : system.getInputs().action;
     }
 
     public FieldLocation getSelectedLocation() {
-        return inputs.location == null ? inputs.defaultLocation : inputs.location;
+        return system.getInputs().location == null ? system.getInputs().defaultLocation : system.getInputs().location;
     }
 
     public void updateInputs() {
-        providerIO.updateInputs(inputs);
-        Logger.processInputs("AutoChooserInputs", inputs);
+        system.updateInputs();
     }
 
     public void setOnActionChangeListener(Consumer<AutoAction> listener) {
-        providerIO.setOnActionChangeListener(listener);
+        system.getIO().setOnActionChangeListener(listener);
     }
 
     public void setOnLocationChangeListener(Consumer<FieldLocation> listener) {
-        providerIO.setOnLocationChangeListener(listener);
+        system.getIO().setOnLocationChangeListener(listener);
     }
     public void forceRefresh(){
         if (validator.apply(getSelectedAction(), getSelectedLocation())) {
-            providerIO.setFeedbackAction(getSelectedAction());
-            providerIO.setFeedbackLocation(getSelectedLocation());
-            providerIO.runValidCommands();
+            system.getIO().setFeedbackAction(getSelectedAction());
+            system.getIO().setFeedbackLocation(getSelectedLocation());
+            system.getIO().runValidCommands();
         }else {
-            providerIO.setFeedbackAction(AutoAction.INVALID);
-            providerIO.setFeedbackLocation(FieldLocation.INVALID);
+            system.getIO().setFeedbackAction(AutoAction.INVALID);
+            system.getIO().setFeedbackLocation(FieldLocation.INVALID);
         }
 
     }
 
     public void addOnValidationCommand(Callable<Command> c) {
-        providerIO.addOnValidationCommand(c);
+        system.getIO().addOnValidationCommand(c);
     }
 }

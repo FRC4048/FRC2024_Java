@@ -4,6 +4,7 @@ package frc.robot.autochooser.event;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
+import frc.robot.subsystems.LoggableIO;
 
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
@@ -12,8 +13,7 @@ import java.util.function.Consumer;
  * interface that outlines the necessary methods to provide
  * {@link FieldLocation FieldLocations}  and {@link AutoAction AutoActions}
  * */
-public interface AutoEventProviderIO {
-    void updateInputs(AutoChooserInputs inputs);
+public interface AutoEventProviderIO extends LoggableIO<AutoChooserInputs> {
     void setOnActionChangeListener(Consumer<AutoAction> listener);
     void setOnLocationChangeListener(Consumer<FieldLocation> listener);
     void addOnValidationCommand(Callable<Command> consumer);
