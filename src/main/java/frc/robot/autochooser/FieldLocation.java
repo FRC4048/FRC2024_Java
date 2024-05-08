@@ -4,6 +4,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 public enum FieldLocation {
      SpeakerLeft(0.70,6.69,Math.toRadians(-120),"Speaker Left","Speaker Right"),
      SpeakFront(1.34,5.55,Math.PI,"Speaker Front","Speaker Front"),
@@ -16,6 +19,11 @@ public enum FieldLocation {
      private final double angle;
      private final String blueName;
      private final String redName;
+     private static final HashMap<String, FieldLocation> nameMap = new HashMap<>();
+
+     static{
+          Arrays.stream(FieldLocation.values()).forEach(v -> nameMap.put(v.getShuffleboardName(), v));
+     }
 
      FieldLocation(double xPos, double yPos,double angle, String blueName, String redName) {
           this.xPose = xPos;
@@ -24,6 +32,11 @@ public enum FieldLocation {
           this.blueName = blueName;
           this.redName = redName;
      }
+
+     public static FieldLocation fromName(String string) {
+          return null;
+     }
+
      public Pose2d getLocation(){
           double x = RobotContainer.isRedAlliance() ? RED_X_POS - xPose: xPose;
           double radian = RobotContainer.isRedAlliance() ? Math.PI-angle: angle;

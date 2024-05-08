@@ -27,7 +27,6 @@ public class ThreadedGyro {
 
     public void start(){
         updateGyro(Logger.getRealTimestamp());
-        OdometryThread.getInstance().getLock().lock();
         OdometryThread.getInstance().addRunnable(time -> {
             if (shouldReset.get()) {
                 gyro.reset();
@@ -39,12 +38,11 @@ public class ThreadedGyro {
             }
             updateGyro(time);
         });
-        OdometryThread.getInstance().getLock().unlock();
     }
 
     private void updateGyro(double time) {
         gyroLock.lock();
-        lastGyroMeasurements.add(new TimedGyroMeasurement((gyro.getAngle() % 360 ) * -1, Logger.getRealTimestamp()));
+        lastGyroMeasurements.add(new TimedGyroMeasurement((gyro.getAngle() % 360 ) * -1, time));
         gyroLock.unlock();
     }
 

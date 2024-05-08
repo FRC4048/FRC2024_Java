@@ -33,18 +33,17 @@ public class CommandLogger {
     }
 
     public void log() {
-        Map.Entry<Command, Queue<Boolean>> entry = toLogCommandStatus.pollFirstEntry();
-        List<Map.Entry<Command,Queue<Boolean>>> entriesToAdd = new ArrayList<>();
+        Iterator<Map.Entry<Command, Queue<Boolean>>> iterator = toLogCommandStatus.entrySet().iterator();
+        Map.Entry<Command, Queue<Boolean>> entry = iterator.next();
         while (entry != null){
             Boolean poll = entry.getValue().poll();
             if (poll != null) {
                 Logger.recordOutput("Command/" + entry.getKey().toString(), poll);
             }
-            if (entry.getValue().peek() != null){
-                entriesToAdd.add(entry);
+            if (entry.getValue().peek() == null){
+                iterator.remove();
             }
-            entry = toLogCommandStatus.pollFirstEntry();
+            entry = iterator.next();
         }
-        entriesToAdd.forEach(e -> toLogCommandStatus.put(e.getKey(), e.getValue()));
     }
 }

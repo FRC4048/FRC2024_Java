@@ -1,6 +1,7 @@
 package frc.robot.autochooser.event;
 
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -97,16 +98,18 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
         inputs.defaultAction = defaultAutoAction;
         inputs.defaultLocation = defaultFieldLocation;
         NetworkTableValue location = SmartShuffleboard.getValue(AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME);
-        if (location == null) {
-            inputs.feedbackLocation = null;
+        if (location == null || location.getString().isBlank()) {
+            inputs.feedbackLocation = FieldLocation.INVALID;
         } else {
-            inputs.feedbackLocation = (FieldLocation) location.getValue();
+            DriverStation.reportWarning(location.getString(), false);
+            inputs.feedbackLocation = FieldLocation.fromName(location.getString());
         }
         NetworkTableValue action = SmartShuffleboard.getValue(AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME);
-        if (action == null) {
-            inputs.feedbackAction = null;
+        if (action == null  || action.getString().isBlank()) {
+            inputs.feedbackAction = AutoAction.INVALID;
         } else {
-            inputs.feedbackAction = (AutoAction) action.getValue();
+            DriverStation.reportWarning(action.getString(), false);
+            inputs.feedbackAction = AutoAction.fromName(action.toString());
         }
     }
 }

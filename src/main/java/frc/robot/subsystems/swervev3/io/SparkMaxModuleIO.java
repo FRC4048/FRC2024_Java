@@ -29,7 +29,6 @@ public class SparkMaxModuleIO implements ModuleIO {
         setConversionFactors(conversionConfig);
         OdometryThread.getInstance().getLock().lock();
         OdometryThread.getInstance().addRunnable(time -> {
-            OdometryThread.getInstance().getLock().lock();
             ModuleInputsStamped input = new ModuleInputsStamped(
                     steerMotor.getEncoder().getPosition(),
                     driveMotor.getEncoder().getPosition(),
@@ -40,7 +39,6 @@ public class SparkMaxModuleIO implements ModuleIO {
             queueLock.lock();
             moduleReadingQueue.add(input);
             queueLock.unlock();
-            OdometryThread.getInstance().getLock().unlock();
         });
         OdometryThread.getInstance().getLock().unlock();
     }
