@@ -308,7 +308,7 @@ public class RobotContainer {
                 new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)
         ).withBasicName("Setup Speaker Shot (AWAY)"));
-        controller.a().onTrue(LoggableParallelCommandGroup(
+        controller.a().onTrue(new LoggableParallelCommandGroup(
                 new RampMove(ramp, () -> Constants.RAMP_POS_SKIP),
                 new ShootSpeaker(shooter, drivetrain, lightStrip)
         ).withBasicName("Setup feeder shot"));

@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.pathplanning.ShootAndDrop;
-import frc.robot.subsystems.Deployer;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
 
 public class ShootWaitMove extends SequentialCommandGroup {
     
