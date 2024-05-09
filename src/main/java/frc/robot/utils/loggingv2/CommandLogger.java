@@ -29,6 +29,11 @@ public class CommandLogger {
             toLogBools.add(false);
             toLogCommandStatus.put(command, toLogBools);
         });
+        CommandScheduler.getInstance().onCommandInterrupt(command -> {
+            Queue<Boolean> toLogBools = toLogCommandStatus.getOrDefault(command, new LinkedList<>());
+            toLogBools.add(false);
+            toLogCommandStatus.put(command, toLogBools);
+        });
         hasInit = true;
     }
 
