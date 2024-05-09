@@ -27,7 +27,7 @@ public class SparkMaxModuleIO implements ModuleIO {
         setConversionFactors(conversionConfig);
         OdometryThread.getInstance().addRunnable(time -> {
             ModuleInputsStamped input = new ModuleInputsStamped(
-                    steerMotor.getEncoder().getPosition(),
+                    normalizeAngle(steerMotor.getEncoder().getPosition() - steerOffset),
                     driveMotor.getEncoder().getPosition(),
                     driveMotor.getEncoder().getVelocity(),
                     steerMotor.getEncoder().getVelocity(),

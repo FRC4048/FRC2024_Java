@@ -45,7 +45,7 @@ public class OdometryThread {
                 CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
 
                 for (Consumer<Double> odometryRunnable : odometryRunnables) {
-                    odometryRunnable.accept(time);
+                    odometryRunnable.accept(startTime/1e6);
                     latch.countDown();
                 }
                 try {
