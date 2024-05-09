@@ -5,7 +5,6 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,18 +39,10 @@ public class OdometryThread {
             double startTime = Logger.getRealTimestamp();
             lock.lock();
             double time = Logger.getRealTimestamp() - startTime;
-            Robot.runInMainThread(()-> Logger.recordOutput("LockWaitTime", time));
+            Robot.runInMainThread(()-> Logger.recordOutput("OdomThreadLockTime", time));
             try {
-                CountDownLatch latch = new CountDownLatch(odometryRunnables.size());
-
                 for (Consumer<Double> odometryRunnable : odometryRunnables) {
                     odometryRunnable.accept(startTime/1e6);
-                    latch.countDown();
-                }
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             } finally {
                 lock.unlock();

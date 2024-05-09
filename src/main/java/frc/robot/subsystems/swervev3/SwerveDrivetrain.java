@@ -62,7 +62,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         ModulePositionStamped[] brPos;
         double lockStart = Logger.getRealTimestamp();
         OdometryThread.getInstance().getLock().lock();
-        Logger.recordOutput("MainThreadLockTime", Logger.getRealTimestamp()- lockStart);
+        Logger.recordOutput("MainThreadLockTime", Logger.getRealTimestamp() - lockStart);
         try {
             processInputs();
             flPos = frontLeft.getPositions();

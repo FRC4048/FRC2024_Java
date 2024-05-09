@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
+import frc.robot.commands.drivetrain.WheelAlign;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
@@ -64,8 +65,7 @@ public class Robot extends LoggedRobot {
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
-        robotContainer.getDrivetrain().setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO,Constants.FRONT_RIGHT_ABS_ENCODER_ZERO,Constants.BACK_LEFT_ABS_ENCODER_ZERO,Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
-//        new WheelAlign(robotContainer.getDrivetrain()).schedule();
+        new WheelAlign(robotContainer.getDrivetrain()).schedule();
         new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
 
