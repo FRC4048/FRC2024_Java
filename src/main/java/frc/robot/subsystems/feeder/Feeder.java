@@ -8,7 +8,6 @@ import frc.robot.subsystems.colorsensor.ColorSensor;
 
 public class Feeder extends SubsystemBase {
     private final ColorSensor colorSensor;
-    private final FeederInputs inputs = new FeederInputs();
     private final LoggableSystem<FeederIO, FeederInputs> feederSystem;
 
     public Feeder(FeederIO feederIO, ColorSensor colorSensor) {
@@ -21,7 +20,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public double getFeederMotorSpeed() {
-        return inputs.feederSpeed;
+        return feederSystem.getInputs().feederSpeed;
     }
 
     public void stopFeederMotor() {
@@ -34,7 +33,7 @@ public class Feeder extends SubsystemBase {
             double confidence = incoming ? Constants.COLOR_CONFIDENCE_RATE_INCOMING : Constants.COLOR_CONFIDENCE_RATE_BACKDRIVE;
             return latestResult.confidence > confidence;
         }
-        return inputs.isFwdTripped;
+        return feederSystem.getInputs().isFwdTripped;
     }
 
     @Override
