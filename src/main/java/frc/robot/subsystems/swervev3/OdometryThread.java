@@ -5,7 +5,10 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -14,7 +17,6 @@ public class OdometryThread {
 
     private static final OdometryThread inst = new OdometryThread();
     private final ScheduledExecutorService executor;
-    private final ExecutorService odomTaskExecutor;
     private final List<Consumer<Double>> odometryRunnables = new ArrayList<>();
     private final ReentrantLock lock = new ReentrantLock();
     private boolean started = false;
@@ -25,11 +27,6 @@ public class OdometryThread {
 
     public OdometryThread() {
         this.executor = Executors.newScheduledThreadPool(1, r -> {
-            Thread t = new Thread(r);
-            t.setDaemon(true);
-            return t;
-        });
-        odomTaskExecutor = Executors.newCachedThreadPool(r -> {
             Thread t = new Thread(r);
             t.setDaemon(true);
             return t;
@@ -48,10 +45,8 @@ public class OdometryThread {
             boolean overrun;
             try {
                 for (Consumer<Double> odometryRunnable : odometryRunnables) {
-                    odomTaskExecutor.submit(() -> {
-                        odometryRunnable.accept(startTime/1.0e6);
-                        latch.countDown();
-                    });
+                    odometryRunnable.accept(startTime/1.0e6);
+                    latch.countDown();
                 }
                 overrun = !latch.await(5, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
@@ -64,7 +59,7 @@ public class OdometryThread {
             Robot.runInMainThread(()-> Logger.recordOutput("OdomUpdateCycleTime", cycleTime));
             boolean finalOverrun = overrun;
             Robot.runInMainThread(()-> Logger.recordOutput("OdomOverrun", finalOverrun));
-        }, 0, 10, TimeUnit.MILLISECONDS);
+        }, 0, 4, TimeUnit.MILLISECONDS);
     }
 
     public void addRunnable(Consumer<Double> runnable) {

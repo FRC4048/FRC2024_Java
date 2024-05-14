@@ -92,8 +92,10 @@ public class SwerveDrivetrain extends SubsystemBase {
                 inSync = false;
             }
         }
+        double startTime = Logger.getRealTimestamp();
         poseEstimator.updatePosition(entries);
         poseEstimator.updateVision();
+        Logger.recordOutput("poseUpdateTime", Logger.getRealTimestamp() - startTime);
         Logger.recordOutput("OdomInSync", inSync);
     }
 
