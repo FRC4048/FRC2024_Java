@@ -73,6 +73,7 @@ public class SwerveDrivetrain extends SubsystemBase {
             OdometryThread.getInstance().getLock().unlock();
         }
 
+
         OdometryMeasurementsStamped[] entries = new OdometryMeasurementsStamped[flPos.length];
         boolean inSync = true;
         for (int i = 0; i < flPos.length; i++) {
@@ -97,6 +98,12 @@ public class SwerveDrivetrain extends SubsystemBase {
         poseEstimator.updateVision();
         Logger.recordOutput("poseUpdateTime", Logger.getRealTimestamp() - startTime);
         Logger.recordOutput("OdomInSync", inSync);
+        Logger.recordOutput("realSwerveStates",
+                frontLeft.getLatestState(),
+                frontRight.getLatestState(),
+                backLeft.getLatestState(),
+                backRight.getLatestState()
+        );
     }
 
     private void processInputs() {
@@ -125,6 +132,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
+        Logger.recordOutput("desiredStates", desiredStates);
         frontLeft.setState(desiredStates[0]);
         frontRight.setState(desiredStates[1]);
         backLeft.setState(desiredStates[2]);
