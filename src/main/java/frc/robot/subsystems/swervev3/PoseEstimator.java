@@ -97,7 +97,7 @@ public class PoseEstimator {
     }
 
     private boolean validAprilTagPose(double[] measurement) {
-        return !ArrayUtils.allMatch(measurement, -1.0);
+        return !ArrayUtils.allMatch(measurement, -1.0) && measurement.length == 4;
     }
 
     public void updateVision() {

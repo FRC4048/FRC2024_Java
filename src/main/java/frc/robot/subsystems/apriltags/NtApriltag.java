@@ -9,7 +9,7 @@ public class NtApriltag implements ApriltagIO {
     public NtApriltag() {
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         NetworkTable table = inst.getTable("ROS");
-        visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(10), PubSubOption.sendAll(true));
+        visionMeasurementSubscriber = table.getDoubleArrayTopic("Pos").subscribe(new double[]{-1,-1,-1,-1}, PubSubOption.pollStorage(100), PubSubOption.sendAll(true));
         apriltagIdSubscriber = table.getIntegerArrayTopic("apriltag_id").subscribe(new long[]{-1,-1});
     }
 
@@ -24,6 +24,7 @@ public class NtApriltag implements ApriltagIO {
         inputs.timestamp = new double[queue.length];
         for (int i = 0; i < queue.length; i++) {
             TimestampedDoubleArray measurement = queue[i];
+            if (queue.length < 4 || tagData.length < 1) continue;
             inputs.apriltagNumber[i] = (int) tagData[0];
             inputs.posX[i] = measurement.value[0];
             inputs.posY[i] = measurement.value[1];
