@@ -25,6 +25,7 @@ public class SparkMaxModuleIO implements ModuleIO {
         absEncoder = new WPI_CANCoder(motorConfig.getCanCoderId());
         setMotorConfig(driveInverted, steerInverted);
         setConversionFactors(conversionConfig);
+        resetEncoder();
         OdometryThread.getInstance().addRunnable(time -> {
             ModuleInputsStamped input = new ModuleInputsStamped(
                     normalizeAngle(steerMotor.getEncoder().getPosition() - steerOffset),
