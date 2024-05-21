@@ -11,12 +11,13 @@ import org.littletonrobotics.junction.Logger;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax driveMotor;
     private final CANSparkMax steerMotor;
     private final WPI_CANCoder absEncoder;
-    private double steerOffset;
+    private final AtomicLong steerOffset = new AtomicLong(0);
     private final Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
@@ -28,7 +29,7 @@ public class SparkMaxModuleIO implements ModuleIO {
         resetEncoder();
         OdometryThread.getInstance().addRunnable(time -> {
             ModuleInputsStamped input = new ModuleInputsStamped(
-                    normalizeAngle(steerMotor.getEncoder().getPosition() - steerOffset),
+                    normalizeAngle(steerMotor.getEncoder().getPosition() - Double.longBitsToDouble(steerOffset.get())),
                     driveMotor.getEncoder().getPosition(),
                     driveMotor.getEncoder().getVelocity(),
                     steerMotor.getEncoder().getVelocity(),
@@ -73,8 +74,7 @@ public class SparkMaxModuleIO implements ModuleIO {
     @Override
     public void setSteerOffset(double zeroAbs) {
         steerMotor.getEncoder().setPosition(0);
-        steerOffset = Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition());
-        steerOffset = normalizeAngle(steerOffset);
+        steerOffset.set(Double.doubleToLongBits(normalizeAngle(Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition()))));
     }
 
     private double normalizeAngle(double angleInRad) {
@@ -112,6 +112,6 @@ public class SparkMaxModuleIO implements ModuleIO {
             i++;
         }
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
-        input.steerOffset = steerOffset;
+        input.steerOffset = steerOffset.get();
     }
 }

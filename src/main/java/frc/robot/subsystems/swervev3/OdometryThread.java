@@ -59,7 +59,7 @@ public class OdometryThread {
             Robot.runInMainThread(()-> Logger.recordOutput("OdomUpdateCycleTime", cycleTime));
             boolean finalOverrun = overrun;
             Robot.runInMainThread(()-> Logger.recordOutput("OdomOverrun", finalOverrun));
-        }, 0, 4, TimeUnit.MILLISECONDS);
+        }, 0, 10, TimeUnit.MILLISECONDS);
     }
 
     public void addRunnable(Consumer<Double> runnable) {

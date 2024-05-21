@@ -60,18 +60,20 @@ public class SwerveDrivetrain extends SubsystemBase {
         ModulePositionStamped[] frPos;
         ModulePositionStamped[] blPos;
         ModulePositionStamped[] brPos;
+        double[] gyroAngles;
         double lockStart = Logger.getRealTimestamp();
         OdometryThread.getInstance().getLock().lock();
         Logger.recordOutput("MainThreadLockTime", Logger.getRealTimestamp() - lockStart);
         try {
             processInputs();
-            flPos = frontLeft.getPositions();
-            frPos = frontLeft.getPositions();
-            blPos = frontLeft.getPositions();
-            brPos = frontLeft.getPositions();
         }finally {
             OdometryThread.getInstance().getLock().unlock();
         }
+        flPos = frontLeft.getPositions();
+        frPos = frontLeft.getPositions();
+        blPos = frontLeft.getPositions();
+        brPos = frontLeft.getPositions();
+        gyroAngles = gyroSystem.getInputs().anglesInDeg;
 
 
         OdometryMeasurementsStamped[] entries = new OdometryMeasurementsStamped[flPos.length];
@@ -84,11 +86,11 @@ public class SwerveDrivetrain extends SubsystemBase {
                             blPos[i].modulePosition(),
                             brPos[i].modulePosition()
                     },
-                    gyroSystem.getInputs().anglesInDeg[i], flPos[i].timestamp()
+                    gyroAngles[i], flPos[i].timestamp()
             );
             if (Arrays.stream(new double[]{
                     flPos[i].timestamp(), frPos[i].timestamp(), blPos[i].timestamp(),
-                    brPos[i].timestamp(), gyroSystem.getInputs().anglesTimeStamps[i]
+                    brPos[i].timestamp(), gyroAngles[i]
             }).distinct().count() != 1) {
                 inSync = false;
             }

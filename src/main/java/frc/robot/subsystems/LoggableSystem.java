@@ -11,13 +11,13 @@ public class LoggableSystem<T extends LoggableIO<R>, R extends LoggableInputs> {
     public LoggableSystem(T io, R inputs) {
         this.io = io;
         this.inputs = inputs;
-        this.key = getClass().getSimpleName() + "Inputs";
+        this.key = "LoggableSystemInputs/"+getClass().getSimpleName() + "Inputs";
     }
 
     public LoggableSystem(T io, R inputs, String key) {
         this.io = io;
         this.inputs = inputs;
-        this.key = key;
+        this.key = "LoggableSystemInputs/"+key;
     }
 
     public void updateInputs() {

@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.swervev3.bags.ModulePositionStamped;
 import frc.robot.swervev2.SwervePidConfig;
@@ -17,15 +18,13 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class Module {
     private final LoggableSystem<ModuleIO, SwerveModuleInput> system;
     private final PIDController drivePIDController;
-    private final String loggingKey;
     private final ProfiledPIDController turningPIDController;
     private final SimpleMotorFeedforward driveFeedforward;
     private final SimpleMotorFeedforward turnFeedforward;
 
     public Module(ModuleIO moduleIO, PID drivePid, PID turnPid, Gain driveGain, Gain turnGain, TrapezoidProfile.Constraints goalConstraint, String loggingKey) {
-        this.system = new LoggableSystem<>(moduleIO, new SwerveModuleInput());
+        this.system = new LoggableSystem<>(moduleIO, new SwerveModuleInput(), loggingKey);
         drivePIDController = new PIDController(drivePid.getP(), drivePid.getI(), drivePid.getD());
-        this.loggingKey = loggingKey;
         turningPIDController = new ProfiledPIDController(turnPid.getP(), turnPid.getI(), turnPid.getD(), goalConstraint);
         driveFeedforward = new SimpleMotorFeedforward(driveGain.getS(), driveGain.getV());
         turnFeedforward = new SimpleMotorFeedforward(turnGain.getS(), turnGain.getV());
@@ -77,6 +76,7 @@ public class Module {
     @AutoLogOutput
     private double getLatestSteerEncPos() {
         if (system.getInputs().steerEncoderPosition.length == 0){
+            DriverStation.reportError("Could not find steer encoder value", true);
             return 0;
         }
         return system.getInputs().steerEncoderPosition[system.getInputs().steerEncoderPosition.length - 1];
@@ -85,6 +85,7 @@ public class Module {
     @AutoLogOutput
     private double getLatestDriveEncVel() {
         if (system.getInputs().steerEncoderPosition.length == 0){
+            DriverStation.reportError("Could not find drive encoder value", true);
             return 0;
         }
         return system.getInputs().driveEncoderVelocity[system.getInputs().steerEncoderPosition.length - 1];
