@@ -14,13 +14,14 @@ import java.util.function.Consumer;
 
 public class OdometryThread {
 
-    private static final OdometryThread inst = new OdometryThread();
+    private static OdometryThread inst = null;
     private final ScheduledExecutorService executor;
     private final List<Consumer<Double>> odometryRunnables = new ArrayList<>();
     private final ReentrantLock lock = new ReentrantLock();
     private boolean started = false;
 
     public static OdometryThread getInstance() {
+        if (inst == null) inst = new OdometryThread();
         return inst;
     }
 
