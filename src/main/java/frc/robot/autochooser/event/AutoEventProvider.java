@@ -20,7 +20,7 @@ public class AutoEventProvider {
     public AutoEventProvider(AutoEventProviderIO providerIO, BiFunction<AutoAction, FieldLocation, Boolean> validator) {
         this.system = new LoggableSystem<>(providerIO, new AutoChooserInputs());
         this.validator = validator;
-        providerIO.setOnActionChangeListener(action -> {
+        setOnActionChangeListener(action -> {
             if (validator.apply(action, getSelectedLocation())) {
                 providerIO.setFeedbackAction(action);
                 providerIO.setFeedbackLocation(getSelectedLocation());
@@ -30,7 +30,7 @@ public class AutoEventProvider {
                 providerIO.setFeedbackLocation(FieldLocation.INVALID);
             }
         });
-        providerIO.setOnLocationChangeListener(autoLocation -> {
+        setOnLocationChangeListener(autoLocation -> {
             if (validator.apply(getSelectedAction(), autoLocation)) {
                 providerIO.setFeedbackAction(getSelectedAction());
                 providerIO.setFeedbackLocation(autoLocation);

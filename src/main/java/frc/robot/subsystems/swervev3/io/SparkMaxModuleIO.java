@@ -9,8 +9,8 @@ import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SparkMaxModuleIO implements ModuleIO {
@@ -18,7 +18,7 @@ public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax steerMotor;
     private final WPI_CANCoder absEncoder;
     private final AtomicLong steerOffset = new AtomicLong(0);
-    private final Queue<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
+    private final Deque<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
         driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
@@ -112,6 +112,6 @@ public class SparkMaxModuleIO implements ModuleIO {
             i++;
         }
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
-        input.steerOffset = steerOffset.get();
+        input.steerOffset = Double.longBitsToDouble(steerOffset.get());
     }
 }

@@ -48,7 +48,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.apriltags.MockApriltag;
-import frc.robot.subsystems.apriltags.NtApriltag;
+import frc.robot.subsystems.apriltags.TCPApriltag;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.MockClimberIO;
 import frc.robot.subsystems.climber.RealCimberIO;
@@ -144,7 +144,7 @@ public class RobotContainer {
             intake = new Intake(new RealIntakeIO());
             lightStrip = new LightStrip(new RealLightStripIO());
             gyroIO = new RealGyroIO();
-            apriltagIO = new NtApriltag();
+            apriltagIO = new TCPApriltag();
         }else{
             shooter = new Shooter(new MockShooterIO());
             deployer = new Deployer(new MockDeployerIO());

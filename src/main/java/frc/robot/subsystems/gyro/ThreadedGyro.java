@@ -3,22 +3,18 @@ package frc.robot.subsystems.gyro;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.subsystems.swervev3.OdometryThread;
 import frc.robot.subsystems.swervev3.bags.TimedGyroMeasurement;
-import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadedGyro {
     private final AHRS gyro;
     private final AtomicBoolean shouldReset = new AtomicBoolean(false);
     private final AtomicBoolean shouldOffset = new AtomicBoolean(false);
-    private final Queue<TimedGyroMeasurement> lastGyroMeasurements = new LinkedList<>();
-    private final ReentrantLock gyroLock = new ReentrantLock();
+    private final LinkedTransferQueue<TimedGyroMeasurement> lastGyroMeasurements = new LinkedTransferQueue<>();
     private final AtomicLong gyroOffset = new AtomicLong();
 
     public ThreadedGyro(AHRS gyro) {
@@ -26,7 +22,6 @@ public class ThreadedGyro {
     }
 
     public void start(){
-        updateGyro(Logger.getRealTimestamp());
         OdometryThread.getInstance().addRunnable(time -> {
             if (shouldReset.get()) {
                 gyro.reset();
@@ -41,16 +36,11 @@ public class ThreadedGyro {
     }
 
     private void updateGyro(double time) {
-        gyroLock.lock();
         lastGyroMeasurements.add(new TimedGyroMeasurement((gyro.getAngle() % 360 ) * -1, time));
-        gyroLock.unlock();
     }
 
     public TimedGyroMeasurement getGyroValue(){
-        gyroLock.lock();
-        TimedGyroMeasurement peek = lastGyroMeasurements.peek();
-        gyroLock.unlock();
-        return peek;
+        return lastGyroMeasurements.peek();
     }
 
     public void resetGyro() {
@@ -63,14 +53,8 @@ public class ThreadedGyro {
     }
 
     public List<TimedGyroMeasurement> flushRecentMeasurements(){
-        gyroLock.lock();
         List<TimedGyroMeasurement> measurementList = new ArrayList<>();
-        TimedGyroMeasurement measurement = lastGyroMeasurements.poll();
-        while (measurement != null){
-            measurementList.add(measurement);
-            measurement = lastGyroMeasurements.poll();
-        }
-        gyroLock.unlock();
+        lastGyroMeasurements.drainTo(measurementList);
         return measurementList;
     }
 

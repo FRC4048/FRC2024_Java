@@ -1,6 +1,7 @@
 package frc.robot.autochooser.event;
 
 import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -74,6 +75,7 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
         onValidEvents.forEach(c -> {
             try {
                 c.call();
+                DriverStation.reportWarning("NT Auto Selection Changed", false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -96,11 +98,11 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
         inputs.location = locationChooser.getSelected();
         inputs.defaultAction = defaultAutoAction;
         inputs.defaultLocation = defaultFieldLocation;
-        NetworkTableValue location = SmartShuffleboard.getValue(AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME);
-        if (location == null || location.getString().isBlank()) {
+        NetworkTableValue feedbackLocation = SmartShuffleboard.getValue(AUTO_TAB_NAME, AUTO_LOCATION_FEEDBACK_NAME);
+        if (feedbackLocation == null || feedbackLocation.getString().isBlank()) {
             inputs.feedbackLocation = FieldLocation.INVALID;
         } else {
-            inputs.feedbackLocation = FieldLocation.fromName(location.getString());
+            inputs.feedbackLocation = FieldLocation.fromName(feedbackLocation.getString());
         }
         NetworkTableValue action = SmartShuffleboard.getValue(AUTO_TAB_NAME, AUTO_ACTION_FEEDBACK_NAME);
         if (action == null  || action.getString().isBlank()) {
