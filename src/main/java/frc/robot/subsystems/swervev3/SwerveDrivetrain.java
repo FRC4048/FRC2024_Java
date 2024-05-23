@@ -14,16 +14,13 @@ import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.GyroInputs;
-import frc.robot.subsystems.swervev3.bags.ModulePositionStamped;
-import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
+import frc.robot.subsystems.swervev3.bags.OdometryMeasurement;
 import frc.robot.subsystems.swervev3.io.Module;
 import frc.robot.subsystems.swervev3.io.ModuleIO;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.advanced.Alignable;
 import org.littletonrobotics.junction.Logger;
-
-import java.util.Arrays;
 
 public class SwerveDrivetrain extends SubsystemBase {
     private final Module frontLeft;
@@ -49,57 +46,23 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.backRight = new Module(backRightIO, pidConfig, "backRight");
         this.gyroSystem = new LoggableSystem<>(gyroIO, new GyroInputs());
         alignableTurnPid.enableContinuousInput(-180, 180);
-        OdometryThread.getInstance().start();
         this.poseEstimator = new PoseEstimator(frontLeft, frontRight, backLeft, backRight, apriltagIO, kinematics, getLastGyro());
     }
 
     @Override
     public void periodic() {
         poseEstimator.updateInputs();
-        ModulePositionStamped[] flPos;
-        ModulePositionStamped[] frPos;
-        ModulePositionStamped[] blPos;
-        ModulePositionStamped[] brPos;
-        double[] gyroAngles;
-        double lockStart = Logger.getRealTimestamp();
-        OdometryThread.getInstance().getLock().lock();
-        Logger.recordOutput("MainThreadLockTime", Logger.getRealTimestamp() - lockStart);
-        try {
-            processInputs();
-        }finally {
-            OdometryThread.getInstance().getLock().unlock();
-        }
-        flPos = frontLeft.getPositions();
-        frPos = frontLeft.getPositions();
-        blPos = frontLeft.getPositions();
-        brPos = frontLeft.getPositions();
-        gyroAngles = gyroSystem.getInputs().anglesInDeg;
-
-
-        OdometryMeasurementsStamped[] entries = new OdometryMeasurementsStamped[flPos.length];
-        boolean inSync = true;
-        for (int i = 0; i < flPos.length; i++) {
-            entries[i] = new OdometryMeasurementsStamped(
-                    new SwerveModulePosition[]{
-                            flPos[i].modulePosition(),
-                            frPos[i].modulePosition(),
-                            blPos[i].modulePosition(),
-                            brPos[i].modulePosition()
-                    },
-                    gyroAngles[i], flPos[i].timestamp()
-            );
-            if (Arrays.stream(new double[]{
-                    flPos[i].timestamp(), frPos[i].timestamp(), blPos[i].timestamp(),
-                    brPos[i].timestamp(), gyroAngles[i]
-            }).distinct().count() != 1) {
-                inSync = false;
-            }
-        }
-        double startTime = Logger.getRealTimestamp();
-        poseEstimator.updatePosition(entries);
+        processInputs();
+        OdometryMeasurement odom = new OdometryMeasurement(
+                new SwerveModulePosition[]{
+                    frontLeft.getPosition(),
+                    frontRight.getPosition(),
+                    backLeft.getPosition(),
+                    backRight.getPosition()
+            }, getLastGyro()
+        );
+        poseEstimator.updatePosition(odom);
         poseEstimator.updateVision();
-        Logger.recordOutput("poseUpdateTime", Logger.getRealTimestamp() - startTime);
-        Logger.recordOutput("OdomInSync", inSync);
         Logger.recordOutput("realSwerveStates",
                 frontLeft.getLatestState(),
                 frontRight.getLatestState(),
@@ -167,8 +130,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public double getLastGyro() {
-        int len = gyroSystem.getInputs().anglesInDeg.length - 1;
-        return len < 0 ? 0 : gyroSystem.getInputs().anglesInDeg[len];
+        return gyroSystem.getInputs().anglesInDeg;
     }
 
     public void setDriveMode(DriveMode driveMode) {

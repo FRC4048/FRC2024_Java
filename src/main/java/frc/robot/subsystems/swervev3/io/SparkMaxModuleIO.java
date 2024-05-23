@@ -3,14 +3,9 @@ package frc.robot.subsystems.swervev3.io;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.swervev3.OdometryThread;
-import frc.robot.subsystems.swervev3.bags.ModuleInputsStamped;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
-import org.littletonrobotics.junction.Logger;
 
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SparkMaxModuleIO implements ModuleIO {
@@ -18,7 +13,6 @@ public class SparkMaxModuleIO implements ModuleIO {
     private final CANSparkMax steerMotor;
     private final WPI_CANCoder absEncoder;
     private final AtomicLong steerOffset = new AtomicLong(0);
-    private final Deque<ModuleInputsStamped> moduleReadingQueue = new LinkedList<>();
 
     public SparkMaxModuleIO(SwerveIdConfig motorConfig, KinematicsConversionConfig conversionConfig, boolean driveInverted, boolean steerInverted) {
         driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
@@ -27,16 +21,6 @@ public class SparkMaxModuleIO implements ModuleIO {
         setMotorConfig(driveInverted, steerInverted);
         setConversionFactors(conversionConfig);
         resetEncoder();
-        OdometryThread.getInstance().addRunnable(time -> {
-            ModuleInputsStamped input = new ModuleInputsStamped(
-                    normalizeAngle(steerMotor.getEncoder().getPosition() - Double.longBitsToDouble(steerOffset.get())),
-                    driveMotor.getEncoder().getPosition(),
-                    driveMotor.getEncoder().getVelocity(),
-                    steerMotor.getEncoder().getVelocity(),
-                    time
-            );
-            moduleReadingQueue.add(input);
-        });
     }
 
     private void setConversionFactors(KinematicsConversionConfig conversionConfig) {
@@ -93,24 +77,10 @@ public class SparkMaxModuleIO implements ModuleIO {
 
     @Override
     public void updateInputs(SwerveModuleInput input) {
-        double size = moduleReadingQueue.size();
-        Logger.recordOutput("ModuleReadingsSize", size);
-        input.steerEncoderPosition = new double[moduleReadingQueue.size()];
-        input.driveEncoderPosition = new double[moduleReadingQueue.size()];
-        input.driveEncoderVelocity = new double[moduleReadingQueue.size()];
-        input.steerEncoderVelocity = new double[moduleReadingQueue.size()];
-        input.measurementTimestamps = new double[moduleReadingQueue.size()];
-        ModuleInputsStamped poll = moduleReadingQueue.poll();
-        int i = 0;
-        while (poll != null) {
-            input.steerEncoderPosition[i] = poll.steerEncoderPosition();
-            input.driveEncoderPosition[i] = poll.driveEncoderPosition();
-            input.driveEncoderVelocity[i] = poll.driveEncoderVelocity();
-            input.steerEncoderVelocity[i] = poll.steerEncoderVelocity();
-            input.measurementTimestamps[i] = poll.measurementTimestamp();
-            poll = moduleReadingQueue.poll();
-            i++;
-        }
+        input.steerEncoderPosition = normalizeAngle(steerMotor.getEncoder().getPosition() - Double.longBitsToDouble(steerOffset.get()));
+        input.driveEncoderPosition = driveMotor.getEncoder().getPosition();
+        input.driveEncoderVelocity = driveMotor.getEncoder().getVelocity();
+        input.steerEncoderVelocity = steerMotor.getEncoder().getVelocity();
         input.driveCurrentDraw = driveMotor.getOutputCurrent();
         input.steerOffset = Double.longBitsToDouble(steerOffset.get());
     }

@@ -5,11 +5,10 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 public class SwerveModuleInput implements LoggableInputs {
 
-    public double[] steerEncoderPosition = new double[]{0};
-    public double[] driveEncoderPosition = new double[]{0};
-    public double[] driveEncoderVelocity = new double[]{0};
-    public double[] steerEncoderVelocity = new double[]{0};
-    public double[] measurementTimestamps = new double[]{0};
+    public double steerEncoderPosition = 0;
+    public double driveEncoderPosition = 0;
+    public double driveEncoderVelocity = 0;
+    public double steerEncoderVelocity = 0;
     public double driveCurrentDraw = 0;
     public double steerCurrentDraw = 0;
     public double steerOffset = 0;
@@ -20,7 +19,6 @@ public class SwerveModuleInput implements LoggableInputs {
         table.put("driveEncoderPosition", driveEncoderPosition);
         table.put("driveEncoderVelocity", driveEncoderVelocity);
         table.put("steerEncoderVelocity", steerEncoderVelocity);
-        table.put("measurementTimestamps", measurementTimestamps);
         table.put("driveCurrentDraw", driveCurrentDraw);
         table.put("steerCurrentDraw", steerCurrentDraw);
         table.put("steerOffset", steerOffset);
@@ -32,7 +30,6 @@ public class SwerveModuleInput implements LoggableInputs {
         driveEncoderPosition = table.get("driveEncoderValue", driveEncoderPosition);
         driveEncoderVelocity = table.get("driveEncoderVelocity", driveEncoderVelocity);
         steerEncoderVelocity = table.get("steerEncoderVelocity", steerEncoderVelocity);
-        measurementTimestamps = table.get("measurementTimestamps", measurementTimestamps);
         driveCurrentDraw = table.get("driveCurrentDraw", driveCurrentDraw);
         steerCurrentDraw = table.get("steerCurrentDraw", steerCurrentDraw);
         steerOffset = table.get("steerOffset", steerOffset);

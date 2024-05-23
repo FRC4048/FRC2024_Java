@@ -1,9 +1,6 @@
 package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.subsystems.swervev3.bags.TimedGyroMeasurement;
-
-import java.util.List;
 
 public class RealGyroIO implements GyroIO {
     private final ThreadedGyro gyro;
@@ -27,16 +24,7 @@ public class RealGyroIO implements GyroIO {
 
     @Override
     public void updateInputs(GyroInputs inputs) {
-        List<TimedGyroMeasurement> measurementList = gyro.flushRecentMeasurements();
-        double[] anglesInDeg = new double[measurementList.size()];
-        double[] anglesTimeStamps = new double[measurementList.size()];
-        for (int i = 0; i < measurementList.size() ; i++) {
-//            DriverStation.reportWarning(measurementList.size() + ":" + i,false);
-            anglesInDeg[i] = measurementList.get(i).angle();
-            anglesTimeStamps[i] = measurementList.get(i).time();
-        }
-        inputs.anglesInDeg = anglesInDeg;
-        inputs.anglesTimeStamps = anglesTimeStamps;
+        inputs.anglesInDeg = gyro.getGyroValue();
         inputs.angleOffset = angleOffset;
     }
 }

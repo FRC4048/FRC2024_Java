@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 
 public class OdometryThread {
 
-
     private static final OdometryThread inst = new OdometryThread();
     private final ScheduledExecutorService executor;
     private final List<Consumer<Double>> odometryRunnables = new ArrayList<>();

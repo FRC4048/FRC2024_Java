@@ -19,7 +19,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.apriltags.ApriltagInputs;
-import frc.robot.subsystems.swervev3.bags.OdometryMeasurementsStamped;
+import frc.robot.subsystems.swervev3.bags.OdometryMeasurement;
 import frc.robot.subsystems.swervev3.bags.VisionMeasurement;
 import frc.robot.subsystems.swervev3.io.Module;
 import frc.robot.utils.PrecisionTime;
@@ -62,10 +62,10 @@ public class PoseEstimator {
                 kinematics,
                 new Rotation2d(Math.toRadians(initGyroValueDeg)),
                 new SwerveModulePosition[]{
-                        frontLeft.getPositions()[0].modulePosition(),
-                        frontRight.getPositions()[0].modulePosition(),
-                        backLeft.getPositions()[0].modulePosition(),
-                        backRight.getPositions()[0].modulePosition(),
+                        frontLeft.getPosition(),
+                        frontRight.getPosition(),
+                        backLeft.getPosition(),
+                        backRight.getPosition(),
                 },
                 new Pose2d(),
                 stateStdDevs,
@@ -82,16 +82,10 @@ public class PoseEstimator {
      *
      * @see SwerveDrivePoseEstimator#update(Rotation2d, SwerveModulePosition[])
      */
-    public void updatePosition(OdometryMeasurementsStamped[] measurements) {
+    public void updatePosition(OdometryMeasurement m) {
         if (DriverStation.isEnabled()) {
-            for (OdometryMeasurementsStamped measurement : measurements) {
-                Pose2d pose2d = poseEstimator.updateWithTime(
-                        measurement.timestamp(),
-                        Rotation2d.fromDegrees(measurement.gyroValueDeg()),
-                        measurement.modulePosition()
-                );
-                robotPoses.addSample(measurement.timestamp(), pose2d);
-            }
+            Pose2d pose2d = poseEstimator.update(Rotation2d.fromDegrees(m.gyroValueDeg()), m.modulePosition());
+            robotPoses.addSample(Logger.getRealTimestamp(), pose2d);
         }
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
@@ -170,10 +164,10 @@ public class PoseEstimator {
     public void resetOdometry(double radians, Translation2d translation2d) {
         this.poseEstimator.resetPosition(new Rotation2d(radians),
                 new SwerveModulePosition[]{
-                        frontLeft.getPositions()[0].modulePosition(),
-                        frontRight.getPositions()[0].modulePosition(),
-                        backLeft.getPositions()[0].modulePosition(),
-                        backRight.getPositions()[0].modulePosition(),
+                        frontLeft.getPosition(),
+                        frontRight.getPosition(),
+                        backLeft.getPosition(),
+                        backRight.getPosition(),
                 }, new Pose2d(translation2d, new Rotation2d(radians)));
     }
 

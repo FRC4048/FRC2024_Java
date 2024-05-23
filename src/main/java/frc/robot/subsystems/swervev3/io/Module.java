@@ -7,13 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.LoggableSystem;
-import frc.robot.subsystems.swervev3.bags.ModulePositionStamped;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.motor.Gain;
 import frc.robot.utils.motor.PID;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class Module {
     private final LoggableSystem<ModuleIO, SwerveModuleInput> system;
@@ -36,15 +33,15 @@ public class Module {
     }
 
     public void setState(SwerveModuleState desiredState) {
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getLatestSteerEncPos()));
-        double driveSpeed = drivePIDController.calculate(getLatestDriveEncVel(), (state.speedMetersPerSecond)) + driveFeedforward.calculate(state.speedMetersPerSecond);
-        double turnSpeed = turningPIDController.calculate(getLatestSteerEncPos(), state.angle.getRadians()) + turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
+        SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(system.getInputs().steerEncoderPosition));
+        double driveSpeed = drivePIDController.calculate(system.getInputs().driveEncoderVelocity, (state.speedMetersPerSecond)) + driveFeedforward.calculate(state.speedMetersPerSecond);
+        double turnSpeed = turningPIDController.calculate(system.getInputs().steerEncoderPosition, state.angle.getRadians()) + turnFeedforward.calculate(turningPIDController.getSetpoint().velocity);
         system.getIO().setDriveVoltage(driveSpeed);
         system.getIO().setSteerVoltage(turnSpeed * 12);
     }
 
     public SwerveModuleState getLatestState() {
-        return new SwerveModuleState(getLatestDriveEncVel(), new Rotation2d(getLatestSteerEncPos()));
+        return new SwerveModuleState(system.getInputs().driveEncoderVelocity, new Rotation2d(system.getInputs().steerEncoderPosition));
     }
 
     public void updateInputs() {
@@ -64,30 +61,7 @@ public class Module {
         system.getIO().setSteerOffset(steerOffset);
     }
 
-    public ModulePositionStamped[] getPositions() {
-        ModulePositionStamped[] poses = new ModulePositionStamped[system.getInputs().measurementTimestamps.length];
-        for (int i = 0; i < system.getInputs().measurementTimestamps.length; i++) {
-            SwerveModulePosition modPos = new SwerveModulePosition(system.getInputs().driveEncoderPosition[i], new Rotation2d(system.getInputs().steerEncoderPosition[i]));
-            poses[i] = new ModulePositionStamped(modPos, system.getInputs().measurementTimestamps[i]);
-        }
-        return poses;
-    }
-
-    @AutoLogOutput
-    private double getLatestSteerEncPos() {
-        if (system.getInputs().steerEncoderPosition.length == 0){
-            DriverStation.reportError("Could not find steer encoder value", true);
-            return 0;
-        }
-        return system.getInputs().steerEncoderPosition[system.getInputs().steerEncoderPosition.length - 1];
-    }
-
-    @AutoLogOutput
-    private double getLatestDriveEncVel() {
-        if (system.getInputs().steerEncoderPosition.length == 0){
-            DriverStation.reportError("Could not find drive encoder value", true);
-            return 0;
-        }
-        return system.getInputs().driveEncoderVelocity[system.getInputs().steerEncoderPosition.length - 1];
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(system.getInputs().driveEncoderPosition, new Rotation2d(system.getInputs().steerEncoderPosition));
     }
 }
