@@ -67,6 +67,9 @@ public abstract class TCPServer<T> extends Thread {
                 readings.add(extractFromStream(dataInputStream));
             } catch (IOException e) {
                 DriverStation.reportError("Problem while reading tcp stream data", true);
+                clientSocket = null;
+                bufferedInputStream = null;
+                dataInputStream = null;
             }
         }
 

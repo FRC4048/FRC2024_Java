@@ -11,11 +11,18 @@ public class TCPAriltagServer extends TCPServer<ApriltagReading> {
 
     @Override
     protected ApriltagReading extractFromStream(DataInputStream stream) throws IOException {
-        double posX = stream.readDouble();
-        double posY = stream.readDouble();
-        double rotationDeg = stream.readDouble();
-        double timestamp = stream.readDouble();
-        double now = System.currentTimeMillis();
+        double posX = -1;
+        double posY = -1;
+        double rotationDeg = -1;
+        double timestamp = -1;
+        double now = 0;
+        while(posX == -1 && posY == -1 && rotationDeg == -1 && timestamp == -1){
+            posX = stream.readDouble();
+            posY = stream.readDouble();
+            rotationDeg = stream.readDouble();
+            timestamp = stream.readDouble();
+            now = System.currentTimeMillis();
+        }
         return new ApriltagReading(posX, posY, rotationDeg, timestamp, now);
     }
 }
