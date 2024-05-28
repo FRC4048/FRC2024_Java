@@ -169,6 +169,8 @@ public class PoseEstimator {
                         backLeft.getPosition(),
                         backRight.getPosition(),
                 }, new Pose2d(translation2d, new Rotation2d(radians)));
+        DriverStation.reportWarning("RESETTING POSE", false);
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 
     private Pose2d getVisionPose(Pose2d measurement, Apriltag tag) {

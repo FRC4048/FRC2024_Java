@@ -1,11 +1,9 @@
 package frc.robot.autochooser.event;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.subsystems.LoggableSystem;
 
-import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -66,14 +64,14 @@ public class AutoEventProvider {
             system.getIO().setFeedbackAction(getSelectedAction());
             system.getIO().setFeedbackLocation(getSelectedLocation());
             system.getIO().runValidCommands();
-        }else {
+        } else {
             system.getIO().setFeedbackAction(AutoAction.INVALID);
             system.getIO().setFeedbackLocation(FieldLocation.INVALID);
         }
 
     }
 
-    public void addOnValidationCommand(Callable<Command> c) {
+    public void addOnValidationCommand(Runnable c) {
         system.getIO().addOnValidationCommand(c);
     }
 }

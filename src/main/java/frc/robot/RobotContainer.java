@@ -167,7 +167,7 @@ public class RobotContainer {
 
     private void setupAutoChooser() {
         autoChooser = new AutoChooser2024(new RealAutoEventProvider(AutoAction.DoNothing, FieldLocation.ZERO),drivetrain, intake, shooter, feeder, deployer, ramp, lightStrip, vision);
-        autoChooser.getProvider().addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser));
+        autoChooser.getProvider().addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser).initialize());
         autoChooser.getProvider().forceRefresh();
     }
 

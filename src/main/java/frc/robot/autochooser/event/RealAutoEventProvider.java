@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
@@ -14,7 +13,6 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public class RealAutoEventProvider implements AutoEventProviderIO {
@@ -29,7 +27,7 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
     private final SendableChooser<FieldLocation> locationChooser;
     private final AutoAction defaultAutoAction;
     private final FieldLocation defaultFieldLocation;
-    public final List<Callable<Command>> onValidEvents = new ArrayList<>();
+    public final List<Runnable> onValidEvents = new ArrayList<>();
 
     public RealAutoEventProvider(AutoAction defaultAutoAction, FieldLocation defaultFieldLocation) {
         this.defaultAutoAction = defaultAutoAction;
@@ -66,7 +64,7 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
     }
 
     @Override
-    public void addOnValidationCommand(Callable<Command> consumer) {
+    public void addOnValidationCommand(Runnable consumer) {
         onValidEvents.add(consumer);
     }
 
@@ -74,7 +72,7 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
     public void runValidCommands() {
         onValidEvents.forEach(c -> {
             try {
-                c.call();
+                c.run();
                 DriverStation.reportWarning("NT Auto Selection Changed", false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
