@@ -22,7 +22,6 @@ import frc.robot.subsystems.apriltags.ApriltagInputs;
 import frc.robot.subsystems.swervev3.bags.OdometryMeasurement;
 import frc.robot.subsystems.swervev3.bags.VisionMeasurement;
 import frc.robot.subsystems.swervev3.io.Module;
-import frc.robot.utils.PrecisionTime;
 import frc.robot.utils.RobotMode;
 import frc.robot.utils.advanced.Apriltag;
 import frc.robot.utils.math.ArrayUtils;
@@ -31,7 +30,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class PoseEstimator {
     private final Field2d field = new Field2d();
@@ -91,20 +89,26 @@ public class PoseEstimator {
     }
 
     private boolean validAprilTagPose(double[] measurement) {
-        return !ArrayUtils.allMatch(measurement, -1.0) && measurement.length == 4;
+        return !ArrayUtils.allMatch(measurement, -1.0) && measurement.length == 3;
     }
 
     public void updateVision() {
         if (Robot.getMode().equals(RobotMode.TELEOP) && Constants.ENABLE_VISION) {
             for (int i = 0; i < apriltagSystem.getInputs().timestamp.length; i++) {
+
                 double[] pos = new double[]{
                         apriltagSystem.getInputs().posX[i], apriltagSystem.getInputs().posY[i],
                         apriltagSystem.getInputs().rotationDeg[i]
                 };
                 if (validAprilTagPose(pos)) {
-                    double diff = apriltagSystem.getInputs().serverTime[i] - TimeUnit.MILLISECONDS.toMicros((long) apriltagSystem.getInputs().timestamp[i]);
-                    double latencyInSec = PrecisionTime.MICROSECONDS.convert(PrecisionTime.SECONDS, diff);
-                    visionPoses.add(new VisionMeasurement(new Pose2d(pos[0], pos[1], Rotation2d.fromDegrees(pos[2])), Apriltag.of(apriltagSystem.getInputs().apriltagNumber[i]), latencyInSec));
+                    if (apriltagSystem.getInputs().posX.length != 0){
+//                        DriverStation.reportWarning(String.valueOf(apriltagSystem.getInputs().posX[0]),false);
+                    }
+                    double diff = apriltagSystem.getInputs().serverTime[i] - apriltagSystem.getInputs().timestamp[i];
+                    double latencyInSec = diff / 1000;
+                    visionPoses.add(new VisionMeasurement(new Pose2d(pos[0], pos[1], getEstimatedPose().getRotation()), Apriltag.of(apriltagSystem.getInputs().apriltagNumber[i]), latencyInSec));
+                }else{
+//                    DriverStation.reportWarning("POSE INVALID", false);
                 }
             }
             if (Constants.FILTER_VISION_POSES) {
@@ -148,7 +152,9 @@ public class PoseEstimator {
             } else {
                 VisionMeasurement measurement = visionPoses.poll();
                 while (measurement != null) {
-                    poseEstimator.addVisionMeasurement(getVisionPose(measurement.measurement(), measurement.tag()), measurement.timeOfMeasurement());
+                    Pose2d pose =  getVisionPose(measurement.measurement(), measurement.tag());
+//                    DriverStation.reportWarning(pose.toString(), false);
+                    poseEstimator.addVisionMeasurement(pose, measurement.timeOfMeasurement());
                     measurement = visionPoses.poll();
                 }
             }
@@ -169,7 +175,6 @@ public class PoseEstimator {
                         backLeft.getPosition(),
                         backRight.getPosition(),
                 }, new Pose2d(translation2d, new Rotation2d(radians)));
-        DriverStation.reportWarning("RESETTING POSE", false);
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
 

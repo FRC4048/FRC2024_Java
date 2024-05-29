@@ -1,5 +1,7 @@
 package frc.robot.subsystems.apriltags;
 
+import edu.wpi.first.wpilibj.Timer;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -21,7 +23,7 @@ public class TCPAriltagServer extends TCPServer<ApriltagReading> {
             posY = stream.readDouble();
             rotationDeg = stream.readDouble();
             timestamp = stream.readDouble();
-            now = System.currentTimeMillis();
+            now = Timer.getFPGATimestamp() * 1000;
         }
         return new ApriltagReading(posX, posY, rotationDeg, timestamp, now);
     }

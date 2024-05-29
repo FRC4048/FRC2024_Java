@@ -1,5 +1,7 @@
 package frc.robot.subsystems.apriltags;
 
+import org.littletonrobotics.junction.Logger;
+
 import java.util.Queue;
 
 public class TCPApriltag implements ApriltagIO {
@@ -14,11 +16,13 @@ public class TCPApriltag implements ApriltagIO {
     @Override
     public void updateInputs(ApriltagInputs inputs) {
         Queue<ApriltagReading> queue = server.flush();
+        Logger.recordOutput("VisionMeasurementsThisTick",queue.size());
         inputs.posX = new double[queue.size()];
         inputs.posY = new double[queue.size()];
         inputs.rotationDeg = new double[queue.size()];
         inputs.serverTime = new double[queue.size()];
         inputs.timestamp = new double[queue.size()];
+        inputs.apriltagNumber = new int[queue.size()];
         for (int i = 0; i < queue.size(); i++) {
             ApriltagReading measurement = queue.poll();
             inputs.apriltagNumber[i] = 1;
