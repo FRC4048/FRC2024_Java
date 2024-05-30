@@ -1,7 +1,6 @@
 package frc.robot.autochooser.event;
 
 import edu.wpi.first.networktables.NetworkTableValue;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -73,7 +72,6 @@ public class RealAutoEventProvider implements AutoEventProviderIO {
         onValidEvents.forEach(c -> {
             try {
                 c.run();
-                DriverStation.reportWarning("NT Auto Selection Changed", false);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

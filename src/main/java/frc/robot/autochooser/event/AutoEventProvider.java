@@ -14,30 +14,13 @@ import java.util.function.Consumer;
 public class AutoEventProvider {
     private final LoggableSystem<AutoEventProviderIO, AutoChooserInputs> system;
     private final BiFunction<AutoAction, FieldLocation, Boolean> validator;
+    private boolean changed = false;
 
     public AutoEventProvider(AutoEventProviderIO providerIO, BiFunction<AutoAction, FieldLocation, Boolean> validator) {
         this.system = new LoggableSystem<>(providerIO, new AutoChooserInputs());
         this.validator = validator;
-        setOnActionChangeListener(action -> {
-            if (validator.apply(action, getSelectedLocation())) {
-                providerIO.setFeedbackAction(action);
-                providerIO.setFeedbackLocation(getSelectedLocation());
-                providerIO.runValidCommands();
-            } else {
-                providerIO.setFeedbackAction(AutoAction.INVALID);
-                providerIO.setFeedbackLocation(FieldLocation.INVALID);
-            }
-        });
-        setOnLocationChangeListener(autoLocation -> {
-            if (validator.apply(getSelectedAction(), autoLocation)) {
-                providerIO.setFeedbackAction(getSelectedAction());
-                providerIO.setFeedbackLocation(autoLocation);
-                providerIO.runValidCommands();
-            } else {
-                providerIO.setFeedbackAction(AutoAction.INVALID);
-                providerIO.setFeedbackLocation(FieldLocation.INVALID);
-            }
-        });
+        setOnActionChangeListener((a) -> changed = true);
+        setOnLocationChangeListener((l) -> changed = true);
     }
 
     public AutoAction getSelectedAction() {
@@ -50,6 +33,10 @@ public class AutoEventProvider {
 
     public void updateInputs() {
         system.updateInputs();
+        if (changed) {
+            forceRefresh();
+            changed = false;
+        }
     }
 
     public void setOnActionChangeListener(Consumer<AutoAction> listener) {
@@ -68,7 +55,6 @@ public class AutoEventProvider {
             system.getIO().setFeedbackAction(AutoAction.INVALID);
             system.getIO().setFeedbackLocation(FieldLocation.INVALID);
         }
-
     }
 
     public void addOnValidationCommand(Runnable c) {
