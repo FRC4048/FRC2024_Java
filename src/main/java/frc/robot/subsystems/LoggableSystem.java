@@ -11,7 +11,7 @@ public class LoggableSystem<T extends LoggableIO<R>, R extends LoggableInputs> {
     public LoggableSystem(T io, R inputs) {
         this.io = io;
         this.inputs = inputs;
-        this.key = "LoggableSystemInputs/"+getClass().getSimpleName() + "Inputs";
+        this.key = getClass().getSimpleName() + "Inputs";
     }
 
     public LoggableSystem(T io, R inputs, String key) {
