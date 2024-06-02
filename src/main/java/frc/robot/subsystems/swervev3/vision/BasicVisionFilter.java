@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev3;
+package frc.robot.subsystems.swervev3.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
