@@ -26,8 +26,8 @@ public class SwerveModuleInput implements LoggableInputs {
 
     @Override
     public void fromLog(LogTable table) {
-        steerEncoderPosition = table.get("steerEncoderValue", steerEncoderPosition);
-        driveEncoderPosition = table.get("driveEncoderValue", driveEncoderPosition);
+        steerEncoderPosition = table.get("steerEncoderPosition", steerEncoderPosition);
+        driveEncoderPosition = table.get("driveEncoderPosition", driveEncoderPosition);
         driveEncoderVelocity = table.get("driveEncoderVelocity", driveEncoderVelocity);
         steerEncoderVelocity = table.get("steerEncoderVelocity", steerEncoderVelocity);
         driveCurrentDraw = table.get("driveCurrentDraw", driveCurrentDraw);

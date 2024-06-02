@@ -61,6 +61,7 @@ public class SwerveDrivetrain extends SubsystemBase {
                     backRight.getPosition()
             }, getLastGyro()
         );
+        Logger.recordOutput("LastOdomModPoses", odom.modulePosition());
         poseEstimator.updatePosition(odom);
         poseEstimator.updateVision();
         Logger.recordOutput("realSwerveStates",
@@ -170,7 +171,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPose();
+        return poseEstimator.getEstimatedPose1();
     }
 
     public void setGyroOffset(double offset) {
