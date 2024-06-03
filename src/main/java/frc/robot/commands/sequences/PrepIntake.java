@@ -10,13 +10,17 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
+import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
 
-public class PrepIntake extends LoggableParallelCommandGroup {
+public class PrepIntake extends LoggableSequentialCommandGroup {
     public PrepIntake(Intake intake, Deployer deployer, Ramp ramp, LightStrip lightStrip){
         super(
-                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
-                new LowerDeployer(deployer, lightStrip),
-                new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW)
+                new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW),
+                new LoggableParallelCommandGroup(
+                        new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                        new LowerDeployer(deployer, lightStrip)
+                )
+
         );
     }
 }

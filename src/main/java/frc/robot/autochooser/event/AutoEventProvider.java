@@ -1,5 +1,6 @@
 package frc.robot.autochooser.event;
 
+import frc.robot.Robot;
 import frc.robot.autochooser.AutoAction;
 import frc.robot.autochooser.FieldLocation;
 import frc.robot.subsystems.LoggableSystem;
@@ -32,7 +33,12 @@ public class AutoEventProvider {
     }
 
     public void updateInputs() {
+        FieldLocation lastsLoc = system.getInputs().location;
+        AutoAction lastsAct = system.getInputs().action;
         system.updateInputs();
+        if (!Robot.isReal() && (!lastsLoc.equals(system.getInputs().location) || !lastsAct.equals(system.getInputs().action))){
+            changed = true;
+        }
         if (changed) {
             forceRefresh();
             changed = false;
