@@ -2,17 +2,17 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
-import frc.robot.utils.Alignable;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utils.ShooterSpeed;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
 import java.util.function.Supplier;
 
-public class AdvancedSpinningShot extends Command {
+public class AdvancedSpinningShot extends LoggableCommand {
     private final Shooter shooter;
     private final Supplier<Pose2d> pose2dSupplier;
     private final Supplier<Alignable> alignableSupplier;

@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.utils.Alignable;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
 import java.util.function.Supplier;
 
-public class AlignableMonitor extends Command {
+public class AlignableMonitor extends LoggableCommand {
     private final Supplier<Alignable> alignableSupplier;
     private Alignable alignable;
     public AlignableMonitor(Supplier<Alignable> alignableSupplier) {

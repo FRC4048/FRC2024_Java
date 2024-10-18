@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,29 +12,33 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.deployer.RaiseDeployer;
 import frc.robot.commands.drivetrain.ResetGyro;
 import frc.robot.commands.drivetrain.WheelAlign;
-import frc.robot.commands.ramp.SetAutoRampPid;
 import frc.robot.commands.teleOPinitReset;
 import frc.robot.constants.Constants;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.LocalADStarAK;
 import frc.robot.utils.RobotMode;
 import frc.robot.utils.TimeoutCounter;
 import frc.robot.utils.diag.Diagnostics;
-import frc.robot.utils.logging.CommandUtil;
-import frc.robot.utils.logging.Logger;
+import frc.robot.utils.loggingv2.CommandLogger;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
     private static Diagnostics diagnostics;
     private Command autonomousCommand;
-    private double loopTime = 0;
     private double aliveTics = 0;
-    private Timer ledCycleTimer = new Timer();
-    private Timer ledEndgameTimer = new Timer();
-
+    private final Timer ledCycleTimer = new Timer();
+    private final Timer ledEndgameTimer = new Timer();
     private RobotContainer robotContainer;
-    private Command autoCommand;
+    private static final ConcurrentLinkedQueue<Runnable> runInMainThread = new ConcurrentLinkedQueue<>();
+
     private static final AtomicReference<RobotMode> mode = new AtomicReference<>(RobotMode.DISABLED);
 
     public static RobotMode getMode(){
@@ -45,25 +47,45 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        Pathfinding.setPathfinder(new LocalADStarAK());
         if (Constants.ENABLE_LOGGING) {
-            DataLogManager.start();
-            DriverStation.startDataLog(DataLogManager.getLog(), false);
-            CommandScheduler.getInstance().onCommandInterrupt(command -> Logger.logInterruption(command.getName(), true));
+            Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
+            Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+            if (isReal()) {
+                Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+            } else {
+                setUseTiming(false); // Run as fast as possible (false == run fast, true == run real)
+                String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
+                Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
+            }
+            Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+            // Log active commands
+            CommandLogger.get().init();
         }
         diagnostics = new Diagnostics();
         robotContainer = new RobotContainer();
-        CommandUtil.logged(new WheelAlign(robotContainer.getDrivetrain())).schedule();
-        CommandUtil.logged(new ResetGyro(robotContainer.getDrivetrain(), 2)).schedule();
+        new WheelAlign(robotContainer.getDrivetrain()).schedule();
+        new ResetGyro(robotContainer.getDrivetrain(), 2).schedule();
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        double time = (loopTime == 0) ? 0 : (Timer.getFPGATimestamp() - loopTime) * 1000;
-        Logger.logDouble("/robot/loopTime", time, Constants.ENABLE_LOGGING);
-//        if (ledEndgameTimer.hasElapsed(130)){
-//            robotContainer.getLEDStrip().setPattern(BlinkinPattern.CONFETTI);
-//        }
+        if (Constants.ENABLE_LOGGING){
+            CommandLogger.get().log();
+            long startTime = Logger.getRealTimestamp();
+            Runnable poll = runInMainThread.poll();
+            while (poll != null){
+                poll.run();
+                if (Logger.getRealTimestamp() - startTime <= 3000){
+                    poll = runInMainThread.poll();
+                }else {
+                    break;
+                }
+            }
+        }
+
     }
 
     @Override
@@ -93,7 +115,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -103,14 +124,13 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        CommandUtil.logged(new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip())).schedule();
-        CommandUtil.parallel("Reset Climber and Ramp", new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip())).schedule();
+        new RaiseDeployer(robotContainer.getDeployer(), robotContainer.getLEDStrip()).schedule();
+        new teleOPinitReset(robotContainer.getRamp(), robotContainer.getClimber(), robotContainer.getLEDStrip()).withBasicName("Reset Climber and Ramp").schedule();
         robotContainer.getRamp().setFarFF();
     }
 
     @Override
     public void teleopPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     @Override
@@ -123,7 +143,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-        loopTime = 0;
         diagnostics.refresh();
         if (ledCycleTimer.advanceIfElapsed(0.5)){
             robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
@@ -137,10 +156,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void simulationPeriodic() {
-        loopTime = Timer.getFPGATimestamp();
     }
 
     public static Diagnostics getDiagnostics() {
         return diagnostics;
+    }
+    public static void runInMainThread(Runnable r){
+        runInMainThread.add(r);
     }
 }

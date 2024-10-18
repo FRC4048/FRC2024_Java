@@ -5,20 +5,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.utils.Alignable;
-import frc.robot.utils.AutoAlignment;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
 import frc.robot.utils.BlinkinPattern;
-import frc.robot.utils.logging.Logger;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.advanced.AutoAlignment;
+import frc.robot.utils.loggingv2.LoggableCommand;
 import frc.robot.utils.math.AngleUtils;
 import frc.robot.utils.math.PoseUtils;
 import frc.robot.utils.math.VelocityVector;
 
-public class RampFollow extends Command {
+public class RampFollow extends LoggableCommand {
     private final Ramp ramp;
     private final SwerveDrivetrain drivetrain;
     private final LightStrip lightStrip;
@@ -84,7 +83,7 @@ public class RampFollow extends Command {
             if (Constants.RAMP_DEBUG){
                 SmartDashboard.putNumber("DEST DIFF", threshold);
             }
-            Logger.logDouble("/robot/ramp/diffFromTarget", threshold, Constants.ENABLE_LOGGING);
+            org.littletonrobotics.junction.Logger.recordOutput("ramp/diffFromTarget", threshold);
             if (isInThresh){
                 lightStrip.setPattern(BlinkinPattern.VIOLET);
             } else {

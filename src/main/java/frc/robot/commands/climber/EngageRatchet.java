@@ -1,9 +1,9 @@
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class EngageRatchet extends Command {
+public class EngageRatchet extends LoggableCommand {
 
     private Climber climber;
     

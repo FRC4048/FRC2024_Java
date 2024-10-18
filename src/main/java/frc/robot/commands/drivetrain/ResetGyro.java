@@ -1,10 +1,10 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class ResetGyro extends Command {
+public class ResetGyro extends LoggableCommand {
     private final SwerveDrivetrain drivetrain;
     private final int delay;
     private double startTime;

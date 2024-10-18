@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -14,15 +13,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.autochooser.AutoAction;
+import frc.robot.autochooser.FieldLocation;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
-import frc.robot.commands.CancelAll;
-import frc.robot.commands.MoveToGamepiece;
-import frc.robot.commands.SetAlignable;
+import frc.robot.autochooser.event.RealAutoEventProvider;
+import frc.robot.commands.*;
 import frc.robot.commands.climber.ManualControlClimber;
 import frc.robot.commands.deployer.LowerDeployer;
 import frc.robot.commands.deployer.RaiseDeployer;
@@ -35,26 +33,68 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
-import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
-import frc.robot.commands.ramp.RampMoveAndWait;
 import frc.robot.commands.ramp.ResetRamp;
+import frc.robot.commands.sequences.IntakePiece;
+import frc.robot.commands.sequences.ShootPiece;
 import frc.robot.commands.sequences.SpoolExitAndShootAtSpeed;
 import frc.robot.commands.shooter.AdvancedSpinningShot;
 import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
-import frc.robot.commands.shooter.StopShooter;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.apriltags.ApriltagIO;
+import frc.robot.subsystems.apriltags.MockApriltag;
+import frc.robot.subsystems.apriltags.TCPApriltag;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.MockClimberIO;
+import frc.robot.subsystems.climber.RealCimberIO;
+import frc.robot.subsystems.colorsensor.ColorSensor;
+import frc.robot.subsystems.colorsensor.MockColorSensor;
+import frc.robot.subsystems.colorsensor.RealColorSensor;
+import frc.robot.subsystems.deployer.Deployer;
+import frc.robot.subsystems.deployer.MockDeployerIO;
+import frc.robot.subsystems.deployer.RealDeployerIO;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.feeder.MockFeederIO;
+import frc.robot.subsystems.feeder.RealFeederIO;
+import frc.robot.subsystems.gyro.GyroIO;
+import frc.robot.subsystems.gyro.MockGyroIO;
+import frc.robot.subsystems.gyro.RealGyroIO;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.MockIntakeIO;
+import frc.robot.subsystems.intake.RealIntakeIO;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.lightstrip.MockLightStripIO;
+import frc.robot.subsystems.lightstrip.RealLightStripIO;
+import frc.robot.subsystems.limelight.MockVisionIO;
+import frc.robot.subsystems.limelight.RealVisionIO;
+import frc.robot.subsystems.limelight.Vision;
+import frc.robot.subsystems.ramp.MockRampIO;
+import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.subsystems.ramp.RealRampIO;
+import frc.robot.subsystems.shooter.MockShooterIO;
+import frc.robot.subsystems.shooter.RealShooterIO;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
+import frc.robot.subsystems.swervev3.io.MockModuleIO;
+import frc.robot.subsystems.swervev3.io.ModuleIO;
+import frc.robot.subsystems.swervev3.io.SparkMaxModuleIO;
 import frc.robot.swervev2.KinematicsConversionConfig;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
-import frc.robot.utils.*;
-import frc.robot.utils.logging.CommandUtil;
+import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.DriveMode;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
+import frc.robot.utils.loggingv2.LoggableRaceCommandGroup;
+import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
+import frc.robot.utils.loggingv2.LoggableWaitCommand;
+import frc.robot.utils.motor.Gain;
+import frc.robot.utils.motor.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 import java.util.Optional;
@@ -76,15 +116,17 @@ public class RobotContainer {
     private final JoystickButton joyLeftButton2 = new JoystickButton(joyleft, 2);
     private final JoystickButton joyRightButton3 = new JoystickButton(joyright, 3);
     private final JoystickButton joyLeftButton3 = new JoystickButton(joyleft, 3);
-    private final Shooter shooter = new Shooter();
-    private final Deployer deployer = new Deployer();
-    private final Feeder feeder = new Feeder();
-    private final Ramp ramp = new Ramp();
-    private final Climber climber = new Climber();
-    private final Vision vision = new Vision();
-    private final IntakeSubsystem intake = new IntakeSubsystem();
-    private final LightStrip lightStrip = new LightStrip(Constants.LIGHTSTRIP_PORT);
+    private final Shooter shooter;
+    private final Deployer deployer;
+    private final Feeder feeder;
+    private final Ramp ramp;
+    private final Climber climber;
+    private final Vision vision;
+    private final Intake intake;
+    private final LightStrip lightStrip;
+    private final ApriltagIO apriltagIO;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
+    private final GyroIO gyroIO;
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
 
@@ -92,6 +134,29 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        if (Robot.isReal()){
+            shooter = new Shooter(new RealShooterIO());
+            deployer = new Deployer(new RealDeployerIO());
+            feeder = new Feeder(new RealFeederIO(), new ColorSensor(new RealColorSensor()));
+            ramp = new Ramp(new RealRampIO());
+            climber = new Climber(new RealCimberIO());
+            vision = new Vision(new RealVisionIO());
+            intake = new Intake(new RealIntakeIO());
+            lightStrip = new LightStrip(new RealLightStripIO());
+            gyroIO = new RealGyroIO();
+            apriltagIO = new TCPApriltag();
+        }else{
+            shooter = new Shooter(new MockShooterIO());
+            deployer = new Deployer(new MockDeployerIO());
+            feeder = new Feeder(new MockFeederIO(),new ColorSensor(new MockColorSensor()));
+            ramp = new Ramp(new MockRampIO());
+            climber = new Climber(new MockClimberIO());
+            vision = new Vision(new MockVisionIO());
+            intake = new Intake(new MockIntakeIO());
+            lightStrip = new LightStrip(new MockLightStripIO());
+            gyroIO = new MockGyroIO();
+            apriltagIO = new MockApriltag();
+        }
         setupDriveTrain();
         registerPathPlanableCommands();
         setupPathPlanning();
@@ -101,32 +166,31 @@ public class RobotContainer {
     }
 
     private void setupAutoChooser() {
-        autoChooser = new AutoChooser2024(intake, shooter, feeder, deployer, ramp, drivetrain, lightStrip);
-        autoChooser.addOnValidationCommand(() -> CommandUtil.logged(new SetInitOdom(drivetrain, autoChooser)));
-        autoChooser.forceRefresh();
+        autoChooser = new AutoChooser2024(new RealAutoEventProvider(AutoAction.DoNothing, FieldLocation.ZERO),drivetrain, intake, shooter, feeder, deployer, ramp, lightStrip, vision);
+        autoChooser.getProvider().addOnValidationCommand(() -> new SetInitOdom(drivetrain, autoChooser).initialize());
+        autoChooser.getProvider().forceRefresh();
     }
 
     /**
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", CommandUtil.race("SlurpWithRamp",
-                new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
-                new SequentialCommandGroup(
-                        new ResetRamp(ramp, lightStrip),
-                        new WaitCommand(2))
-                )
-        );
-        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake, lightStrip)));
-        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, lightStrip)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, lightStrip ,Constants.TIMED_FEEDER_EXIT)));
-        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, lightStrip)));
-        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder, lightStrip)));
-        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp, lightStrip)));
-        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip)));
+        NamedCommands.registerCommand("SlurpWithRamp", new LoggableParallelCommandGroup(
+                        new CurrentBasedIntakeFeeder(intake, feeder, lightStrip),
+                        new LoggableSequentialCommandGroup(
+                                new ResetRamp(ramp, lightStrip),
+                                new LoggableWaitCommand(2)).withBasicName("ResetRampPostIntake")
+        ).withBasicName("SlurpWithRamp"));
+        NamedCommands.registerCommand("PathPlannerShoot", new PathPlannerShoot(shooter, feeder, ramp, intake, lightStrip));
+        NamedCommands.registerCommand("ComboShot", new ComboShot(shooter, feeder, lightStrip));
+        NamedCommands.registerCommand("FeederGamepieceUntilLeave", new TimedFeeder(feeder, lightStrip ,Constants.TIMED_FEEDER_EXIT));
+        NamedCommands.registerCommand("ShootAndDrop", new ShootAndDrop(shooter, feeder, deployer, lightStrip));
+        NamedCommands.registerCommand("FeederBackDrive", new FeederBackDrive(feeder, lightStrip));
+        NamedCommands.registerCommand("ResetRamp", new ResetRamp(ramp, lightStrip));
+        NamedCommands.registerCommand("RampShootComboCenter", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_CENTER_AUTO_SHOOT).withBasicName("RampShootComboCenter"));// second piece
+        NamedCommands.registerCommand("RampShootComboSide", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_SIDE_AUTO_SHOOT).withBasicName("RampShootComboSide")); // first and third
+        NamedCommands.registerCommand("RampShootComboSide2", new RampShootCombo(ramp, shooter, lightStrip, Constants.RAMP_DIP_AUTO_SHOOT).withBasicName("RampShootComboSide2")); // first and third
+        NamedCommands.registerCommand("MoveToGamePiece", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
     }
 
     /**
@@ -147,7 +211,6 @@ public class RobotContainer {
     }
 
     private void setupDriveTrain() {
-
         SwerveIdConfig frontLeftIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_LEFT_D, Constants.DRIVE_FRONT_LEFT_S, Constants.DRIVE_CANCODER_FRONT_LEFT);
         SwerveIdConfig frontRightIdConf = new SwerveIdConfig(Constants.DRIVE_FRONT_RIGHT_D, Constants.DRIVE_FRONT_RIGHT_S, Constants.DRIVE_CANCODER_FRONT_RIGHT);
         SwerveIdConfig backLeftIdConf = new SwerveIdConfig(Constants.DRIVE_BACK_LEFT_D, Constants.DRIVE_BACK_LEFT_S, Constants.DRIVE_CANCODER_BACK_LEFT);
@@ -161,126 +224,113 @@ public class RobotContainer {
 
         KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
-        ThreadedGyro navxGyro = new ThreadedGyro(new AHRS());
-        navxGyro.start();
-        this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, navxGyro);
+        ModuleIO frontLeft;
+        ModuleIO frontRight;
+        ModuleIO backLeft;
+        ModuleIO backRight;
+        if (Robot.isReal()){
+            frontLeft = new SparkMaxModuleIO(frontLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            frontRight = new SparkMaxModuleIO(frontRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            backLeft = new SparkMaxModuleIO(backLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            backRight = new SparkMaxModuleIO(backRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        }else{
+            frontLeft = new MockModuleIO();
+            frontRight = new MockModuleIO();
+            backLeft = new MockModuleIO();
+            backRight = new MockModuleIO();
+        }
+        this.drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, apriltagIO, pidConfig);
     }
 
     public void putShuffleboardCommands() {
 
         if (Constants.DEPLOYER_DEBUG) {
-            SmartShuffleboard.putCommand("Deployer", "DeployerLower", CommandUtil.logged(new RaiseDeployer(deployer, lightStrip)));
-            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", CommandUtil.logged(new LowerDeployer(deployer, lightStrip)));
+            SmartShuffleboard.putCommand("Deployer", "DeployerLower", new RaiseDeployer(deployer, lightStrip));
+            SmartShuffleboard.putCommand("Deployer", "DeployerRaise", new LowerDeployer(deployer, lightStrip));
         }
         if (Constants.RAMP_DEBUG) {
             SmartShuffleboard.put("Ramp", "myTargetPos", 0);
-            SmartShuffleboard.putCommand("Ramp", "SetRamp", CommandUtil.logged(new RampMove(ramp, () -> SmartShuffleboard.getDouble("Ramp", "myTargetPos", 0))));
-//            SmartShuffleboard.putCommand("Ramp", "SetArmPID400", CommandUtil.logged(new RampMove(ramp, 15 )));
-//            SmartShuffleboard.putCommand("Ramp", "SetArmPID500", CommandUtil.logged(new RampMove(ramp, 500)));
-            SmartShuffleboard.putCommand("Ramp", "ResetRamp", CommandUtil.logged(new ResetRamp(ramp, lightStrip)));
+            SmartShuffleboard.putCommand("Ramp", "SetRamp", new RampMove(ramp, () -> SmartShuffleboard.getDouble("Ramp", "myTargetPos", 0)));
+            SmartShuffleboard.putCommand("Ramp", "ResetRamp", new ResetRamp(ramp, lightStrip));
         }
         if (Constants.SHOOTER_DEBUG) {
             SmartShuffleboard.putCommand("Shooter", "Spool Exit and shoot", new SpoolExitAndShootAtSpeed(shooter, feeder, lightStrip));
             SmartShuffleboard.putCommand("Shooter", "Set Shooter Speed", new SetShooterSpeed(shooter, lightStrip));
-//            SmartShuffleboard.putCommand("Shooter", "Shoot", new Shoot(shooter));
-//            SmartShuffleboard.putCommand("Shooter", "Shoot", CommandUtil.logged(new Shoot(shooter)));
-
         }
         if (Constants.FEEDER_DEBUG) {
-            SmartShuffleboard.putCommand("Feeder", "Feed", CommandUtil.logged(new StartFeeder(feeder, lightStrip)));
+            SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder, lightStrip));
         }
         if (Constants.INTAKE_DEBUG) {
-            SmartShuffleboard.putCommand("Intake", "Start Intake", CommandUtil.logged(new StartIntake(intake, 5)));
-            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", CommandUtil.sequence(
-                    "IntakeFeederCurrentCombo",
-                    new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
-                    new CurrentBasedIntakeFeeder(intake, feeder, lightStrip))
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new frc.robot.commands.intake.StartIntake(intake, 5));
+            SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", new LoggableSequentialCommandGroup(
+                        new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
+                        new CurrentBasedIntakeFeeder(intake, feeder, lightStrip)
+                    ).withBasicName("IntakeFeederCurrentCombo")
             );
         }
         if (Constants.SWERVE_DEBUG) {
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip,0.3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, -0.3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0, 0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0, -0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, lightStrip,0.3048, 0, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, lightStrip, -0.3048, 0, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, lightStrip, 0, 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, lightStrip, 0, -0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, .3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, -0.3048, 0, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0, 0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip,0, -0.3048, 0.4)));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4)));
+            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
         if (Constants.VISION_DEBUG) {
             SmartShuffleboard.putCommand("Vision", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Vision", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, lightStrip));
+            SmartShuffleboard.putCommand("Vision", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
     }
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
-        Command rampMoveAndSpin = CommandUtil.race(
-                "AdvancedAutoShoot",
+        Command rampMoveAndSpin = new LoggableRaceCommandGroup(
                 new RampFollow(ramp, drivetrain, lightStrip),
                 new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
-        );
-        joyLeftButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.SPEAKER))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
+        ).withBasicName("AdvancedAutoShoot");
+        joyLeftButton1.onTrue(new SetAlignable(drivetrain, Alignable.SPEAKER)).onFalse(new SetAlignable(drivetrain, null));
         joyLeftButton3.onTrue(rampMoveAndSpin);
-        joyRightButton1.onTrue(CommandUtil.logged(new SetAlignable(drivetrain, Alignable.AMP))).onFalse(CommandUtil.logged(new SetAlignable(drivetrain, null)));
-        joyLeftButton2.whileTrue(CommandUtil.logged(new SetRobotDriveMode(drivetrain, DriveMode.ROBOT_CENTRIC))).whileFalse(new SetRobotDriveMode(drivetrain, DriveMode.FIELD_CENTRIC));
+        joyRightButton1.onTrue(new SetAlignable(drivetrain, Alignable.AMP)).onFalse(new SetAlignable(drivetrain, null));
+        joyLeftButton2.whileTrue(new SetRobotDriveMode(drivetrain, DriveMode.ROBOT_CENTRIC)).whileFalse(new SetRobotDriveMode(drivetrain, DriveMode.FIELD_CENTRIC));
         ManualControlClimber leftClimbCmd = new ManualControlClimber(climber, () -> -controller.getLeftY()); // negative because Y "up" is negative
 
         climber.setDefaultCommand(leftClimbCmd);
 
         // Set up to shoot Speaker CLOSE - Y
-        controller.y().onTrue(CommandUtil.parallel("Setup Speaker Shot (CLOSE)",
-                new RampMove(ramp, () -> Constants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
-                new ShootSpeaker(shooter, drivetrain, lightStrip)));
+        controller.y().onTrue(new LoggableParallelCommandGroup(
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_CLOSE),
+                new ShootSpeaker(shooter, drivetrain, lightStrip)
+        ).withBasicName("Setup Speaker Shot (CLOSE)"));
 
         // Set up to shoot Speaker AWAY - X
-        controller.x().onTrue(CommandUtil.parallel("Setup Speaker Shot (AWAY)",
-                new RampMove(ramp, () -> Constants.RAMP_POS_SHOOT_SPEAKER_AWAY),
-                new ShootSpeaker(shooter, drivetrain, lightStrip)));
-
-        controller.a().onTrue(CommandUtil.parallel("Setup feeder shot",
+        controller.x().onTrue(new LoggableParallelCommandGroup(
+                new RampMove(ramp, () -> GameConstants.RAMP_POS_SHOOT_SPEAKER_AWAY),
+                new ShootSpeaker(shooter, drivetrain, lightStrip)
+        ).withBasicName("Setup Speaker Shot (AWAY)"));
+        controller.a().onTrue(new LoggableParallelCommandGroup(
                 new RampMove(ramp, () -> Constants.RAMP_POS_SKIP),
-                new ShootSpeaker(shooter, drivetrain, lightStrip)));
+                new ShootSpeaker(shooter, drivetrain, lightStrip)
+        ).withBasicName("Setup feeder shot"));
 
         // Cancell all - B
-        controller.b().onTrue(CommandUtil.logged(new CancelAll(ramp, shooter, lightStrip)));
+        controller.b().onTrue(new CancelAll(ramp, shooter, lightStrip));
 
         // Shoot - Right Trigger
-        controller.rightTrigger(0.5).onTrue(CommandUtil.sequence("Operator Shoot",
-                new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW)));
+        controller.rightTrigger(0.5).onTrue(new ShootPiece(shooter,feeder,ramp,lightStrip).withBasicName("Operator Shoot"));
 
         //Driver Shoot
-        joyRightButton2.onTrue(CommandUtil.sequence("Driver Shoot",
-                new TimedFeeder(feeder,lightStrip, Constants.TIMED_FEEDER_EXIT),
-                new WaitCommand(GameConstants.SHOOTER_TIME_BEFORE_STOPPING),
-                new StopShooter(shooter),
-                new RampMove(ramp, () -> GameConstants.RAMP_POS_STOW))
-        );
-
-        // start intaking a note
-        Command lowerIntake = CommandUtil.parallel("lowerIntake",
-                new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
-                new LowerDeployer(deployer, lightStrip),
-                new RampMoveAndWait(ramp, lightStrip ,() -> GameConstants.RAMP_POS_STOW));
-        Command endIntake = CommandUtil.parallel("endIntake",
-                new RaiseDeployer(deployer, lightStrip));
-        controller.povDown().onTrue(CommandUtil.sequence("Intake a Note",
-                lowerIntake, new CurrentBasedIntakeFeeder(intake, feeder, lightStrip), endIntake));
-
+        joyRightButton2.onTrue(new ShootPiece(shooter,feeder,ramp,lightStrip).withBasicName("Driver Shoot"));
+        controller.povDown().onTrue(new IntakePiece(intake,deployer,ramp,feeder,lightStrip).withBasicName("Intake a Note"));
         controller.leftTrigger(.5).onTrue(new FeederBackDrive(feeder, lightStrip));
-
         // stop intake
-        controller.povUp().onTrue(CommandUtil.parallel("stop intake",
-                CommandUtil.logged(new RaiseDeployer(deployer, lightStrip)),
-                CommandUtil.logged(new StopIntake(intake)),
-                CommandUtil.logged(new StopFeeder(feeder))));
+        controller.povUp().onTrue(new LoggableParallelCommandGroup(
+                new RaiseDeployer(deployer, lightStrip),
+                new StopFeeder(feeder),
+                new StopIntake(intake),
+                new SetLedPattern(lightStrip, BlinkinPattern.BLACK)
+        ).withBasicName("stop intake"));
+
         joyRightButton3.onTrue(new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT));
     }
 
@@ -322,7 +372,7 @@ public class RobotContainer {
         return autoChooser;
     }
 
-    public IntakeSubsystem getIntake() {
+    public Intake getIntake() {
         return intake;
     }
 

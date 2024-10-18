@@ -1,22 +1,22 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LightStrip;
+import frc.robot.subsystems.feeder.Feeder;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class CurrentBasedIntakeFeeder extends Command {
+public class CurrentBasedIntakeFeeder extends LoggableCommand {
     private final Feeder feeder;
     private final LightStrip lightStrip;
-    private final IntakeSubsystem intake;
+    private final Intake intake;
     private final Timer timer = new Timer();
     private boolean slowState = false;
     private double intakeSpikeCount = 0;
 
-    public CurrentBasedIntakeFeeder(IntakeSubsystem intake, Feeder feeder, LightStrip lightStrip) {
+    public CurrentBasedIntakeFeeder(Intake intake, Feeder feeder, LightStrip lightStrip) {
         this.intake = intake;
         this.feeder = feeder;
         this.lightStrip = lightStrip;

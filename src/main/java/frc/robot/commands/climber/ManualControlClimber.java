@@ -1,12 +1,12 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
 import java.util.function.DoubleSupplier;
 
-public class ManualControlClimber extends Command {
+public class ManualControlClimber extends LoggableCommand {
 
     private Climber climber;
     private DoubleSupplier supplier;

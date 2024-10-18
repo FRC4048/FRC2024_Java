@@ -5,10 +5,8 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.utils.logging.Logger;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import org.littletonrobotics.junction.Logger;
 
 /** Counts how many timeouts each command had during a match. */
 public class TimeoutCounter {
@@ -20,7 +18,7 @@ public class TimeoutCounter {
     public TimeoutCounter(String commandName, LightStrip lightStrip) {
         this.commandName = commandName;
         this.lightStrip = lightStrip;
-        Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
+        Logger.recordOutput("Timeouts/" + commandName, timeoutCounter);
     }
     public double getTimeoutCount() {
         return timeoutCounter;
@@ -28,7 +26,7 @@ public class TimeoutCounter {
     public void increaseTimeoutCount() {
         timeoutCounter++;
         totalTimeouts++;
-        Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
+        Logger.recordOutput("Timeouts/" + commandName, timeoutCounter);
         lightStrip.setPattern(BlinkinPattern.HOT_PINK);
         double startTime = Timer.getFPGATimestamp();
         lightStrip.scheduleOnTrue(()-> Timer.getFPGATimestamp() - startTime >= 1, BlinkinPattern.BLACK);
@@ -38,7 +36,7 @@ public class TimeoutCounter {
     }
     public void resetCounter() {
         timeoutCounter = 0;
-        Logger.logInteger("/Timeouts/" + commandName, timeoutCounter, Constants.ENABLE_LOGGING);
+        Logger.recordOutput("Timeouts/" + commandName, timeoutCounter);
     }
     public static int getTotalTimeouts(){
         return totalTimeouts;

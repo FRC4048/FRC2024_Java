@@ -1,18 +1,18 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class StartIntake extends Command {
-    private final IntakeSubsystem intakeSubsystem;
+public class StartIntake extends LoggableCommand {
+    private final Intake intake;
     private final Timer timer = new Timer();
     private final double motorRunTime; // temporary until  done testing
 
-    public StartIntake(IntakeSubsystem intakeSubsystem, double motorRunTime ) {
-        addRequirements(intakeSubsystem);
-        this.intakeSubsystem = intakeSubsystem;
+    public StartIntake(Intake intake, double motorRunTime ) {
+        addRequirements(intake);
+        this.intake = intake;
         this.motorRunTime = motorRunTime;
     }
 
@@ -24,12 +24,12 @@ public class StartIntake extends Command {
   
     @Override
     public void execute() {
-        intakeSubsystem.setMotorSpeed(Constants.INTAKE_MOTOR_1_SPEED, Constants.INTAKE_MOTOR_2_SPEED);
+        intake.setMotorSpeed(Constants.INTAKE_MOTOR_1_SPEED, Constants.INTAKE_MOTOR_2_SPEED);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.stopMotors();
+        intake.stopMotors();
     }
 
     @Override

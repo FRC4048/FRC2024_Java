@@ -1,5 +1,9 @@
 package frc.robot.utils.math;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 public class ArrayUtils {
     public static <T extends Number> boolean contains(T[] array, T value){
         for (T t : array) {
@@ -48,5 +52,22 @@ public class ArrayUtils {
             }
         }
         return true;
+    }
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toArray(List<T> list, Class<T> tClass){
+        T[] t = (T[]) Array.newInstance(tClass, list.size());
+        return list.toArray(t);
+    }
+
+    public static double[] unwrap(Double[] a){
+        return Arrays.stream(a).mapToDouble(Double::doubleValue).toArray();
+    }
+
+    public static int[] unwrap(Integer[] a){
+        return Arrays.stream(a).mapToInt(Integer::intValue).toArray();
+    }
+
+    public static long[] unwrap(Long[] a){
+        return Arrays.stream(a).mapToLong(Long::longValue).toArray();
     }
 }

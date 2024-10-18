@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.climber.ResetClimber;
 import frc.robot.commands.ramp.ResetRamp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.utils.loggingv2.LoggableParallelCommandGroup;
 
-public class teleOPinitReset extends ParallelCommandGroup{
+public class teleOPinitReset extends LoggableParallelCommandGroup {
     public teleOPinitReset(Ramp ramp, Climber climber, LightStrip lightStrip) {
         addCommands(
             new ResetRamp(ramp, lightStrip),

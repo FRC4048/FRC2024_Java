@@ -5,13 +5,13 @@
 package frc.robot.commands.ramp;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Ramp;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.ramp.Ramp;
 import frc.robot.utils.TimeoutCounter;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class ResetRamp extends Command {
+public class ResetRamp extends LoggableCommand {
   /** Creates a new ResetRamp. */
   private final Ramp ramp;
   private double startTime;

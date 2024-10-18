@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LightStrip;
+import frc.robot.subsystems.lightstrip.LightStrip;
 import frc.robot.utils.BlinkinPattern;
+import frc.robot.utils.loggingv2.LoggableCommand;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-public class SetLEDValue extends Command {
+public class SetLEDValue extends LoggableCommand {
 
     LightStrip lightStrip;
     

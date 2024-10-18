@@ -53,8 +53,8 @@ public class GameConstants {
     public static final double RAMP_POS_SKIP = 18.0;
 
     //SERVO
-    public static final int RIGHT_SERVO_ENGAGED = 0;
-    public static final int RIGHT_SERVO_DISENGAGED = 180;
+    public static final int RIGHT_SERVO_ENGAGED = 180;
+    public static final int RIGHT_SERVO_DISENGAGED = 0;
     public static final int LEFT_SERVO_ENGAGED = 0;
     public static final int LEFT_SERVO_DISENGAGED = 180;
 
@@ -165,5 +165,9 @@ public class GameConstants {
     public static final boolean MULTI_CAMERA = false;
     public static final double APRILTAG_SPEAKER_OFFSET = 0.234809;
     public static final double VISION_CONSISTANCY_THRESHOLD = 0.25;
+    public static final double VISION_CONSISTANCY_THRESHOLD2 = 0.25;
+
+    public static final boolean FILTER_VISION_POSES1 = false;
+    public static final boolean FILTER_VISION_POSES2 = false;
 
 }

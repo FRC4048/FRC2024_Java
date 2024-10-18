@@ -1,11 +1,11 @@
 package frc.robot.commands.ramp;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Ramp;
-import frc.robot.subsystems.SwerveDrivetrain;
-import frc.robot.utils.Alignable;
+import frc.robot.subsystems.ramp.Ramp;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
+import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class BoringRampFollow extends Command {
+public class BoringRampFollow extends LoggableCommand {
     private final Ramp ramp;
     private final SwerveDrivetrain drivetrain;
     private Alignable alignable;

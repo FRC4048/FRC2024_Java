@@ -1,12 +1,12 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class StopIntake extends Command {
-    private final IntakeSubsystem intake;
+public class StopIntake extends LoggableCommand {
+    private final Intake intake;
 
-    public StopIntake(IntakeSubsystem intake) {
+    public StopIntake(Intake intake) {
         addRequirements(intake);
         this.intake = intake;
     }

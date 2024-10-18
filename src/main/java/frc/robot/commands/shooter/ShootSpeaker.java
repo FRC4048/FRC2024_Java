@@ -1,15 +1,15 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.swervev3.SwerveDrivetrain;
 import frc.robot.utils.BlinkinPattern;
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.utils.loggingv2.LoggableCommand;
 
-public class ShootSpeaker extends Command {
+public class ShootSpeaker extends LoggableCommand {
 
     private final Shooter shooter;
     private SwerveDrivetrain drivetrain;

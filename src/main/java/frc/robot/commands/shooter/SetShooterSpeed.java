@@ -5,15 +5,15 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.LightStrip;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.lightstrip.LightStrip;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.utils.BlinkinPattern;
 import frc.robot.utils.TimeoutCounter;
+import frc.robot.utils.loggingv2.LoggableCommand;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
-public class SetShooterSpeed extends Command {
+public class SetShooterSpeed extends LoggableCommand {
   /** Creates a new DummyShoot. */
   private double startTime = Timer.getFPGATimestamp();
   private final Shooter shooter;
@@ -22,6 +22,7 @@ public class SetShooterSpeed extends Command {
   private double desiredRightSpeedRpm;
   private final TimeoutCounter timeoutCounter;
   private Timer timer = new Timer();
+
   public SetShooterSpeed(Shooter shooter, LightStrip lightStrip) {
     this.shooter = shooter;
     this.lightStrip = lightStrip;
@@ -29,7 +30,6 @@ public class SetShooterSpeed extends Command {
     SmartShuffleboard.put("Shooter", "Desired Right Speed", 0.0);
     timeoutCounter = new TimeoutCounter(getName(), lightStrip);
     addRequirements(shooter);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
