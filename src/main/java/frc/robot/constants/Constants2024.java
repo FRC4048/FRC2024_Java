@@ -41,6 +41,7 @@ public class Constants2024 extends GameConstants {
     public static final int DRIVE_FRONT_LEFT_D = 58;
     public static final int DRIVE_BACK_LEFT_S = 27;
     public static final int DRIVE_BACK_LEFT_D = 57;
+    public static final SwerveModuleProfile SWERVE_MODULE_PROFILEellelel = SwerveModuleProfile.legacy1;
 
     public static final int DRIVE_CANCODER_FRONT_RIGHT = 39;
     public static final int DRIVE_CANCODER_BACK_RIGHT = 40;

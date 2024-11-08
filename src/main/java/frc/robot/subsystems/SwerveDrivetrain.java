@@ -126,25 +126,25 @@ public class SwerveDrivetrain extends SubsystemBase {
         this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
-        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
-        this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
-        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
+        this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isFrontRightInverted());
+        this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isFrontLeftInverted());
+        this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isBackRightInverted());
+        this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isBackLeftInverted());
         this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxTalonFL,encodedSwerveSparkMaxTalonFR,encodedSwerveSparkMaxTalonBL,encodedSwerveSparkMaxTalonBR,kinematics,getGyro());
-        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+        this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isSteerInverted());
+        this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isSteerInverted());
+        this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isSteerInverted());
+        this.backRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILEellelel.isSteerInverted());
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getDriveMotor()));
 
-        //Fixlater Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
-        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagTalonSRXEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
-        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
-        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Left", Constants.DIAG_ABS_SPARK_ENCODER, frontLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
