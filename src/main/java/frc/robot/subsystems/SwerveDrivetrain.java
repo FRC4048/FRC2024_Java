@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
@@ -16,6 +18,7 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
+import frc.robot.swervev2.components.EncodedSwerveSparkMaxTalonHybrid;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.Alignable;
 import frc.robot.utils.DriveMode;
@@ -24,6 +27,7 @@ import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.diag.DiagTalonSrxEncoder;
 
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -69,10 +73,10 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontLeftDriveCurrent = ((TalonSRX)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontRightDriveCurrent = ((TalonSRX)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backLeftDriveCurrent = ((TalonSRX)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backRightDriveCurrent = ((TalonSRX)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
         frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
@@ -101,7 +105,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         
         gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
-            poseEstimator.updatePositionWithVis(gyroValue);
+            poseEstimator.updatePosition(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
         }
@@ -114,20 +118,20 @@ public class SwerveDrivetrain extends SubsystemBase {
                             KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
     {
         this.gyro = gyro;
-        EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxBL = new EncodedSwerveMotorBuilder(backLeftConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxBR = new EncodedSwerveMotorBuilder(backRightConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonFL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(frontLeftConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonFR = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(frontRightConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backLeftConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBR = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backRightConfig, conversionConfig).build();
 
-        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
-        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
+        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxTalonFL,encodedSwerveSparkMaxTalonFR,encodedSwerveSparkMaxTalonBL,encodedSwerveSparkMaxTalonBR,kinematics,getGyro());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
@@ -138,10 +142,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getDriveMotor()));
 
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getSteerMotor()));
+        //Fixlater Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
+        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagTalonSRXEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
+        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
+        //fixlater Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Left", Constants.DIAG_ABS_SPARK_ENCODER, frontLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
