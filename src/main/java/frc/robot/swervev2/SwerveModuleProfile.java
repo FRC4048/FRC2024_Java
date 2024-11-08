@@ -4,7 +4,9 @@ public enum SwerveModuleProfile {
     MK4(true, false, true, false,
             12.8, 6.75, false),
     MK4I(true, false, true, false,
-            150f / 7f, 8.142857, true); //old
+            150f / 7f, 8.142857, true), //old
+    // VALUES HAVE TO BE CHANGED
+    legacy1(true, false, true, false, 150f / 7f, 6.75, false);
 
     SwerveModuleProfile(boolean frontRightInverted, boolean frontLeftInverted, boolean backRightInverted, boolean backLeftInverted, double steerRatio, double driveRatio, boolean steerInverted) {
         this.frontRightInverted = frontRightInverted;

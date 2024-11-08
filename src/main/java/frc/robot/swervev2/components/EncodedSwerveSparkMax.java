@@ -5,12 +5,12 @@ import com.revrobotics.CANSparkMax;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.encoder.SwerveCANAbsEncoder;
 import frc.robot.swervev2.encoder.SwerveSparkMaxEncoder;
+import frc.robot.swervev2.encoder.SwerveSparkMaxEncoder;
 
 public class EncodedSwerveSparkMax extends GenericEncodedSwerve {
     public EncodedSwerveSparkMax(CANSparkMax driveMotor, CANSparkMax steerMotor, WPI_CANCoder absEncoder, double driveVelFactor, double drivePosFactor, double steerPosFactor) {
         super(driveMotor, steerMotor, new SwerveCANAbsEncoder(absEncoder), new SwerveSparkMaxEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveSparkMaxEncoder(steerMotor, steerPosFactor, steerPosFactor/60));
         configureEncoders();
-
     }
 
     @Override
