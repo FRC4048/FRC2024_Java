@@ -4,21 +4,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class SwerveTalonEncoder implements SwerveEncoder {
     private final WPI_TalonSRX motor;
-    private double positionConversionFactor;
-    private double velocityConversionFactor;
+    private final double positionConversionFactor;
+    private final double velocityConversionFactor;
 
-    public SwerveTalonEncoder(WPI_TalonSRX motor) {
+    public SwerveTalonEncoder(WPI_TalonSRX motor, double velFactor, double posFactor) {
         this.motor = motor;
-    }
-
-    @Override
-    public void setPositionConversionFactor(double factor) {
-        positionConversionFactor = factor;
-    }
-
-    @Override
-    public void setVelocityConversionFactor(double factor) {
-        velocityConversionFactor = factor;
+        positionConversionFactor = posFactor;
+        velocityConversionFactor = velFactor;
     }
 
     @Override

@@ -19,14 +19,12 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
     private double steerOffset = 0;
     private final WPI_CANCoder absEncoder;
 
-    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, WPI_CANCoder absEncoder, SwerveEncoder driveEncoder, SwerveEncoder steerEncoder,
-                                double driveVelFactor, double drivePosFactor, double steerPosFactor) {
+    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, WPI_CANCoder absEncoder, SwerveEncoder driveEncoder, SwerveEncoder steerEncoder) {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
         this.absEncoder = absEncoder;
         this.driveEncoder = driveEncoder;
         this.steerEncoder = steerEncoder;
-        configureEncoders(driveVelFactor,drivePosFactor, steerPosFactor);
     }
 
     /**
@@ -35,12 +33,8 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
      * @param drivePosFactor (2 * PI * wheelRadius) / gearRatio;
      * @param steerPosFactor (2 * PI) / gearRatio
      */
-    public void configureEncoders(double driveVelFactor, double drivePosFactor, double steerPosFactor){
+    public void configureEncoders(){
         resetRelEnc();
-        driveEncoder.setVelocityConversionFactor(driveVelFactor);
-        driveEncoder.setPositionConversionFactor(drivePosFactor);
-        steerEncoder.setPositionConversionFactor(steerPosFactor);
-        steerEncoder.setVelocityConversionFactor(steerPosFactor/60);
         absEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData,50);
     }
 
