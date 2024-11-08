@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -73,14 +72,14 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        frontLeftDriveCurrent = ((TalonSRX)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        frontRightDriveCurrent = ((TalonSRX)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backLeftDriveCurrent = ((TalonSRX)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        backRightDriveCurrent = ((TalonSRX)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
-        frontLeftSteerCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        frontRightSteerCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        backLeftSteerCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
-        backRightSteerCurrent = ((CANSparkMax)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        frontLeftDriveCurrent = ((CANSparkMax)frontLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontRightDriveCurrent = ((CANSparkMax)frontRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backLeftDriveCurrent = ((CANSparkMax)backLeft.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        backRightDriveCurrent = ((CANSparkMax)backRight.getSwerveMotor().getDriveMotor()).getOutputCurrent();
+        frontLeftSteerCurrent = ((WPI_TalonSRX)frontLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        frontRightSteerCurrent = ((WPI_TalonSRX)frontRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backLeftSteerCurrent = ((WPI_TalonSRX)backLeft.getSwerveMotor().getSteerMotor()).getOutputCurrent();
+        backRightSteerCurrent = ((WPI_TalonSRX)backRight.getSwerveMotor().getSteerMotor()).getOutputCurrent();
         totalSteerCurrent = frontLeftSteerCurrent + frontRightSteerCurrent + backRightSteerCurrent + backLeftSteerCurrent;
         totalDriveCurrent = frontLeftDriveCurrent + frontRightDriveCurrent + backLeftDriveCurrent + backRightDriveCurrent;
         totalCurrent = totalSteerCurrent + totalDriveCurrent;
