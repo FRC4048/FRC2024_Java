@@ -141,10 +141,10 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getDriveMotor()));
 
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Left", Constants.DIAG_ABS_SPARK_ENCODER, frontLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
