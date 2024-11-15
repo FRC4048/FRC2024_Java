@@ -23,10 +23,10 @@ public class EncodedSwerveMotorBuilderSparkMaxTalonHybrid {
      }
      public EncodedSwerveSparkMaxTalonHybrid build(){
           CANSparkMax driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
-          WPI_TalonSRX turnMotor = new WPI_TalonSRX(motorConfig.getTurnMotorId());
+          WPI_TalonSRX turnMotor = new WPI_TalonSRX(motorConfig.getTurnMotorId()); //uh idk if motorconfig works
           WPI_CANCoder canCoder = new WPI_CANCoder(motorConfig.getCanCoderId());
           double driveVelConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio() * 60);
-          double drivePosConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio());
+          double drivePosConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio()); 
           double steerPosConvFactor = 2 * Math.PI / Constants.SWERVE_MODULE_PROFILE.getSteerRatio();
           return new EncodedSwerveSparkMaxTalonHybrid(driveMotor, turnMotor, canCoder, driveVelConvFactor, drivePosConvFactor, steerPosConvFactor);
      }

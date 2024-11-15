@@ -25,9 +25,9 @@ public class EncodedSwerveSparkMaxTalonHybrid extends GenericEncodedSwerve {
         steerMotor.configFactoryDefault();
         driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         steerMotor.setNeutralMode(NeutralMode.Brake);
-        driveMotor.setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT);
-        driveMotor.setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
-        driveMotor.setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
+        //driveMotor.setSmartCurrentLimit(Constants.DRIVE_SMART_LIMIT); we do not know and noah voodoo
+        //driveMotor.setSecondaryCurrentLimit(Constants.DRIVE_SECONDARY_LIMIT);
+        //driveMotor.setClosedLoopRampRate(Constants.DRIVE_RAMP_RATE_LIMIT);
         super.configureEncoders();
     }
 }
