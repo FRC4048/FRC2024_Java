@@ -103,7 +103,7 @@ public class SwerveDrivetrain extends SubsystemBase {
         
         gyroValue = getGyro();
         if (Constants.ENABLE_VISION){
-            poseEstimator.updatePositionWithVis(gyroValue);
+            poseEstimator.updatePosition(gyroValue);
         }else {
             poseEstimator.updatePosition(gyroValue);
         }
