@@ -6,7 +6,7 @@ import frc.robot.utils.math.AngleUtils;
 public class SwerveAnalogAbsEncoder implements SwerveAbsEncoder {
 
     private final AnalogEncoder absEncoder;
-    private double steerOffset;
+    private double steerOffset = 0;
 
     public SwerveAnalogAbsEncoder(AnalogEncoder absEncoder) {
         this.absEncoder = absEncoder;

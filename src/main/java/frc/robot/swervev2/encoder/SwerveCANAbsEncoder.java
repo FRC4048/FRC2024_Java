@@ -7,7 +7,7 @@ import frc.robot.utils.math.AngleUtils;
 public class SwerveCANAbsEncoder implements SwerveAbsEncoder {
 
     private final WPI_CANCoder absEncoder;
-    private double steerOffset;
+    private double steerOffset = 0;
 
     public SwerveCANAbsEncoder(WPI_CANCoder absEncoder) {
         this.absEncoder = absEncoder;
