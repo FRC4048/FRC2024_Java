@@ -1,5 +1,5 @@
 package frc.robot.constants;
 
-public class ConstantsLegacy {
+public class ConstantsLegacy extends GameConstants{
     
 }
