@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,7 +17,7 @@ import frc.robot.Robot;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.*;
 import frc.robot.swervev2.components.EncodedSwerveSparkMax;
-import frc.robot.swervev2.components.EncodedSwerveTalon;
+import frc.robot.swervev2.components.EncodedSwerveSparkMaxTalonHybrid;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.advanced.Alignable;
 import frc.robot.utils.DriveMode;
@@ -26,11 +26,12 @@ import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.utils.logging.Logger;
+import frc.robot.utils.diag.DiagTalonSrxEncoder;
 
 
-public class SwerveDrivetrain extends SubsystemBase {
+public class SwerveV2Drivetrain extends SubsystemBase {
 
-    private PathPlannerPath path;
+    // private PathPlannerPath path; // :(
 
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
@@ -42,12 +43,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, Constants.ROBOT_WIDTH/2);
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
-    private final SwervePosEstimator poseEstimator;
-    private final AHRS gyro;
-    private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
+    // private final SwervePosEstimator poseEstimator; bye bye
+    private final AHRS gyro; //change later
+    // private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
     private double gyroValue = 0;
-    private boolean faceingTarget = false;
-    private Alignable alignable = null;
+    //private boolean faceingTarget = false;
+    //private Alignable alignable = null;
     private double frontLeftDriveCurrent;
     private double frontRightDriveCurrent;
     private double backLeftDriveCurrent;
@@ -85,51 +86,51 @@ public class SwerveDrivetrain extends SubsystemBase {
         Logger.logDouble("/Robot/DriveCurrent", totalDriveCurrent, Constants.ENABLE_LOGGING);
         Logger.logDouble("/Robot/SteerCurrent", totalSteerCurrent, Constants.ENABLE_LOGGING);
         Logger.logDouble("/Robot/TotalCurrent", totalCurrent, Constants.ENABLE_LOGGING);
-        if (Constants.PATHPLANNER_DEBUG){
-            SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
-            SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
-        }
+        // if (Constants.PATHPLANNER_DEBUG){
+        //     SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
+        //     SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
+        // }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
 
-            SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
-            SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
-            SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
+            // SmartShuffleboard.put("DriveTrain", "Total Drive Current", totalDriveCurrent);
+            // SmartShuffleboard.put("DriveTrain", "Total Steer Current", totalSteerCurrent);
+            // SmartShuffleboard.put("DriveTrain", "TOTAL Current", totalCurrent);
         }
         
         
         gyroValue = getGyro();
-        if (Constants.ENABLE_VISION){
-            poseEstimator.updatePosition(gyroValue);
-        }else {
-            poseEstimator.updatePosition(gyroValue);
-        }
+        // if (Constants.ENABLE_VISION){
+        //     poseEstimator.updatePosition(gyroValue);
+        // }else {
+        //     poseEstimator.updatePosition(gyroValue);
+        // }
         if (Constants.SWERVE_DEBUG) {
             SmartShuffleboard.put("GYRO", "Gyro Angle", gyroValue);
         }
     }
 
-    public SwerveDrivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
-                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro)
+    public SwerveV2Drivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
+                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro) //change gyro and configs for CANS LATER
     {
         this.gyro = gyro;
-        EncodedSwerveSparkMax encodedSwerveSparkMaxFL = new EncodedSwerveMotorBuilder(frontLeftConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxFR = new EncodedSwerveMotorBuilder(frontRightConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxBL = new EncodedSwerveMotorBuilder(backLeftConfig, conversionConfig).build();
-        EncodedSwerveSparkMax encodedSwerveSparkMaxBR = new EncodedSwerveMotorBuilder(backRightConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonFL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(frontLeftConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonFR = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(frontRightConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backLeftConfig, conversionConfig).build();
+        EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBR = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backRightConfig, conversionConfig).build();
 
-        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
         this.backLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted());
-        this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxFL,encodedSwerveSparkMaxFR,encodedSwerveSparkMaxBL,encodedSwerveSparkMaxBR,kinematics,getGyro());
+        //this.poseEstimator = new SwervePosEstimator(encodedSwerveSparkMaxTalonFL,encodedSwerveSparkMaxTalonFR,encodedSwerveSparkMaxTalonBL,encodedSwerveSparkMaxTalonBR,kinematics,getGyro());
         this.frontLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.frontRight.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
         this.backLeft.getSwerveMotor().getSteerMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
@@ -140,16 +141,16 @@ public class SwerveDrivetrain extends SubsystemBase {
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getDriveMotor()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Drive", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getDriveMotor()));
 
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontLeft.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) frontRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backRight.getSwerveMotor().getSteerMotor()));
-        Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_SPARK_ENCODER, (CANSparkMax) backLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Left", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) frontLeft.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Front Right", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) frontRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Left", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) backRight.getSwerveMotor().getSteerMotor()));
+        Robot.getDiagnostics().addDiagnosable(new DiagTalonSrxEncoder("DT Turn", "Back Right", Constants.DIAG_REL_TALON_ENCODER, (WPI_TalonSRX) backLeft.getSwerveMotor().getSteerMotor()));
 
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Left", Constants.DIAG_ABS_SPARK_ENCODER, frontLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Front Right", Constants.DIAG_ABS_SPARK_ENCODER, frontRight.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Left", Constants.DIAG_ABS_SPARK_ENCODER, backLeft.getSwerveMotor().getAbsEnc()));
         Robot.getDiagnostics().addDiagnosable(new DiagSparkMaxAbsEncoder("DT CanCoder", "Back Right", Constants.DIAG_ABS_SPARK_ENCODER, backRight.getSwerveMotor().getAbsEnc()));
-        alignableTurnPid.enableContinuousInput(-180, 180);
+        //alignableTurnPid.enableContinuousInput(-180, 180);
     }
 
 
@@ -223,11 +224,12 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPose();
+        return new Pose2d();
+        //return poseEstimator.getEstimatedPose(); //TODO: FIXLATER BECAUSE OF PROBLEMS
     }
 
     public void resetOdometry(Translation2d pose2d,Rotation2d rotation2d) {
-        poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
+        //poseEstimator.resetOdometry(rotation2d.getRadians(), pose2d);
     }
     public void resetOdometry(Pose2d pose2d) {
         resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
@@ -245,29 +247,32 @@ public class SwerveDrivetrain extends SubsystemBase {
      * @param facingTarget if you are facing target or not
      */
     public void setFacingTarget(boolean facingTarget) {
-        this.faceingTarget = facingTarget;
+        //this.faceingTarget = facingTarget;
     }
 
     /**
      * @return return true if you have reached target, else return false
      */
     public boolean isFacingTarget() {
-        return faceingTarget;
+        //return faceingTarget;
+        return true;
     }
 
     public Alignable getAlignable() {
-        return alignable;
+        //return alignable;
+        return null;
     }
 
     public void setAlignable(Alignable alignable) {
-        this.alignable = alignable;
-        if (Constants.SWERVE_DEBUG && alignable != null) {
-            SmartDashboard.putString("Alignable", alignable.toString());
-        }
+        //this.alignable = alignable;
+        // if (Constants.SWERVE_DEBUG && alignable != null) {
+        //     SmartDashboard.putString("Alignable", alignable.toString());
+        // }
     }
 
     public PIDController getAlignableTurnPid() {
-        return alignableTurnPid;
+        //return alignableTurnPid;
+        return null;
     }
     public double getFrontLeftDriveCurrent() {
         return frontLeftDriveCurrent;

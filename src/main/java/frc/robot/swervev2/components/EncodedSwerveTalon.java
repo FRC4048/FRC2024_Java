@@ -10,7 +10,7 @@ import frc.robot.swervev2.encoder.SwerveTalonEncoder;
 
 public class EncodedSwerveTalon extends GenericEncodedSwerve {
     public EncodedSwerveTalon(WPI_TalonSRX driveMotor, WPI_TalonSRX steerMotor, WPI_CANCoder absEncoder, double driveVelFactor, double drivePosFactor, double steerPosFactor) {
-        super(driveMotor, steerMotor, absEncoder, new SwerveTalonEncoder(driveMotor, driveVelFactor, steerPosFactor), new SwerveTalonEncoder(steerMotor, steerPosFactor, steerPosFactor));
+        super(driveMotor, steerMotor, absEncoder, new SwerveTalonEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveTalonEncoder(steerMotor, steerPosFactor, steerPosFactor/60));
         configureEncoders();
     }
 

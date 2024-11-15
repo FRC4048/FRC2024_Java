@@ -3,7 +3,7 @@ package frc.robot.swervev2;
 public class SwerveIdConfig {
     private final int driveMotorId;
     private final int turnMotorId;
-    private final int canCoderId;
+    private final int canCoderId; //TODO: change later
 
     public SwerveIdConfig(int driveMotorId, int turnMotorId, int canCoderId) {
         this.driveMotorId = driveMotorId;
