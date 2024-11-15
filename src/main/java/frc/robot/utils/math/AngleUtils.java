@@ -35,4 +35,15 @@ public class AngleUtils {
     public static Rotation2d normalize(Rotation2d angle) {
         return new Rotation2d(Math.asin(Math.sin(angle.getRadians()))); //can be simplified (reduce(angle+PI) - PI
     }
+    /**
+     * @param angleInRad angle in radians
+     * @return the angle between 0 and (2 * PI)
+     */
+    public static double normalizeAngle2(double angleInRad){
+        angleInRad %= 2 * Math.PI;
+        if (angleInRad < 0) {
+            angleInRad += 2 * Math.PI;
+        }
+        return angleInRad;
+    }
 }

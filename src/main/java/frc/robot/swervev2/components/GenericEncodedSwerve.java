@@ -1,11 +1,11 @@
 package frc.robot.swervev2.components;
 
-import com.ctre.phoenix.sensors.CANCoderStatusFrame;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.swervev2.encoder.SwerveAbsEncoder;
 import frc.robot.swervev2.encoder.SwerveEncoder;
+import frc.robot.utils.math.AngleUtils;
 
 /**
  * Generic Class for Swerve Modules with Encoders
@@ -16,10 +16,9 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
 
     private final SwerveEncoder driveEncoder;
     private final SwerveEncoder steerEncoder;
-    private double steerOffset = 0;
-    private final WPI_CANCoder absEncoder;
+    private final SwerveAbsEncoder absEncoder;
 
-    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, WPI_CANCoder absEncoder, SwerveEncoder driveEncoder, SwerveEncoder steerEncoder) {
+    public GenericEncodedSwerve(MotorController driveMotor, MotorController steerMotor, SwerveAbsEncoder absEncoder, SwerveEncoder driveEncoder, SwerveEncoder steerEncoder) {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
         this.absEncoder = absEncoder;
@@ -35,7 +34,6 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
      */
     public void configureEncoders(){
         resetRelEnc();
-        absEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData,50);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
      */
     @Override
     public double getSteerEncPosition() {
-        return normalizeAngle(steerEncoder.getPosition() - getSteerOffset());
+        return AngleUtils.normalizeAngle2(steerEncoder.getPosition() - getSteerOffset());
     }
 
     @Override
@@ -74,7 +72,7 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
 
     @Override
     public double getSteerOffset() {
-        return steerOffset;
+        return absEncoder.getSteerOffset();
     }
 
     /**
@@ -83,26 +81,15 @@ public class GenericEncodedSwerve implements SwerveMotor, SwerveMotorEncoder {
     @Override
     public void setSteerOffset(double zeroAbs) {
         steerEncoder.setPosition(0);
-        steerOffset = Math.toRadians(zeroAbs - absEncoder.getAbsolutePosition());
-        steerOffset = normalizeAngle(steerOffset);
+        absEncoder.zero(zeroAbs);
     }
     public SwerveModulePosition getPosition(){
         return new SwerveModulePosition(getDriveEncPosition(),new Rotation2d(getSteerEncPosition()));
     }
 
-    /**
-     * @param angleInRad angle in radians
-     * @return the angle between 0 and (2 * PI)
-     */
-    private double normalizeAngle(double angleInRad){
-        angleInRad %= 2 * Math.PI;
-        if (angleInRad < 0) {
-            angleInRad += 2 * Math.PI;
-        }
-        return angleInRad;
-    }
 
-    public WPI_CANCoder getAbsEnc() {
+
+    public SwerveAbsEncoder getAbsEnc() {
         return absEncoder;
     }
 
