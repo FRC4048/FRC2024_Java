@@ -6,11 +6,12 @@ import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.constants.Constants;
+import frc.robot.swervev2.encoder.SwerveCANAbsEncoder;
 import frc.robot.swervev2.encoder.SwerveTalonEncoder;
 
 public class EncodedSwerveTalon extends GenericEncodedSwerve {
     public EncodedSwerveTalon(WPI_TalonSRX driveMotor, WPI_TalonSRX steerMotor, WPI_CANCoder absEncoder, double driveVelFactor, double drivePosFactor, double steerPosFactor) {
-        super(driveMotor, steerMotor, absEncoder, new SwerveTalonEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveTalonEncoder(steerMotor, steerPosFactor, steerPosFactor/60));
+        super(driveMotor, steerMotor, new SwerveCANAbsEncoder(absEncoder), new SwerveTalonEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveTalonEncoder(steerMotor, steerPosFactor, steerPosFactor/60));
         configureEncoders();
     }
 

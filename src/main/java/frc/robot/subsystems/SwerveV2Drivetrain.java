@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -44,7 +45,7 @@ public class SwerveV2Drivetrain extends SubsystemBase {
     private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH/2, -Constants.ROBOT_WIDTH/2);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation,frontRightLocation,backLeftLocation,backRightLocation);
     // private final SwervePosEstimator poseEstimator; bye bye
-    private final AHRS gyro; //change later
+    private final ADIS16470_IMU gyro; //change later
     // private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P,Constants.ALIGNABLE_PID_I,Constants.ALIGNABLE_PID_D);
     private double gyroValue = 0;
     //private boolean faceingTarget = false;
@@ -60,7 +61,7 @@ public class SwerveV2Drivetrain extends SubsystemBase {
     private double totalCurrent;
     private double totalSteerCurrent;
     private double totalDriveCurrent;
-
+    
 
 
 
@@ -114,7 +115,7 @@ public class SwerveV2Drivetrain extends SubsystemBase {
     }
 
     public SwerveV2Drivetrain(SwerveIdConfig frontLeftConfig, SwerveIdConfig frontRightConfig, SwerveIdConfig backLeftConfig, SwerveIdConfig backRightConfig,
-                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, AHRS gyro) //change gyro and configs for CANS LATER
+                            KinematicsConversionConfig conversionConfig, SwervePidConfig pidConfig, ADIS16470_IMU gyro) //change gyro and configs for CANS LATER
     {
         this.gyro = gyro;
         EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonFL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(frontLeftConfig, conversionConfig).build();
@@ -234,9 +235,9 @@ public class SwerveV2Drivetrain extends SubsystemBase {
     public void resetOdometry(Pose2d pose2d) {
         resetOdometry(pose2d.getTranslation(),pose2d.getRotation());
     }
-    public void setGyroOffset(double degrees) {
-        gyro.setAngleAdjustment(degrees);
-    }
+    // public void setGyroOffset(double degrees) {
+    //     gyro.setGyroAngle(degrees);
+    // }
 
     public Rotation2d getGyroAngle() {
         return new Rotation2d(Math.toRadians(gyroValue));
