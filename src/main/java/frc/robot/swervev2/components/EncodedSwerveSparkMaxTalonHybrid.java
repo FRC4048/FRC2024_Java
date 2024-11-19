@@ -3,17 +3,20 @@ package frc.robot.swervev2.components;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.constants.Constants;
+import frc.robot.swervev2.encoder.SwerveAnalogAbsEncoder;
 import frc.robot.swervev2.encoder.SwerveSparkMaxEncoder;
 import frc.robot.swervev2.encoder.SwerveTalonEncoder;
 
 import com.revrobotics.CANSparkMax;
 
 public class EncodedSwerveSparkMaxTalonHybrid extends GenericEncodedSwerve {
-    public EncodedSwerveSparkMaxTalonHybrid(CANSparkMax driveMotor, WPI_TalonSRX steerMotor, WPI_CANCoder absEncoder, double driveVelFactor, double drivePosFactor, double steerPosFactor) {
-        super(driveMotor, steerMotor, absEncoder, new SwerveSparkMaxEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveTalonEncoder(steerMotor, driveVelFactor, steerPosFactor/60));
+    public EncodedSwerveSparkMaxTalonHybrid(CANSparkMax driveMotor, WPI_TalonSRX steerMotor, AnalogEncoder absEncoder, double driveVelFactor, double drivePosFactor, double steerPosFactor) {
+        super(driveMotor, steerMotor, new SwerveAnalogAbsEncoder(absEncoder), new SwerveSparkMaxEncoder(driveMotor, driveVelFactor, drivePosFactor), new SwerveTalonEncoder(steerMotor, driveVelFactor, steerPosFactor/60));
         configureEncoders();
     }
 
