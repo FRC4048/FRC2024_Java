@@ -41,7 +41,6 @@ public class Constants2024 extends GameConstants {
     public static final int DRIVE_FRONT_LEFT_D = 58;
     public static final int DRIVE_BACK_LEFT_S = 27;
     public static final int DRIVE_BACK_LEFT_D = 57;
-    //TODO: make news constants file
 
     public static final int DRIVE_CANCODER_FRONT_RIGHT = 39;
     public static final int DRIVE_CANCODER_BACK_RIGHT = 40;

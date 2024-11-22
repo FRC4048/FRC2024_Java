@@ -18,7 +18,7 @@ public class DiagTalonSrxEncoder extends DiagDistanceTraveled {
      * @param requiredTravel  - the required difference between the initial position to qualify for success
      * @param talonSRX         - the encoder instance to test
      */
-    public DiagTalonSrxEncoder(String title, String name, double requiredTravel, WPI_TalonSRX talonSRX) {
+    public DiagTalonSrxEncoder(String title, String name, int requiredTravel, WPI_TalonSRX talonSRX) {
         super(title, name, requiredTravel);
         this.talonSRX = talonSRX;
         reset();

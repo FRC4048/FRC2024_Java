@@ -5,8 +5,8 @@ public enum SwerveModuleProfile {
             12.8, 6.75, false),
     MK4I(true, false, true, false,
             150f / 7f, 8.142857, true), //old
-    // TODO:VALUES HAVE TO BE CHANGED
-    ANYMARK_LEGACY_1(true, false, true, false, 150f / 7f, 6.75, false);
+    // VALUES HAVE TO BE CHANGED
+    legacy1(true, false, true, false, 150f / 7f, 6.75, false);
 
     SwerveModuleProfile(boolean frontRightInverted, boolean frontLeftInverted, boolean backRightInverted, boolean backLeftInverted, double steerRatio, double driveRatio, boolean steerInverted) {
         this.frontRightInverted = frontRightInverted;
