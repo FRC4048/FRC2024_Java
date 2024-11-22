@@ -3,8 +3,8 @@ package frc.robot.constants;
 import edu.wpi.first.math.util.Units;
 import frc.robot.swervev2.SwerveModuleProfile;
 
-
-public class Constants2024 extends GameConstants {
+public class ConstantsLegacy extends GameConstants{
+    //TODO: change all this probably
     //AMP 
     public static final int AMP_ID = 5;
 
@@ -32,7 +32,7 @@ public class Constants2024 extends GameConstants {
     public static final double SHOOTER_MAX_RPM_VELOCITY = 30000;
 
     //S = STEER, D = DRIVE, Drivetrain Constants
-    public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.MK4;
+    public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.ANYMARK_LEGACY_1;
     public static final int DRIVE_FRONT_RIGHT_S = 29;
     public static final int DRIVE_FRONT_RIGHT_D = 59;
     public static final int DRIVE_BACK_RIGHT_S = 30;
