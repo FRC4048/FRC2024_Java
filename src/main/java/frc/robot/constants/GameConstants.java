@@ -134,7 +134,6 @@ public class GameConstants {
     public static final double GRAVITY = -9.81;
     public static final int DIAG_ABS_SPARK_ENCODER = 20;
     public static final double DIAG_REL_SPARK_ENCODER = 0.1;
-    public static final double DIAG_REL_TALON_ENCODER = 999; //change latrr
     public static final double SPEAKER_TOP_EDGE_Y_POS = 6;
     public static final double PATH_PLANNER_TRANSLATION_PID_P = 5;
     public static final double PATH_PLANNER_TRANSLATION_PID_I = 0;

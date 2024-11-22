@@ -46,7 +46,6 @@ import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.constants.ConstantsLegacy;
 import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.apriltags.MockApriltag;
 import frc.robot.subsystems.apriltags.TCPApriltag;
