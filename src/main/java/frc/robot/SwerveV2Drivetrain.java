@@ -1,8 +1,8 @@
-package frc.robot.subsystems;
+package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.path.PathPlannerPath;
+//import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,12 +22,15 @@ import frc.robot.swervev2.components.EncodedSwerveSparkMaxTalonHybrid;
 import frc.robot.swervev2.type.GenericSwerveModule;
 import frc.robot.utils.advanced.Alignable;
 import frc.robot.utils.DriveMode;
-import frc.robot.utils.advanced.PathPlannerUtils;
+//import frc.robot.utils.advanced.PathPlannerUtils;
 import frc.robot.utils.diag.DiagSparkMaxAbsEncoder;
 import frc.robot.utils.diag.DiagSparkMaxEncoder;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.utils.logging.Logger;
 import frc.robot.utils.diag.DiagTalonSrxEncoder;
+import frc.robot.swervev2.SwerveIdConfig;
+import frc.robot.swervev2.KinematicsConversionConfig;
+
 
 
 public class SwerveV2Drivetrain extends SubsystemBase {
