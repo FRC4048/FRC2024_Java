@@ -3,12 +3,12 @@ package frc.robot.swervev2;
 public class SwerveIdConfig {
     private final int driveMotorId;
     private final int turnMotorId;
-    private final int canCoderId; //TODO: change later
+    private final int analogEncoderId;
 
-    public SwerveIdConfig(int driveMotorId, int turnMotorId, int canCoderId) {
+    public SwerveIdConfig(int driveMotorId, int turnMotorId, int analogEncoderId) {
         this.driveMotorId = driveMotorId;
         this.turnMotorId = turnMotorId;
-        this.canCoderId = canCoderId;
+        this.analogEncoderId = analogEncoderId;
     }
 
     public int getDriveMotorId() {
@@ -19,7 +19,7 @@ public class SwerveIdConfig {
         return turnMotorId;
     }
 
-    public int getCanCoderId() {
-        return canCoderId;
+    public int getanalogEncoderId() {
+        return analogEncoderId;
     }
 }

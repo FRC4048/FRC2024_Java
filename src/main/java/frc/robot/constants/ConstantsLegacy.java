@@ -33,20 +33,25 @@ public class ConstantsLegacy extends GameConstants{
 
     //S = STEER, D = DRIVE, Drivetrain Constants
     public static final SwerveModuleProfile SWERVE_MODULE_PROFILE = SwerveModuleProfile.ANYMARK_LEGACY_1;
-    public static final int DRIVE_FRONT_RIGHT_S = 29;
-    public static final int DRIVE_FRONT_RIGHT_D = 59;
-    public static final int DRIVE_BACK_RIGHT_S = 30;
-    public static final int DRIVE_BACK_RIGHT_D = 60;
-    public static final int DRIVE_FRONT_LEFT_S = 28;
-    public static final int DRIVE_FRONT_LEFT_D = 58;
-    public static final int DRIVE_BACK_LEFT_S = 27;
-    public static final int DRIVE_BACK_LEFT_D = 57;
+    public static final int DRIVE_FRONT_RIGHT_S = 10;
+    public static final int DRIVE_FRONT_RIGHT_D = 41;
+    public static final int DRIVE_BACK_RIGHT_S = 11;
+    public static final int DRIVE_BACK_RIGHT_D = 39;
+    public static final int DRIVE_FRONT_LEFT_S = 3;
+    public static final int DRIVE_FRONT_LEFT_D = 37;
+    public static final int DRIVE_BACK_LEFT_S = 1;
+    public static final int DRIVE_BACK_LEFT_D = 38;
     //TODO: make news constants file
+    public static final int DRIVE_ANALOG_ENCODER_FRONT_RIGHT = 2; //TODO: CHANGE ALL LATER
+    public static final int DRIVE_ANALOG_ENCODER_BACK_RIGHT = 3;
+    public static final int DRIVE_ANALOG_ENCODER_FRONT_LEFT = 1;
+    public static final int DRIVE_ANALOG_ENCODER_BACK_LEFT = 0;
 
-    public static final int DRIVE_CANCODER_FRONT_RIGHT = 39;
-    public static final int DRIVE_CANCODER_BACK_RIGHT = 40;
-    public static final int DRIVE_CANCODER_FRONT_LEFT = 38;
-    public static final int DRIVE_CANCODER_BACK_LEFT = 37;
+
+    // public static final int DRIVE_CANCODER_FRONT_RIGHT = 39;
+    // public static final int DRIVE_CANCODER_BACK_RIGHT = 40;
+    // public static final int DRIVE_CANCODER_FRONT_LEFT = 38;
+    // public static final int DRIVE_CANCODER_BACK_LEFT = 37;
 
 
     //PID Constants
