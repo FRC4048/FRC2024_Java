@@ -6,7 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
+//import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 
 // import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.auto.NamedCommands;
@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.SetAlignable;
 // import frc.robot.commands.climber.ManualControlClimber;
 // import frc.robot.commands.deployer.LowerDeployer;
 // import frc.robot.commands.deployer.RaiseDeployer;
@@ -58,9 +59,9 @@ import frc.robot.constants.GameConstants;
 // import frc.robot.subsystems.feeder.Feeder;
 // import frc.robot.subsystems.feeder.MockFeederIO;
 // import frc.robot.subsystems.feeder.RealFeederIO;
-import frc.robot.subsystems.gyro.GyroIO;
-import frc.robot.subsystems.gyro.MockGyroIO;
-import frc.robot.subsystems.gyro.RealGyroIO;
+// import frc.robot.subsystems.gyro.GyroIO;
+// import frc.robot.subsystems.gyro.MockGyroIO;
+// import frc.robot.subsystems.gyro.RealGyroIO;
 // import frc.robot.subsystems.swervev3.io.MockModuleIO;
 // import frc.robot.subsystems.swervev3.io.ModuleIO;
 // import frc.robot.subsystems.swervev3.io.SparkMaxModuleIO;
@@ -76,6 +77,8 @@ import frc.robot.utils.loggingv2.LoggableSequentialCommandGroup;
 import frc.robot.utils.motor.Gain;
 import frc.robot.utils.motor.PID;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import frc.robot.SwerveV2Drivetrain;
 
 
 /**
@@ -104,8 +107,8 @@ public class RobotContainer {
     // private final LightStrip lightStrip;
     // private final ApriltagIO apriltagIO;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
-    private final GyroIO gyroIO;
-    private SwerveDrivetrain drivetrain;
+    //private final GyroIO gyroIO;
+    private SwerveV2Drivetrain drivetrain;
     // private AutoChooser2024 autoChooser;
 
     /**f
@@ -121,7 +124,7 @@ public class RobotContainer {
             // vision = new Vision(new RealVisionIO());
             // intake = new Intake(new RealIntakeIO());
             // lightStrip = new LightStrip(new RealLightStripIO());
-            gyroIO = new RealGyroIO();
+            // gyroIO = new RealGyroIO();
             // apriltagIO = new TCPApriltag();
         }else{
             // shooter = new Shooter(new MockShooterIO());
@@ -132,7 +135,7 @@ public class RobotContainer {
             // vision = new Vision(new MockVisionIO());
             // intake = new Intake(new MockIntakeIO());
             // lightStrip = new LightStrip(new MockLightStripIO());
-            gyroIO = new MockGyroIO();
+            // gyroIO = new MockGyroIO();
             // apriltagIO = new MockApriltag();
         }
         setupDriveTrain();
@@ -217,7 +220,8 @@ public class RobotContainer {
         //     backLeft = new MockModuleIO();
         //     backRight = new MockModuleIO();
         // }
-        this.drivetrain = new SwerveDrivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, gyroIO);
+        ADIS16470_IMU gyro = new ADIS16470_IMU();
+        this.drivetrain = new SwerveV2Drivetrain(frontLeftIdConf, frontRightIdConf, backLeftIdConf, backRightIdConf, kinematicsConversionConfig, pidConfig, gyro);
     }
 
     public void putShuffleboardCommands() {
@@ -247,11 +251,11 @@ public class RobotContainer {
         //     );
         // }
         if (Constants.SWERVE_DEBUG) {
-            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, lightStrip,0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, lightStrip, -0.3048, 0, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, lightStrip, 0, 0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, lightStrip, 0, -0.3048, 0.4));
-            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, lightStrip, 0.3048, 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Backward 1ft", new MoveDistance(drivetrain, -0.3048, 0, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0, 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0, -0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4));
             // SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
             // SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
@@ -312,7 +316,7 @@ public class RobotContainer {
         // joyRightButton3.onTrue(new TimedFeeder(feeder, lightStrip, Constants.TIMED_FEEDER_EXIT));
     }
 
-    public SwerveDrivetrain getDrivetrain() {
+    public SwerveV2Drivetrain getDrivetrain() {
         return drivetrain;
     }
 
