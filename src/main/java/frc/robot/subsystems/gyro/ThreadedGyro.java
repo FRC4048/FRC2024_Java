@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gyro;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.Constants;
 
 import java.util.concurrent.Executors;
@@ -38,6 +39,20 @@ public class ThreadedGyro {
         },0, Constants.GYRO_THREAD_RATE_MS, TimeUnit.MILLISECONDS);
     }
 
+    public void stop(){
+        executor.shutdownNow();
+    }
+    public boolean stopAndWait(long maxTime, TimeUnit timeUnit){
+        executor.shutdownNow();
+        try {
+            return executor.awaitTermination(maxTime, timeUnit);
+        } catch (InterruptedException e) {
+            DriverStation.reportError("ThreadedGyro thread termination was interrupted: " + e.getMessage(), true);
+            return false;
+        }
+    }
+
+
     private void updateGyro() {
         lastGyro.set(Double.doubleToLongBits(((gyro.getAngle()) % 360)  * -1));
     }
@@ -53,6 +68,10 @@ public class ThreadedGyro {
     public void setAngleAdjustment(double degrees) {
         gyroOffset.set(Double.doubleToLongBits(degrees));
         shouldOffset.set(true);
+    }
+
+    public double getAngleOffset() {
+        return Double.longBitsToDouble(gyroOffset.get());
     }
 
 }

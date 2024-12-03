@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -33,6 +34,7 @@ import frc.robot.commands.feeder.StartFeeder;
 import frc.robot.commands.feeder.StopFeeder;
 import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
+import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
 import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
@@ -46,9 +48,10 @@ import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.commands.shooter.ShootSpeaker;
 import frc.robot.constants.Constants;
 import frc.robot.constants.GameConstants;
-import frc.robot.subsystems.apriltags.ApriltagIO;
+import frc.robot.subsystems.LoggableIO;
+import frc.robot.subsystems.apriltags.ApriltagInputs;
 import frc.robot.subsystems.apriltags.MockApriltag;
-import frc.robot.subsystems.apriltags.TCPApriltag;
+import frc.robot.subsystems.apriltags.NtApriltag;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.MockClimberIO;
 import frc.robot.subsystems.climber.RealCimberIO;
@@ -64,6 +67,7 @@ import frc.robot.subsystems.feeder.RealFeederIO;
 import frc.robot.subsystems.gyro.GyroIO;
 import frc.robot.subsystems.gyro.MockGyroIO;
 import frc.robot.subsystems.gyro.RealGyroIO;
+import frc.robot.subsystems.gyro.ThreadedGyro;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.MockIntakeIO;
 import frc.robot.subsystems.intake.RealIntakeIO;
@@ -79,11 +83,12 @@ import frc.robot.subsystems.ramp.RealRampIO;
 import frc.robot.subsystems.shooter.MockShooterIO;
 import frc.robot.subsystems.shooter.RealShooterIO;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.swervev3.KinematicsConversionConfig;
 import frc.robot.subsystems.swervev3.SwerveDrivetrain;
-import frc.robot.subsystems.swervev3.io.MockModuleIO;
-import frc.robot.subsystems.swervev3.io.ModuleIO;
-import frc.robot.subsystems.swervev3.io.SparkMaxModuleIO;
-import frc.robot.swervev2.KinematicsConversionConfig;
+import frc.robot.subsystems.swervev3.io.SwerveModule;
+import frc.robot.subsystems.swervev3.io.abs.MockAbsIO;
+import frc.robot.subsystems.swervev3.io.drive.MockDriveMotorIO;
+import frc.robot.subsystems.swervev3.io.steer.MockSteerMotorIO;
 import frc.robot.swervev2.SwerveIdConfig;
 import frc.robot.swervev2.SwervePidConfig;
 import frc.robot.utils.BlinkinPattern;
@@ -124,9 +129,7 @@ public class RobotContainer {
     private final Vision vision;
     private final Intake intake;
     private final LightStrip lightStrip;
-    private final ApriltagIO apriltagIO;
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
-    private final GyroIO gyroIO;
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
 
@@ -143,8 +146,6 @@ public class RobotContainer {
             vision = new Vision(new RealVisionIO());
             intake = new Intake(new RealIntakeIO());
             lightStrip = new LightStrip(new RealLightStripIO());
-            gyroIO = new RealGyroIO();
-            apriltagIO = new TCPApriltag();
         }else{
             shooter = new Shooter(new MockShooterIO());
             deployer = new Deployer(new MockDeployerIO());
@@ -154,8 +155,6 @@ public class RobotContainer {
             vision = new Vision(new MockVisionIO());
             intake = new Intake(new MockIntakeIO());
             lightStrip = new LightStrip(new MockLightStripIO());
-            gyroIO = new MockGyroIO();
-            apriltagIO = new MockApriltag();
         }
         setupDriveTrain();
         registerPathPlanableCommands();
@@ -222,24 +221,34 @@ public class RobotContainer {
         Gain driveGain = Gain.of(Constants.DRIVE_PID_FF_V, Constants.DRIVE_PID_FF_S);
         Gain steerGain = Gain.of(Constants.STEER_PID_FF_V, Constants.STEER_PID_FF_S);
 
-        KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE.getDriveRatio(), Constants.SWERVE_MODULE_PROFILE.getSteerRatio());
+        KinematicsConversionConfig kinematicsConversionConfig = new KinematicsConversionConfig(Constants.WHEEL_RADIUS, Constants.SWERVE_MODULE_PROFILE);
         SwervePidConfig pidConfig = new SwervePidConfig(drivePid, steerPid, driveGain, steerGain, constraints);
-        ModuleIO frontLeft;
-        ModuleIO frontRight;
-        ModuleIO backLeft;
-        ModuleIO backRight;
+        SwerveModule frontLeft;
+        SwerveModule frontRight;
+        SwerveModule backLeft;
+        SwerveModule backRight;
+
+        GyroIO gyroIO;
+        LoggableIO<ApriltagInputs> apriltagIO;
         if (Robot.isReal()){
-            frontLeft = new SparkMaxModuleIO(frontLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-            frontRight = new SparkMaxModuleIO(frontRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-            backLeft = new SparkMaxModuleIO(backLeftIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackLeftInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
-            backRight = new SparkMaxModuleIO(backRightIdConf,kinematicsConversionConfig, Constants.SWERVE_MODULE_PROFILE.isBackRightInverted(), Constants.SWERVE_MODULE_PROFILE.isSteerInverted());
+            frontLeft = SwerveModule.createModule(frontLeftIdConf, kinematicsConversionConfig, pidConfig, "frontLeft");
+            frontRight = SwerveModule.createModule(frontRightIdConf, kinematicsConversionConfig, pidConfig, "frontRight");
+            backLeft = SwerveModule.createModule(backLeftIdConf, kinematicsConversionConfig, pidConfig, "backLeft");
+            backRight = SwerveModule.createModule(backRightIdConf, kinematicsConversionConfig, pidConfig, "backRight");
+
+            ThreadedGyro threadedGyro = new ThreadedGyro(new AHRS());
+            threadedGyro.start();
+            gyroIO = new RealGyroIO(threadedGyro);
+            apriltagIO = new NtApriltag();
         }else{
-            frontLeft = new MockModuleIO();
-            frontRight = new MockModuleIO();
-            backLeft = new MockModuleIO();
-            backRight = new MockModuleIO();
+            frontLeft = new SwerveModule(new MockDriveMotorIO(), new MockSteerMotorIO(), new MockAbsIO(), pidConfig, "frontLeft");
+            frontRight = new SwerveModule(new MockDriveMotorIO(), new MockSteerMotorIO(), new MockAbsIO(), pidConfig, "frontRight");
+            backLeft = new SwerveModule(new MockDriveMotorIO(), new MockSteerMotorIO(), new MockAbsIO(), pidConfig, "backLeft");
+            backRight = new SwerveModule(new MockDriveMotorIO(), new MockSteerMotorIO(), new MockAbsIO(), pidConfig, "backRight");
+            gyroIO = new MockGyroIO();
+            apriltagIO = new MockApriltag();
         }
-        this.drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, apriltagIO, pidConfig);
+        drivetrain = new SwerveDrivetrain(frontLeft, frontRight, backLeft, backRight, gyroIO, apriltagIO);
     }
 
     public void putShuffleboardCommands() {
@@ -261,7 +270,7 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Feeder", "Feed", new StartFeeder(feeder, lightStrip));
         }
         if (Constants.INTAKE_DEBUG) {
-            SmartShuffleboard.putCommand("Intake", "Start Intake", new frc.robot.commands.intake.StartIntake(intake, 5));
+            SmartShuffleboard.putCommand("Intake", "Start Intake", new StartIntake(intake, 5));
             SmartShuffleboard.putCommand("Intake", "IntakeFeederCombo", new LoggableSequentialCommandGroup(
                         new SpoolIntake(intake, Constants.INTAKE_SPOOL_TIME),
                         new CurrentBasedIntakeFeeder(intake, feeder, lightStrip)

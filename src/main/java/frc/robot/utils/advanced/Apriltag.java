@@ -2,6 +2,7 @@ package frc.robot.utils.advanced;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+//import org.jetbrains.annotations.Nullable;
 
 public enum Apriltag {
     ONE(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), Units.inchesToMeters(53.38)),
@@ -21,36 +22,34 @@ public enum Apriltag {
     FIFTEEN(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10), Units.inchesToMeters(52.00)),
     SIXTEEN(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), Units.inchesToMeters(52.00));
 
-    private final double x;
-    private final double y;
-    private final double z;
+    private final Translation3d translation;
 
     Apriltag(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.translation = new Translation3d(x,y,z);
     }
 
     public double getX() {
-        return x;
+        return translation.getX();
     }
 
     public double getY() {
-        return y;
+        return translation.getY();
     }
 
     public double getZ() {
-        return z;
+        return translation.getZ();
     }
     public Translation3d getPose(){
-        return new Translation3d(x,y,z);
+        return translation;
     }
 
     /**
+     *
      * Get the position of an AprilTag based on the tag ID (1-16)
      * @param num
      * @return AprilTag
      */
+//    @Nullable
     public static Apriltag of(int num){
         if (num <= 0){
             return values()[0];

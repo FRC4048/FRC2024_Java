@@ -16,14 +16,13 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.LoggableIO;
 import frc.robot.subsystems.LoggableSystem;
-import frc.robot.subsystems.apriltags.ApriltagIO;
 import frc.robot.subsystems.apriltags.ApriltagInputs;
 import frc.robot.subsystems.swervev3.bags.OdometryMeasurement;
 import frc.robot.subsystems.swervev3.bags.VisionMeasurement;
-import frc.robot.subsystems.swervev3.io.Module;
+import frc.robot.subsystems.swervev3.io.SwerveModule;
 import frc.robot.subsystems.swervev3.vision.BasicVisionFilter;
-import frc.robot.subsystems.swervev3.vision.BasicVisionFilter2;
 import frc.robot.utils.RobotMode;
 import frc.robot.utils.advanced.Apriltag;
 import frc.robot.utils.math.ArrayUtils;
@@ -32,33 +31,32 @@ import org.littletonrobotics.junction.Logger;
 
 public class PoseEstimator {
     private final Field2d field = new Field2d();
-    private final Module frontLeft;
-    private final Module frontRight;
-    private final Module backLeft;
-    private final Module backRight;
-    private final LoggableSystem<ApriltagIO, ApriltagInputs> apriltagSystem;
+    private final SwerveModule frontLeft;
+    private final SwerveModule frontRight;
+    private final SwerveModule backLeft;
+    private final SwerveModule backRight;
+    private final LoggableSystem<LoggableIO<ApriltagInputs>, ApriltagInputs> apriltagSystem;
 
     /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
-    private static final Vector<N3> stateStdDevs1 = VecBuilder.fill(0.05, 0.05, 0.001);
+    private static final Vector<N3> stateStdDevs1 = VecBuilder.fill(0.075, 0.075, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
     private static final Vector<N3> visionMeasurementStdDevs1 = VecBuilder.fill(0.5, 0.5, 0.5);
-    /* standard deviation of robot states, the lower the numbers arm, the more we trust odometry */
-    private static final Vector<N3> stateStdDevs2 = VecBuilder.fill(0.075, 0.075, 0.001);
 
     /* standard deviation of vision readings, the lower the numbers arm, the more we trust vision */
     private static final Vector<N3> visionMeasurementStdDevs2 = VecBuilder.fill(0.45, 0.45, 0.001);
     private static final Transform2d cameraOneTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
     private static final Transform2d cameraTwoTransform = new Transform2d(Constants.CAMERA_OFFSET_FROM_CENTER_X, Constants.CAMERA_OFFSET_FROM_CENTER_Y, new Rotation2d());
-    private final PoseManager poseManager1;
-    private final PoseManager poseManager2;
+    private final PoseManager poseManager;
+    private int invalidApriltagNum;
 
-    public PoseEstimator(Module frontLeftMotor, Module frontRightMotor, Module backLeftMotor, Module backRightMotor, ApriltagIO apriltagIO, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
+    public PoseEstimator(SwerveModule frontLeftMotor, SwerveModule frontRightMotor, SwerveModule backLeftMotor, SwerveModule backRightMotor, LoggableIO<ApriltagInputs> apriltagIO, SwerveDriveKinematics kinematics, double initGyroValueDeg) {
         this.frontLeft = frontLeftMotor;
         this.frontRight = frontRightMotor;
         this.backLeft = backLeftMotor;
         this.backRight = backRightMotor;
         this.apriltagSystem = new LoggableSystem<>(apriltagIO, new ApriltagInputs());
+        invalidApriltagNum = 0;
         OdometryMeasurement initMeasurement = new OdometryMeasurement(
                 new SwerveModulePosition[]{
                         frontLeft.getPosition(),
@@ -68,14 +66,7 @@ public class PoseEstimator {
                 }, initGyroValueDeg
         );
         TimeInterpolatableBuffer<Pose2d> m1Buffer = TimeInterpolatableBuffer.createBuffer(Constants.POSE_BUFFER_STORAGE_TIME);
-        TimeInterpolatableBuffer<Pose2d> m2Buffer = TimeInterpolatableBuffer.createBuffer(Constants.POSE_BUFFER_STORAGE_TIME);
-        this.poseManager1 = new FilterablePoseManager(stateStdDevs1, visionMeasurementStdDevs1, kinematics, initMeasurement, m1Buffer, new BasicVisionFilter(m1Buffer){
-            @Override
-            public Pose2d getVisionPose(VisionMeasurement measurement) {
-                return measurement.measurement().plus(cameraOneTransform);
-            }
-        });
-        this.poseManager2 = new FilterablePoseManager(stateStdDevs2, visionMeasurementStdDevs2, kinematics, initMeasurement, m2Buffer, new BasicVisionFilter2(m2Buffer) {
+        this.poseManager = new FilterablePoseManager(stateStdDevs1, visionMeasurementStdDevs1, kinematics, initMeasurement, m1Buffer, new BasicVisionFilter(m1Buffer){
             @Override
             public Pose2d getVisionPose(VisionMeasurement measurement) {
                 return measurement.measurement().plus(cameraOneTransform);
@@ -95,11 +86,9 @@ public class PoseEstimator {
      */
     public void updatePosition(OdometryMeasurement m) {
         if (DriverStation.isEnabled()) {
-            poseManager1.addOdomMeasurement(m, Logger.getRealTimestamp());
-            poseManager2.addOdomMeasurement(m, Logger.getRealTimestamp());
-
+            poseManager.addOdomMeasurement(m, Logger.getRealTimestamp());
         }
-        field.setRobotPose(poseManager1.getEstimatedPosition());
+        field.setRobotPose(poseManager.getEstimatedPosition());
     }
 
     private boolean validAprilTagPose(double[] measurement) {
@@ -116,9 +105,14 @@ public class PoseEstimator {
                 if (validAprilTagPose(pos)) {
                     double diff = apriltagSystem.getInputs().serverTime[i] - apriltagSystem.getInputs().timestamp[i];
                     double latencyInSec = diff / 1000;
-                    VisionMeasurement measurement = new VisionMeasurement(new Pose2d(pos[0], pos[1], getEstimatedPose1().getRotation()), Apriltag.of(apriltagSystem.getInputs().apriltagNumber[i]), latencyInSec);
-                    poseManager1.registerVisionMeasurement(measurement);
-                    poseManager2.registerVisionMeasurement(measurement);
+                    Apriltag apriltag = Apriltag.of(apriltagSystem.getInputs().apriltagNumber[i]);
+                    if (apriltag == null){
+                        invalidApriltagNum++;
+//                        CommandLogger.get().logMessage("InvalidApriltagNumber", invalidApriltagNum);
+                        continue;
+                    }
+                    VisionMeasurement measurement = new VisionMeasurement(new Pose2d(pos[0], pos[1], getEstimatedPose().getRotation()), apriltag, latencyInSec);
+                    poseManager.registerVisionMeasurement(measurement);
                 }
             }
         }
@@ -138,18 +132,13 @@ public class PoseEstimator {
                         backRight.getPosition(),
                 }, (radians*180) / Math.PI
         );
-        poseManager1.resetPose(initMeasurement, translation2d);
-        poseManager2.resetPose(initMeasurement, translation2d);
-        field.setRobotPose(poseManager1.getEstimatedPosition());
+        poseManager.resetPose(initMeasurement, translation2d);
+        field.setRobotPose(poseManager.getEstimatedPosition());
     }
 
     @AutoLogOutput
-    public Pose2d getEstimatedPose1() {
-        return poseManager1.getEstimatedPosition();
-    }
-    @AutoLogOutput
-    public Pose2d getEstimatedPose2() {
-        return poseManager2.getEstimatedPosition();
+    public Pose2d getEstimatedPose() {
+        return poseManager.getEstimatedPosition();
     }
 
     public Field2d getField() {

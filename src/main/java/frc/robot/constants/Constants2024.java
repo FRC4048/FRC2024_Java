@@ -1,7 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.swervev2.SwerveModuleProfile;
+import frc.robot.subsystems.swervev3.SwerveModuleProfile;
 
 
 public class Constants2024 extends GameConstants {
