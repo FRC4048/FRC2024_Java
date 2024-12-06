@@ -266,7 +266,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
+        // drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
         // Command rampMoveAndSpin = new LoggableRaceCommandGroup(
         //         new RampFollow(ramp, drivetrain, lightStrip),
         //         new AdvancedSpinningShot(shooter, lightStrip, () -> drivetrain.getPose(), () -> drivetrain.getAlignable())
