@@ -55,7 +55,7 @@ public class Robot extends LoggedRobot {
         //Pathfinding.setPathfinder(new LocalADStarAK());
         if (Constants.ENABLE_LOGGING) {
             Logger.recordMetadata("ProjectName", "FRC2024_Java"); // Set a metadata value
-            Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+            //Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
             if (isReal()) {
                 Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
             } else {
