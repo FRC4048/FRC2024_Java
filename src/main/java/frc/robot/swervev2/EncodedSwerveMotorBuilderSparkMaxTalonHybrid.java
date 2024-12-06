@@ -1,14 +1,13 @@
 package frc.robot.swervev2;
 
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj.AnalogEncoder;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.constants.Constants;
 import frc.robot.swervev2.components.EncodedSwerveTalon;
 import frc.robot.swervev2.components.EncodedSwerveSparkMaxTalonHybrid;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 
 /**
  * Utility class to build an {@link frc.robot.swervev2.components.EncodedSwerveSparkMax}
@@ -27,7 +26,8 @@ public class EncodedSwerveMotorBuilderSparkMaxTalonHybrid {
      public EncodedSwerveSparkMaxTalonHybrid build(){
           CANSparkMax driveMotor = new CANSparkMax(motorConfig.getDriveMotorId(), CANSparkMax.MotorType.kBrushless);
           WPI_TalonSRX turnMotor = new WPI_TalonSRX(motorConfig.getTurnMotorId()); //uh idk if motorconfig works
-          AnalogEncoder absEncoder = new AnalogEncoder(motorConfig.getCanCoderId());
+          //WPI_CANCoder canCoder = new WPI_CANCoder(motorConfig.getCanCoderId());
+          AnalogEncoder absEncoder = new AnalogEncoder(motorConfig.getCanCoderId()); //TODO: might need to change
           double driveVelConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio() * 60);
           double drivePosConvFactor = (2 * conversionConfig.getWheelRadius() * Math.PI) / (conversionConfig.getDriveGearRatio()); 
           double steerPosConvFactor = 2 * Math.PI / Constants.SWERVE_MODULE_PROFILE.getSteerRatio();
