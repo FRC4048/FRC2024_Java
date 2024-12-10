@@ -52,7 +52,7 @@ public class MoveDistance extends LoggableCommand {
       speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
       speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
     }
-    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0.0, DriveMode.FIELD_CENTRIC));
+    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 10.0, DriveMode.ROBOT_CENTRIC)); //TODO: change later
   }
 
   // Called once the command ends or is interrupted.

@@ -256,6 +256,9 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left 1ft", new MoveDistance(drivetrain, 0, 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0, -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Do nothing", new MoveDistance(drivetrain, 0, 0, 0.4));
+            SmartShuffleboard.put("Drivetrain","steer abs encoder",drivetrain.getFrontLeft().getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartShuffleboard.put("Drivetrain","drive encoder",drivetrain.getFrontLeft().getSwerveMotor().getDriveEncPosition());
             // SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
             // SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder, deployer, ramp, lightStrip));
         }
