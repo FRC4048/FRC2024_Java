@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swervev3;
 
+import frc.robot.subsystems.swervev3.io.ModulePosition;
+
 public enum SwerveModuleProfile {
     MK4(true, false, true, false,
             12.8, 6.75, false),
@@ -50,5 +52,24 @@ public enum SwerveModuleProfile {
 
     public boolean isSteerInverted() {
         return steerInverted;
+    }
+    public boolean isDriveInverted(ModulePosition modulePosition){
+        switch (modulePosition){
+            case FRONT_LEFT -> {
+                return isFrontLeftInverted();
+            }
+            case FRONT_RIGHT -> {
+                return isFrontRightInverted();
+            }
+            case BACK_LEFT -> {
+                return isBackLeftInverted();
+            }
+            case BACK_RIGHT -> {
+                return isBackRightInverted();
+            }
+            default -> {
+                throw new IllegalArgumentException("Invalid Module Position" + modulePosition);
+            }
+        }
     }
 }

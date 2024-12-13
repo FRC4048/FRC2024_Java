@@ -35,4 +35,11 @@ public class AngleUtils {
     public static Rotation2d normalize(Rotation2d angle) {
         return new Rotation2d(Math.asin(Math.sin(angle.getRadians()))); //can be simplified (reduce(angle+PI) - PI
     }
+    public static double normalizeSwerveAngle(double angleInRad) {
+        angleInRad %= 2 * Math.PI;
+        if (angleInRad < 0) {
+            angleInRad += 2 * Math.PI;
+        }
+        return angleInRad;
+    }
 }

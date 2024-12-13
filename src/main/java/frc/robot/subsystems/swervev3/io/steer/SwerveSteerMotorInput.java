@@ -7,14 +7,12 @@ public class SwerveSteerMotorInput implements LoggableInputs {
     public double steerEncoderPosition = 0;
     public double steerEncoderVelocity = 0;
     public double steerCurrentDraw = 0;
-    public double steerOffset = 0;
 
     @Override
     public void toLog(LogTable table) {
         table.put("steerEncoderPosition", steerEncoderPosition);
         table.put("steerEncoderVelocity", steerEncoderVelocity);
         table.put("steerCurrentDraw", steerCurrentDraw);
-        table.put("steerOffset", steerOffset);
     }
 
     @Override
@@ -22,6 +20,5 @@ public class SwerveSteerMotorInput implements LoggableInputs {
         steerEncoderPosition = table.get("steerEncoderPosition", steerEncoderPosition);
         steerEncoderVelocity = table.get("steerEncoderVelocity", steerEncoderVelocity);
         steerCurrentDraw = table.get("steerCurrentDraw", steerCurrentDraw);
-        steerOffset = table.get("steerOffset", steerOffset);
     }
 }

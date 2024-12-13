@@ -8,11 +8,6 @@ public class MockSteerMotorIO implements SwerveSteerMotorIO{
     }
 
     @Override
-    public void setSteerOffset(double zeroAbs, double absCurrentPose) {
-
-    }
-
-    @Override
     public void resetEncoder() {
 
     }

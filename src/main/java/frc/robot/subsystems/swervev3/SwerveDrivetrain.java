@@ -20,6 +20,7 @@ import frc.robot.subsystems.swervev3.estimation.PoseEstimator;
 import frc.robot.subsystems.swervev3.io.SwerveModule;
 import frc.robot.utils.DriveMode;
 import frc.robot.utils.advanced.Alignable;
+import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -62,6 +63,8 @@ public class SwerveDrivetrain extends SubsystemBase {
             }, getLastGyro()
         );
         Logger.recordOutput("LastOdomModPoses", odom.modulePosition());
+        SmartShuffleboard.put("Drivetrain", "frontRightAbs", frontRight.getAbsPosition());
+
         poseEstimator.updatePosition(odom);
         poseEstimator.updateVision();
         Logger.recordOutput("realSwerveStates",
@@ -73,11 +76,11 @@ public class SwerveDrivetrain extends SubsystemBase {
     }
 
     private void processInputs() {
+        gyroSystem.updateInputs();
         frontLeft.updateInputs();
         frontRight.updateInputs();
         backLeft.updateInputs();
         backRight.updateInputs();
-        gyroSystem.updateInputs();
     }
 
     public ChassisSpeeds createChassisSpeeds(double xSpeed, double ySpeed, double rotation, DriveMode driveMode) {
