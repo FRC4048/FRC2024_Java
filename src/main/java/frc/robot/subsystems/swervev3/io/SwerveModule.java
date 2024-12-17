@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.LoggableSystem;
 import frc.robot.subsystems.swervev3.KinematicsConversionConfig;
+import frc.robot.subsystems.swervev3.ModulePosition;
 import frc.robot.subsystems.swervev3.io.abs.CANCoderAbsIO;
 import frc.robot.subsystems.swervev3.io.abs.SwerveAbsIO;
 import frc.robot.subsystems.swervev3.io.abs.SwerveAbsInput;

@@ -15,11 +15,8 @@ public class WheelAlign extends LoggableCommand {
         super.end(interrupted);
     }
 
-    /**
-     * Has to be in init because execute was not getting called when command was in robot init for some reason
-     */
     @Override
-    public void initialize() {
+    public void execute() {
         drivetrain.setSteerOffset(Constants.FRONT_LEFT_ABS_ENCODER_ZERO,Constants.FRONT_RIGHT_ABS_ENCODER_ZERO,Constants.BACK_LEFT_ABS_ENCODER_ZERO,Constants.BACK_RIGHT_ABS_ENCODER_ZERO);
     }
 
@@ -30,6 +27,6 @@ public class WheelAlign extends LoggableCommand {
 
     @Override
     public boolean runsWhenDisabled() {
-        return true;
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.swervev3.io;
+package frc.robot.subsystems.swervev3;
 
 public enum ModulePosition {
     FRONT_LEFT("frontLeft"),

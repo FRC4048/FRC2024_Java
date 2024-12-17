@@ -1,7 +1,5 @@
 package frc.robot.subsystems.swervev3;
 
-import frc.robot.subsystems.swervev3.io.ModulePosition;
-
 public enum SwerveModuleProfile {
     MK4(true, false, true, false,
             12.8, 6.75, false),

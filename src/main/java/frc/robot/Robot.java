@@ -41,7 +41,7 @@ public class Robot extends LoggedRobot {
 
     private static final AtomicReference<RobotMode> mode = new AtomicReference<>(RobotMode.DISABLED);
 
-    public static RobotMode getMode(){
+    public static RobotMode getMode() {
         return mode.get();
     }
 
@@ -72,15 +72,15 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        if (Constants.ENABLE_LOGGING){
+        if (Constants.ENABLE_LOGGING) {
             CommandLogger.get().log();
             long startTime = Logger.getRealTimestamp();
             Runnable poll = runInMainThread.poll();
-            while (poll != null){
+            while (poll != null) {
                 poll.run();
-                if (Logger.getRealTimestamp() - startTime <= 3000){
+                if (Logger.getRealTimestamp() - startTime <= 3000) {
                     poll = runInMainThread.poll();
-                }else {
+                } else {
                     break;
                 }
             }
@@ -92,12 +92,12 @@ public class Robot extends LoggedRobot {
     public void disabledInit() {
         mode.set(RobotMode.DISABLED);
         aliveTics = 0;
-        SmartShuffleboard.put("Driver","TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
+        SmartShuffleboard.put("Driver", "TotalTimeouts", TimeoutCounter.getTotalTimeouts()).withPosition(9, 3).withSize(1, 1);
     }
 
     @Override
     public void disabledPeriodic() {
-        SmartDashboard.putNumber("Alive",aliveTics);
+        SmartDashboard.putNumber("Alive", aliveTics);
         aliveTics = (aliveTics + 1) % 1000;
     }
 
@@ -144,7 +144,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void testPeriodic() {
         diagnostics.refresh();
-        if (ledCycleTimer.advanceIfElapsed(0.5)){
+        if (ledCycleTimer.advanceIfElapsed(0.5)) {
             robotContainer.getLEDStrip().setPattern(robotContainer.getLEDStrip().getPattern().next());
         }
     }
@@ -161,7 +161,8 @@ public class Robot extends LoggedRobot {
     public static Diagnostics getDiagnostics() {
         return diagnostics;
     }
-    public static void runInMainThread(Runnable r){
+
+    public static void runInMainThread(Runnable r) {
         runInMainThread.add(r);
     }
 }
