@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.swervev2.components.GenericEncodedSwerve;
 import frc.robot.utils.motor.Gain;
 import frc.robot.utils.motor.PID;
@@ -20,9 +21,11 @@ public class GenericSwerveModule implements StatedSwerve {
     private final SimpleMotorFeedforward driveFeedforward;
     private final SimpleMotorFeedforward turnFeedforward;
     private final GenericEncodedSwerve swerveMotor;
+    private final Boolean FL_Debug;
 
-    public GenericSwerveModule(GenericEncodedSwerve swerveMotor, PID drivePid, PID turnPid, Gain driveGain, Gain turnGain, TrapezoidProfile.Constraints goalConstraint) {
+    public GenericSwerveModule(GenericEncodedSwerve swerveMotor, PID drivePid, PID turnPid, Gain driveGain, Gain turnGain, TrapezoidProfile.Constraints goalConstraint, Boolean FL_Debug) {
         this.swerveMotor = swerveMotor;
+        this.FL_Debug = FL_Debug;
         drivePIDController = new PIDController(drivePid.getP(),drivePid.getI(),drivePid.getD());
         turningPIDController = new ProfiledPIDController(turnPid.getP(),turnPid.getI(),turnPid.getD(),goalConstraint);
         driveFeedforward = new SimpleMotorFeedforward(driveGain.getS(),driveGain.getV());
@@ -46,6 +49,10 @@ public class GenericSwerveModule implements StatedSwerve {
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(swerveMotor.getSteerEncPosition()));
         double driveSpeed = calcDrivePidOut(state.speedMetersPerSecond) + calcDriveFeedForward(state.speedMetersPerSecond);
         double turnSpeed = calcSteerPidOut(state.angle.getRadians()) + calcSteerFeedForward();
+        if (FL_Debug){
+            SmartDashboard.putNumber("Turn Speed", turnSpeed);
+            SmartDashboard.putNumber("Drive Speed", driveSpeed);
+        }  
         swerveMotor.getDriveMotor().setVoltage(driveSpeed);
         swerveMotor.getSteerMotor().set(turnSpeed);
     }

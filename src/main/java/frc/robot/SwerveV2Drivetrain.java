@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -96,6 +97,7 @@ public class SwerveV2Drivetrain extends SubsystemBase {
         // }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
+            SmartDashboard.putNumber("FL_STEER", frontLeft.getSwerveMotor().getSteerEncPosition());
             SmartDashboard.putNumber("FR_ABS",frontRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BL_ABS",backLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartDashboard.putNumber("BR_ABS",backRight.getSwerveMotor().getAbsEnc().getAbsolutePosition());
@@ -126,10 +128,10 @@ public class SwerveV2Drivetrain extends SubsystemBase {
         EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBL = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backLeftConfig, conversionConfig).build();
         EncodedSwerveSparkMaxTalonHybrid encodedSwerveSparkMaxTalonBR = new EncodedSwerveMotorBuilderSparkMaxTalonHybrid(backRightConfig, conversionConfig).build();
 
-        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
-        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint());
+        this.frontLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonFL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint(), true);
+        this.frontRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonFR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint(), false);
+        this.backLeft = new GenericSwerveModule(encodedSwerveSparkMaxTalonBL, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint(), false);
+        this.backRight = new GenericSwerveModule(encodedSwerveSparkMaxTalonBR, pidConfig.getDrivePid(),pidConfig.getSteerPid(),pidConfig.getDriveGain(),pidConfig.getSteerGain(),pidConfig.getGoalConstraint(), false);
         this.frontRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontRightInverted());
         this.frontLeft.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isFrontLeftInverted());
         this.backRight.getSwerveMotor().getDriveMotor().setInverted(Constants.SWERVE_MODULE_PROFILE.isBackRightInverted());
@@ -167,6 +169,8 @@ public class SwerveV2Drivetrain extends SubsystemBase {
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.MAX_VELOCITY);
+        SmartDashboard.putNumber("Front Left Angle", swerveModuleStates[0].angle.getDegrees());
+        SmartDashboard.putNumber("Front Left Speed", swerveModuleStates[0].speedMetersPerSecond);
         setModuleStates(swerveModuleStates);
     }
 
@@ -177,9 +181,9 @@ public class SwerveV2Drivetrain extends SubsystemBase {
 
     private void setModuleStates(SwerveModuleState[] desiredStates) {
         frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
+        // frontRight.setDesiredState(desiredStates[1]);
+        // backLeft.setDesiredState(desiredStates[2]);
+        // backRight.setDesiredState(desiredStates[3]);
     }
 
     public void stopMotor() {

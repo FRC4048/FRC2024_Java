@@ -55,11 +55,11 @@ public class ConstantsLegacy extends GameConstants{
 
 
     //PID Constants
-    public static final double DRIVE_PID_P = 1;
+    public static final double DRIVE_PID_P = 0.1; //TODO: change later
     public static final double DRIVE_PID_I = 0;
     public static final double DRIVE_PID_D = 0;
-    public static final double DRIVE_PID_FF_S = 1;
-    public static final double DRIVE_PID_FF_V = 2.8;
+    public static final double DRIVE_PID_FF_S = 0; //TODO: change later
+    public static final double DRIVE_PID_FF_V = 0; //TODO: change later
 
 
     //Current Caps
@@ -67,11 +67,11 @@ public class ConstantsLegacy extends GameConstants{
     public static final int DRIVE_SECONDARY_LIMIT = 48;
     public static final double DRIVE_RAMP_RATE_LIMIT = 0.1;
 
-    public static final double STEER_PID_P = 0.3;
-    public static final double STEER_PID_I = 0;
-    public static final double STEER_PID_D = 0.005;
-    public static final double STEER_PID_FF_S = 0;//0.2;
-    public static final double STEER_PID_FF_V = 0;//0.8;
+    public static final double STEER_PID_P = 0.0275; //0.4
+    public static final double STEER_PID_I = 0.07;
+    public static final double STEER_PID_D = 0.003; //0.005
+    public static final double STEER_PID_FF_S = 0; //0.2;
+    public static final double STEER_PID_FF_V = 0; //0.8;
     public static final double WHEEL_RADIUS = 0.0508;
     public static final double ROBOT_RADIUS =  0.43;
 

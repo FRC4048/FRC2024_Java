@@ -45,14 +45,14 @@ public class MoveDistance extends LoggableCommand {
   @Override
   public void execute() {
     double speedY = 0;
-    double speedX = 0;
-    double neededChangeX = desiredPoseX - drivetrain.getPose().getX();
-    double neededChangeY = desiredPoseY - drivetrain.getPose().getY();
-    if ((neededChangeX != 0) || (neededChangeY != 0)) {
-      speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
-      speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
-    }
-    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 10.0, DriveMode.ROBOT_CENTRIC)); //TODO: change later
+    double speedX = 0.5;
+    // double neededChangeX = desiredPoseX - drivetrain.getPose().getX();
+    // double neededChangeY = desiredPoseY - drivetrain.getPose().getY();
+    // if ((neededChangeX != 0) || (neededChangeY != 0)) {
+    //   speedX = (neededChangeX * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
+    //   speedY = (neededChangeY * maxSpeed) / (Math.abs(neededChangeX) + Math.abs(neededChangeY));
+    // }
+    drivetrain.drive(drivetrain.createChassisSpeeds(speedX, speedY, 0, DriveMode.ROBOT_CENTRIC)); //TODO: change later
   }
 
   // Called once the command ends or is interrupted.
@@ -67,9 +67,9 @@ public class MoveDistance extends LoggableCommand {
 
     double targetXDistance = Math.abs((drivetrain.getPose().getX() - desiredPoseX));
     double targetYDistance = Math.abs((drivetrain.getPose().getY() - desiredPoseY));
-    if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
-      return true;
-    }
+    // if (targetXDistance <= Constants.DRIVE_THRESHHOLD_METERS && targetYDistance <= Constants.DRIVE_THRESHHOLD_METERS) {
+    //   return true;
+    // }
     if ((Timer.getFPGATimestamp() - startTime) >= Constants.MOVE_DISTANCE_TIMEOUT) {
       timeoutCounter.increaseTimeoutCount();
       return true;

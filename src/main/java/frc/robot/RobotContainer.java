@@ -26,6 +26,8 @@ import frc.robot.commands.SetAlignable;
 import frc.robot.commands.drivetrain.Drive;
 import frc.robot.commands.drivetrain.MoveDistance;
 import frc.robot.commands.drivetrain.SetRobotDriveMode;
+import frc.robot.commands.drivetrain.SimpleMotorSpinFL;
+import frc.robot.commands.drivetrain.SimpleMotorSteerFL;
 // import frc.robot.commands.feeder.FeederBackDrive;
 // import frc.robot.commands.feeder.StartFeeder;
 // import frc.robot.commands.feeder.StopFeeder;
@@ -257,6 +259,8 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Right 1ft", new MoveDistance(drivetrain, 0, -0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4));
             SmartShuffleboard.putCommand("Drivetrain", "Do nothing", new MoveDistance(drivetrain, 0, 0, 0.4));
+            SmartShuffleboard.putCommand("Drivetrain", "Simple spin FL", new SimpleMotorSpinFL(drivetrain));
+            SmartShuffleboard.putCommand("Drivetrain", "Simple Steer FL", new SimpleMotorSteerFL(drivetrain));
             SmartShuffleboard.put("Drivetrain","steer abs encoder",drivetrain.getFrontLeft().getSwerveMotor().getAbsEnc().getAbsolutePosition());
             SmartShuffleboard.put("Drivetrain","drive encoder",drivetrain.getFrontLeft().getSwerveMotor().getDriveEncPosition());
             // SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));

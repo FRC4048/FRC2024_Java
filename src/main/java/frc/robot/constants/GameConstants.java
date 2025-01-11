@@ -117,7 +117,7 @@ public class GameConstants {
 
     //DRIVETRAIN
     public static final double DRIVE_THRESHHOLD_METERS = 0.00762;// TODO: Refine This Number
-    public static final double MOVE_DISTANCE_TIMEOUT = 5.0;
+    public static final double MOVE_DISTANCE_TIMEOUT = 5.0; //change latet
     public static final double MAX_AUTO_ALIGN_SPEED = 0.9;
 
     //Limelight
