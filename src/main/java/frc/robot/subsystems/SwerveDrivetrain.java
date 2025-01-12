@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.path.PathPlannerPath;
+//import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -27,7 +27,7 @@ import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 
 public class SwerveDrivetrain extends SubsystemBase {
 
-    private PathPlannerPath path;
+    //private PathPlannerPath path;
 
     private final GenericSwerveModule frontLeft;
     private final GenericSwerveModule frontRight;
@@ -54,8 +54,8 @@ public class SwerveDrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         if (Constants.PATHPLANNER_DEBUG){
-            SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
-            SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
+            //SmartShuffleboard.putCommand("PathPlanner","Plan To Podium", PathPlannerUtils.autoFromPath(PathPlannerUtils.createManualPath(getPose(),new Pose2d(2.5,4,new Rotation2d(Math.PI)),0)));
+            //SmartShuffleboard.putCommand("PathPlanner","Plan To PodiumV2", PathPlannerUtils.pathToPose(new Pose2d(2.5,4,new Rotation2d(Math.PI)),0));
         }
         if (Constants.SWERVE_DEBUG){
             SmartDashboard.putNumber("FL_ABS",frontLeft.getSwerveMotor().getAbsEnc().getAbsolutePosition());

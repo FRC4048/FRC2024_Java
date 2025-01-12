@@ -5,11 +5,11 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.NamedCommands;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
+import frc.robot.commands.Intake2025Command;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -39,7 +40,7 @@ import frc.robot.commands.feeder.TimedFeeder;
 import frc.robot.commands.intake.CurrentBasedIntakeFeeder;
 import frc.robot.commands.intake.StartIntake;
 import frc.robot.commands.intake.StopIntake;
-import frc.robot.commands.pathplanning.*;
+// import frc.robot.commands.pathplanning.*;
 import frc.robot.commands.ramp.RampFollow;
 import frc.robot.commands.ramp.RampMove;
 import frc.robot.commands.ramp.RampMoveAndWait;
@@ -59,6 +60,8 @@ import frc.robot.utils.Gain;
 import frc.robot.utils.PID;
 import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
+import frc.robot.subsystems.Intake2025;
+import frc.robot.commands.Intake2025Command;
 
 import java.util.Optional;
 
@@ -87,6 +90,7 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Vision vision = new Vision();
     private final IntakeSubsystem intake = new IntakeSubsystem();
+    private final Intake2025 intakeTesting = new Intake2025();
     private final CommandXboxController controller = new CommandXboxController(Constants.XBOX_CONTROLLER_ID);
     private SwerveDrivetrain drivetrain;
     private AutoChooser2024 autoChooser;
@@ -97,7 +101,7 @@ public class RobotContainer {
     public RobotContainer() {
         setupDriveTrain();
         registerPathPlanableCommands();
-        setupPathPlanning();
+        // setupPathPlanning();
         setupAutoChooser();
         configureBindings();
         putShuffleboardCommands();
@@ -113,39 +117,39 @@ public class RobotContainer {
      * NamedCommands
      */
     private void registerPathPlanableCommands() {
-        NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
-                new StartFeeder(feeder),
-                new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
-                new ResetRamp(ramp))
-        );
-        NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
-        NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
-        NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, Constants.TIMED_FEEDER_EXIT)));
-        NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
-        NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
-        NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
-        NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
-        NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
-        NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder)));
+        // NamedCommands.registerCommand("SlurpWithRamp", new ParallelDeadlineGroup(
+        //         new StartFeeder(feeder),
+        //         new TimedIntake(intake, Constants.TIMED_INTAKE_AUTO_TIMEOUT),
+        //         new ResetRamp(ramp))
+        // );
+        // NamedCommands.registerCommand("PathPlannerShoot", CommandUtil.logged(new PathPlannerShoot(shooter, feeder, ramp, intake)));
+        // NamedCommands.registerCommand("ComboShot", CommandUtil.logged(new ComboShot(shooter, feeder, ramp)));
+        // NamedCommands.registerCommand("FeederGamepieceUntilLeave", CommandUtil.logged(new TimedFeeder(feeder, Constants.TIMED_FEEDER_EXIT)));
+        // NamedCommands.registerCommand("ShootAndDrop", CommandUtil.logged(new ShootAndDrop(shooter, feeder, deployer, ramp)));
+        // NamedCommands.registerCommand("FeederBackDrive", CommandUtil.logged(new FeederBackDrive(feeder)));
+        // NamedCommands.registerCommand("ResetRamp", CommandUtil.logged(new ResetRamp(ramp)));
+        // NamedCommands.registerCommand("RampShootComboCenter", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_CENTER_AUTO_SHOOT)));// second piece
+        // NamedCommands.registerCommand("RampShootComboSide", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_SIDE_AUTO_SHOOT))); // first and third
+        // NamedCommands.registerCommand("RampShootComboSide2", CommandUtil.logged(new RampShootCombo(ramp, shooter, Constants.RAMP_DIP_AUTO_SHOOT))); // first and third
+        // NamedCommands.registerCommand("MoveToGamePiece", CommandUtil.logged(new DevourerPiece(drivetrain, vision, intake, feeder)));
     }
 
     /**
      * <a href=https://github.com/mjansen4857/pathplanner/wiki/PathPlannerLib-Changelog>Change log</a>
      */
-    private void setupPathPlanning() {
-        AutoBuilder.configureHolonomic(drivetrain::getPose,
-                drivetrain::resetOdometry,
-                drivetrain::speedsFromStates,
-                drivetrain::drive,
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(Constants.PATH_PLANNER_TRANSLATION_PID_P, Constants.PATH_PLANNER_TRANSLATION_PID_I, Constants.PATH_PLANNER_TRANSLATION_PID_D), // Translation PID constants
-                        new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I, Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
-                        Constants.MAX_VELOCITY, // Max module speed, in m/s
-                        Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
-                        new ReplanningConfig()
-                ), RobotContainer::isRedAlliance, drivetrain);
-    }
+    // private void setupPathPlanning() {
+    //     AutoBuilder.configureHolonomic(drivetrain::getPose,
+    //             drivetrain::resetOdometry,
+    //             drivetrain::speedsFromStates,
+    //             drivetrain::drive,
+    //             new HolonomicPathFollowerConfig(
+    //                     new PIDConstants(Constants.PATH_PLANNER_TRANSLATION_PID_P, Constants.PATH_PLANNER_TRANSLATION_PID_I, Constants.PATH_PLANNER_TRANSLATION_PID_D), // Translation PID constants
+    //                     new PIDConstants(Constants.PATH_PLANNER_ROTATION_PID_P, Constants.PATH_PLANNER_ROTATION_PID_I, Constants.PATH_PLANNER_ROTATION_PID_D), // Rotation PID constants
+    //                     Constants.MAX_VELOCITY, // Max module speed, in m/s
+    //                     Constants.ROBOT_RADIUS, // Drive base radius in meters. Distance from robot center to the furthest module.
+    //                     new ReplanningConfig()
+    //             ), RobotContainer::isRedAlliance, drivetrain);
+    // }
 
     private void setupDriveTrain() {
 
@@ -215,9 +219,12 @@ public class RobotContainer {
             SmartShuffleboard.putCommand("Drivetrain", "Move Left + Forward 1ft", CommandUtil.logged(new MoveDistance(drivetrain, 0.3048, 0.3048, 0.4)));
             SmartShuffleboard.putCommand("Test", "TurnToGampiece", new TurnToGampieceGroup(vision, drivetrain, feeder, intake, deployer, ramp));
             SmartShuffleboard.putCommand("Test", "Gamepiece", new MoveToGamepiece(drivetrain, vision));
-            SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
+            // SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
         }
-    }
+        if (Constants.INTAKE_TESTING_DEBUG) {
+            SmartShuffleboard.putCommand("IntakeTesting", "Start Intake", CommandUtil.logged(new Intake2025Command(intakeTesting, () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired speed 1", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired speed 2", 0))));
+        }
+    } 
 
     private void configureBindings() {
         drivetrain.setDefaultCommand(new Drive(drivetrain, joyleft::getY, joyleft::getX, joyright::getX, drivetrain::getDriveMode));
