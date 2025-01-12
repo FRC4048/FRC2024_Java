@@ -96,6 +96,6 @@ public class Constants2024 extends GameConstants {
     public static final double ALIGNABLE_PID_I = 0;
     public static final double ALIGNABLE_PID_D = 0.0015;
 
-    public static final int INTAKE_MOTOR_TESTING_1_ID = 1; //change
+    public static final int INTAKE_MOTOR_TESTING_1_ID = 11; //change
     public static final int INTAKE_MOTOR_TESTING_2_ID = 2; //change
 }

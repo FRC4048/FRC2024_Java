@@ -15,12 +15,8 @@ public class Intake2025Command extends Command {
   /** Creates a new Intake2025Command. */
   private final Intake2025 intake;
   private double time;
-  private DoubleSupplier speed1;
-  private DoubleSupplier speed2;
-  public Intake2025Command(Intake2025 intake, DoubleSupplier speed1, DoubleSupplier speed2) {
+  public Intake2025Command(Intake2025 intake) {
     this.intake = intake;
-    this.speed1 = speed1;
-    this.speed2 = speed2;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake);
   }
@@ -34,8 +30,8 @@ public class Intake2025Command extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setIntakeMotor1Speed(speed1.getAsDouble());
-    intake.setIntakeMotor2Speed(speed2.getAsDouble());
+    intake.setIntakeMotor1Speed(0.2);
+    intake.setIntakeMotor2Speed(0.2);
   }
 
   // Called once the command ends or is interrupted.

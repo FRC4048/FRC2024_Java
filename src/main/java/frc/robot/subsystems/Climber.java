@@ -26,7 +26,6 @@ public class Climber extends SubsystemBase {
     public Climber() {
         this.climberLeft = new CANSparkMax(Constants.CLIMBER_LEFT, CANSparkMax.MotorType.kBrushless);
         this.climberRight = new CANSparkMax(Constants.CLIMBER_RIGHT, CANSparkMax.MotorType.kBrushless);
-
         this.climberLeft.restoreFactoryDefaults();
         this.climberRight.restoreFactoryDefaults();
 

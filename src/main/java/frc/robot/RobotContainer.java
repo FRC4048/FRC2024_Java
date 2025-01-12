@@ -224,8 +224,8 @@ public class RobotContainer {
             // SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
         }
         if (Constants.INTAKE_TESTING_DEBUG) {
-            SmartShuffleboard.putCommand("IntakeTesting", "Start Intake", CommandUtil.logged(new Intake2025Command(intakeTesting, () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 1", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 2", 0))));
-            SmartShuffleboard.putCommand("IntakeTesting", "Start Shooter", CommandUtil.logged(new Shoot2025Command(intakeTesting,  () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 3", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 4", 0))));
+            SmartShuffleboard.putCommand("IntakeTesting", "Start Intake", CommandUtil.logged(new Intake2025Command(intakeTesting)));
+            SmartShuffleboard.putCommand("IntakeTesting", "Start Shooter", CommandUtil.logged(new Shoot2025Command(intakeTesting)));
         }
     } 
 
