@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autochooser.chooser.AutoChooser;
 import frc.robot.autochooser.chooser.AutoChooser2024;
 import frc.robot.commands.Intake2025Command;
+import frc.robot.commands.Shoot2025Command;
 import frc.robot.commands.MoveToGamepiece;
 import frc.robot.commands.SetAlignable;
 import frc.robot.commands.amp.DeployAmp;
@@ -62,6 +63,7 @@ import frc.robot.utils.logging.CommandUtil;
 import frc.robot.utils.smartshuffleboard.SmartShuffleboard;
 import frc.robot.subsystems.Intake2025;
 import frc.robot.commands.Intake2025Command;
+import frc.robot.commands.Shoot2025Command;
 
 import java.util.Optional;
 
@@ -222,7 +224,8 @@ public class RobotContainer {
             // SmartShuffleboard.putCommand("Test", "DEVOUR", new DevourerPiece(drivetrain, vision, intake, feeder));
         }
         if (Constants.INTAKE_TESTING_DEBUG) {
-            SmartShuffleboard.putCommand("IntakeTesting", "Start Intake", CommandUtil.logged(new Intake2025Command(intakeTesting, () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired speed 1", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired speed 2", 0))));
+            SmartShuffleboard.putCommand("IntakeTesting", "Start Intake", CommandUtil.logged(new Intake2025Command(intakeTesting, () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 1", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 2", 0))));
+            SmartShuffleboard.putCommand("IntakeTesting", "Start Shooter", CommandUtil.logged(new Shoot2025Command(intakeTesting,  () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 3", 0), () -> SmartShuffleboard.getDouble("IntakeTesting", "Desired intake speed 4", 0))));
         }
     } 
 

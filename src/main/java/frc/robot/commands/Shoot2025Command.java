@@ -11,13 +11,13 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Timer;
 
-public class Intake2025Command extends Command {
+public class Shoot2025Command extends Command {
   /** Creates a new Intake2025Command. */
   private final Intake2025 intake;
   private double time;
   private DoubleSupplier speed1;
   private DoubleSupplier speed2;
-  public Intake2025Command(Intake2025 intake, DoubleSupplier speed1, DoubleSupplier speed2) {
+  public Shoot2025Command(Intake2025 intake, DoubleSupplier speed1, DoubleSupplier speed2) {
     this.intake = intake;
     this.speed1 = speed1;
     this.speed2 = speed2;
@@ -34,8 +34,8 @@ public class Intake2025Command extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setIntakeMotor1Speed(speed1.getAsDouble());
-    intake.setIntakeMotor2Speed(speed2.getAsDouble());
+    intake.setIntakeMotor1Speed(-speed1.getAsDouble());
+    intake.setIntakeMotor2Speed(-speed2.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
@@ -48,8 +48,6 @@ public class Intake2025Command extends Command {
   @Override
   public boolean isFinished() {
     if (Timer.getFPGATimestamp()-time > 5) {
-      return true;
-    } else if (intake.getForwardSwitchTripped()) {
       return true;
     } else {
       return false;
