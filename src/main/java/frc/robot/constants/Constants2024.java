@@ -55,6 +55,15 @@ public class Constants2024 extends GameConstants {
     public static final double DRIVE_PID_FF_S = 1;
     public static final double DRIVE_PID_FF_V = 2.8;
 
+    public static final double DRIVE_FRONT_LEFT_X = 0.318;
+    public static final double DRIVE_FRONT_LEFT_Y = 0.318;
+    public static final double DRIVE_FRONT_RIGHT_X = 0.318;
+    public static final double DRIVE_FRONT_RIGHT_Y = -0.318;
+    public static final double DRIVE_BACK_LEFT_X = -0.318;
+    public static final double DRIVE_BACK_LEFT_Y = 0.318;
+    public static final double DRIVE_BACK_RIGHT_X = -0.318;
+    public static final double DRIVE_BACK_RIGHT_Y = -0.318;
+
 
     //Current Caps
     public static final int DRIVE_SMART_LIMIT = 38;

@@ -28,10 +28,10 @@ public class SwerveDrivetrain extends SubsystemBase {
     private final Module frontRight;
     private final Module backLeft;
     private final Module backRight;
-    private final Translation2d frontLeftLocation = new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2);
-    private final Translation2d frontRightLocation = new Translation2d(Constants.ROBOT_LENGTH / 2, -Constants.ROBOT_WIDTH / 2);
-    private final Translation2d backLeftLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2);
-    private final Translation2d backRightLocation = new Translation2d(-Constants.ROBOT_LENGTH / 2, -Constants.ROBOT_WIDTH / 2);
+    private final Translation2d frontLeftLocation = new Translation2d(Constants.DRIVE_FRONT_LEFT_X, Constants.DRIVE_FRONT_LEFT_Y);
+    private final Translation2d frontRightLocation = new Translation2d(Constants.DRIVE_FRONT_RIGHT_X, Constants.DRIVE_FRONT_RIGHT_Y);
+    private final Translation2d backLeftLocation = new Translation2d(Constants.DRIVE_BACK_LEFT_X, Constants.DRIVE_BACK_LEFT_Y);
+    private final Translation2d backRightLocation = new Translation2d(Constants.DRIVE_BACK_RIGHT_X, Constants.DRIVE_BACK_RIGHT_Y);
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
     private final LoggableSystem<GyroIO, GyroInputs> gyroSystem;
     private final PIDController alignableTurnPid = new PIDController(Constants.ALIGNABLE_PID_P, Constants.ALIGNABLE_PID_I, Constants.ALIGNABLE_PID_D);
